@@ -5,10 +5,27 @@ package mrs.eclinicapi.model; /*************************************************
  ***********************************************************************/
 
 import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-/** @pdOid ceb29990-68c9-4727-af01-bf60ad283731 */
+@Entity
 public class ClinicRoom {
-   /** @pdOid 728c5caa-7e94-46c4-b97d-f99a02d027cf */
-   private int id;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	public int getId() {
+		return id;
+	}
 
 }
