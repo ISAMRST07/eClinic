@@ -4,8 +4,15 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class User
  ***********************************************************************/
 
+
+
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.*;
 
+@Getter
+@Setter
 /** @pdOid 85433257-248d-4b5d-a4f7-715f6e82b0c1 */
 public abstract class User {
    /** @pdOid 36701ae4-7c08-465d-926b-423a8c62f0b5 */
