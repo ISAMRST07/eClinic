@@ -4,14 +4,10 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class ClinicAdministrator
  ***********************************************************************/
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 
-import java.util.*;
-
-@Getter
-@Setter
 /** @pdOid 335bfd7c-27d7-4f1c-b72b-445fd7b9c706 */
+@AllArgsConstructor
 public class ClinicAdministrator extends User {
    /** @pdRoleInfo migr=no name=Pacijent assc=association11 coll=java.util.Collection impl=java.util.HashSet mult=0..* */
    public java.util.Collection<Pacijent> pacijent;
@@ -19,7 +15,6 @@ public class ClinicAdministrator extends User {
    public java.util.Collection<MedicalStaff> medicalStaff;
    /** @pdRoleInfo migr=no name=Clinic assc=association12 mult=1..1 */
    public Clinic clinic;
-
 
    /** @pdGenerated default getter */
    public java.util.Collection<Pacijent> getPacijent() {
