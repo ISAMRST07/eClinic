@@ -18,6 +18,29 @@ public class Clinic {
    /** @pdRoleInfo migr=no name=ClinicRoom assc=association8 coll=java.util.Collection impl=java.util.HashSet mult=1..* */
    public java.util.Collection<ClinicRoom> clinicRoom;
 
+   public String getName() {
+      return name;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public String getId() {
+      return id;
+   }
+
+   public void setId(String id) {
+      this.id = id;
+   }
+
+   public MedicalStaff getMedicalStaff() {
+      return medicalStaff;
+   }
+
+   public void setMedicalStaff(MedicalStaff medicalStaff) {
+      this.medicalStaff = medicalStaff;
+   }
 
    /** @pdGenerated default getter */
    public java.util.Collection<ClinicRoom> getClinicRoom() {

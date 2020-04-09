@@ -10,7 +10,6 @@ public class ClinicAdministratorService {
 
     public boolean addClinicAdministraor(ClinicAdministrator newCAdministrator){
         System.out.println("In future...");
-
         return true;
     }
 }
