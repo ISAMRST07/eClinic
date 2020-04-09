@@ -5,7 +5,7 @@ import java.util.List;
 import mrs.eclinicapi.model.ClinicRoom;
 
 public interface ClinicRoomRepository {
-    List<ClinicRoom> getAllClinicRooms();
+	List<ClinicRoom> getAllClinicRooms();
 
 	void deleteById(int id);
 
