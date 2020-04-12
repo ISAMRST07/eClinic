@@ -35,7 +35,7 @@ public class Patient {
     public MedicalRecord medicalRecord;
 
 
-    @OneToMany(mappedBy = "patient", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private  List<Intervention> intervention;
 
 }
