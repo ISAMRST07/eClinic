@@ -4,53 +4,58 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class MedicalRecord
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/** @pdOid 390483d6-8440-49da-8f26-3aa3b1cbab0d */
+import javax.persistence.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class MedicalRecord {
-   /** @pdRoleInfo migr=no name=Examination assc=association2 coll=java.util.Collection impl=java.util.HashSet mult=0..* */
-   public java.util.Collection<Examination> examination;
-   /** @pdRoleInfo migr=no name=Disease assc=association3 coll=java.util.Collection impl=java.util.HashSet mult=0..* */
-   public java.util.Collection<Disease> disease;
-   /** @pdRoleInfo migr=no name=Prescription assc=association19 coll=java.util.Collection impl=java.util.HashSet mult=0..* */
-   public java.util.Collection<Prescription> prescription;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    private Patient patient;
+
+   /*public List<Examination> examination;
+   public List<Disease> disease;
+   public List<Prescription> prescription;
 
 
-   /** @pdGenerated default getter */
-   public java.util.Collection<Examination> getExamination() {
+   public Collection<Examination> getExamination() {
       if (examination == null)
-         examination = new java.util.HashSet<Examination>();
+         examination = new ArrayList<>();
       return examination;
    }
 
-   /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorExamination() {
       if (examination == null)
-         examination = new java.util.HashSet<Examination>();
+         examination = new ArrayList<>();
       return examination.iterator();
    }
 
-   /** @pdGenerated default setter
-     * @param newExamination */
    public void setExamination(java.util.Collection<Examination> newExamination) {
       removeAllExamination();
       for (java.util.Iterator iter = newExamination.iterator(); iter.hasNext();)
          addExamination((Examination)iter.next());
    }
 
-   /** @pdGenerated default add
-     * @param newExamination */
    public void addExamination(Examination newExamination) {
       if (newExamination == null)
          return;
       if (this.examination == null)
-         this.examination = new java.util.HashSet<Examination>();
+         this.examination = new ArrayList<>();
       if (!this.examination.contains(newExamination))
          this.examination.add(newExamination);
    }
 
-   /** @pdGenerated default remove
-     * @param oldExamination */
    public void removeExamination(Examination oldExamination) {
       if (oldExamination == null)
          return;
@@ -59,46 +64,38 @@ public class MedicalRecord {
             this.examination.remove(oldExamination);
    }
 
-   /** @pdGenerated default removeAll */
    public void removeAllExamination() {
       if (examination != null)
          examination.clear();
    }
-   /** @pdGenerated default getter */
-   public java.util.Collection<Disease> getDisease() {
+
+   public Collection<Disease> getDisease() {
       if (disease == null)
-         disease = new java.util.HashSet<Disease>();
+         disease = new ArrayList<>();
       return disease;
    }
 
-   /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorDisease() {
       if (disease == null)
-         disease = new java.util.HashSet<Disease>();
+         disease = new ArrayList<>();
       return disease.iterator();
    }
 
-   /** @pdGenerated default setter
-     * @param newDisease */
    public void setDisease(java.util.Collection<Disease> newDisease) {
       removeAllDisease();
       for (java.util.Iterator iter = newDisease.iterator(); iter.hasNext();)
          addDisease((Disease)iter.next());
    }
 
-   /** @pdGenerated default add
-     * @param newDisease */
    public void addDisease(Disease newDisease) {
       if (newDisease == null)
          return;
       if (this.disease == null)
-         this.disease = new java.util.HashSet<Disease>();
+         this.disease = new ArrayList<>();
       if (!this.disease.contains(newDisease))
          this.disease.add(newDisease);
    }
 
-   /** @pdGenerated default remove
-     * @param oldDisease */
    public void removeDisease(Disease oldDisease) {
       if (oldDisease == null)
          return;
@@ -107,46 +104,37 @@ public class MedicalRecord {
             this.disease.remove(oldDisease);
    }
 
-   /** @pdGenerated default removeAll */
    public void removeAllDisease() {
       if (disease != null)
          disease.clear();
    }
-   /** @pdGenerated default getter */
-   public java.util.Collection<Prescription> getPrescription() {
+   public Collection<Prescription> getPrescription() {
       if (prescription == null)
-         prescription = new java.util.HashSet<Prescription>();
+         prescription = new ArrayList<>();
       return prescription;
    }
 
-   /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorPrescription() {
       if (prescription == null)
-         prescription = new java.util.HashSet<Prescription>();
+         prescription = new ArrayList<>();
       return prescription.iterator();
    }
 
-   /** @pdGenerated default setter
-     * @param newPrescription */
    public void setPrescription(java.util.Collection<Prescription> newPrescription) {
       removeAllPrescription();
       for (java.util.Iterator iter = newPrescription.iterator(); iter.hasNext();)
          addPrescription((Prescription)iter.next());
    }
 
-   /** @pdGenerated default add
-     * @param newPrescription */
    public void addPrescription(Prescription newPrescription) {
       if (newPrescription == null)
          return;
       if (this.prescription == null)
-         this.prescription = new java.util.HashSet<Prescription>();
+         this.prescription = new ArrayList<>();
       if (!this.prescription.contains(newPrescription))
          this.prescription.add(newPrescription);
    }
 
-   /** @pdGenerated default remove
-     * @param oldPrescription */
    public void removePrescription(Prescription oldPrescription) {
       if (oldPrescription == null)
          return;
@@ -155,10 +143,9 @@ public class MedicalRecord {
             this.prescription.remove(oldPrescription);
    }
 
-   /** @pdGenerated default removeAll */
    public void removeAllPrescription() {
       if (prescription != null)
          prescription.clear();
-   }
+   }*/
 
 }

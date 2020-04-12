@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @Repository
 public class InMemoryClinicAdministratorReoisitory implements ClinicAdministratorRepository{
-    private final ConcurrentMap<String, ClinicAdministrator> clinicsAdmins = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, ClinicAdministrator> clinicsAdmins = new ConcurrentHashMap<>();
 
     @Override
     public Collection<ClinicAdministrator> getAll() {

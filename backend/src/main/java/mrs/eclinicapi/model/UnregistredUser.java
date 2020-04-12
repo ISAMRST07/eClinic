@@ -4,8 +4,25 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class UnregistredUser
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/** @pdOid ae3e5f1e-ce99-4dfc-ba78-a318e01b2af3 */
-public class UnregistredUser extends User {
+import javax.persistence.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
+public class UnregistredUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
+
 }

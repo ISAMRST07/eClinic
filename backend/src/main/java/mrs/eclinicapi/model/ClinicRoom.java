@@ -4,15 +4,25 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class ClinicRoom
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class ClinicRoom {
 
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public int getId() {
-		return id;
-	}
+    @ManyToOne
+    private Clinic clinic;
 
 }

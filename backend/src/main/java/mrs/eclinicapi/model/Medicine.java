@@ -4,13 +4,30 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class Medicine
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/** @pdOid 63361bc0-8cad-4459-b1ab-a702ae3c3f73 */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class Medicine {
-   /** @pdOid 89fbc302-7f9c-476e-b39c-269ddb134499 */
-   private int id;
-   /** @pdOid 41961984-9d6d-45c7-bbbb-17ef5e82cb0b */
-   private int name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /*TODO
+    @ManyToMany(mappedBy = "medicine")
+    private List<Codebook> codebooks;*/
+    private int name;
 
 }

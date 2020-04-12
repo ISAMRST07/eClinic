@@ -14,7 +14,7 @@ public class InMemoryTestRepository implements TestRepository {
     @Override
     public Collection<Test> findTests() {
         Test t = new Test();
-        t.setId(1);
+        t.setId(1L);
         tests.putIfAbsent(1, t);
         return this.tests.values();
     }

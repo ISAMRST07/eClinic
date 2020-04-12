@@ -35,7 +35,7 @@ public class ClinicRoomController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClinicRoom> getClinicRoom(@PathVariable int id) {
+	public ResponseEntity<ClinicRoom> getClinicRoom(@PathVariable Long id) {
 
 		ClinicRoom clinicRoom = clinicRoomService.findOneClinicRoom(id);
 		// clinicRoom must exist
@@ -57,7 +57,7 @@ public class ClinicRoomController {
 
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteClinicRoom(@PathVariable int id) {
+	public ResponseEntity<Void> deleteClinicRoom(@PathVariable Long id) {
 
 		ClinicRoom clinicRoom = clinicRoomService.findOneClinicRoom(id);
 

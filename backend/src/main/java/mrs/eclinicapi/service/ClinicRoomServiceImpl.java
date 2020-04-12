@@ -22,12 +22,12 @@ public class ClinicRoomServiceImpl implements ClinicRoomService {
 	}
 
 	@Override
-	public void remove(int id) {
-		clinicRoomRepository.deleteById(id);
+	public void remove(Long id) {
+
 	}
 
 	@Override
-	public ClinicRoom findOneClinicRoom(int id) {
-		return clinicRoomRepository.findById(id);
+	public ClinicRoom findOneClinicRoom(Long id) {
+		return null;
 	}
 }

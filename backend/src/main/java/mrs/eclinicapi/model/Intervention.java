@@ -4,13 +4,28 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class Intervention
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import mrs.eclinicapi.model.enums.InterventionType;
 
-/** @pdOid d47e13b4-734a-43a9-8e4a-b81287ccf85e */
+import javax.persistence.*;
+
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class Intervention {
-   /** @pdOid 3486a0e4-2a5c-4355-9700-7164b85de5bb */
-   private int id;
-   /** @pdOid 7efb6cde-5d33-45db-9d13-87a983928cae */
-   private InterventionType type;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private InterventionType type;
+
+    @ManyToOne
+    private Patient patient;
 
 }

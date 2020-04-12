@@ -4,14 +4,27 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class Prescription
  ***********************************************************************/
 
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/** @pdOid 4ae36bab-979f-4e15-acd2-65c5c65b566e */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class Prescription {
-   /** @pdOid c9bc8b13-9003-47cf-b5d2-52dac5aaef15 */
-   private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   /** @pdRoleInfo migr=no name=Medicine assc=association20 mult=1..1 */
-   public Medicine medicine;
+   /*
+   public Medicine medicine;*/
 
 }

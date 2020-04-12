@@ -4,53 +4,59 @@ package mrs.eclinicapi.model; /*************************************************
  * Purpose: Defines the Class ClinicalCentarAdministrator
  ***********************************************************************/
 
-import java.util.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/** @pdOid 7d475349-9842-43c8-853f-89494e57dad3 */
-public class ClinicalCentarAdministrator extends User {
-   /** @pdRoleInfo migr=no name=ClinicAdministrator assc=association13 coll=java.util.Collection impl=java.util.HashSet mult=1..* */
-   public java.util.Collection<ClinicAdministrator> clinicAdministrator;
-   /** @pdRoleInfo migr=no name=UnregistredUser assc=association14 coll=java.util.Collection impl=java.util.HashSet mult=0..* */
-   public java.util.Collection<UnregistredUser> unregistredUser;
-   /** @pdRoleInfo migr=no name=Codebook assc=association15 mult=1..1 */
-   public Codebook codebook;
+import javax.persistence.*;
 
 
-   /** @pdGenerated default getter */
-   public java.util.Collection<ClinicAdministrator> getClinicAdministrator() {
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+public class ClinicalCentarAdministrator {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
+  /* @OneToOne
+   private Codebook codebook;*/
+   /* private List<ClinicAdministrator> clinicAdministrator;
+   private List<UnregistredUser> unregistredUser;
+
+
+   public Collection<ClinicAdministrator> getClinicAdministrator() {
       if (clinicAdministrator == null)
-         clinicAdministrator = new java.util.HashSet<ClinicAdministrator>();
+         clinicAdministrator = new ArrayList<>();
       return clinicAdministrator;
    }
 
-   /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorClinicAdministrator() {
       if (clinicAdministrator == null)
-         clinicAdministrator = new java.util.HashSet<ClinicAdministrator>();
+         clinicAdministrator = new ArrayList<>();
       return clinicAdministrator.iterator();
    }
 
-   /** @pdGenerated default setter
-     * @param newClinicAdministrator */
    public void setClinicAdministrator(java.util.Collection<ClinicAdministrator> newClinicAdministrator) {
       removeAllClinicAdministrator();
       for (java.util.Iterator iter = newClinicAdministrator.iterator(); iter.hasNext();)
          addClinicAdministrator((ClinicAdministrator)iter.next());
    }
 
-   /** @pdGenerated default add
-     * @param newClinicAdministrator */
    public void addClinicAdministrator(ClinicAdministrator newClinicAdministrator) {
       if (newClinicAdministrator == null)
          return;
       if (this.clinicAdministrator == null)
-         this.clinicAdministrator = new java.util.HashSet<ClinicAdministrator>();
+         this.clinicAdministrator = new ArrayList<>();
       if (!this.clinicAdministrator.contains(newClinicAdministrator))
          this.clinicAdministrator.add(newClinicAdministrator);
    }
 
-   /** @pdGenerated default remove
-     * @param oldClinicAdministrator */
    public void removeClinicAdministrator(ClinicAdministrator oldClinicAdministrator) {
       if (oldClinicAdministrator == null)
          return;
@@ -59,46 +65,38 @@ public class ClinicalCentarAdministrator extends User {
             this.clinicAdministrator.remove(oldClinicAdministrator);
    }
 
-   /** @pdGenerated default removeAll */
    public void removeAllClinicAdministrator() {
       if (clinicAdministrator != null)
          clinicAdministrator.clear();
    }
-   /** @pdGenerated default getter */
-   public java.util.Collection<UnregistredUser> getUnregistredUser() {
+
+   public Collection<UnregistredUser> getUnregistredUser() {
       if (unregistredUser == null)
-         unregistredUser = new java.util.HashSet<UnregistredUser>();
+         unregistredUser = new ArrayList<>();
       return unregistredUser;
    }
 
-   /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorUnregistredUser() {
       if (unregistredUser == null)
-         unregistredUser = new java.util.HashSet<UnregistredUser>();
+         unregistredUser = new ArrayList<>();
       return unregistredUser.iterator();
    }
 
-   /** @pdGenerated default setter
-     * @param newUnregistredUser */
    public void setUnregistredUser(java.util.Collection<UnregistredUser> newUnregistredUser) {
       removeAllUnregistredUser();
       for (java.util.Iterator iter = newUnregistredUser.iterator(); iter.hasNext();)
          addUnregistredUser((UnregistredUser)iter.next());
    }
 
-   /** @pdGenerated default add
-     * @param newUnregistredUser */
    public void addUnregistredUser(UnregistredUser newUnregistredUser) {
       if (newUnregistredUser == null)
          return;
       if (this.unregistredUser == null)
-         this.unregistredUser = new java.util.HashSet<UnregistredUser>();
+         this.unregistredUser = new ArrayList<>();
       if (!this.unregistredUser.contains(newUnregistredUser))
          this.unregistredUser.add(newUnregistredUser);
    }
 
-   /** @pdGenerated default remove
-     * @param oldUnregistredUser */
    public void removeUnregistredUser(UnregistredUser oldUnregistredUser) {
       if (oldUnregistredUser == null)
          return;
@@ -107,10 +105,9 @@ public class ClinicalCentarAdministrator extends User {
             this.unregistredUser.remove(oldUnregistredUser);
    }
 
-   /** @pdGenerated default removeAll */
    public void removeAllUnregistredUser() {
       if (unregistredUser != null)
          unregistredUser.clear();
-   }
+   }*/
 
 }

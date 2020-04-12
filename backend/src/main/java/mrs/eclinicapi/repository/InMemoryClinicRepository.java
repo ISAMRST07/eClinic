@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @Repository
 public class InMemoryClinicRepository implements ClinicRepository{
-    private final ConcurrentMap<String, Clinic> clinics = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, Clinic> clinics = new ConcurrentHashMap<>();
 
     @Override
     public Collection<Clinic> getAll() {
