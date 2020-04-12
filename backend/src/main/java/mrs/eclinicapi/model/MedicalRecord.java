@@ -25,7 +25,9 @@ public class MedicalRecord {
     private Patient patient;
 
    /*public List<Examination> examination;
+
    public List<Disease> disease;
+
    public List<Prescription> prescription;
 
 

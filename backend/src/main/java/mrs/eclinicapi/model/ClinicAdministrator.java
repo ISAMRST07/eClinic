@@ -36,6 +36,8 @@ public class ClinicAdministrator {
     @OneToMany(mappedBy = "clinicAdministrator", fetch = FetchType.LAZY)
     private List<Nurse> nurses;
 
+    @ManyToOne
+    private ClinicalCentarAdministrator admin;
 
     @OneToOne
     public Clinic clinic;

@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 @Getter
@@ -24,10 +27,14 @@ public class ClinicalCentarAdministrator {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-  /* @OneToOne
-   private Codebook codebook;*/
-   /* private List<ClinicAdministrator> clinicAdministrator;
-   private List<UnregistredUser> unregistredUser;
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
+    private List<Codebook> codebook;
+
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
+    private List<ClinicAdministrator> clinicAdministrator;
+
+    @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
+    private List<UnregistredUser> unregistredUser;
 
 
    public Collection<ClinicAdministrator> getClinicAdministrator() {
@@ -108,6 +115,6 @@ public class ClinicalCentarAdministrator {
    public void removeAllUnregistredUser() {
       if (unregistredUser != null)
          unregistredUser.clear();
-   }*/
+   }
 
 }

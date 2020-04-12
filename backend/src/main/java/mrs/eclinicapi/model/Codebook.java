@@ -9,10 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,9 +25,11 @@ public class Codebook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   /*TODO
-   @ManyToMany(mappedBy = "codebooks")
-   public List<Medicine> medicine;
+   @ManyToOne
+   private ClinicalCentarAdministrator admin;
+
+   @OneToMany(mappedBy = "codebook")
+   private List<Medicine> medicine;
 
    public Collection<Medicine> getMedicine() {
       if (medicine == null)
@@ -67,6 +69,6 @@ public class Codebook {
    public void removeAllMedicine() {
       if (medicine != null)
          medicine.clear();
-   }*/
+   }
 
 }

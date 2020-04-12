@@ -24,5 +24,7 @@ public class UnregistredUser {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
+    @ManyToOne
+    private ClinicalCentarAdministrator admin;
 
 }

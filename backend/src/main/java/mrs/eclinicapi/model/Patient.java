@@ -28,6 +28,9 @@ public class Patient {
     @ManyToOne
     private ClinicAdministrator clinicAdministrator;
 
+    @ManyToOne
+    private ClinicAdministrator clinic;
+
     @OneToOne
     public MedicalRecord medicalRecord;
 

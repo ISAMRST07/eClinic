@@ -37,6 +37,9 @@ public class Clinic {
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Nurse> nurses;
 
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+    private List<Patient> patients;
+
 
 /*TODO
    public String getName() {

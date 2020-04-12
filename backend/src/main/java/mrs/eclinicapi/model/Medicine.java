@@ -9,10 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -25,9 +23,10 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*TODO
-    @ManyToMany(mappedBy = "medicine")
-    private List<Codebook> codebooks;*/
+
+    @ManyToOne
+    private Codebook codebook;
+
     private int name;
 
 }

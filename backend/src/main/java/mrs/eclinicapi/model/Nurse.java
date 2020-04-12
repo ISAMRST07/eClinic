@@ -20,10 +20,12 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Nurse extends MedicalStaff {
 
+
+
     private String nursePosition;
 //  TODO
 
-//   private List<Prescription> prescription;
+ //  private List<Prescription> prescription;
 //
 //   public Collection<Prescription> getPrescription() {
 //      if (prescription == null)

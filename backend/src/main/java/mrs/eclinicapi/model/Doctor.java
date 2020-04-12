@@ -21,9 +21,9 @@ public class Doctor extends MedicalStaff {
 
     private String position;
 
-   /*TODO
-   public List<Intervention> intervention;
 
+   //public List<Intervention> intervention;
+/*TODO
    public Collection<Intervention> getIntervention() {
       if (intervention == null)
          intervention = new ArrayList<>();
