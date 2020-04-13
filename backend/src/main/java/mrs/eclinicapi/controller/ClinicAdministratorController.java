@@ -1,6 +1,9 @@
 package mrs.eclinicapi.controller;
 
+import mrs.eclinicapi.DTO.ClinicAdministratorDto;
 import mrs.eclinicapi.model.ClinicAdministrator;
+import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.repository.UserRepositroy;
 import mrs.eclinicapi.service.ClinicAdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,14 +18,17 @@ import java.util.Collection;
 @RequestMapping("/api/clinicadministrator")
 public class ClinicAdministratorController {
 
+    private ClinicAdministratorService clinisAService;
+
     @Autowired
-    ClinicAdministratorService clinisAService;
+    public ClinicAdministratorController(ClinicAdministratorService clinisAService) {
+        this.clinisAService = clinisAService;
+    }
 
+    @PostMapping()
+    public ClinicAdministratorDto addClinicAdministrator(@RequestBody ClinicAdministratorDto clinicAdministratorDto ) {
+        return new ClinicAdministratorDto(clinisAService.addClinicAdministraor(clinicAdministratorDto));
 
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public boolean addClinicAdministrato(@RequestBody ClinicAdministrator newClinicAdmin ) {
-        boolean greetings = clinisAService.addClinicAdministraor(newClinicAdmin);
-        return  greetings;
     }
 
 }
