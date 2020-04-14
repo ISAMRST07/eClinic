@@ -27,17 +27,9 @@ public class ClinicAdministrator {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(mappedBy = "clinicAdministrator", fetch = FetchType.EAGER)
-    public List<Patient> patients;
 
-    @OneToMany(mappedBy = "clinicAdministrator", fetch = FetchType.LAZY)
-    private List<Doctor> doctors;
 
-    @OneToMany(mappedBy = "clinicAdministrator", fetch = FetchType.LAZY)
-    private List<Nurse> nurses;
 
-    @ManyToOne
-    private ClinicalCentarAdministrator admin;
 
     @OneToOne
     public Clinic clinic;

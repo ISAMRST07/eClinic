@@ -31,50 +31,50 @@ public class ClinicalCentarAdministrator {
     private List<Codebook> codebook;
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
-    private List<ClinicAdministrator> clinicAdministrator;
+    private List<Clinic> clinics;
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
     private List<UnregistredUser> unregistredUser;
 
 
-   public Collection<ClinicAdministrator> getClinicAdministrator() {
-      if (clinicAdministrator == null)
-         clinicAdministrator = new ArrayList<>();
-      return clinicAdministrator;
+   public Collection<Clinic> getClinics() {
+      if (clinics == null)
+         clinics = new ArrayList<Clinic>();
+      return clinics;
    }
 
    public java.util.Iterator getIteratorClinicAdministrator() {
-      if (clinicAdministrator == null)
-         clinicAdministrator = new ArrayList<>();
-      return clinicAdministrator.iterator();
+      if (clinics == null)
+         clinics = new ArrayList<Clinic>();
+      return clinics.iterator();
    }
 
-   public void setClinicAdministrator(java.util.Collection<ClinicAdministrator> newClinicAdministrator) {
+   public void setClinics(java.util.Collection<ClinicAdministrator> newClinicAdministrator) {
       removeAllClinicAdministrator();
       for (java.util.Iterator iter = newClinicAdministrator.iterator(); iter.hasNext();)
-         addClinicAdministrator((ClinicAdministrator)iter.next());
+         addClinicAdministrator((Clinic)iter.next());
    }
 
-   public void addClinicAdministrator(ClinicAdministrator newClinicAdministrator) {
+   public void addClinicAdministrator(Clinic newClinicAdministrator) {
       if (newClinicAdministrator == null)
          return;
-      if (this.clinicAdministrator == null)
-         this.clinicAdministrator = new ArrayList<>();
-      if (!this.clinicAdministrator.contains(newClinicAdministrator))
-         this.clinicAdministrator.add(newClinicAdministrator);
+      if (this.clinics == null)
+         this.clinics = new ArrayList<Clinic>();
+      if (!this.clinics.contains(newClinicAdministrator))
+         this.clinics.add(newClinicAdministrator);
    }
 
    public void removeClinicAdministrator(ClinicAdministrator oldClinicAdministrator) {
       if (oldClinicAdministrator == null)
          return;
-      if (this.clinicAdministrator != null)
-         if (this.clinicAdministrator.contains(oldClinicAdministrator))
-            this.clinicAdministrator.remove(oldClinicAdministrator);
+      if (this.clinics != null)
+         if (this.clinics.contains(oldClinicAdministrator))
+            this.clinics.remove(oldClinicAdministrator);
    }
 
    public void removeAllClinicAdministrator() {
-      if (clinicAdministrator != null)
-         clinicAdministrator.clear();
+      if (clinics != null)
+         clinics.clear();
    }
 
    public Collection<UnregistredUser> getUnregistredUser() {

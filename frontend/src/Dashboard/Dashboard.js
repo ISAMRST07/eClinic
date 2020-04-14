@@ -21,6 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import AddClinicAdministrator from "../ClinicAdministrator/addClinicAdministrator";
 import axios from 'axios';
 
 function Copyright() {
@@ -263,6 +264,10 @@ export default function Dashboard() {
                                 </Button>
                             </Grid>
                         </form>
+                    </Paper>
+                    <Paper className={classes.paper}>
+                        <AddClinicAdministrator />
+
                     </Paper>
                     <Box pt={4}>
                         <Copyright />

@@ -39,7 +39,8 @@ public class Clinic {
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Patient> patients;
-
+    @ManyToOne
+    private ClinicalCentarAdministrator admin;
 
 /*TODO
    public String getName() {
