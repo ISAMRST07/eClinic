@@ -1,11 +1,13 @@
 package mrs.eclinicapi.repository;
 
 import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.ClinicAdministrator;
 
 import java.util.Collection;
 
-public interface ClinicRepository {
-    Collection<Clinic> getAll();
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    Clinic create(Clinic clinic);
+public interface ClinicRepository extends JpaRepository<Clinic, Long> {
+
 }
+

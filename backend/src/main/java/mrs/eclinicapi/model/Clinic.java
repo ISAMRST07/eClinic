@@ -41,7 +41,14 @@ public class Clinic {
     private List<Patient> patients;
     @ManyToOne
     private ClinicalCentarAdministrator admin;
+	@Override
+	public String toString() {
+		return "Clinic [id=" + id + ", name=" + name + ", clinicAdministrator=" + clinicAdministrator + ", clinicRoom="
+				+ clinicRoom + ", doctors=" + doctors + ", nurses=" + nurses + ", patients=" + patients + ", admin="
+				+ admin + "]";
+	}
 
+    
 /*TODO
    public String getName() {
       return name;
