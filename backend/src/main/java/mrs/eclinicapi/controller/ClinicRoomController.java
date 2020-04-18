@@ -28,7 +28,7 @@ public class ClinicRoomController {
 	@Autowired
 	private ClinicRoomService clinicRoomService;
 	
-	@GetMapping
+	/*@GetMapping
 	public ResponseEntity<List<ClinicRoom>> getClinicRooms() {
 		List<ClinicRoom> clinicRooms = clinicRoomService.getAllClinicRooms();
 		return new ResponseEntity<>(clinicRooms, HttpStatus.OK);
@@ -67,5 +67,5 @@ public class ClinicRoomController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
+	}*/
 }

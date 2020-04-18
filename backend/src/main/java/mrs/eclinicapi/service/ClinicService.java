@@ -16,7 +16,6 @@ public class ClinicService {
 
     @Autowired
     public ClinicService(ClinicRepository clinicRepository) {
-    	System.out.println("clinicservice cosntructor");
         this.clinicRepository = clinicRepository;
     }
 

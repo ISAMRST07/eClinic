@@ -7,7 +7,7 @@ import mrs.eclinicapi.model.Test;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.repository.ClinicAdministratorRepository;
 import mrs.eclinicapi.repository.ClinicRepository;
-import mrs.eclinicapi.repository.UserRepositroy;
+import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class ClinicAdministratorService {
     private ClinicAdministratorRepository clinicAdminRepository;
 
     @Autowired
-    public ClinicAdministratorService(ClinicAdministratorRepository clinicAdminRepository, UserRepositroy userRepositroy) {
+    public ClinicAdministratorService(ClinicAdministratorRepository clinicAdminRepository, UserRepository userRepository) {
         this.clinicAdminRepository = clinicAdminRepository;
     }
 

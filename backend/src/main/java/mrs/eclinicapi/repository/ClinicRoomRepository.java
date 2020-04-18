@@ -2,12 +2,10 @@ package mrs.eclinicapi.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import mrs.eclinicapi.model.ClinicRoom;
 
-public interface ClinicRoomRepository {
-	List<ClinicRoom> getAllClinicRooms();
+public interface ClinicRoomRepository extends JpaRepository<ClinicRoom, Long>{
 
-	void deleteById(int id);
-
-	ClinicRoom findById(int id);
 }

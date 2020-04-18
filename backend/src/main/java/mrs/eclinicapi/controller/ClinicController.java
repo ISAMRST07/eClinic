@@ -9,18 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "api/clinic")
 public class ClinicController {
 
-	private ClinicService clinicService;
-
-    @Autowired
-    public ClinicController(ClinicService clinicService) {
-        this.clinicService = clinicService;
-    }
+	@Autowired
+	private ClinicService service;
     
     @PostMapping()
     public Clinic addClinic(@RequestParam String name, @RequestParam String id) {
     	Clinic newClinic = new Clinic();
     	newClinic.setName(name);
-    	clinicService.addClinic(newClinic);
+    	service.addClinic(newClinic);
     	System.out.println("newClinic = " + newClinic);
         return newClinic;
     }
