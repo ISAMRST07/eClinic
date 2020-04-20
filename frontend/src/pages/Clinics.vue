@@ -15,7 +15,51 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="6">
-
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field label="Name*" required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" align-self="end">
+                                    <v-text-field label="Address*"
+                                                  ref="address"
+                                                  :rules="addressRules"
+                                                  :value="clinic.address"
+                                                  @keypress.enter="mapAddress = $event.target.value"
+                                                  @focusout="mapAddress = $event.target.value"
+                                                  required>
+                                        <v-tooltip bottom slot="append">
+                                            <template v-slot:activator="{ on }">
+                                                <v-btn icon v-on="on"
+                                                       @click="mapAddress = $refs.address.internalValue"
+                                                       class="d-none d-md-flex">
+                                                    <v-icon>mdi-map-marker</v-icon>
+                                                </v-btn>
+                                                <v-btn icon v-on="on" class="d-flex d-md-none">
+                                                    <v-icon>mdi-map</v-icon>
+                                                </v-btn>
+                                            </template>
+                                            <span>Show on the map</span>
+                                        </v-tooltip>
+                                    </v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6" align-self="end">
+                                    <v-text-field label="Coordinates"
+                                                  :value="clinic.coordinates | formatCoords"
+                                                  disabled
+                                    >
+                                    </v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-textarea
+                                            counter="256"
+                                            outlined
+                                            label="Description"
+                                            rows="10"
+                                            no-resize
+                                            :rules="rules"
+                                    ></v-textarea>
+                                </v-col>
+                            </v-row>
                         </v-col>
                         <v-col cols="6">
                             <map-view v-model="clinic.coordinates"
