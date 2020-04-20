@@ -2,7 +2,8 @@
     <v-app>
         <drawer :mini="miniDrawer" @miniVariant="miniDrawer = !miniDrawer"/>
         <nav-bar/>
-        <v-content>
+        <v-content class="content">
+            <router-view/>
         </v-content>
     </v-app>
 </template>
@@ -12,7 +13,7 @@
     import Drawer from "../components/Drawer";
 
     export default {
-        name: "Home",
+        name: "Main",
         components: {Drawer, NavBar},
         data: () => ({
             miniDrawer: true,
@@ -26,5 +27,7 @@
 </script>
 
 <style scoped>
-
+    .content {
+        background-color: #f0f0f0;
+    }
 </style>

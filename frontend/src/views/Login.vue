@@ -1,5 +1,5 @@
 <template>
-    $END$
+    <p>login</p>
 </template>
 
 <script>

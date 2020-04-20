@@ -1,27 +1,38 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
-Vue.use(VueRouter)
+import Login from "../views/Login";
+import Main from "../views/Main";
+import loggedRoutes from "./loggedRoutes";
+Vue.use(VueRouter);
 
   const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    {
+      path: '/',
+      component: Main,
+      children: loggedRoutes,
+      meta: {
+        public: false,
+      }
+    },
+    {
+      path: '/login',
+      component: Login,
+      meta: {
+        public: true,
+      }
+    }
+
+];
 
 const router = new VueRouter({
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+  // check if logged. if not, send them to login page no matter what
+  let isPublic = to.matched.some((routeRecord) => routeRecord.meta.public);
+  console.log(isPublic);
+  next();
+});
 
 export default router
