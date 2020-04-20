@@ -15,65 +15,46 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="6">
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-text-field label="Name*" required></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6" align-self="end">
-                                    <v-text-field label="Address*"
-                                                  ref="address"
-                                                  :rules="addressRules"
-                                                  :value="clinic.address"
-                                                  @keypress.enter="mapAddress = $event.target.value"
-                                                  @focusout="mapAddress = $event.target.value"
-                                                  required>
-                                        <v-tooltip bottom slot="append">
-                                            <template v-slot:activator="{ on }">
-                                                <v-btn icon v-on="on"
-                                                       @click="mapAddress = $refs.address.internalValue"
-                                                       class="d-none d-md-flex">
-                                                    <v-icon>mdi-map-marker</v-icon>
-                                                </v-btn>
-                                                <v-btn icon v-on="on" class="d-flex d-md-none">
-                                                    <v-icon>mdi-map</v-icon>
-                                                </v-btn>
-                                            </template>
-                                            <span>Show on the map</span>
-                                        </v-tooltip>
-                                    </v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6" align-self="end">
-                                    <v-text-field label="Coordinates"
-                                                  :value="clinic.coordinates | formatCoords"
-                                                  disabled
-                                    >
-                                    </v-text-field>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-textarea
-                                            counter="256"
-                                            outlined
-                                            label="Description"
-                                            rows="10"
-                                            no-resize
-                                            :rules="rules"
-                                    ></v-textarea>
-                                </v-col>
-                            </v-row>
+                            <add-clinic-form @mapAddress="mapAddress = $event" @mapDialog="mapDialog = !mapDialog" />
                         </v-col>
                         <v-col cols="6">
-                            <map-view v-model="clinic.coordinates"
+                            <map-view v-model="coordinates"
+                                      map-id="map"
                                       class="d-none d-md-flex"
                                       clickable
                                       use-address
                                       :address="mapAddress"
-                                      @clickAddress="clinic.address = $event"
+                                      @clickAddress="address = $event"
                             />
                         </v-col>
                     </v-row>
                     <small>*indicates required field</small>
                 </v-container>
                 </v-card>
+        </v-dialog>
+        <v-dialog  v-model="mapDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card>
+                <v-toolbar class="toolbar" dark elevation="2" color="primary">
+                    <v-toolbar-title>Select a location</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark @click="mapDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>
+                <v-container fluid class="mobile-map">
+                        <map-view v-model="coordinates"
+                                  class="d-flex d-md-none"
+                                  clickable
+                                  use-address
+                                  :address="mapAddress"
+                                  map-id="smallMap"
+                                  @clickAddress="address = $event"
+                        />
+                </v-container>
+                <v-container class="footer">
+
+                </v-container>
+            </v-card>
         </v-dialog>
         <v-btn
                 fab
@@ -90,30 +71,38 @@
 
 <script>
     import MapView from "../components/MapView";
+    import AddClinicForm from "../components/AddClinicForm";
+    import {mapMutations, mapState} from "vuex";
+
     export default {
         name: "Clinics",
-        components: {MapView},
+        components: {AddClinicForm, MapView},
         data: () => ({
             addDialog: false,
-            rules: [v=> !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.'],
-            clinic: {
-                name: String,
-                address: null,
-                description: String,
-                coordinates: null,
-            },
-            mapAddress: '',
-            addressRules: [value => !!value || 'Valid address required.']
+            mapDialog: false,
+            mapAddress: null,
         }),
-        methods: {
-            macak(e) {
+        computed: {
+            ...mapState('clinics/addClinic', ['clinic']),
+            coordinates: {
+                get() {
+                    return this.clinic.coordinates;
+                },
+                set(coords) {
+                    this.updateClinic({coordinates: coords});
+                }
+            },
+            address: {
+                get() {
+                    return this.clinic.address;
+                },
+                set(address) {
+                    this.updateClinic({address: address});
+                }
             }
         },
-        filters: {
-            formatCoords(value) {
-                if (!value) return '';
-                return `(${value.lat.toFixed(6)}, ${value.lng.toFixed(6)})`;
-            }
+        methods: {
+            ...mapMutations('clinics/addClinic', ['updateClinic'])
         }
     }
 </script>
@@ -123,6 +112,18 @@
         position: absolute;
         right: 2em;
         bottom: 3em;
+    }
+    .toolbar, .toolbar *{
+        z-index: 10;
+    }
+    .mobile-map {
+        z-index: 1;
+        position: absolute;
+        height: auto;
+        top: 56px;
+        bottom: 56px;
+        margin: 0;
+        padding: 0;
     }
 
 </style>

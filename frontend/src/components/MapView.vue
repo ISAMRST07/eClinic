@@ -1,5 +1,7 @@
 <template>
-    <div id="map">
+    <div :id="mapId"
+         style="width: 100%; height: 100%;"
+    >
 
     </div>
 </template>
@@ -15,6 +17,10 @@
             isActive: false
         }),
         props: {
+            mapId: {
+                type: String,
+                default: 'map'
+            },
             value: null,
             clickable: {
                 type: Boolean,
@@ -35,8 +41,7 @@
                     this.coordsFromAddress(newAddress);
                 }
             }
-        }
-        ,
+        },
         mounted() {
             delete L.Icon.Default.prototype._getIconUrl;
             L.Icon.Default.mergeOptions({
@@ -45,12 +50,12 @@
                 shadowUrl: require("leaflet/dist/images/marker-shadow.png")
             });
 
-            this.map = L.map('map').setView([0, 0], 2);
+            this.map = L.map(this.mapId).setView([0, 0], 2);
             this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
-
+            console.log(this.map);
             if (this.clickable) this.map.on('click', this.addMarker);
             if (this.value) this.placeMarker(this.value);
             setTimeout(() => this.map.invalidateSize(), 400);
@@ -103,8 +108,4 @@
 </script>
 
 <style scoped>
-    #map {
-        width: 100%;
-        height: 100%;
-    }
 </style>
