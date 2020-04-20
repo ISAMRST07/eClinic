@@ -29,8 +29,7 @@ public class MedicalStaff {
     @ManyToOne
     private Clinic clinic;
 
-    @ManyToOne
-    private ClinicAdministrator clinicAdministrator;
+
 
     // public WorkingCalendar workingCalendar;
 
