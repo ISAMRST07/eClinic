@@ -31,4 +31,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    public User(String username, String password, String name) {
+    	this.username = username;
+    	this.password = password;
+    	this.name = name;
+    }
+
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", password=" + password + ", name=" + name + ", type=" + type + ", id="
+				+ id + "]";
+	}
+    
+    
 }

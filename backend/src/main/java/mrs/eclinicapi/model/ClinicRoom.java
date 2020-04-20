@@ -11,6 +11,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,7 +24,8 @@ public class ClinicRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Clinic clinic;
 
 }

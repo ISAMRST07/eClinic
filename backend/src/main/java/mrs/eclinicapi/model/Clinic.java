@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,9 +31,9 @@ public class Clinic {
     @OneToOne
     private ClinicAdministrator clinicAdministrator;
 
-    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
-    private List<ClinicRoom> clinicRoom;
-
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ClinicRoom> clinicRoom = new HashSet<ClinicRoom>();
+    
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Doctor> doctors;
 
