@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.service.ClinicRoomService;
+import mrs.eclinicapi.service.ClinicService;
 
 @RestController
 @RequestMapping(value = "api/clinicroom")
@@ -28,6 +30,24 @@ public class ClinicRoomController {
 	@Autowired
 	private ClinicRoomService clinicRoomService;
 	
+	@Autowired
+	private ClinicService clinicService;
+	
+	@PostMapping()
+    public ClinicRoom addClinicRoom(@RequestParam Long clinicId) {
+		System.out.println("adding room to clinic = " + clinicId);
+		Clinic clinic = clinicService.findOne(clinicId);
+		if(clinic == null) {
+			System.out.println("clinic with id = " + clinicId + " is null");
+		}else {
+			System.out.println("clinic with id = " + clinicId + " is = " + clinic);
+		}
+		
+		ClinicRoom newClinicRoom = new ClinicRoom();
+		newClinicRoom.setClinic(clinic);
+		clinicRoomService.addClinicRoom(newClinicRoom);
+        return newClinicRoom;
+    }
 	/*@GetMapping
 	public ResponseEntity<List<ClinicRoom>> getClinicRooms() {
 		List<ClinicRoom> clinicRooms = clinicRoomService.getAllClinicRooms();

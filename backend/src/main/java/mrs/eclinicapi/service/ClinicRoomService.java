@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClinicRoomService {
  
+	@Autowired
 	private ClinicRoomRepository repository;
 	
-	@Autowired
-	public ClinicRoomService(ClinicRoomRepository repository) {
-		this.repository = repository;
+	public ClinicRoom addClinicRoom(ClinicRoom newClinicRoom){
+		return repository.save(newClinicRoom);
 	}
 }
