@@ -2,7 +2,12 @@ package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.service.ClinicService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,4 +26,29 @@ public class ClinicController {
         return newClinic;
     }
     
+    @RequestMapping(path="/{id}")
+	public Clinic getClinic(@PathVariable("id") Long id) {
+
+		Clinic clinic = service.findOne(id);
+
+		if (clinic == null) {
+			return null;
+		}
+		System.out.println("foudn clinic with id = " + id + " " + clinic);
+		return clinic;
+	}
+    
+    @GetMapping(value = "/getAll")
+   	public ResponseEntity<List<Clinic>> getAllClinic() {
+
+   		List<Clinic> clinics = service.findAll();
+
+   		if (clinics == null) {
+   			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+   		}
+   		for(Clinic c : clinics) {
+   	   		System.out.println("getall clinic = " + c);
+   		}
+   		return new ResponseEntity<>(clinics, HttpStatus.OK);
+   	}
 }
