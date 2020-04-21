@@ -23,5 +23,6 @@ export default {
     ::-webkit-scrollbar {
         width: 0 !important;
         background: transparent !important;
+        overflow: hidden !important;
     }
 </style>

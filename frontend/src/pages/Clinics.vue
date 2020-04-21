@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-dialog v-model="addDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
-                <v-toolbar dark color="accent">
+                <v-toolbar dark class="toolbar" color="accent">
                     <v-btn icon dark @click="addDialog = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -33,7 +33,7 @@
                 </v-card>
         </v-dialog>
         <v-dialog  v-model="mapDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card>
+            <v-card height="100%">
                 <v-toolbar class="toolbar" dark elevation="2" color="primary">
                     <v-toolbar-title>Select a location</v-toolbar-title>
                     <v-spacer></v-spacer>
@@ -41,19 +41,27 @@
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                 </v-toolbar>
-                <v-container fluid class="mobile-map">
-                        <map-view v-model="coordinates"
-                                  class="d-flex d-md-none"
-                                  clickable
-                                  use-address
-                                  :address="mapAddress"
-                                  map-id="smallMap"
-                                  @clickAddress="address = $event"
-                        />
-                </v-container>
-                <v-container class="footer">
-
-                </v-container>
+                <v-card-text class="card-body">
+                    <map-view v-model="coordinates"
+                              class="d-flex d-md-none"
+                              clickable
+                              use-address
+                              :address="mapAddress"
+                              map-id="smallMap"
+                              @clickAddress="setAddress"
+                    />
+                </v-card-text>
+                <v-fade-transition>
+                    <v-card v-show="!!clinic.address && clinic.address.length > 0"
+                            tile
+                            outlined
+                            class="footer"
+                    >
+                        <v-card-text>
+                            <p class="font-weight-medium">{{ clinic.address }}</p>
+                        </v-card-text>
+                    </v-card>
+                </v-fade-transition>
             </v-card>
         </v-dialog>
         <v-btn
@@ -102,7 +110,11 @@
             }
         },
         methods: {
-            ...mapMutations('clinics/addClinic', ['updateClinic'])
+            ...mapMutations('clinics/addClinic', ['updateClinic']),
+            setAddress(e) {
+                // ovo treba da se doradi za autocomplete
+                this.address = e[0];
+            }
         }
     }
 </script>
@@ -113,17 +125,19 @@
         right: 2em;
         bottom: 3em;
     }
-    .toolbar, .toolbar *{
-        z-index: 10;
+    .card-body {
+        margin: auto 0 auto 0;
+        height: 91%;
+        width: 100%;
+        padding: 0 !important;
     }
-    .mobile-map {
-        z-index: 1;
+    .footer{
         position: absolute;
-        height: auto;
-        top: 56px;
-        bottom: 56px;
-        margin: 0;
-        padding: 0;
+        bottom: 0;
+        height: fit-content;
+        width: 100%;
+        z-index: 1000;
+        background-color: red;
     }
 
 </style>

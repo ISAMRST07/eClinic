@@ -58,7 +58,7 @@
             console.log(this.map);
             if (this.clickable) this.map.on('click', this.addMarker);
             if (this.value) this.placeMarker(this.value);
-            setTimeout(() => this.map.invalidateSize(), 400);
+            setTimeout(() => this.map.invalidateSize(), 500);
         },
         updated() {
             this.map.invalidateSize();
@@ -79,16 +79,16 @@
                 let res = await this.reverseGeoCode(latlng);
                 let address= res.data.display_name;
                 if (!address) this.$emit('clickAddress', null);
-                this.$emit('clickAddress', res.data.display_name);
+                this.$emit('clickAddress', [res.data.display_name]);
             },
             async coordsFromAddress(newAddress) {
                 try {
                     let res = await this.geoCode(newAddress);
                     let latlng = {lat: Number(res.data[0].lat), lng: Number(res.data[0].lon)};
-                    let address = res.data[0].display_name;
+                    let addresses = res.data.map(el => el.display_name);
                     this.placeMarker(latlng);
                     this.map.flyTo(new L.LatLng(latlng.lat, latlng.lng), 15);
-                    this.$emit('clickAddress', address);
+                    this.$emit('clickAddress', addresses);
                     this.$emit('input', latlng);
                 } catch (err) {
                     this.$emit('clickAddress', null);
@@ -100,7 +100,7 @@
                 return this.$axios.get(`https://nominatim.openstreetmap.org/${query}`);
             },
             geoCode(address) {
-                let query = `?q=${address}&format=jsonv2&addressdetails=1&limit=1`;
+                let query = `?q=${address}&format=jsonv2&addressdetails=1&limit=6`;
                 return this.$axios.get(`https://nominatim.openstreetmap.org/${query}`);
             }
         }

@@ -11,7 +11,7 @@
                           @keypress.enter="$emit('mapAddress', $event.target.value)"
                           @focusout="$emit('mapAddress', $event.target.value)"
                           required>
-                <v-tooltip bottom slot="append">
+                <v-tooltip bottom :open-on-click="false" slot="append">
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on"
                                @click="$emit('mapAddress', $refs.address.internalValue)"
