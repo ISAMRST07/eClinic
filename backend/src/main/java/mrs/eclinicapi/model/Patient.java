@@ -25,7 +25,6 @@ public class Patient {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-
     @ManyToOne
     private ClinicAdministrator clinic;
 

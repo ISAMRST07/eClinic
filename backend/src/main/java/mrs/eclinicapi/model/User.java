@@ -23,14 +23,14 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class User {
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String username;
     private String password;
     private String name;
     private UserType type;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     
     public User(String username, String password, String name) {
     	this.username = username;
@@ -38,6 +38,13 @@ public class User {
     	this.name = name;
     }
 
+    public User(String username, String password, String name, UserType type) {
+    	this.username = username;
+    	this.password = password;
+    	this.name = name;
+    	this.type = type;
+    }
+    
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", name=" + name + ", type=" + type + ", id="

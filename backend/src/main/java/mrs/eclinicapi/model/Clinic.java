@@ -42,8 +42,10 @@ public class Clinic {
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Patient> patients;
+    
     @ManyToOne
     private ClinicalCentarAdministrator admin;
+    
 	@Override
 	public String toString() {
 		return "Clinic [id=" + id + ", name=" + name + ", clinicAdministrator=" + clinicAdministrator + ", clinicRoom="

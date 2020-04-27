@@ -51,4 +51,16 @@ public class ClinicController {
    		}
    		return new ResponseEntity<>(clinics, HttpStatus.OK);
    	}
+    
+    @RequestMapping(path="/delete/{id}")
+	public ResponseEntity<String> deleteClinic(@PathVariable("id") Long id) {
+		Clinic clinic = service.findOne(id);
+		if (clinic == null) {
+	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
+		}
+		System.out.println("foudn clinic with id = " + id + " " + clinic);
+		service.deleteById(id);
+   		return new ResponseEntity<>("deleted clinic", HttpStatus.OK);
+	}
+    
 }

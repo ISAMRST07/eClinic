@@ -22,15 +22,10 @@ public class MedicalStaff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
     @ManyToOne
     private Clinic clinic;
-
-
-
-    // public WorkingCalendar workingCalendar;
 
 }
