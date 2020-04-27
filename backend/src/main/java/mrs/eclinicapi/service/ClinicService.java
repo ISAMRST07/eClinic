@@ -28,4 +28,16 @@ public class ClinicService {
     public List<Clinic> findAll() {
 		return clinicRepository.findAll();
 	}
+    
+    public void deleteById(Long id) {
+    	clinicRepository.deleteById(id);
+    }
+    
+    public void deleteAll() {
+    	clinicRepository.deleteAll();
+    }
+    
+    public void deleteOne(Clinic clinicToDelete) {
+    	clinicRepository.delete(clinicToDelete);
+    }
 }

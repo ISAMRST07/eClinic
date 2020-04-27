@@ -25,8 +25,10 @@ public class ClinicAdministratorService {
 
     @Transactional
     public ClinicAdministrator addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
-        User newUser = new User(clinicAdministratorDto.getUsername(), clinicAdministratorDto.getPassword(),
-                clinicAdministratorDto.getName(), clinicAdministratorDto.getType(), null);
+        User newUser = new User(clinicAdministratorDto.getUsername(), 
+        		clinicAdministratorDto.getPassword(),
+                clinicAdministratorDto.getName(), 
+                clinicAdministratorDto.getType());
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
 
