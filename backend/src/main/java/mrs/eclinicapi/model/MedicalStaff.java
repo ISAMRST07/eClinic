@@ -11,6 +11,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,10 +24,14 @@ public class MedicalStaff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    /*ovde nije CascadeType.ALL da ne bi kada obrises doctor/nurse bili i 
+    user i clinic obrisani iz svojih tabela*/
+    @OneToOne(cascade = { CascadeType.PERSIST } )
     private User user;
 
-    @ManyToOne
+    @JsonIgnore
+	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Clinic clinic;
 
+    
 }

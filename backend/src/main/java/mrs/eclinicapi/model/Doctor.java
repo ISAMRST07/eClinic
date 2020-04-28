@@ -21,4 +21,10 @@ public class Doctor extends MedicalStaff {
 
     private String position;
 
+	@Override
+	public String toString() {
+		return "Doctor [position=" + position + "]";
+	}
+
+    
 }

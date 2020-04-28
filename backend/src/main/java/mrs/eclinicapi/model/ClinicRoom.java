@@ -25,7 +25,7 @@ public class ClinicRoom {
     private Long id;
 
     @JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Clinic clinic;
 
 }

@@ -20,6 +20,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Nurse extends MedicalStaff {
 
-    private String nursePosition;
+    private String position;
 
 }
