@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,16 +17,14 @@ public class ClinicController {
 
 	@Autowired
 	private ClinicService service;
-    
-    @PostMapping()
-    public Clinic addClinic(@RequestParam String name, @RequestParam String id) {
-    	Clinic newClinic = new Clinic();
-    	newClinic.setName(name);
-    	service.addClinic(newClinic);
-    	System.out.println("newClinic = " + newClinic);
-        return newClinic;
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Clinic addClinic(@RequestBody Clinic clinic) {
+    	service.addClinic(clinic);
+    	System.out.println("newClinic = " + clinic);
+        return clinic;
     }
-    
+
     @RequestMapping(path="/{id}")
 	public Clinic getClinic(@PathVariable("id") Long id) {
 
@@ -37,7 +36,7 @@ public class ClinicController {
 		System.out.println("foudn clinic with id = " + id + " " + clinic);
 		return clinic;
 	}
-    
+
     @GetMapping(value = "/getAll")
    	public ResponseEntity<List<Clinic>> getAllClinic() {
 

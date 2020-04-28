@@ -37,7 +37,11 @@
         },
         watch: {
             address(newAddress, oldAddress) {
-                if(newAddress !== oldAddress) {
+                if(!newAddress || newAddress.length === 0){
+                    if (this.currentMarker) this.map.removeLayer(this.currentMarker);
+                    this.currentMarker = null;
+                }
+                else if(newAddress !== oldAddress) {
                     this.coordsFromAddress(newAddress);
                 }
             }
@@ -59,8 +63,10 @@
             if (this.clickable) this.map.on('click', this.addMarker);
             if (this.value) this.placeMarker(this.value);
             setTimeout(() => this.map.invalidateSize(), 500);
+
         },
         updated() {
+            setTimeout(() => this.map.invalidateSize(), 500);
             this.map.invalidateSize();
         },
         methods: {

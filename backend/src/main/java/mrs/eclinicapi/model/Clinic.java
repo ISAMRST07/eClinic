@@ -1,13 +1,10 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Clinic.java
- * Author:  Manojlović
- * Purpose: Defines the Class Clinic
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.controller.Coordinates;
 
 import javax.persistence.*;
 
@@ -27,13 +24,18 @@ public class Clinic {
     private Long id;
 
     private String name;
+    private String description;
+    private String address;
+
+    @Embedded
+    private Coordinates coordinates;
 
     @OneToOne
     private ClinicAdministrator clinicAdministrator;
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ClinicRoom> clinicRoom = new HashSet<ClinicRoom>();
-    
+    private Set<ClinicRoom> clinicRoom = new HashSet<>();
+
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Doctor> doctors;
 
@@ -42,10 +44,10 @@ public class Clinic {
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Patient> patients;
-    
+
     @ManyToOne
     private ClinicalCentarAdministrator admin;
-    
+
 	@Override
 	public String toString() {
 		return "Clinic [id=" + id + ", name=" + name + ", clinicAdministrator=" + clinicAdministrator + ", clinicRoom="
@@ -53,7 +55,7 @@ public class Clinic {
 				+ admin + "]";
 	}
 
-    
+
 /*TODO
    public String getName() {
       return name;

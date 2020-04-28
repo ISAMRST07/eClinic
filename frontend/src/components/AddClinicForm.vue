@@ -1,7 +1,12 @@
 <template>
     <v-row>
         <v-col cols="12">
-            <v-text-field label="Name*" required></v-text-field>
+            <v-text-field
+                    label="Name*"
+                    required
+                    :rules="nameRules"
+                    v-model="name"
+            ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" align-self="end">
             <v-text-field label="Address*"
@@ -44,7 +49,8 @@
                     label="Description"
                     rows="10"
                     no-resize
-                    :rules="rules"
+                    v-model="description"
+                    :rules="descriptionRules"
             ></v-textarea>
         </v-col>
     </v-row>
@@ -52,22 +58,43 @@
 
 <script>
 
-    import {mapState} from "vuex";
+    import {mapMutations, mapState} from "vuex";
 
     export default {
         name: "AddClinicForm",
         data: () => ({
-            rules: [v=> !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.'],
-            addressRules: [value => !!value || 'Valid address required.']
+            nameRules: [v => !!v || "* Name is required"],
+            descriptionRules: [v=> !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.'],
+            addressRules: [value => !!value || '* Valid address required.']
         }),
         computed: {
-            ...mapState('clinics/addClinic', ['clinic'])
+            ...mapState('clinics/addClinic', ['clinic']),
+            name: {
+                get() {
+                    return this.clinic.name;
+                },
+                set(val) {
+                    this.updateClinic({name: val});
+                }
+            },
+            description: {
+                get() {
+                    return this.clinic.description;
+                },
+                set(val) {
+                    this.updateClinic({description: val});
+                }
+            }
+
         },
         filters: {
             formatCoords(value) {
                 if (!value) return '';
                 return `(${value.lat.toFixed(6)}, ${value.lng.toFixed(6)})`;
             }
+        },
+        methods: {
+            ...mapMutations('clinics/addClinic', ['updateClinic']),
         }
     }
 </script>
