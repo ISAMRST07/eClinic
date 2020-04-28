@@ -44,7 +44,7 @@ public class UserController {
    			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		System.out.println("found user with id = " + id + " " + user);
-		return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/getAll")

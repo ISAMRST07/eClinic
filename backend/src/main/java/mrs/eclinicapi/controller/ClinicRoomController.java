@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRoom;
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.service.ClinicRoomService;
 import mrs.eclinicapi.service.ClinicService;
 
@@ -28,7 +29,7 @@ import mrs.eclinicapi.service.ClinicService;
 public class ClinicRoomController {
 
 	@Autowired
-	private ClinicRoomService clinicRoomService;
+	private ClinicRoomService service;
 	
 	@Autowired
 	private ClinicService clinicService;
@@ -45,47 +46,23 @@ public class ClinicRoomController {
 		
 		ClinicRoom newClinicRoom = new ClinicRoom();
 		newClinicRoom.setClinic(clinic);
-		clinicRoomService.addClinicRoom(newClinicRoom);
+		service.addClinicRoom(newClinicRoom);
         return newClinicRoom;
     }
-	/*@GetMapping
-	public ResponseEntity<List<ClinicRoom>> getClinicRooms() {
-		List<ClinicRoom> clinicRooms = clinicRoomService.getAllClinicRooms();
-		return new ResponseEntity<>(clinicRooms, HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClinicRoom> getClinicRoom(@PathVariable Long id) {
-
-		ClinicRoom clinicRoom = clinicRoomService.findOneClinicRoom(id);
-		// clinicRoom must exist
-		if (clinicRoom == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	
+	@RequestMapping(path="/deleteClinicRoom/{id}")
+    public ResponseEntity<String> deleteClinicRoom(@PathVariable("id") Long id) {
+		System.out.println("delete clinicroom " + id);
+	
+		ClinicRoom room = service.findOne(id);
+		if(room == null) {
+			System.out.println("room not found");
+   			return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(clinicRoom, HttpStatus.OK);
-	}
+		System.out.println("delete this room = " + room);
 
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<ClinicRoom> saveClinicRoom(@RequestBody ClinicRoom newClinicRoom) {
-		ClinicRoom clinicRoom = clinicRoomService.findOneClinicRoom(newClinicRoom.getId());
-		//already exists
-		if(clinicRoom != null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(newClinicRoom, HttpStatus.CREATED);
-	}
-
-
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteClinicRoom(@PathVariable Long id) {
-
-		ClinicRoom clinicRoom = clinicRoomService.findOneClinicRoom(id);
-
-		if (clinicRoom != null) {
-			clinicRoomService.remove(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}*/
+		service.deleteById(id);
+		return new ResponseEntity<>("room deleted", HttpStatus.OK);
+    }
+	
 }
