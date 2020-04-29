@@ -3,7 +3,9 @@ package mrs.eclinicapi.controller;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.service.ClinicService;
+import mrs.eclinicapi.service.DoctorService;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ClinicController {
 
 	@Autowired
 	private ClinicService service;
+
+	@Autowired
+	private DoctorService doctorService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Clinic addClinic(@RequestBody Clinic clinic) {
@@ -103,6 +108,34 @@ public class ClinicController {
    		return new ResponseEntity<>("updated clinic", HttpStatus.OK);
 	}
     
-    
+    @RequestMapping(path="/deleteDoctor")
+	public ResponseEntity<String> deleteDoctor(@RequestParam Long id,
+												@RequestParam Long doctorId) {
+		Clinic clinic = service.findOne(id);
+		if (clinic == null) {
+	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
+		}
+		System.out.println("foudn clinic with id = " + id + " " + clinic);
+		
+		for (Iterator<Doctor> iterator = clinic.getDoctors().iterator(); iterator.hasNext();) {
+		    Doctor d =  iterator.next();
+			System.out.println("doctor d = " + d.getId());
+		    if (d.getId() == doctorId) {
+				System.out.println("doctor delete this");
+		    	iterator.remove();
+		    }       
+		}
+		System.out.println("clinic doctors after delete");
+		for(Doctor d : clinic.getDoctors()) {
+			System.out.println("doctor d = " + d.getId());
+		}
+		
+		service.addClinic(clinic);
+   		Doctor d = doctorService.findOne(doctorId);
+   		d.setClinic(null);
+   		doctorService.addDoctor(d);
+   		
+		return new ResponseEntity<>("delete doctor clinic", HttpStatus.OK);
+	}
     
 }
