@@ -40,4 +40,16 @@ public class ClinicService {
     public void deleteOne(Clinic clinicToDelete) {
     	clinicRepository.delete(clinicToDelete);
     }
+    
+    public void updateName(Long id, String newName) {
+    	clinicRepository.updateName(id, newName);
+    }
+    
+    public void updateDescription(Long id, String newDescription) {
+    	clinicRepository.updateDescription(id, newDescription);
+    }
+    
+    public void updateAddress(Long id, String newAddress) {
+    	clinicRepository.updateDescription(id, newAddress);
+    }
 }
