@@ -18,7 +18,6 @@ public class ClinicService {
 	private ClinicRepository clinicRepository;
 
     public Clinic addClinic(Clinic newClinic){
-        if(this.findOne(newClinic.getId()) != null) return null;
         return clinicRepository.save(newClinic);
     }
 

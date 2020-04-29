@@ -85,7 +85,6 @@
                     this.updateClinic({description: val});
                 }
             }
-
         },
         filters: {
             formatCoords(value) {

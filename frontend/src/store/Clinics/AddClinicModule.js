@@ -18,8 +18,16 @@ export default {
                 // tu ce ic update za prikaz
                 commit('clinics/readClinics/addClinic', res, {root: true});
             } catch (err) {
-                console.log(err);
+                console.error(err);
                 // tu moze ic neki toast
+            }
+        },
+        async modifyClinicApi({commit}, clinic) {
+            try {
+                let {data: res} = await Vue.prototype.$axios.put(`/api/clinic/${clinic.id}`, clinic);
+                commit('clinics/readClinics/updateClinic', res, {root: true});
+            } catch (err) {
+                console.error(err);
             }
         }
     },

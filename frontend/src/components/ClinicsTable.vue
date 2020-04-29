@@ -18,85 +18,60 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.description="{ item }">
-                <v-icon @click="toggleDescriptionDialog(item)">mdi-information</v-icon>
+                <v-icon
+                    color="success"
+                    @click="toggleClinicDescription(item)"
+                >mdi-information</v-icon>
             </template>
             <template v-slot:item.remove="{ item }">
                 <v-icon
                         @click="deleteDialog(item)"
+                        color="red"
                 >
                     mdi-delete
+                </v-icon>
+            </template>
+            <template v-slot:item.update="{ item }">
+                <v-icon
+                        @click="updateDialog(item)"
+                        color="amber darken-2"
+                >
+                    mdi-pencil
                 </v-icon>
             </template>
             <template v-slot:no-data>
                 <p>There are no existing clinics</p>
             </template>
         </v-data-table>
-        <v-dialog
+        <delete-dialog
                 v-model="dialog"
-                max-width="290"
-        >
-            <v-card>
-                <v-card-title class="headline">Deletion</v-card-title>
-
-                <v-card-text>
-                    Are you sure that you want to delete <span class="text--primary">{{ deleteName }}</span>?
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                            color="green darken-1"
-                            text
-                            @click="deleteDialog(null)"
-                    >
-                        No
-                    </v-btn>
-
-                    <v-btn
-                            color="green darken-1"
-                            text
-                            @click="deleteClinic"
-                    >
-                        Yes
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <v-dialog
+                :clinic="clinicToDelete"
+                @close="deleteDialog(null)"
+                @delete="deleteClinic"
+        />
+        <description-dialog
                 v-model="descriptionDialog"
-                max-width="600"
-        >
-            <v-card>
-                <v-card-title class="headline">{{ descriptionName }}</v-card-title>
-
-                <v-card-text>
-                    {{ description }}
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                            color="green darken-1"
-                            text
-                            @click="toggleDescriptionDialog(null)"
-                    >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+                :clinic="clinicWithDescription"
+                @close="toggleClinicDescription(null)"
+        />
+        <modify-clinic-dialog
+                mode="update"
+                v-model="editDialog"/>
     </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
+    import DescriptionDialog from "./DescriptionDialog";
+    import DeleteDialog from "./DeleteDialog";
+    import ModifyClinicDialog from "./ModifyClinicDialog";
 
     export default {
         name: "ClinicsTable",
+        components: {ModifyClinicDialog, DeleteDialog, DescriptionDialog},
         data: () => ({
             descriptionDialog: false,
+            editDialog: false,
             dialog: false,
             clinicToDelete: null,
             clinicWithDescription: null,
@@ -106,21 +81,21 @@
                     align: 'start',
                     value: 'name',
                 },
-                { text: 'Description', value: 'description', sortable: false},
+                { text: 'Description', value: 'description', sortable: false, align: 'center'},
                 { text: 'Address', value: 'address' },
-                { text: 'Remove', value: 'remove' }
+                { text: 'Update', value: 'update', sortable: false, align: 'center' },
+                { text: 'Remove', value: 'remove', sortable: false, align: 'center' }
             ],
         }),
         computed: {
             ...mapState('clinics/readClinics', ['clinics']),
-            deleteName() {
-                return this.clinicToDelete ? this.clinicToDelete.name : '';
-            },
-            descriptionName() {
-                return this.clinicWithDescription ? this.clinicWithDescription.name : '';
-            },
-            description() {
-                return this.clinicWithDescription ? this.clinicWithDescription.description : '';
+            editClinic: {
+                get() {
+                    return this.$store.state.clinics.addClinic.clinic;
+                },
+                set(val) {
+                    this.$store.commit('clinics/addClinic/updateClinic', val);
+                }
             }
         },
         methods: {
@@ -134,10 +109,15 @@
                 this.deleteClinicApi(this.clinicToDelete);
                 this.deleteDialog(null);
             },
-            toggleDescriptionDialog(clinic){
+            toggleClinicDescription(clinic) {
                 this.clinicWithDescription = clinic;
                 this.descriptionDialog = !this.descriptionDialog;
+            },
+            updateDialog(clinic) {
+                this.editClinic = clinic;
+                this.editDialog = true;
             }
+
         },
         created() {
             this.getClinics();

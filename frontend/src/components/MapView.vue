@@ -14,7 +14,8 @@
         data: () => ({
             map: null,
             currentMarker: null,
-            isActive: false
+            isActive: false,
+            formerInput: null,
         }),
         props: {
             mapId: {
@@ -33,17 +34,24 @@
             address: {
                 type: String,
                 default: null
-            }
+            },
         },
         watch: {
             address(newAddress, oldAddress) {
                 if(!newAddress || newAddress.length === 0){
-                    if (this.currentMarker) this.map.removeLayer(this.currentMarker);
-                    this.currentMarker = null;
+                    this.resetMap();
                 }
                 else if(newAddress !== oldAddress) {
                     this.coordsFromAddress(newAddress);
                 }
+            },
+            value(newCoords) {
+                if(!newCoords) return;
+                this.placeMarker(newCoords);
+                if(this.formerInput &&
+                    this.formerInput.lat === newCoords.lat &&
+                    this.formerInput.lng === newCoords.lng) return;
+                this.map.setView([newCoords.lat, newCoords.lng], 15);
             }
         },
         mounted() {
@@ -59,19 +67,22 @@
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
-            console.log(this.map);
             if (this.clickable) this.map.on('click', this.addMarker);
-            if (this.value) this.placeMarker(this.value);
-            setTimeout(() => this.map.invalidateSize(), 500);
+            if (this.value) {
+                this.placeMarker(this.value);
+                this.map.setView([this.value.lat, this.value.lng], 15);
 
+            }
+            this.$nextTick(() => this.map.invalidateSize());
         },
         updated() {
-            setTimeout(() => this.map.invalidateSize(), 500);
-            this.map.invalidateSize();
+            // setTimeout(() => this.map.invalidateSize(), 500);
+            this.$nextTick(() => this.map.invalidateSize());
         },
         methods: {
             addMarker(e) {
                 this.placeMarker(e.latlng);
+                this.formerInput = e.latlng;
                 this.$emit('input', e.latlng);
             },
             placeMarker(latlng) {
@@ -84,8 +95,9 @@
             async addressFromCoords(latlng) {
                 let res = await this.reverseGeoCode(latlng);
                 let address= res.data.display_name;
+
                 if (!address) this.$emit('clickAddress', null);
-                this.$emit('clickAddress', [res.data.display_name]);
+                else this.$emit('clickAddress', [res.data.display_name]);
             },
             async coordsFromAddress(newAddress) {
                 try {
@@ -108,6 +120,12 @@
             geoCode(address) {
                 let query = `?q=${address}&format=jsonv2&addressdetails=1&limit=6`;
                 return this.$axios.get(`https://nominatim.openstreetmap.org/${query}`);
+            },
+            resetMap() {
+                if (this.currentMarker) this.map.removeLayer(this.currentMarker);
+                this.currentMarker = null;
+                this.map.setView([0, 0], 2);
+                this.map.invalidateSize();
             }
         }
     }
