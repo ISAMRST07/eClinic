@@ -71,7 +71,8 @@ public class ClinicController {
 	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
 		}
 		System.out.println("foudn clinic with id = " + id + " " + clinic);
-		service.updateName(id, newName);
+		clinic.setName(newName);
+		service.addClinic(clinic);
    		return new ResponseEntity<>("updated clinic", HttpStatus.OK);
 	}
     
@@ -84,35 +85,24 @@ public class ClinicController {
 	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
 		}
 		System.out.println("foudn clinic with id = " + id + " " + clinic);
-		service.updateDescription(id, newDescription);
+		clinic.setDescription(newDescription);
+		service.addClinic(clinic);
    		return new ResponseEntity<>("updated clinic", HttpStatus.OK);
 	}
     
-    @RequestMapping(path="/updateAdress")
-	public ResponseEntity<String> updateAdress(@RequestParam Long id,
+    @RequestMapping(path="/updateAddress")
+	public ResponseEntity<String> updateAddress(@RequestParam Long id,
 												@RequestParam String newAddress) {
 		Clinic clinic = service.findOne(id);
 		if (clinic == null) {
 	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
 		}
 		System.out.println("foudn clinic with id = " + id + " " + clinic);
-		service.updateAddress(id, newAddress);
+		clinic.setAddress(newAddress);
+		service.addClinic(clinic);
    		return new ResponseEntity<>("updated clinic", HttpStatus.OK);
 	}
     
-    @RequestMapping(path="/deleteDoctor")
-	public ResponseEntity<String> deleteDoctor(@RequestParam Long id,
-												@RequestParam Long doctorId) {
-		Clinic clinic = service.findOne(id);
-		if (clinic == null) {
-	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
-		}
-		System.out.println("foudn clinic with id = " + id + " " + clinic);
-		//service.updateAddress(id, newAddress);
-		for(Doctor d : clinic.getDoctors()) {
-			System.out.println("doctor d = " + d);
-		}
-   		return new ResponseEntity<>("delete doctor clinic", HttpStatus.OK);
-	}
+    
     
 }
