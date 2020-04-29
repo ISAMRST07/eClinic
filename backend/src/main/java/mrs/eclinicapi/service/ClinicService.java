@@ -40,4 +40,5 @@ public class ClinicService {
     public void deleteOne(Clinic clinicToDelete) {
     	clinicRepository.delete(clinicToDelete);
     }
+    
 }
