@@ -18,27 +18,40 @@ public class ClinicService {
 	private ClinicRepository clinicRepository;
 
     public Clinic addClinic(Clinic newClinic){
+        if(this.findOne(newClinic.getId()) != null) return null;
         return clinicRepository.save(newClinic);
     }
-    
+
     public Clinic findOne(Long id) {
 		return clinicRepository.findById(id).orElseGet(null);
 	}
 
+	public Clinic modifyClinic(Long id, Clinic clinic) {
+        Clinic found = this.findOne(id);
+        if (found == null) {
+            return null;
+        }
+        found.setName(clinic.getName());
+        found.setAddress(clinic.getAddress());
+        found.setDescription(clinic.getDescription());
+        found.setCoordinates(clinic.getCoordinates());
+        clinicRepository.save(found);
+        return found;
+    }
+
     public List<Clinic> findAll() {
 		return clinicRepository.findAll();
 	}
-    
+
     public void deleteById(Long id) {
     	clinicRepository.deleteById(id);
     }
-    
+
     public void deleteAll() {
     	clinicRepository.deleteAll();
     }
-    
+
     public void deleteOne(Clinic clinicToDelete) {
     	clinicRepository.delete(clinicToDelete);
     }
-    
 }

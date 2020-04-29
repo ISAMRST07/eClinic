@@ -1,11 +1,15 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.service.ClinicService;
 
+import java.util.Iterator;
 import java.util.List;
 
+import mrs.eclinicapi.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +22,26 @@ public class ClinicController {
 	@Autowired
 	private ClinicService service;
 
+	@Autowired
+	private DoctorService doctorService;
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Clinic addClinic(@RequestBody Clinic clinic) {
-    	service.addClinic(clinic);
+    public ResponseEntity<Clinic> addClinic(@RequestBody Clinic clinic) {
+    	Clinic newClinic = service.addClinic(clinic);
+    	if (newClinic == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
     	System.out.println("newClinic = " + clinic);
-        return clinic;
+        return new ResponseEntity<>(newClinic, HttpStatus.OK);
     }
 
-    @PutMapping(path="/{id}")
-	public Clinic getClinic(@PathVariable("id") Long id) {
+    @PutMapping(path="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Clinic> modifyClinic(@PathVariable("id") Long id, @RequestBody Clinic clinic) {
 
-		Clinic clinic = service.findOne(id);
-
-		if (clinic == null) {
-			return null;
+		Clinic modified = service.modifyClinic(id, clinic);
+		if (modified == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		System.out.println("foudn clinic with id = " + id + " " + clinic);
-		return clinic;
+		return new ResponseEntity<>(modified, HttpStatus.OK);
 	}
 
     @GetMapping(value = "/getAll")
@@ -46,20 +53,47 @@ public class ClinicController {
    			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
    		}
    		for(Clinic c : clinics) {
-   	   		System.out.println("getall clinic = " + c);
+   	   		System.out.println("getall clinics = " + c);
    		}
    		return new ResponseEntity<>(clinics, HttpStatus.OK);
    	}
 
-    @DeleteMapping(path="/{id}")
+    @DeleteMapping(path="/delete/{id}")
 	public ResponseEntity<String> deleteClinic(@PathVariable("id") Long id) {
 		Clinic clinic = service.findOne(id);
 		if (clinic == null) {
 	   		return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
 		}
-		System.out.println("found clinic with id = " + id + " " + clinic);
 		service.deleteById(id);
    		return new ResponseEntity<>("deleted clinic", HttpStatus.OK);
 	}
+	@RequestMapping(path="/deleteDoctor")
+	public ResponseEntity<String> deleteDoctor(@RequestParam Long id,
+											   @RequestParam Long doctorId) {
+		Clinic clinic = service.findOne(id);
+		if (clinic == null) {
+			return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
+		}
+		System.out.println("foudn clinic with id = " + id + " " + clinic);
 
+		for (Iterator<Doctor> iterator = clinic.getDoctors().iterator(); iterator.hasNext();) {
+			Doctor d =  iterator.next();
+			System.out.println("doctor d = " + d.getId());
+			if (d.getId().equals(doctorId)) {
+				System.out.println("doctor delete this");
+				iterator.remove();
+			}
+		}
+		System.out.println("clinic doctors after delete");
+		for(Doctor d : clinic.getDoctors()) {
+			System.out.println("doctor d = " + d.getId());
+		}
+
+		service.addClinic(clinic);
+		Doctor d = doctorService.findOne(doctorId);
+		d.setClinic(null);
+		doctorService.addDoctor(d);
+
+		return new ResponseEntity<>("delete doctor clinic", HttpStatus.OK);
+	}
 }
