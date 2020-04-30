@@ -111,5 +111,17 @@ public class NurseController {
 		return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
     }
 	
-	
+	@RequestMapping(path="/deleteNurseFromClinic")
+    public ResponseEntity<String> deleteNurseFromClinic(@RequestParam Long id) {
+		System.out.println("get nurse " + id);
+		Nurse nurse = service.findOne(id);
+		if(nurse == null) {
+			System.out.println("nurse not found");
+   			return new ResponseEntity<>("nurse not found", HttpStatus.NOT_FOUND);
+		}
+		System.out.println("update this nurse = " + nurse);
+		nurse.setClinic(null);
+		service.addNurse(nurse);
+		return new ResponseEntity<>("nurse clinic removed", HttpStatus.OK);
+    }
 }

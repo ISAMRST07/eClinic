@@ -67,33 +67,5 @@ public class ClinicController {
 		service.deleteById(id);
    		return new ResponseEntity<>("deleted clinic", HttpStatus.OK);
 	}
-	@RequestMapping(path="/deleteDoctor")
-	public ResponseEntity<String> deleteDoctor(@RequestParam Long id,
-											   @RequestParam Long doctorId) {
-		Clinic clinic = service.findOne(id);
-		if (clinic == null) {
-			return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
-		}
-		System.out.println("foudn clinic with id = " + id + " " + clinic);
-
-		for (Iterator<Doctor> iterator = clinic.getDoctors().iterator(); iterator.hasNext();) {
-			Doctor d =  iterator.next();
-			System.out.println("doctor d = " + d.getId());
-			if (d.getId().equals(doctorId)) {
-				System.out.println("doctor delete this");
-				iterator.remove();
-			}
-		}
-		System.out.println("clinic doctors after delete");
-		for(Doctor d : clinic.getDoctors()) {
-			System.out.println("doctor d = " + d.getId());
-		}
-
-		service.addClinic(clinic);
-		Doctor d = doctorService.findOne(doctorId);
-		d.setClinic(null);
-		doctorService.addDoctor(d);
-
-		return new ResponseEntity<>("delete doctor clinic", HttpStatus.OK);
-	}
+	
 }

@@ -61,7 +61,7 @@ public class DoctorController {
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		System.out.println("delete doctor " + id);
 	
-		Doctor doctor = (Doctor) service.findOne(id);
+		Doctor doctor = service.findOne(id);
 		if(doctor == null) {
 			System.out.println("doctor not found");
    			return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
@@ -86,7 +86,7 @@ public class DoctorController {
 	@RequestMapping(path="/getDoctor/{id}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
 		System.out.println("get doctor " + id);
-		Doctor doctor = (Doctor) service.findOne(id);
+		Doctor doctor = service.findOne(id);
 		if(doctor == null) {
 			System.out.println("doctor not found");
    			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -100,7 +100,7 @@ public class DoctorController {
     public ResponseEntity<String> updatePosition(@RequestParam Long id,
 												@RequestParam String newPosition) {
 		System.out.println("get doctor " + id);
-		Doctor doctor = (Doctor) service.findOne(id);
+		Doctor doctor = service.findOne(id);
 		if(doctor == null) {
 			System.out.println("doctor not found");
    			return new ResponseEntity<>("doctor not found", HttpStatus.NOT_FOUND);
@@ -108,5 +108,19 @@ public class DoctorController {
 		System.out.println("update this doctor = " + doctor);
 		service.updatePosition(id, newPosition);
 		return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
+    }
+	
+	@RequestMapping(path="/deleteDoctorFromClinic")
+    public ResponseEntity<String> deleteDoctorFromClinic(@RequestParam Long id) {
+		System.out.println("get doctor " + id);
+		Doctor doctor =  service.findOne(id);
+		if(doctor == null) {
+			System.out.println("doctor not found");
+   			return new ResponseEntity<>("doctor not found", HttpStatus.NOT_FOUND);
+		}
+		doctor.setClinic(null);
+		System.out.println("update this doctor = " + doctor);
+		service.addDoctor(doctor);
+		return new ResponseEntity<>("doctor clinic removed", HttpStatus.OK);
     }
 }
