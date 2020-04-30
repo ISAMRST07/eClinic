@@ -31,9 +31,5 @@ public class NurseService {
 	public void deleteById(Long id) {
 		repository.deleteById(id);
 	}
-	
-	public void updatePosition(Long id, String newPosition) {
-		repository.updatePosition(id, newPosition);
-	}
 
 }

@@ -8,7 +8,4 @@ import mrs.eclinicapi.model.Doctor;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long>{
 
-	@Modifying
-	@Query("UPDATE Doctor SET position = ?2 WHERE id = ?1")
-	public void updatePosition(Long id, String newPosition);
 }

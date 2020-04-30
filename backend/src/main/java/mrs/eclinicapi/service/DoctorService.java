@@ -32,7 +32,4 @@ public class DoctorService {
 		repository.deleteById(id);
 	}
 	
-	public void updatePosition(Long id, String newPosition) {
-		repository.updatePosition(id, newPosition);
-	}
 }

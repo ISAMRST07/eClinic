@@ -106,7 +106,8 @@ public class DoctorController {
    			return new ResponseEntity<>("doctor not found", HttpStatus.NOT_FOUND);
 		}
 		System.out.println("update this doctor = " + doctor);
-		service.updatePosition(id, newPosition);
+		doctor.setPosition(newPosition);
+		service.addDoctor(doctor);
 		return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
     }
 	
