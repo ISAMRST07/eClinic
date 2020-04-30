@@ -12,7 +12,8 @@
                     <v-btn icon dark @click="closeAddDialog">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Add a clinic</v-toolbar-title>
+                    <v-toolbar-title v-if="mode === 'add'">Add a clinic</v-toolbar-title>
+                    <v-toolbar-title v-else-if="clinic">Update {{ clinic.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
                         <v-btn v-if="mode === 'add'" dark text @click="submit(saveClinic)">Add</v-btn>
@@ -84,7 +85,7 @@
 
 <script>
     import {mapActions, mapMutations} from "vuex";
-    import {emptyClinic} from "../utils/skeletons";
+    import {emptyClinic} from "../../utils/skeletons";
     import AddClinicForm from "./AddClinicForm";
     import MapView from "./MapView";
 

@@ -3,7 +3,6 @@
         <v-data-table
                 :headers="headers"
                 :items="clinics"
-                sort-by="calories"
                 class="elevation-1"
         >
             <template v-slot:top>
@@ -121,12 +120,7 @@
         },
         created() {
             this.getClinics();
-        },
-        filters: {
-            descriptionShortener(val) {
-                return val.slice(0, 10)
-            }
-        },
+        }
 
     }
 </script>

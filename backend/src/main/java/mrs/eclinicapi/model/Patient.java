@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Pacijent.java
- * Author:  Manojlović
- * Purpose: Defines the Class Pacijent
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +26,6 @@ public class Patient {
 
     @OneToOne
     public MedicalRecord medicalRecord;
-
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private  List<Intervention> intervention;

@@ -1,9 +1,11 @@
 package mrs.eclinicapi.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import mrs.eclinicapi.DTO.ClinicRoomDTO;
+import mrs.eclinicapi.model.Intervention;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,30 +32,28 @@ public class ClinicRoomController {
 
 	@Autowired
 	private ClinicRoomService service;
-	
+
 	@Autowired
 	private ClinicService clinicService;
-	
-	@PostMapping()
-    public ClinicRoom addClinicRoom(@RequestParam Long clinicId) {
-		System.out.println("adding room to clinic = " + clinicId);
-		Clinic clinic = clinicService.findOne(clinicId);
-		if(clinic == null) {
-			System.out.println("clinic with id = " + clinicId + " is null");
-		}else {
-			System.out.println("clinic with id = " + clinicId + " is = " + clinic);
-		}
-		
-		ClinicRoom newClinicRoom = new ClinicRoom();
-		newClinicRoom.setClinic(clinic);
-		service.addClinicRoom(newClinicRoom);
-        return newClinicRoom;
+
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ClinicRoomDTO> addClinicRoom(@RequestBody ClinicRoomDTO clinicRoomDto) {
+		ClinicRoom clinicRoom = this.convertToEntity(clinicRoomDto);
+		ClinicRoom added = service.addClinicRoom(clinicRoom);
+        return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
-	
-	@RequestMapping(path="/deleteClinicRoom/{id}")
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ClinicRoomDTO>> getAllRooms() {
+		List<ClinicRoom> clinicRooms = service.findAll();
+		List<ClinicRoomDTO> clinicRoomDTOS = clinicRooms.stream().map(this::convertToDTO).collect(Collectors.toList());
+		return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
+	}
+
+	@DeleteMapping(path="/deleteClinicRoom/{id}")
     public ResponseEntity<String> deleteClinicRoom(@PathVariable("id") Long id) {
 		System.out.println("delete clinicroom " + id);
-	
+
 		ClinicRoom room = service.findOne(id);
 		if(room == null) {
 			System.out.println("room not found");
@@ -64,5 +64,35 @@ public class ClinicRoomController {
 		service.deleteById(id);
 		return new ResponseEntity<>("room deleted", HttpStatus.OK);
     }
-	
+
+    public ClinicRoom convertToEntity(ClinicRoomDTO clinicRoomDTO) {
+		Clinic foundClinic = clinicService.findOne(clinicRoomDTO.getClinicId());
+		if(foundClinic == null) return null;
+		ClinicRoom clinicRoom = new ClinicRoom();
+		clinicRoom.setId(clinicRoom.getId());
+		clinicRoom.setName(clinicRoomDTO.getName());
+		clinicRoom.setClinic(foundClinic);
+		Set<Intervention> interventionSet = new HashSet<>(clinicRoomDTO.getPastInterventions());
+		interventionSet.addAll(clinicRoomDTO.getScheduledInterventions());
+		clinicRoom.setInterventions(interventionSet);
+		return clinicRoom;
+	}
+
+	public ClinicRoomDTO convertToDTO(ClinicRoom clinicRoom) {
+		ClinicRoomDTO clinicRoomDTO = new ClinicRoomDTO();
+		clinicRoomDTO.setId(clinicRoom.getId());
+		clinicRoomDTO.setName(clinicRoom.getName());
+		clinicRoomDTO.setClinicId(clinicRoom.getClinic().getId());
+		Set<Intervention> pastInterventions = new HashSet<>();
+		Set<Intervention> scheduledInterventions = new HashSet<>();
+		for (Intervention i : clinicRoom.getInterventions()) {
+			if(i.getDateTime().isBefore(LocalDateTime.now())) pastInterventions.add(i);
+			else scheduledInterventions.add(i);
+		}
+		clinicRoomDTO.setPastInterventions(pastInterventions);
+		clinicRoomDTO.setScheduledInterventions(scheduledInterventions);
+		if (scheduledInterventions.size() > 0) clinicRoomDTO.setRemovable(false);
+		else clinicRoomDTO.setRemovable(true);
+		return clinicRoomDTO;
+	}
 }

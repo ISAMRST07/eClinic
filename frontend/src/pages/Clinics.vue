@@ -6,8 +6,8 @@
 </template>
 
 <script>
-    import AddClinic from "../components/AddClinic";
-    import ClinicsTable from "../components/ClinicsTable";
+    import AddClinic from "../components/Clinics/AddClinic";
+    import ClinicsTable from "../components/Clinics/ClinicsTable";
 
     export default {
         name: "Clinics",

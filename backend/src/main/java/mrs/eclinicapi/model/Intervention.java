@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Intervention.java
- * Author:  Manojlović
- * Purpose: Defines the Class Intervention
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +7,7 @@ import lombok.Setter;
 import mrs.eclinicapi.model.enums.InterventionType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -24,8 +21,15 @@ public class Intervention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private InterventionType type;
+    private LocalDateTime dateTime;
+
+    @ManyToOne
+    private ClinicRoom clinicRoom;
 
     @ManyToOne
     private Patient patient;
+
+    @ManyToOne
+    private Doctor doctor;
 
 }

@@ -24,7 +24,7 @@ public class DoctorController {
 
 	@Autowired
 	private DoctorService service;
-    
+
 	@Autowired
 	private UserService userService;
 
@@ -41,17 +41,18 @@ public class DoctorController {
 			System.out.println("user with id = " + userId + " == null");
 		}
 		System.out.println("found userId = " + userId + " = " + user);
-		
+
 		Clinic clinic = clinicService.findOne(clinicId);
 		if(clinic == null) {
 			System.out.println("clinic with id = " + clinicId + " == null");
 		}
 		System.out.println("found clinicId = " + clinicId + " = " + clinic);
-		
-		Doctor doctor = new Doctor(position);
+
+		Doctor doctor = new Doctor();
+		doctor.setPosition(position);
 		doctor.setUser(user);
 		doctor.setClinic(clinic);
-		
+
 		service.addDoctor(doctor);
     	System.out.println("newDoctor = " + doctor);
         return doctor;
@@ -60,7 +61,7 @@ public class DoctorController {
 	@RequestMapping(path="/deleteDoctor/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		System.out.println("delete doctor " + id);
-	
+
 		Doctor doctor = service.findOne(id);
 		if(doctor == null) {
 			System.out.println("doctor not found");
@@ -82,7 +83,7 @@ public class DoctorController {
 		}
 		return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }
-	
+
 	@RequestMapping(path="/getDoctor/{id}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
 		System.out.println("get doctor " + id);
@@ -95,7 +96,7 @@ public class DoctorController {
 
 		return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
-	
+
 	@RequestMapping(path="/updatePosition")
     public ResponseEntity<String> updatePosition(@RequestParam Long id,
 												@RequestParam String newPosition) {
@@ -110,7 +111,7 @@ public class DoctorController {
 		service.addDoctor(doctor);
 		return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
     }
-	
+
 	@RequestMapping(path="/deleteDoctorFromClinic")
     public ResponseEntity<String> deleteDoctorFromClinic(@RequestParam Long id) {
 		System.out.println("get doctor " + id);

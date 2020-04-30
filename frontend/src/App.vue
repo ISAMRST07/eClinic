@@ -25,4 +25,9 @@ export default {
         background: transparent !important;
         overflow: hidden !important;
     }
+    .fab-br {
+        position: absolute;
+        right: 2em;
+        bottom: 3em;
+    }
 </style>
