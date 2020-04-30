@@ -15,6 +15,7 @@ public class ClinicAdministratorDto {
     private Long id;
     private String username;
     private String password;
+    private String surname;
     private String name;
     private UserType type;
 
@@ -22,6 +23,7 @@ public class ClinicAdministratorDto {
         this.id = clinicAdministrator.getId();
         this.username = clinicAdministrator.getUser().getUsername();
         this.password = clinicAdministrator.getUser().getPassword();
+        this.surname = clinicAdministrator.getUser().getSurname();
         this.name = clinicAdministrator.getUser().getName();
         this.type = clinicAdministrator.getUser().getType();
 

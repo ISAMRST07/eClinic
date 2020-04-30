@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ClinicModules from "./ClinicModules";
+import ClinicAdministratorModules from "./ClinicAdministratorModules";
 import ClinicRoomModules from "./ClinicRoomModules";
 
 Vue.use(Vuex);
@@ -9,6 +10,7 @@ export default new Vuex.Store({
   namespaced: true,
   modules: {
     clinics: ClinicModules,
+    clinicAdmins: ClinicAdministratorModules,
     clinicRooms: ClinicRoomModules
   }
 })

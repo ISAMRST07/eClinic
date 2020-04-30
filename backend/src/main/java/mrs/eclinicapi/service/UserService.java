@@ -29,7 +29,12 @@ public class UserService {
 	}
 
 	public void deleteById(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		}
+		catch (Exception NullPointerException){
+
+		}
 	}
 	
 	public void updateUsername(Long id, String newUsername) {

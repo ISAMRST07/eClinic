@@ -30,6 +30,7 @@ public class User {
     private String username;
     private String password;
     private String name;
+	private String surname;
     private UserType type;
     
     public User(String username, String password, String name) {
@@ -37,6 +38,14 @@ public class User {
     	this.password = password;
     	this.name = name;
     }
+
+	public User(String username, String password, String name, String surname, UserType type) {
+		this.username = username;
+		this.password = password;
+		this.surname = surname;
+		this.name = name;
+		this.type = type;
+	}
 
     public User(String username, String password, String name, UserType type) {
     	this.username = username;
