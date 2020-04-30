@@ -51,7 +51,6 @@
 
 <script>
     import {mapActions, mapState} from "vuex";
-    import DescriptionDialog from "./DescriptionDialog";
     import ClinicAdministratorDeleteDialog from "./ClinicAdministratorDeleteDialog";
     import ModifyClinicAdministratorDialog from "./ModifyClinicAdministratorDialog";
 

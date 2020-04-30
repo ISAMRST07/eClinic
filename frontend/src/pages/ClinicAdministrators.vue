@@ -7,8 +7,8 @@
 
 <script>
 
-    import AddClinicAdministrator from "../components/AddClinicAdministrator";
-    import TableClinicAdministrator from "../components/TableClinicAdministrator";
+    import AddClinicAdministrator from "../components/ClinicAdministrator/AddClinicAdministrator";
+    import TableClinicAdministrator from "../components/ClinicAdministrator/TableClinicAdministrator";
 
     export default {
         name: "ClinicAdministrators",

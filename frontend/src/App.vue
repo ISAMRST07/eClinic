@@ -29,5 +29,6 @@ export default {
         position: absolute;
         right: 2em;
         bottom: 3em;
+        z-index: 20;
     }
 </style>

@@ -55,7 +55,6 @@
         </v-col>
     </v-row>
 </template>
-
 <script>
 
     import {mapMutations, mapState} from "vuex";

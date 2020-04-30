@@ -44,7 +44,7 @@ public class ClinicController {
 		return new ResponseEntity<>(modified, HttpStatus.OK);
 	}
 
-    @GetMapping(value = "/getAll")
+    @GetMapping()
    	public ResponseEntity<List<Clinic>> getAllClinic() {
 
    		List<Clinic> clinics = service.findAll();
@@ -58,7 +58,7 @@ public class ClinicController {
    		return new ResponseEntity<>(clinics, HttpStatus.OK);
    	}
 
-    @DeleteMapping(path="/delete/{id}")
+    @DeleteMapping(path="/{id}")
 	public ResponseEntity<String> deleteClinic(@PathVariable("id") Long id) {
 		Clinic clinic = service.findOne(id);
 		if (clinic == null) {
@@ -67,5 +67,5 @@ public class ClinicController {
 		service.deleteById(id);
    		return new ResponseEntity<>("deleted clinic", HttpStatus.OK);
 	}
-	
+
 }

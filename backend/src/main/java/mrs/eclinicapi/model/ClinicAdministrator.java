@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  ClinicAdministrator.java
- * Author:  Manojlović
- * Purpose: Defines the Class ClinicAdministrator
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,12 +23,7 @@ public class ClinicAdministrator {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-
-
-
-
-    @OneToOne
+    @ManyToOne
     public Clinic clinic;
-
 
 }

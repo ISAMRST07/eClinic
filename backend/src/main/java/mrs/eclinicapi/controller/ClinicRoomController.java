@@ -50,7 +50,7 @@ public class ClinicRoomController {
 		return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path="/deleteClinicRoom/{id}")
+	@DeleteMapping(path="/{id}")
     public ResponseEntity<String> deleteClinicRoom(@PathVariable("id") Long id) {
 		System.out.println("delete clinicroom " + id);
 

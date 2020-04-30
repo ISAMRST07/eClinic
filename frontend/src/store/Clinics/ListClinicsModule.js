@@ -26,7 +26,7 @@ export default {
     actions: {
         async getClinics({commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinic/getAll');
+                let res = await Vue.prototype.$axios.get('/api/clinic/');
                 console.log(res.data);
                 commit('setAllClinics', res.data);
             } catch (err) {

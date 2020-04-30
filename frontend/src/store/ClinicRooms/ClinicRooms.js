@@ -40,6 +40,14 @@ export default {
             } catch (err) {
                 console.error(err);
             }
+        },
+        async deleteRoomApi({commit}, clinicRoom) {
+            try {
+                let res = await Vue.prototype.$axios.delete(`/api/clinicroom/${clinicRoom.id}`);
+                commit('deleteClinicRoom', clinicRoom);
+            } catch (err) {
+                console.error(err);
+            }
         }
     },
 };
