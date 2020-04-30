@@ -9,7 +9,8 @@ export const emptyClinicAdmin = {
     name: '',
     surname: '',
     password: '',
-    username: ''
+    username: '',
+    clinic : null
 };
 
 export const resetClinic = {

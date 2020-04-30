@@ -34,6 +34,7 @@ public class ClinicAdministratorService {
                 UserType.clinicAdministrator);
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
+        clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
         return clinicAdminRepository.save(clinicAdministrator);
     }
@@ -49,6 +50,7 @@ public class ClinicAdministratorService {
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setId(clinicAdministratorDto.getId());
+        clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
         return clinicAdminRepository.save(clinicAdministrator);
     }

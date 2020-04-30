@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.model.enums.UserType;
 
@@ -18,6 +19,7 @@ public class ClinicAdministratorDto {
     private String surname;
     private String name;
     private UserType type;
+    private Clinic clinic;
 
     public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator) {
         this.id = clinicAdministrator.getId();
@@ -26,6 +28,7 @@ public class ClinicAdministratorDto {
         this.surname = clinicAdministrator.getUser().getSurname();
         this.name = clinicAdministrator.getUser().getName();
         this.type = clinicAdministrator.getUser().getType();
+        this.clinic = clinicAdministrator.getClinic();
 
     }
 }
