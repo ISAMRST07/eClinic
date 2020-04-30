@@ -5,10 +5,7 @@ export const emptyClinic = {
     coordinates: null
 };
 
-export const resetClinic = {
+export const emptyClinicRoom = {
     name: '',
-    description: '',
-    address: null,
-    coordinates: null,
-    reset: true
+    clinicId: ''
 };

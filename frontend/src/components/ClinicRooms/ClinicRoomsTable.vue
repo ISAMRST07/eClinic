@@ -7,7 +7,7 @@
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>Clinics</v-toolbar-title>
+                    <v-toolbar-title>Clinic rooms</v-toolbar-title>
                     <v-divider
                             class="mx-4"
                             inset
@@ -18,7 +18,7 @@
             </template>
 
             <template v-slot:no-data>
-                <p>There are no existing clinics</p>
+                <p>There are no existing clinic rooms</p>
             </template>
         </v-data-table>
 <!--        <delete-dialog-->
@@ -52,7 +52,7 @@
             headers: [
                 { text: 'ID', align: 'start', value: 'id' },
                 { text: 'Name', value: 'name', align: 'center'},
-                { text: 'Clinic ID', value: 'clinicID' },
+                { text: 'Clinic ID', value: 'clinicId' },
             ],
         }),
         computed: {

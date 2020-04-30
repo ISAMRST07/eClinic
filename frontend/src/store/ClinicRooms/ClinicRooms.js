@@ -10,11 +10,11 @@ export default {
             Vue.set(state, 'clinicRooms', clinicRooms);
         },
         addClinicRoom(state, clinicRoom) {
-            state.clinics.push(clinicRoom);
+            state.clinicRooms.push(clinicRoom);
         },
         deleteClinicRoom(state, clinicRoom) {
             let index = state.clinicRooms.findIndex(c => c.id === clinicRoom.id);
-            state.clinics.splice(index, 1);
+            state.clinicRooms.splice(index, 1);
         },
         updateClinicRoom(state, clinicRoom) {
             state.clinicRooms = [
@@ -34,7 +34,8 @@ export default {
         },
         async addClinicRoomApi({commit}, clinicRoom) {
             try {
-                let {data: added} = await Vue.prototype.$axios.post('/api/clinicRoom', clinicRoom);
+                let {data: added} = await Vue.prototype.$axios.post('/api/clinicroom', clinicRoom);
+                console.log(clinicRoom.name);
                 commit('addClinicRoom', added);
             } catch (err) {
                 console.error(err);

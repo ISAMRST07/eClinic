@@ -1,7 +1,6 @@
 <template>
     <div>
-<!--        <modify-clinic-dialog-->
-<!--                v-model="addDialog"/>-->
+        <modify-clinic-room-dialog v-model="addDialog"/>
         <v-btn
                 fab
                 dark
@@ -16,8 +15,10 @@
 </template>
 
 <script>
+    import ModifyClinicRoomDialog from "./ModifyClinicRoomDialog";
     export default {
         name: "AddClinicRoom",
+        components: {ModifyClinicRoomDialog},
         data: () => ({
             addDialog: false
         })
