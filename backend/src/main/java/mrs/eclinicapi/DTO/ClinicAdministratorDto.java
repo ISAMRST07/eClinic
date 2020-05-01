@@ -31,4 +31,15 @@ public class ClinicAdministratorDto {
         this.clinic = clinicAdministrator.getClinic();
 
     }
+
+    public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator, int i) {
+        this.id = clinicAdministrator.getId();
+        this.username = clinicAdministrator.getUser().getUsername();
+        this.password = clinicAdministrator.getUser().getPassword();
+        this.surname = clinicAdministrator.getUser().getSurname();
+        this.name = clinicAdministrator.getUser().getName();
+        this.type = clinicAdministrator.getUser().getType();
+        this.clinic = clinicAdministrator.getClinic();
+        this.clinic.setClinicAdministrator(null);
+    }
 }

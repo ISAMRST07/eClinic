@@ -26,7 +26,7 @@ public class ClinicAdministratorService {
     }
 
     @Transactional
-    public ClinicAdministrator addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
+    public ClinicAdministratorDto addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
         User newUser = new User(clinicAdministratorDto.getUsername(), 
         		clinicAdministratorDto.getPassword(),
                 clinicAdministratorDto.getName(),
@@ -36,11 +36,11 @@ public class ClinicAdministratorService {
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
-        return clinicAdminRepository.save(clinicAdministrator);
+        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator), 0);
     }
 
     @Transactional
-    public ClinicAdministrator updateClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
+    public ClinicAdministratorDto updateClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
         User newUser = new User(clinicAdministratorDto.getUsername(),
                 clinicAdministratorDto.getPassword(),
                 clinicAdministratorDto.getName(),
@@ -52,7 +52,7 @@ public class ClinicAdministratorService {
         clinicAdministrator.setId(clinicAdministratorDto.getId());
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
-        return clinicAdminRepository.save(clinicAdministrator);
+        return new ClinicAdministratorDto( clinicAdminRepository.save(clinicAdministrator), 0);
     }
 
     public List<ClinicAdministrator> findAll() {

@@ -137,7 +137,7 @@
                     }
                     else {
                         console.log("this.clinicToUpdate")
-                        //this.clinicAdmin.clinic = this.selectedClinic;
+                        this.clinicAdmin.clinic = this.selectedClinic;
                         fun(this.clinicAdmin);
                     }
                     this.closeAddDialog();

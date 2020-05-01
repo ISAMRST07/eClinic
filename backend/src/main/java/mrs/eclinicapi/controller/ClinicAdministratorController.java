@@ -28,7 +28,7 @@ public class ClinicAdministratorController {
 
     @PostMapping()
     public ClinicAdministratorDto addClinicAdministrator(@RequestBody ClinicAdministratorDto clinicAdministratorDto ) {
-        return new ClinicAdministratorDto(service.addClinicAdministraor(clinicAdministratorDto));
+        return service.addClinicAdministraor(clinicAdministratorDto);
 
     }
 
@@ -45,7 +45,7 @@ public class ClinicAdministratorController {
 
     @PutMapping(path="/{id}")
     public ClinicAdministratorDto modifyClinic(@RequestBody ClinicAdministratorDto clinicAdministratorDto) {
-        return new ClinicAdministratorDto(service.updateClinicAdministraor(clinicAdministratorDto));
+        return service.updateClinicAdministraor(clinicAdministratorDto);
 
     }
 
@@ -58,7 +58,7 @@ public class ClinicAdministratorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         for(ClinicAdministrator c : clinicAdministrators) {
-            clinicAdministratorsDto.add(new ClinicAdministratorDto(c));
+            clinicAdministratorsDto.add(new ClinicAdministratorDto(c,0));
         }
         return new ResponseEntity<>(clinicAdministratorsDto, HttpStatus.OK);
     }
