@@ -1,16 +1,12 @@
 package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.DTO.ClinicAdministratorDto;
-import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicAdministrator;
-import mrs.eclinicapi.model.Test;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.repository.ClinicAdministratorRepository;
-import mrs.eclinicapi.repository.ClinicRepository;
 import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,9 +22,9 @@ public class ClinicAdministratorService {
     }
 
     @Transactional
-    public ClinicAdministratorDto addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
-        User newUser = new User(clinicAdministratorDto.getUsername(), 
-        		clinicAdministratorDto.getPassword(),
+    public ClinicAdministratorDto addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto) {
+        User newUser = new User(clinicAdministratorDto.getUsername(),
+                clinicAdministratorDto.getPassword(),
                 clinicAdministratorDto.getName(),
                 clinicAdministratorDto.getSurname(),
                 UserType.clinicAdministrator);
@@ -40,7 +36,7 @@ public class ClinicAdministratorService {
     }
 
     @Transactional
-    public ClinicAdministratorDto updateClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto){
+    public ClinicAdministratorDto updateClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto) {
         User newUser = new User(clinicAdministratorDto.getUsername(),
                 clinicAdministratorDto.getPassword(),
                 clinicAdministratorDto.getName(),
@@ -52,7 +48,7 @@ public class ClinicAdministratorService {
         clinicAdministrator.setId(clinicAdministratorDto.getId());
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
-        return new ClinicAdministratorDto( clinicAdminRepository.save(clinicAdministrator), 0);
+        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator), 0);
     }
 
     public List<ClinicAdministrator> findAll() {

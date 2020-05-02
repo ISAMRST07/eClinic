@@ -22,7 +22,7 @@
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <clinic-selection v-model="selectedClinic"/>
+                                <clinic-selection v-model="selectedClinic" :disabled="mode === `update`"/>
                             </v-col>
                         </v-row>
                     </v-form>
@@ -32,9 +32,8 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Close</v-btn>
-                <v-btn color="blue darken-1" v-if="mode === `add`" text @click="addClinicRoom">Add</v-btn>
-                <v-btn color="blue darken-1" v-else text @click="dialog = false">Update</v-btn>
-
+                <v-btn color="blue darken-1" v-if="mode === `add`" text @click="submit(addClinicRoomApi)">Add</v-btn>
+                <v-btn color="blue darken-1" v-else text @click="submit(updateClinicRoomApi)">Update</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -42,7 +41,7 @@
 
 <script>
     import ClinicSelection from "../Clinics/ClinicSelection";
-    import {mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
     import {emptyClinicRoom} from "../../utils/skeletons";
     export default {
         name: "ModifyClinicRoomDialog",
@@ -54,27 +53,41 @@
             nameRules: [v => !!v || 'Name is required.']
         }),
         props: {
-            clinic: null,
+            editRoom: null,
             value: false,
             mode: {
                 type: String,
                 default: 'add'
             }
         },
+        watch: {
+            value() {
+                if(this.editRoom) {
+                    this.clinicRoom = this.editRoom;
+                }
+                this.name = this.clinicRoom.name;
+                this.selectedClinic = this.clinicById(this.clinicRoom.clinicId);
+            }
+        },
         methods: {
             ...mapActions('clinicRooms/clinicRooms', ['addClinicRoomApi']),
-            addClinicRoom() {
+            ...mapActions('clinicRooms/clinicRooms', ['updateClinicRoomApi']),
+
+            submit(fun) {
                 if(this.$refs.form.validate()) {
                     this.clinicRoom.name = this.name;
                     this.clinicRoom.clinicId = this.selectedClinic.id;
-                    this.addClinicRoomApi(this.clinicRoom);
+                    fun(this.clinicRoom);
                     this.close();
                 }
             },
             close() {
                 this.$emit('input', false);
-                this.$refs.form.reset();
+                if (this.mode === 'add') this.$refs.form.reset();
             }
+        },
+        computed: {
+            ...mapGetters('clinics/readClinics', ['clinicById']),
         }
     }
 </script>

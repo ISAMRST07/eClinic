@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Examination.java
- * Author:  Manojlović
- * Purpose: Defines the Class Examination
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

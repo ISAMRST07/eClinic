@@ -38,7 +38,11 @@
             rules: [v => !!v || 'Clinic is required'],
         }),
         props: {
-            value: null
+            value: null,
+            disabled: {
+                type: Boolean,
+                value: false,
+            },
         },
         computed: {
             ...mapState('clinics/readClinics', ['clinics']),

@@ -1,16 +1,13 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Medicine.java
- * Author:  Manojlović
- * Purpose: Defines the Class Medicine
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @Getter
@@ -18,6 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

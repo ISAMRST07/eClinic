@@ -1,9 +1,7 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Disease.java
- * Author:  Manojlović
- * Purpose: Defines the Class Disease
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +17,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Disease {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  WorkingCalendar.java
- * Author:  Manojlović
- * Purpose: Defines the Class WorkingCalendar
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,5 +7,4 @@ import lombok.Setter;
 @Setter
 public class WorkingCalendar {
     private String medicalStaffID;
-
 }

@@ -17,9 +17,7 @@ import javax.persistence.*;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public class ClinicAdministrator {
-
-
+public class UnregisteredUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +25,5 @@ public class ClinicAdministrator {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @ManyToOne
-    public Clinic clinic;
 
 }

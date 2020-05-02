@@ -22,6 +22,6 @@ export const resetClinic = {
 };
 
 export const emptyClinicRoom = {
-    name: '',
-    clinicId: ''
+    name: null,
+    clinicId: null
 };

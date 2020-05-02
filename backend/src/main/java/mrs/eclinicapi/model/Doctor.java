@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,11 @@ public class Doctor extends MedicalStaff {
 
     private String position;
 
-	@Override
-	public String toString() {
-		return "Doctor [position=" + position + "]";
-	}
+    @Override
+    public String toString() {
+        return "Doctor [position=" + position + "]";
+    }
 
-	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
 }

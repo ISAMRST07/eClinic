@@ -23,6 +23,11 @@ export default {
             ]
         }
     },
+    getters: {
+        clinicById: state => id => {
+            return state.clinics.find(clinic => clinic.id === id);
+        }
+    },
     actions: {
         async getClinics({commit}) {
             try {
@@ -39,6 +44,7 @@ export default {
             } catch(err) {
                 console.error(err);
             }
-        }
+        },
+
     },
 };

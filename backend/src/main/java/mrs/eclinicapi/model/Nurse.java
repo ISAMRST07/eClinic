@@ -1,8 +1,4 @@
-package mrs.eclinicapi.model; /***********************************************************************
- * Module:  Nurse.java
- * Author:  Manojlović
- * Purpose: Defines the Class Nurse
- ***********************************************************************/
+package mrs.eclinicapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 
 @Getter

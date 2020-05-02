@@ -24,7 +24,7 @@ export default {
         },
         async modifyClinicApi({commit}, clinic) {
             try {
-                let {data: res} = await Vue.prototype.$axios.put(`/api/clinic/${clinic.id}`, clinic);
+                let {data: res} = await Vue.prototype.$axios.put('/api/clinic', clinic);
                 commit('clinics/readClinics/updateClinic', res, {root: true});
             } catch (err) {
                 console.error(err);

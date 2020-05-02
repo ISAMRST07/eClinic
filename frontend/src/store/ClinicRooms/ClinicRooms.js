@@ -48,6 +48,15 @@ export default {
             } catch (err) {
                 console.error(err);
             }
-        }
+        },
+        async updateClinicRoomApi({commit}, clinicRoom) {
+            console.log(clinicRoom);
+            try {
+                let {data: modified} = await Vue.prototype.$axios.put('/api/clinicroom', clinicRoom);
+                commit('updateClinicRoom', modified);
+            } catch (err) {
+                console.error(err);
+            }
+        },
     },
 };

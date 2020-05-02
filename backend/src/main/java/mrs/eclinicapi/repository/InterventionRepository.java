@@ -1,9 +1,8 @@
 package mrs.eclinicapi.repository;
 
+import mrs.eclinicapi.model.Intervention;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import mrs.eclinicapi.model.Intervention;
-
-public interface InterventionRepository extends JpaRepository<Intervention, Long>{
+public interface InterventionRepository extends JpaRepository<Intervention, Long> {
 
 }

@@ -1,16 +1,14 @@
 package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +17,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class ClinicRoom {
 
     @Id
@@ -31,9 +32,8 @@ public class ClinicRoom {
     private Set<Intervention> interventions = new HashSet<>();
 
     @JsonIgnore
-	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
-
 
 
 }

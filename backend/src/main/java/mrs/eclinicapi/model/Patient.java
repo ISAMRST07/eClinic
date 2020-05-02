@@ -1,5 +1,7 @@
 package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +33,6 @@ public class Patient {
     public MedicalRecord medicalRecord;
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private  List<Intervention> intervention;
+    private List<Intervention> intervention;
 
 }

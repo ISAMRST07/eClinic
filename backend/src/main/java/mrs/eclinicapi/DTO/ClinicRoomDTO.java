@@ -1,11 +1,11 @@
 package mrs.eclinicapi.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mrs.eclinicapi.model.Clinic;
-import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.Intervention;
 
 import java.util.HashSet;
@@ -15,6 +15,9 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class ClinicRoomDTO {
     private Long id;
     private String name;

@@ -17,6 +17,15 @@
                 </v-toolbar>
             </template>
 
+            <template v-slot:item.update="{ item }">
+                <v-icon
+                        @click="updateDialog(item)"
+                        color="amber darken-2"
+                >
+                    mdi-pencil
+                </v-icon>
+            </template>
+
             <template v-slot:item.remove="{ item }">
                 <v-icon
                         @click="deleteDialog(item)"
@@ -36,29 +45,32 @@
                 @close="deleteDialog(null)"
                 @delete="deleteRoom"
         />
-<!--        <modify-clinic-dialog-->
-<!--                mode="update"-->
-<!--                v-model="editDialog"/>-->
+        <modify-clinic-room-dialog
+                    mode="update"
+                    :edit-room="editRoom"
+                    v-model="editDialog"/>
     </div>
 </template>
 
 <script>
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
+    import ModifyClinicRoomDialog from "./ModifyClinicRoomDialog";
 
     export default {
         name: "ClinicRoomsTable",
-        components: {DeleteDialog},
+        components: {ModifyClinicRoomDialog, DeleteDialog},
         data: () => ({
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
             roomToDelete: null,
-            clinicWithDescription: null,
+            editRoom: null,
             headers: [
                 { text: 'ID', align: 'start', value: 'id' },
                 { text: 'Name', value: 'name', align: 'center'},
                 { text: 'Clinic ID', value: 'clinicId' },
+                { text: 'Update', value: 'update', sortable: false },
                 { text: 'Remove', value: 'remove', sortable: false },
 
             ],
@@ -75,6 +87,7 @@
             // }
         },
         methods: {
+            ...mapActions('clinics/readClinics', ['getClinics']),
             ...mapActions('clinicRooms/clinicRooms', ['getClinicRooms']),
             ...mapActions('clinicRooms/clinicRooms', ['deleteRoomApi']),
 
@@ -86,17 +99,14 @@
                 this.deleteRoomApi(this.roomToDelete);
                 this.deleteDialog(null);
             },
-            // toggleClinicDescription(clinic) {
-            //     this.clinicWithDescription = clinic;
-            //     this.descriptionDialog = !this.descriptionDialog;
-            // },
-            // updateDialog(clinic) {
-            //     this.editClinic = clinic;
-            //     this.editDialog = true;
-            // }
+            updateDialog(room) {
+                this.editRoom = room;
+                this.editDialog = true;
+            }
 
         },
         created() {
+            this.getClinics();
             this.getClinicRooms();
         }
     }

@@ -1,9 +1,8 @@
 package mrs.eclinicapi.repository;
 
+import mrs.eclinicapi.model.Examination;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import mrs.eclinicapi.model.Examination;
-
-public interface ExaminationRepository extends JpaRepository<Examination, Long>{
+public interface ExaminationRepository extends JpaRepository<Examination, Long> {
 
 }
