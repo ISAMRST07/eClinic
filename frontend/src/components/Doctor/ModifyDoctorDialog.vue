@@ -12,7 +12,6 @@
                 <v-container>
                     <v-form ref="form">
                         <v-row>
-                           
                             <v-col cols="12">
                                 <doctor-selection v-model="selectedDoctor"/>
                             </v-col>
@@ -29,7 +28,6 @@
                 <v-btn color="blue darken-1" text @click="close">Close</v-btn>
                 <v-btn color="blue darken-1" v-if="mode === `add`" text @click="addDoctor">Add</v-btn>
                 <v-btn color="blue darken-1" v-else text @click="dialog = false">Update</v-btn>
-
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -42,7 +40,7 @@
     import {emptyDoctor} from "../../utils/skeletons";
     export default {
         name: "ModifyDoctorDialog",
-        components: {ClinicSelection},
+        components: {ClinicSelection, DoctorSelection},
         data: () => ({
             name: null,
             doctor: emptyDoctor,
@@ -62,8 +60,8 @@
             ...mapActions('doctor/doctor', ['addDoctorApi']),
             addDoctor() {
                 if(this.$refs.form.validate()) {
-                    console.log(this.selectedDoctor);
-                    console.log(this.selectedClinic);              
+                    console.log(this.selectedDoctor.user.name);
+                    console.log(this.selectedClinic.name);              
                     //this.doctor.name = this.name;
                     //this.doctor.clinicId = this.selectedClinic.id;
                     //this.addDoctorApi(this.doctor);

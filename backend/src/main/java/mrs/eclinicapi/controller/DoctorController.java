@@ -57,7 +57,7 @@ public class DoctorController {
         return doctor;
     }
 
-    @RequestMapping(path = "/deleteDoctor/{id}")
+    @DeleteMapping(path = "/deleteDoctor/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
         System.out.println("delete doctor " + id);
 

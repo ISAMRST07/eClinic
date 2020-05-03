@@ -6,8 +6,8 @@
             :items="doctor"
             label="Doctor*"
             persistent-hint
-            item-text="name"
-            item-value="name"
+            item-text="user.name"
+            item-value="user.name"
             :rules="rules"
             return-object
             prepend-icon="mdi-hospital-building"
@@ -46,6 +46,7 @@
             ...mapActions('doctor/doctor', ['getDoctor']),
         },
         created() {
+        	console.log("getDoctor in doctorSelection");
             this.getDoctor();
         }
     }

@@ -16,7 +16,14 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
             </template>
-
+			<template v-slot:item.update="{ item }">
+                <v-icon
+                        @click="updateDialog(item)"
+                        color="amber darken-2"
+                >
+                    mdi-pencil
+                </v-icon>
+            </template>
             <template v-slot:item.remove="{ item }">
                 <v-icon
                         @click="deleteDialog(item)"
@@ -36,25 +43,32 @@
                 @close="deleteDialog(null)"
                 @delete="deleteDoctor"
         />
+        <modify-doctor-dialog
+                mode="update"
+                :doctorToUpdate="doctorToUpdate"
+                v-model="editDialog"/>
     </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
+    import ModifyDoctorDialog from "./ModifyDoctorDialog";
 
     export default {
         name: "DoctorTable",
-        components: {DeleteDialog},
+        components: {DeleteDialog, ModifyDoctorDialog},
         data: () => ({
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
             doctorToDelete: null,
+            doctorToUpdate: null,     
             headers: [
                 { text: 'Doctor', align: 'start', value: 'user.username' },
                 { text: 'Position', align: 'center', value: 'position' },
                 { text: 'Clinic', align: 'center', value: 'clinic.name' },
+                { text: 'Update', value: 'update', sortable: false, align: 'center' },      
                 { text: 'Remove', sortable: false, value: 'remove' },
             ],
         }),
@@ -72,6 +86,12 @@
             deleteDoctor() {
                 this.deleteDoctorApi(this.doctorToDelete);
                 this.deleteDialog(null);
+            },
+            updateDialog(doctor) {
+            	console.log("updateDialog");
+            	console.log(doctor.position);
+                this.doctorToUpdate = doctor;
+                this.editDialog = true;
             }
         },
         created() {

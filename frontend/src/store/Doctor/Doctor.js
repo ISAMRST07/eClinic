@@ -48,7 +48,7 @@ export default {
             try {
             	console.log("delete doctor = ");
             	console.log(doctor.id);
-                let res = await Vue.prototype.$axios.delete(`/api/doctor/deleteDoctorFromClinic/${doctor.id}`);
+                let res = await Vue.prototype.$axios.delete(`/api/doctor/deleteDoctor/${doctor.id}`);
                 commit('deleteDoctor', doctor);
             } catch (err) {
                 console.error(err);
