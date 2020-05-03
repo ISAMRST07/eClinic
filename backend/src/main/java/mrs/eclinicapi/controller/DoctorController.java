@@ -9,6 +9,7 @@ import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -110,8 +111,8 @@ public class DoctorController {
         return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/deleteDoctorFromClinic")
-    public ResponseEntity<String> deleteDoctorFromClinic(@RequestParam Long id) {
+    @DeleteMapping(path = "/deleteDoctorFromClinic/{id}")
+    public ResponseEntity<String> deleteDoctorFromClinic(@PathVariable("id") Long id) {
         System.out.println("get doctor " + id);
         Doctor doctor = service.findOne(id);
         if (doctor == null) {
