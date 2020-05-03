@@ -3,6 +3,7 @@ import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
 import ClinicRooms from "../pages/ClinicRooms";
+import Doctor from "../pages/Doctor";
 
 const loggedRoutes = [
     {
@@ -21,7 +22,13 @@ const loggedRoutes = [
     {
         path: '/clinicRooms',
         component: ClinicRooms,
+    },
+
+    {
+        path: '/doctor',
+        component: Doctor,
     }
+
 
 ];
 

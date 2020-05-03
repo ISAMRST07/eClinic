@@ -29,9 +29,11 @@ public class MedicalStaff {
     @OneToOne(cascade = {CascadeType.PERSIST})
     private User user;
 
-    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
-
+	@Override
+	public String toString() {
+		return "MedicalStaff [id=" + id + ", user=" + user + ", clinic=" + clinic + "]";
+	}
 }
