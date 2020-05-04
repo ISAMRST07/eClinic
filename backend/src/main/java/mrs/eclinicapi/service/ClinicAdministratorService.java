@@ -55,12 +55,12 @@ public class ClinicAdministratorService {
         return clinicAdminRepository.findAll();
     }
 
-    public ClinicAdministrator findById(Long id) {
+    public ClinicAdministrator findById(String id) {
         return clinicAdminRepository.findById(id).orElseGet(null);
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         clinicAdminRepository.deleteById(id);
     }
 }

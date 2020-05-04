@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,8 +22,13 @@ import java.util.List;
         property = "id")
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pt_seq")
+    @GenericGenerator(name = "pt_seq",
+            strategy = "mrs.eclinicapi.generator.IdGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "PT")})
+    private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;

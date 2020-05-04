@@ -29,6 +29,7 @@ export default {
     actions: {
         async saveClinicAdmin({commit}, clinicAdmin) {
             try {
+                console.log(clinicAdmin);
                 let {data: res} = await Vue.prototype.$axios.post('/api/clinicadministrator', clinicAdmin);
                 // tu ce ic update za prikaz
                 commit('addClinicAdmin', res);

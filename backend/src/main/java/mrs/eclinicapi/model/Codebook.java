@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,8 +25,13 @@ import java.util.List;
 public class Codebook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cb_seq")
+    @GenericGenerator(name = "cb_seq",
+            strategy = "mrs.eclinicapi.generator.IdGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "CB")})
+    private String id;
 
     @ManyToOne
     private ClinicalCentarAdministrator admin;

@@ -20,7 +20,7 @@ public class ClinicService {
         return clinicRepository.save(newClinic);
     }
 
-    public Clinic findOne(Long id) {
+    public Clinic findOne(String id) {
         return clinicRepository.findById(id).orElseGet(null);
     }
 
@@ -33,7 +33,7 @@ public class ClinicService {
         return clinicRepository.findAll();
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         clinicRepository.deleteById(id);
     }
 

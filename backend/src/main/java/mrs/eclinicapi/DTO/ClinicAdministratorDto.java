@@ -18,7 +18,7 @@ import mrs.eclinicapi.model.enums.UserType;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class ClinicAdministratorDto {
-    private Long id;
+    private String id;
     private String username;
     private String password;
     private String surname;

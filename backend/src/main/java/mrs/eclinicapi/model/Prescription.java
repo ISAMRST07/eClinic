@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -19,8 +21,13 @@ import javax.persistence.*;
         property = "id")
 public class Prescription {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pr_seq")
+    @GenericGenerator(name = "pr_seq",
+            strategy = "mrs.eclinicapi.generator.IdGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "PR")})
+    private String id;
 
     @ManyToOne
     public Medicine medicine;

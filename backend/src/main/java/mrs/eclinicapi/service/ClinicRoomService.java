@@ -19,7 +19,7 @@ public class ClinicRoomService {
         return repository.save(newClinicRoom);
     }
 
-    public ClinicRoom findOne(Long id) {
+    public ClinicRoom findOne(String id) {
         return repository.findById(id).orElseGet(null);
     }
 
@@ -27,7 +27,7 @@ public class ClinicRoomService {
         return repository.findAll();
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 

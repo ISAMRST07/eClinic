@@ -19,9 +19,9 @@ import java.util.Set;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class ClinicRoomDTO {
-    private Long id;
+    private String id;
     private String name;
-    private Long clinicId;
+    private String clinicId;
     private Set<Intervention> scheduledInterventions = new HashSet<>();
     private Set<Intervention> pastInterventions = new HashSet<>();
     private boolean removable = true;

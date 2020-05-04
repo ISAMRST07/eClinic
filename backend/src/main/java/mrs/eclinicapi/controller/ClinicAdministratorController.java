@@ -6,6 +6,7 @@ import mrs.eclinicapi.service.ClinicAdministratorService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +22,14 @@ public class ClinicAdministratorController {
     @Autowired
     private UserService userService;
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ClinicAdministratorDto addClinicAdministrator(@RequestBody ClinicAdministratorDto clinicAdministratorDto) {
         return service.addClinicAdministraor(clinicAdministratorDto);
 
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteClinicAdministrator(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteClinicAdministrator(@PathVariable("id") String id) {
         ClinicAdministrator clinicAdministrator = service.findById(id);
         System.out.println(clinicAdministrator);
 //        if (clinicAdministrator == null) {

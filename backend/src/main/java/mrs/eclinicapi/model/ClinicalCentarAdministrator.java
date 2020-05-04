@@ -3,6 +3,8 @@ package mrs.eclinicapi.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,8 +17,13 @@ import java.util.List;
 public class ClinicalCentarAdministrator {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+@Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cca_seq")
+    @GenericGenerator(name = "cca_seq",
+            strategy = "mrs.eclinicapi.generator.IdGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "CCA")})
+    private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;

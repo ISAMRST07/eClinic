@@ -19,7 +19,7 @@ public class NurseService {
         return repository.save(newNurse);
     }
 
-    public Nurse findOne(Long id) {
+    public Nurse findOne(String id) {
         return repository.findById(id).orElseGet(null);
     }
 
@@ -27,7 +27,7 @@ public class NurseService {
         return repository.findAll();
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 

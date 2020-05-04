@@ -19,7 +19,7 @@ public class UserService {
         return repository.save(newUser);
     }
 
-    public User findOne(Long id) {
+    public User findOne(String id) {
         return repository.findById(id).orElseGet(null);
     }
 
@@ -27,7 +27,7 @@ public class UserService {
         return repository.findAll();
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         try {
             repository.deleteById(id);
         } catch (Exception NullPointerException) {
@@ -35,15 +35,15 @@ public class UserService {
         }
     }
 
-    public void updateUsername(Long id, String newUsername) {
+    public void updateUsername(String id, String newUsername) {
         repository.updateUsername(id, newUsername);
     }
 
-    public void updatePassword(Long id, String newPassword) {
+    public void updatePassword(String id, String newPassword) {
         repository.updatePassword(id, newPassword);
     }
 
-    public void updateName(Long id, String newName) {
+    public void updateName(String id, String newName) {
         repository.updateName(id, newName);
     }
 

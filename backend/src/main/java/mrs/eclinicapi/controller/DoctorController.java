@@ -9,7 +9,6 @@ import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,8 +31,8 @@ public class DoctorController {
 
     @RequestMapping(path = "/addDoctor")
     public Doctor addDoctor(@RequestParam String position,
-                            @RequestParam Long userId,
-                            @RequestParam Long clinicId) {
+                            @RequestParam String userId,
+                            @RequestParam String clinicId) {
         System.out.println("adding doctor " + position + " " + userId + " " + clinicId);
         User user = userService.findOne(userId);
         if (user == null) {
@@ -57,8 +56,8 @@ public class DoctorController {
         return doctor;
     }
 
-    @DeleteMapping(path = "/deleteDoctor/{id}")
-    public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
+    @RequestMapping(path = "/deleteDoctor/{id}")
+    public ResponseEntity<String> deleteDoctor(@PathVariable("id") String id) {
         System.out.println("delete doctor " + id);
 
         Doctor doctor = service.findOne(id);
@@ -84,7 +83,7 @@ public class DoctorController {
     }
 
     @RequestMapping(path = "/getDoctor/{id}")
-    public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
+    public ResponseEntity<Doctor> getDoctor(@PathVariable("id") String id) {
         System.out.println("get doctor " + id);
         Doctor doctor = service.findOne(id);
         if (doctor == null) {
@@ -97,7 +96,7 @@ public class DoctorController {
     }
 
     @RequestMapping(path = "/updatePosition")
-    public ResponseEntity<String> updatePosition(@RequestParam Long id,
+    public ResponseEntity<String> updatePosition(@RequestParam String id,
                                                  @RequestParam String newPosition) {
         System.out.println("get doctor " + id);
         Doctor doctor = service.findOne(id);
@@ -111,8 +110,8 @@ public class DoctorController {
         return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/deleteDoctorFromClinic/{id}")
-    public ResponseEntity<String> deleteDoctorFromClinic(@PathVariable("id") Long id) {
+    @RequestMapping(path = "/deleteDoctorFromClinic")
+    public ResponseEntity<String> deleteDoctorFromClinic(@RequestParam String id) {
         System.out.println("get doctor " + id);
         Doctor doctor = service.findOne(id);
         if (doctor == null) {

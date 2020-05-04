@@ -53,7 +53,7 @@ public class ClinicRoomController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteClinicRoom(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteClinicRoom(@PathVariable("id") String id) {
 
         ClinicRoom room = service.findOne(id);
         if (room == null) {

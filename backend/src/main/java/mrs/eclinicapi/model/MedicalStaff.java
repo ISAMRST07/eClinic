@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -21,8 +23,10 @@ import javax.persistence.*;
 public class MedicalStaff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @GenericGenerator(name = "seq", strategy = "mrs.eclinicapi.generator.IdGenerator")
+    private String id;
 
     /*ovde nije CascadeType.ALL da ne bi kada obrises doctor/nurse bili i
     user i clinic obrisani iz svojih tabela*/

@@ -32,8 +32,8 @@ public class NurseController {
 
     @RequestMapping(path = "/addNurse")
     public Nurse addNurse(@RequestParam String position,
-                          @RequestParam Long userId,
-                          @RequestParam Long clinicId) {
+                          @RequestParam String userId,
+                          @RequestParam String clinicId) {
 
         User user = userService.findOne(userId);
         if (user == null) {
@@ -57,7 +57,7 @@ public class NurseController {
     }
 
     @RequestMapping(path = "/deleteNurse/{id}")
-    public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteNurse(@PathVariable("id") String id) {
         System.out.println("delete nurse " + id);
 
         Nurse nurse = service.findOne(id);
@@ -83,7 +83,7 @@ public class NurseController {
     }
 
     @RequestMapping(path = "/getNurse/{id}")
-    public ResponseEntity<Nurse> getNurse(@PathVariable("id") Long id) {
+    public ResponseEntity<Nurse> getNurse(@PathVariable("id") String id) {
         System.out.println("get nurse " + id);
         Nurse nurse = service.findOne(id);
         if (nurse == null) {
@@ -96,7 +96,7 @@ public class NurseController {
     }
 
     @RequestMapping(path = "/updatePosition")
-    public ResponseEntity<String> updatePosition(@RequestParam Long id,
+    public ResponseEntity<String> updatePosition(@RequestParam String id,
                                                  @RequestParam String newPosition) {
         System.out.println("get nurse " + id);
         Nurse nurse = service.findOne(id);
@@ -111,7 +111,7 @@ public class NurseController {
     }
 
     @RequestMapping(path = "/deleteNurseFromClinic")
-    public ResponseEntity<String> deleteNurseFromClinic(@RequestParam Long id) {
+    public ResponseEntity<String> deleteNurseFromClinic(@RequestParam String id) {
         System.out.println("get nurse " + id);
         Nurse nurse = service.findOne(id);
         if (nurse == null) {

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+    public ResponseEntity<User> getUser(@PathVariable("id") String id) {
 
         User user = service.findOne(id);
 
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") String id) {
         User user = service.findOne(id);
         if (user == null) {
             return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
@@ -67,7 +67,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/updateUsername")
-    public ResponseEntity<String> updateUsername(@RequestParam Long id,
+    public ResponseEntity<String> updateUsername(@RequestParam String id,
                                                  @RequestParam String newUsername) {
         User user = service.findOne(id);
         if (user == null) {
@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestParam Long id,
+    public ResponseEntity<String> updatePassword(@RequestParam String id,
                                                  @RequestParam String newPassword) {
         User user = service.findOne(id);
         if (user == null) {
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/updateName")
-    public ResponseEntity<String> updateName(@RequestParam Long id,
+    public ResponseEntity<String> updateName(@RequestParam String id,
                                              @RequestParam String newName) {
         User user = service.findOne(id);
         if (user == null) {

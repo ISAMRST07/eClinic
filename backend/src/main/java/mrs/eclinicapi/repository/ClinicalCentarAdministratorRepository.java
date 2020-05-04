@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ClinicalCentarAdministratorRepository
-        extends JpaRepository<ClinicalCentarAdministrator, Long> {
+        extends JpaRepository<ClinicalCentarAdministrator, String> {
 }

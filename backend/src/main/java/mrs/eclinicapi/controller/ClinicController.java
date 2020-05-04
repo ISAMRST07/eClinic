@@ -53,7 +53,7 @@ public class ClinicController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteClinic(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteClinic(@PathVariable("id") String id) {
         Clinic clinic = service.findOne(id);
         if (clinic == null) {
             return new ResponseEntity<>("clinic not found", HttpStatus.NOT_FOUND);
