@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.DTO.ClinicAdministratorDto;
 import mrs.eclinicapi.generator.IdGenerator;
 import mrs.eclinicapi.model.enums.UserType;
 import org.hibernate.annotations.GenericGenerator;
@@ -37,6 +38,11 @@ public class User {
     private String name;
     private String surname;
     private UserType type;
+    private String email;
+    private String city;
+    private String state;
+    private String address;
+    private String umnc; //JMBG
 
     public User(String username, String password, String name) {
         this.username = username;
@@ -44,6 +50,18 @@ public class User {
         this.name = name;
     }
 
+    public User(ClinicAdministratorDto clinicAdminDto){
+        this.username = clinicAdminDto.getUsername();
+        this.password = clinicAdminDto.getPassword();
+        this.name = clinicAdminDto.getName();
+        this.surname = clinicAdminDto.getSurname();
+        this.type = UserType.clinicAdministrator;
+        this.email = clinicAdminDto.getEmail();
+        this.city = clinicAdminDto.getCity();
+        this.state = clinicAdminDto.getState();
+        this.umnc = clinicAdminDto.getUmnc();
+        this.address = clinicAdminDto.getAddress();
+    }
     public User(String username, String password, String name, String surname, UserType type) {
         this.username = username;
         this.password = password;

@@ -39,14 +39,7 @@
                                             </v-col>
                                             <v-col cols="6">
                                                 <v-text-field
-                                                        label="Username*"
-                                                        required
-                                                        :rules="usernameRules"
-                                                        v-model="clinicAdmin.username"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
+                                                        ref="password"
                                                         label="Password*"
                                                         required
                                                         v-model="clinicAdmin.password"
@@ -57,6 +50,69 @@
                                                         hint="At least 8 characters"
                                                         class="input-group--focused"
                                                         @click:append="showPassword = !showPassword"
+                                                ></v-text-field>
+                                            </v-col>
+
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Confirm password*"
+                                                        required
+                                                        v-model="confpass"
+                                                        :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                        :rules="passwordRules"
+                                                        :type="showPassword2 ? 'text' : 'password'"
+                                                        name="input-10-2"
+                                                        hint="At least 8 characters"
+                                                        class="input-group--focused"
+                                                        @click:append="showPassword2 = !showPassword2"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Username*"
+                                                        required
+                                                        :rules="usernameRules"
+                                                        v-model="clinicAdmin.username"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Email*"
+                                                        required
+                                                        :rules="emailRules"
+                                                        v-model="clinicAdmin.email"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="City*"
+                                                        required
+                                                        :rules="cityRules"
+                                                        v-model="clinicAdmin.city"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="State*"
+                                                        required
+                                                        :rules="stateRules"
+                                                        v-model="clinicAdmin.state"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Address*"
+                                                        required
+                                                        :rules="addressRules"
+                                                        v-model="clinicAdmin.address"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="UMCN*"
+                                                        required
+                                                        :rules="umcnRules"
+                                                        v-model="clinicAdmin.umnc"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -89,12 +145,20 @@
             //*************************************************************************************************************
             selectedClinic: null, // ************************************************************* OVO CES DA METNES ADMINU
             //*************************************************************************************************************
+            confpass : '',
             clinicAdmin: emptyClinicAdmin,
             showPassword: false,
+            showPassword2: false,
+            addressRules : [v => !!v || "* Address is required"],
+            emailRules: [v => !!v || "* Email is required",
+                v => /.+@.+/.test(v) || "E-mail must be valid"],
+            cityRules: [v => !!v || "* City is required"],
+            stateRules: [v => !!v || "* State is required"],
+            umcnRules: [v => !!v || "* UMNC is required"],
             nameRules: [v => !!v || "* Name is required"],
-            surnameRules: [v => !!v || "* Surname is required"],
-            usernameRules: [v => !!v || "* Surname is required"],
-            passwordRules : [v => !!v || "* Surname is required"]
+            surnameRules: [v => !!v || "* Sutname is required"],
+            usernameRules: [v => !!v || "* Username is required"],
+            passwordRules : [v => !!v || "* Password is required"]
         }),
         props: {
             clinicToUpdate:{
@@ -133,6 +197,9 @@
                         this.clinicToUpdate.username = this.clinicAdmin.username;
                         this.clinicToUpdate.name = this.clinicAdmin.name;
                         this.clinicToUpdate.surname = this.clinicAdmin.surname;
+                        this.clinicToUpdate.clinic = this.selectedClinic;
+                        console.log(this.selectedClinic.id)
+                        console.log(this.selectedClinic)
                         fun(this.clinicToUpdate);
                     }
                     else {

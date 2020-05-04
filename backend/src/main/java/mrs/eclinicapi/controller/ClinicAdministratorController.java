@@ -47,14 +47,9 @@ public class ClinicAdministratorController {
 
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<ClinicAdministratorDto>> getAllClinicAdmin() {
-        System.out.println("USA SAM ODJE");
-        List<ClinicAdministrator> clinicAdministrators = service.findAll();
-        List<ClinicAdministratorDto> clinicAdministratorsDto = new ArrayList<>();
-        if (clinicAdministrators == null) {
+        List<ClinicAdministratorDto> clinicAdministratorsDto = service.findAll();
+        if (clinicAdministratorsDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        for (ClinicAdministrator c : clinicAdministrators) {
-            clinicAdministratorsDto.add(new ClinicAdministratorDto(c, 0));
         }
         return new ResponseEntity<>(clinicAdministratorsDto, HttpStatus.OK);
     }

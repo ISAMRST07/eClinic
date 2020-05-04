@@ -70,7 +70,9 @@
                     value: 'name',
                 },
                 { text: 'Surname', value: 'surname' },
+                { text: 'Email', value: 'email' },
                 { text: 'Username', value: 'username' },
+                { text: 'Clinic name', value: 'clinic.name' },
                 { text: 'Update', value: 'update', sortable: false, align: 'center' },
                 { text: 'Remove', value: 'remove', sortable: false, align: 'center' }
             ],

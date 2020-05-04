@@ -25,17 +25,12 @@ public class ClinicAdministratorDto {
     private String name;
     private UserType type;
     private Clinic clinic;
-
-    public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator) {
-        this.id = clinicAdministrator.getId();
-        this.username = clinicAdministrator.getUser().getUsername();
-        this.password = clinicAdministrator.getUser().getPassword();
-        this.surname = clinicAdministrator.getUser().getSurname();
-        this.name = clinicAdministrator.getUser().getName();
-        this.type = clinicAdministrator.getUser().getType();
-        this.clinic = clinicAdministrator.getClinic();
-
-    }
+    private String email;
+    private String userID;
+    private String city;
+    private String state;
+    private String address;
+    private String umnc; //JMBG
 
     public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator, int i) {
         this.id = clinicAdministrator.getId();
@@ -45,6 +40,11 @@ public class ClinicAdministratorDto {
         this.name = clinicAdministrator.getUser().getName();
         this.type = clinicAdministrator.getUser().getType();
         this.clinic = clinicAdministrator.getClinic();
-        this.clinic.setClinicAdministrator(null);
+        this.email = clinicAdministrator.getUser().getEmail();;
+        this.city = clinicAdministrator.getUser().getCity();;
+        this.state = clinicAdministrator.getUser().getState();
+        this.userID = clinicAdministrator.getUser().getId();
+        this.address = clinicAdministrator.getUser().getAddress();
+        this.umnc = clinicAdministrator.getUser().getUmnc(); //JMBG
     }
 }
