@@ -1,5 +1,6 @@
 import {emptyClinicAdmin} from "../../utils/skeletons";
 import Vue from 'vue';
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -35,7 +36,7 @@ export default {
                 // tu ce ic update za prikaz
                 commit('addClinicAdmin', res);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
                 // tu moze ic neki toast
             }
         },
@@ -46,7 +47,7 @@ export default {
                 console.log(res.data);
                 commit('setAllClinicAdmins', res.data);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async modifyClinicApi({rootState, commit}, clinic) {
@@ -55,7 +56,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('updateClinicAdmin', res);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async deleteClinicAdminApi({rootState, commit}, clinicAdministrator) {
@@ -64,7 +65,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinicAdmins', clinicAdministrator);
             } catch(err) {
-                console.error(err);
+                defaultError(err);
             }
         }
 

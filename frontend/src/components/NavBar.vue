@@ -9,19 +9,20 @@
 
         <v-spacer></v-spacer>
         <v-btn icon>
-            <v-icon>mdi-apps</v-icon>
+            <v-icon dense>mdi-apps</v-icon>
         </v-btn>
-        <v-btn icon class="ml-1 mr-2">
-            <v-avatar color="accent">
-                <span class="white--text headline">A</span>
-            </v-avatar>
-        </v-btn>
+        <avatar-menu :menu-active="menuActive"></avatar-menu>
     </v-app-bar>
 </template>
 
 <script>
+    import AvatarMenu from "./Auth/AvatarMenu";
     export default {
         name: "NavBar",
+        components: {AvatarMenu},
+        data: () => ({
+            menuActive: false
+        }),
     }
 </script>
 

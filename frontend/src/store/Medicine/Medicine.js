@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -29,7 +30,7 @@ export default {
                 let res = await Vue.prototype.$axios.get('/api/medicine', {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('setAllMedicines', res.data);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async addMedicineApi({rootState,commit}, medicine) {
@@ -38,7 +39,7 @@ export default {
                 console.log(medicine.name);
                 commit('addMedicine', added);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async deleteMedicineApi({rootState,commit}, medicine) {
@@ -46,7 +47,7 @@ export default {
                 let res = await Vue.prototype.$axios.delete(`/api/medicine/${medicine.id}`, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteMedicine', medicine);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async updateMedicineApi({rootState,commit}, medicine) {
@@ -55,7 +56,7 @@ export default {
                 let {data: modified} = await Vue.prototype.$axios.put('/api/medicine', medicine, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateMedicine', modified);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
     },

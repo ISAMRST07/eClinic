@@ -1,5 +1,6 @@
 import {emptyClinic} from "../../utils/skeletons";
 import Vue from 'vue';
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -19,7 +20,7 @@ export default {
                 // tu ce ic update za prikaz
                 commit('clinics/readClinics/addClinic', res, {root: true});
             } catch (err) {
-                console.error(err);
+                defaultError(err);
                 // tu moze ic neki toast
             }
         },
@@ -29,7 +30,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('clinics/readClinics/updateClinic', res, {root: true});
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         }
     },

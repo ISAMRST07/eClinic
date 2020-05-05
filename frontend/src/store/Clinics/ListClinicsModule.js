@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import {redirectToLogin} from "../AuthModule";
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -35,7 +37,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('setAllClinics', res.data);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async deleteClinicApi({rootState, commit}, clinic) {
@@ -44,7 +46,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinic', clinic);
             } catch(err) {
-                console.error(err);
+                defaultError(err);
             }
         },
 

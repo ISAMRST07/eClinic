@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -30,7 +31,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('setAllClinicRooms', res.data);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async addClinicRoomApi({rootState, commit}, clinicRoom) {
@@ -40,7 +41,7 @@ export default {
                 console.log(clinicRoom.name);
                 commit('addClinicRoom', added);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async deleteRoomApi({rootState, commit}, clinicRoom) {
@@ -49,7 +50,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinicRoom', clinicRoom);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async updateClinicRoomApi({rootState, commit}, clinicRoom) {
@@ -59,7 +60,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('updateClinicRoom', modified);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
     },

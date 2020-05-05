@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {defaultError} from "../../utils/defaultErrorBehavior";
 
 export default {
     namespaced: true,
@@ -33,7 +34,7 @@ export default {
                 console.log(res.data);
                 commit('setAllDoctor', res.data);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async addDoctorApi({rootState, commit}, doctor) {
@@ -45,7 +46,7 @@ export default {
                 console.log(doctor.name);
                 commit('addDoctor', added);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         },
         async deleteDoctorApi({rootState, commit}, doctor) {
@@ -56,7 +57,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteDoctor', doctor);
             } catch (err) {
-                console.error(err);
+                defaultError(err);
             }
         }
     },

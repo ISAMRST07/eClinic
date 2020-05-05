@@ -1,5 +1,5 @@
-import Vue from 'vue'
-
+import Vue from 'vue';
+import router from '../router/index'
 const tokenResponse = JSON.parse(localStorage.getItem('tokenResponse'));
 let initialExpiresIn = 0;
 let initialToken = '';
@@ -29,6 +29,12 @@ const AuthModule = {
             state.expiresIn = tokenResponse.expiresIn;
             state.user = tokenResponse.loggedUser;
             state.role = tokenResponse.loggedUser.type;
+        },
+        clearResponse(state) {
+            state.token = '';
+            state.expiresIn = 0;
+            state.user = null;
+            state.role = '';
         }
     },
     getters: {
@@ -42,8 +48,19 @@ const AuthModule = {
             }).catch(err => {
                 console.error(err);
             })
+        },
+        logout({commit}) {
+            localStorage.removeItem('tokenResponse');
+            commit('clearResponse');
+            router.push('/login');
         }
     }
 };
 
 export default AuthModule;
+
+export function redirectToLogin(commit) {
+    localStorage.removeItem('tokenResponse');
+    commit('auth/clearResponse', {root: true});
+    router.push('/login');
+}
