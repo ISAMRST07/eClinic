@@ -30,10 +30,13 @@ public class Medicine {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "M")})
     private String id;
 
+    private String name;
+    private String manufacturer;
 
-    @ManyToOne
-    private Codebook codebook;
 
-    private int name;
+//    @ManyToOne
+//    private Codebook codebook;
+
+
 
 }
