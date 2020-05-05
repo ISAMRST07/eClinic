@@ -8,8 +8,10 @@ import mrs.eclinicapi.service.DoctorService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +30,23 @@ public class DoctorController {
 
     @Autowired
     private ClinicService clinicService;
-
-    @RequestMapping(path = "/addDoctor")
+    
+    @PostMapping(path = "/addDoctor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Doctor addDoctor(@RequestParam String position,
-                            @RequestParam String userId,
+                            @RequestParam String name,
+                            @RequestParam String surname,
+                            @RequestParam String username,
+                            @RequestParam String password,
                             @RequestParam String clinicId) {
-        System.out.println("adding doctor " + position + " " + userId + " " + clinicId);
-        User user = userService.findOne(userId);
+        System.out.println("adding doctor " + position + " " + username + " " + clinicId);
+        System.out.println("position = " + position);
+        System.out.println("name = " + name);
+        System.out.println("surname = " + surname);
+        System.out.println("username = " + username);
+        System.out.println("password = " + password);
+        System.out.println("clinicId = " + clinicId);
+
+        /*User user = userService.findOne(userId);
         if (user == null) {
             System.out.println("user with id = " + userId + " == null");
         }
@@ -52,8 +64,8 @@ public class DoctorController {
         doctor.setClinic(clinic);
 
         service.addDoctor(doctor);
-        System.out.println("newDoctor = " + doctor);
-        return doctor;
+        System.out.println("newDoctor = " + doctor);*/
+        return null;
     }
 
     @RequestMapping(path = "/deleteDoctor/{id}")

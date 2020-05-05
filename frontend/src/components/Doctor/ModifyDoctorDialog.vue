@@ -11,14 +11,62 @@
             <v-card-text>
                 <v-container>
                     <v-form ref="form">
-                        <v-row>
-                            <v-col cols="12">
-                                <doctor-selection v-model="selectedDoctor"/>
-                            </v-col>
-                            <v-col cols="12">
-                                <clinic-selection v-model="selectedClinic"/>
-                            </v-col>
-                        </v-row>
+                    	<v-row>
+				                          <v-col cols="12">
+                                                <clinic-selection v-model="selectedClinic"/>
+                                            </v-col>
+                              
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Position*"
+                                                        required
+                                                        :rules="nameRules"
+                                                        v-model="doctor.position"
+                                                >
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Username*"
+                                                        required
+                                                        :rules="nameRules"
+                                                        v-model="doctor.username"
+                                                >
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Name*"
+                                                        required
+                                                        :rules="nameRules"
+                                                        v-model="doctor.name"
+                                                >
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Surname*"
+                                                        required
+                                                        :rules="surnameRules"
+                                                        v-model="doctor.surname"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field
+                                                        label="Password*"
+                                                        required
+                                                        v-model="doctor.password"
+                                                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                                        :rules="passwordRules"
+                                                        :type="showPassword ? 'text' : 'password'"
+                                                        name="input-10-2"
+                                                        hint="At least 8 characters"
+                                                        class="input-group--focused"
+                                                        @click:append="showPassword = !showPassword"
+                                                >
+                                                </v-text-field>
+                                   </v-col>
+                               </v-row>
                     </v-form>
                 </v-container>
                 <small>*indicates required field</small>
@@ -45,8 +93,12 @@
             name: null,
             doctor: emptyDoctor,
             selectedDoctor: null,
-            selectedClinic: null,    
-            nameRules: [v => !!v || 'Name is required.']
+            selectedClinic: null,  
+            showPassword: false,    
+            nameRules: [v => !!v || 'Name is required.'],
+            surnameRules: [v => !!v || "* Surname is required"],
+            usernameRules: [v => !!v || "* Surname is required"],
+            passwordRules : [v => !!v || "* Surname is required"],
         }),
         props: {
             clinic: null,
@@ -60,12 +112,19 @@
             ...mapActions('doctor/doctor', ['addDoctorApi']),
             addDoctor() {
                 if(this.$refs.form.validate()) {
-                    console.log(this.selectedDoctor.user.name);
-                    console.log(this.selectedClinic.name);              
-                    //this.doctor.name = this.name;
-                    //this.doctor.clinicId = this.selectedClinic.id;
-                    //this.addDoctorApi(this.doctor);
-                    //this.close();
+                    console.log("name " + this.doctor.name);
+                    console.log("surname " + this.doctor.surname);
+                    console.log("username " + this.doctor.username);
+                    console.log("password " + this.doctor.password);
+                    console.log("position " + this.doctor.position);
+                    
+                    console.log("clinicId " + this.selectedClinic.id);
+                    console.log("clinicName " + this.selectedClinic.name);
+                    
+                    this.doctor.clinicId = this.selectedClinic;        
+                    
+                    this.addDoctorApi(this.doctor);
+                    this.close();
                 }
             },
             close() {

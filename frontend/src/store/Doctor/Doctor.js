@@ -38,7 +38,9 @@ export default {
         },
         async addDoctorApi({rootState, commit}, doctor) {
             try {
-                let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,
+            	console.log("adddoctorapi");
+            	console.log(doctor)
+                let {data: added} = await Vue.prototype.$axios.post('/api/doctor/addDoctor', doctor,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log(doctor.name);
                 commit('addDoctor', added);
