@@ -32,9 +32,6 @@ public class MedicineService {
 
     @Transactional
     public Medicine add(Medicine medicine) {
-        System.out.println("Dodavanje leka");
-        System.out.println(medicine.getManufacturer());
-        System.out.println(medicine.getName());
         return repository.save(medicine);
     }
 

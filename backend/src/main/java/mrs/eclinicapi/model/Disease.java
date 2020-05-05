@@ -28,4 +28,5 @@ public class Disease {
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
+    private String name;
 }

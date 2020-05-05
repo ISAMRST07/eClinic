@@ -2,12 +2,12 @@
     <div>
         <v-data-table
                 :headers="headers"
-                :items="medicines"
+                :items="diseases"
                 class="elevation-1"
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>Medicines</v-toolbar-title>
+                    <v-toolbar-title>Diseases</v-toolbar-title>
                     <v-divider
                             class="mx-4"
                             inset
@@ -36,76 +36,68 @@
             </template>
 
             <template v-slot:no-data>
-                <p>There are no existing medicines</p>
+                <p>There are no existing disease</p>
             </template>
         </v-data-table>
-        <delete-medicine
+        <delete-disease
                 v-model="dialog"
-                :medicine="medicineToDelete"
+                :disease="diseaseToDelete"
                 @close="deleteDialog(null)"
-                @delete="deleteMedicine"
+                @delete="deleteDisease"
         />
-        <modify-medicine
+        <modify-disease
                     mode="update"
-                    :edit-medicine="editMedicine"
+                    :edit-disease="editDisease"
                     v-model="editDialog"/>
     </div>
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapState} from "vuex";
-    import DeleteMedicine from "./DeleteMedicine";
-    import ModifyMedicine from "./ModifyMedicine";
+    import {mapActions, mapState} from "vuex";
+    import DeleteDisease from "./DeleteDisease";
+    import ModifyDisease from "./ModifyDisease";
+
 
     export default {
-        name: "MedicineTable",
-        components: {ModifyMedicine, DeleteMedicine},
+        name: "TableDisease",
+        components: {ModifyDisease, DeleteDisease},
         data: () => ({
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
-            medicineToDelete: null,
-            editMedicine: null,
+            diseaseToDelete: null,
+            editDisease: null,
             headers: [
                 { text: 'ID', align: 'start', value: 'id' },
                 { text: 'Name', value: 'name', align: 'center'},
-                { text: 'Manufacturer', value: 'manufacturer' },
                 { text: 'Update', value: 'update', sortable: false },
                 { text: 'Remove', value: 'remove', sortable: false },
 
             ],
         }),
         computed: {
-            ...mapState('medicines/medicines', ['medicines']),
-            // editClinic: {
-            //     get() {
-            //         return this.$store.state.clinics.addClinic.clinic;
-            //     },
-            //     set(val) {
-            //         this.$store.commit('clinics/addClinic/updateClinic', val);
-            //     }
-            // }
+            ...mapState('disease/disease', ['diseases']),
         },
         methods: {
-            ...mapActions('medicines/medicines', ['getMedicines']),
-            ...mapActions('medicines/medicines', ['deleteMedicineApi']),
+            ...mapActions('disease/disease', ['getDiseases']),
+            ...mapActions('disease/disease', ['deleteDiseaseApi']),
 
-            deleteDialog(medicine) {
-                this.medicineToDelete = medicine;
+            deleteDialog(disease) {
+                this.diseaseToDelete = disease;
                 this.dialog = !this.dialog;
             },
-            deleteMedicine() {
-                this.deleteMedicineApi(this.medicineToDelete);
+            deleteDisease() {
+                this.deleteDiseaseApi(this.diseaseToDelete);
                 this.deleteDialog(null);
             },
-            updateDialog(room) {
-                this.editMedicine = room;
+            updateDialog(disease) {
+                this.editDisease = disease;
                 this.editDialog = true;
             }
 
         },
         created() {
-            this.getMedicines();
+            this.getDiseases();
         }
     }
 </script>

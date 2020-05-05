@@ -26,6 +26,10 @@ export const resetClinic = {
     reset: true
 };
 
+export const emptyDisease = {
+    name: null
+};
+
 export const emptyMedicine = {
     name: null,
     manufacturer: null

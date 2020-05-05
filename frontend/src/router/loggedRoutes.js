@@ -1,3 +1,4 @@
+import Main from "../views/Main";
 import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
@@ -7,11 +8,12 @@ import Medicine from "../pages/Medicine";
 import {
     clinicAdministratorsPath,
     clinicRoomsPath,
-    clinicsPath,
+    clinicsPath, diseasePath,
     doctorsPath,
     homePath,
     medicinesPath
 } from "../utils/paths";
+import Disease from "../pages/Disease";
 
 const loggedRoutes = [
     {
@@ -40,6 +42,10 @@ const loggedRoutes = [
     {
         path: medicinesPath,
         component: Medicine,
+    },
+    {
+        path: diseasePath,
+        component: Disease,
     }
 
 
