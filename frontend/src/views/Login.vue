@@ -16,15 +16,9 @@
                             md="4"
                     >
                         <v-card outlined>
-                            <v-stepper v-model="step" class="elevation-0">
-                                <v-stepper-items>
-                                    <v-stepper-content step="1">
-                                        <router-view/>
-                                    </v-stepper-content>
-                                    <v-stepper-content step="2">
-                                    </v-stepper-content>
-                                </v-stepper-items>
-                            </v-stepper>
+                            <transition mode="out-in" name="fade">
+                                <router-view/>
+                            </transition>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -41,27 +35,14 @@
     export default {
         name: "Login",
         components: {RegisterView, LoginView},
-        data: () => ({
-            step: 1,
-        }),
-        watch: {
-            step(val) {
-                if (val === 1){
-                    this.$router.push('/auth');
-                } else {
-                    this.$router.push('/auth/register');
-                }
-            },
-            $route(to, from) {
-                // if(to === '/auth') this.step = 1;
-                // else if (to === '/auth/register') this.step = 2;
-            }
-        },
-        created() {
-        }
     }
 </script>
 
 <style scoped>
-
+    .fade-enter-active, .fade-leave-active {
+        transition: all .5s
+    }
+    .fade-enter, .fade-leave-to{
+        opacity: 0;
+    }
 </style>

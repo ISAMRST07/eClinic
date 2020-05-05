@@ -32,7 +32,7 @@
                                 <span class="text--secondary d-inline-flex">
                                     Don't have an account?
                                 </span>
-                                <v-btn type="button" text color="primary" @click="$emit('registerClick')" class="px-2" small>
+                                <v-btn type="button" text color="primary" @click="$router.push('/auth/register')" class="px-2" small>
                                     apply here
                                 </v-btn>
                             </v-col>
@@ -156,7 +156,7 @@
         },
         methods: {
             ...mapActions('auth', ['login']),
-            postLogin(event) {
+            postLogin() {
                 if(this.$refs.passwordForm.validate()) {
                     this.authRequest.password = this.formElements.password;
                     this.login(this.authRequest);
