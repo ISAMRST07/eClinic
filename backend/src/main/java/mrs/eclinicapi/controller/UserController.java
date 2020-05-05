@@ -18,11 +18,11 @@ public class UserController {
     private UserService service;
 
     @PostMapping()
-    public User addUser(@RequestParam String username,
+    public User addUser(@RequestParam String email,
                         @RequestParam String password,
                         @RequestParam String name,
                         @RequestParam int type) {
-        User newUser = new User(username, password, name, UserType.fromInteger(type));
+        User newUser = new User(email, password, name, UserType.fromInteger(type));
         service.addUser(newUser);
         System.out.println("newUser = " + newUser);
         return newUser;
@@ -66,9 +66,9 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/updateUsername")
-    public ResponseEntity<String> updateUsername(@RequestParam String id,
-                                                 @RequestParam String newUsername) {
+    @RequestMapping(path = "/updateEmail")
+    public ResponseEntity<String> updateEmail(@RequestParam String id,
+                                                 @RequestParam String newEmail) {
         User user = service.findOne(id);
         if (user == null) {
             return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
@@ -76,13 +76,13 @@ public class UserController {
         List<User> allUsers = service.findAll();
         for (User u : allUsers) {
             System.out.println("User u = " + u);
-            if (u.getUsername().toUpperCase().equals(newUsername.toUpperCase())) {
-                return new ResponseEntity<>("username already exists", HttpStatus.BAD_REQUEST);
+            if (u.getEmail().toUpperCase().equals(newEmail.toUpperCase())) {
+                return new ResponseEntity<>("email already exists", HttpStatus.BAD_REQUEST);
             }
         }
         System.out.println("foudn user with id = " + id);
-        service.updateUsername(id, newUsername);
-        return new ResponseEntity<>("updated user username", HttpStatus.OK);
+        service.updateEmail(id, newEmail);
+        return new ResponseEntity<>("updated user email", HttpStatus.OK);
     }
 
     @RequestMapping(path = "/updatePassword")

@@ -19,7 +19,6 @@ import mrs.eclinicapi.model.enums.UserType;
         property = "id")
 public class ClinicAdministratorDto {
     private String id;
-    private String username;
     private String password;
     private String surname;
     private String name;
@@ -28,13 +27,12 @@ public class ClinicAdministratorDto {
     private String email;
     private String userID;
     private String city;
-    private String state;
+    private String country;
     private String address;
-    private String umnc; //JMBG
+    private String personalID; //JMBG
 
     public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator, int i) {
         this.id = clinicAdministrator.getId();
-        this.username = clinicAdministrator.getUser().getUsername();
         this.password = clinicAdministrator.getUser().getPassword();
         this.surname = clinicAdministrator.getUser().getSurname();
         this.name = clinicAdministrator.getUser().getName();
@@ -42,9 +40,9 @@ public class ClinicAdministratorDto {
         this.clinic = clinicAdministrator.getClinic();
         this.email = clinicAdministrator.getUser().getEmail();;
         this.city = clinicAdministrator.getUser().getCity();;
-        this.state = clinicAdministrator.getUser().getState();
+        this.country = clinicAdministrator.getUser().getCountry();
         this.userID = clinicAdministrator.getUser().getId();
         this.address = clinicAdministrator.getUser().getAddress();
-        this.umnc = clinicAdministrator.getUser().getUmnc(); //JMBG
+        this.personalID = clinicAdministrator.getUser().getPersonalID(); //JMBG
     }
 }

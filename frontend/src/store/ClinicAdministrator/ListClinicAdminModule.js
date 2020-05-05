@@ -27,10 +27,11 @@ export default {
         },
     },
     actions: {
-        async saveClinicAdmin({commit}, clinicAdmin) {
+        async saveClinicAdmin({rootState, commit}, clinicAdmin) {
             try {
                 console.log(clinicAdmin);
-                let {data: res} = await Vue.prototype.$axios.post('/api/clinicadministrator', clinicAdmin);
+                let {data: res} = await Vue.prototype.$axios.post('/api/clinicadministrator', clinicAdmin,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 // tu ce ic update za prikaz
                 commit('addClinicAdmin', res);
             } catch (err) {
@@ -38,26 +39,29 @@ export default {
                 // tu moze ic neki toast
             }
         },
-        async getClinicAdmins({commit}) {
+        async getClinicAdmins({rootState, commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinicadministrator/getAll');
+                let res = await Vue.prototype.$axios.get('/api/clinicadministrator/getAll',
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log(res.data);
                 commit('setAllClinicAdmins', res.data);
             } catch (err) {
                 console.error(err);
             }
         },
-        async modifyClinicApi({commit}, clinic) {
+        async modifyClinicApi({rootState, commit}, clinic) {
             try {
-                let {data: res} = await Vue.prototype.$axios.put(`/api/clinicadministrator/${clinic.id}`, clinic);
+                let {data: res} = await Vue.prototype.$axios.put(`/api/clinicadministrator/${clinic.id}`, clinic,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('updateClinicAdmin', res);
             } catch (err) {
                 console.error(err);
             }
         },
-        async deleteClinicAdminApi({commit}, clinicAdministrator) {
+        async deleteClinicAdminApi({rootState, commit}, clinicAdministrator) {
             try{
-                let res = await Vue.prototype.$axios.delete(`/api/clinicadministrator/${clinicAdministrator.id}`);
+                let res = await Vue.prototype.$axios.delete(`/api/clinicadministrator/${clinicAdministrator.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinicAdmins', clinicAdministrator);
             } catch(err) {
                 console.error(err);

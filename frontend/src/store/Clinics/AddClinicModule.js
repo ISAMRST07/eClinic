@@ -12,9 +12,10 @@ export default {
         }
     },
     actions: {
-        async saveClinic({commit}, clinic) {
+        async saveClinic({rootState, commit}, clinic) {
             try {
-                let {data: res} = await Vue.prototype.$axios.post('/api/clinic', clinic);
+                let {data: res} = await Vue.prototype.$axios.post('/api/clinic', clinic,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 // tu ce ic update za prikaz
                 commit('clinics/readClinics/addClinic', res, {root: true});
             } catch (err) {
@@ -22,9 +23,10 @@ export default {
                 // tu moze ic neki toast
             }
         },
-        async modifyClinicApi({commit}, clinic) {
+        async modifyClinicApi({rootState, commit}, clinic) {
             try {
-                let {data: res} = await Vue.prototype.$axios.put('/api/clinic', clinic);
+                let {data: res} = await Vue.prototype.$axios.put('/api/clinic', clinic,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('clinics/readClinics/updateClinic', res, {root: true});
             } catch (err) {
                 console.error(err);

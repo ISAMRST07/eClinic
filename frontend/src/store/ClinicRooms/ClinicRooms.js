@@ -24,35 +24,39 @@ export default {
         }
     },
     actions: {
-        async getClinicRooms({commit}) {
+        async getClinicRooms({rootState, commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinicroom');
+                let res = await Vue.prototype.$axios.get('/api/clinicroom',
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('setAllClinicRooms', res.data);
             } catch (err) {
                 console.error(err);
             }
         },
-        async addClinicRoomApi({commit}, clinicRoom) {
+        async addClinicRoomApi({rootState, commit}, clinicRoom) {
             try {
-                let {data: added} = await Vue.prototype.$axios.post('/api/clinicroom', clinicRoom);
+                let {data: added} = await Vue.prototype.$axios.post('/api/clinicroom', clinicRoom,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log(clinicRoom.name);
                 commit('addClinicRoom', added);
             } catch (err) {
                 console.error(err);
             }
         },
-        async deleteRoomApi({commit}, clinicRoom) {
+        async deleteRoomApi({rootState, commit}, clinicRoom) {
             try {
-                let res = await Vue.prototype.$axios.delete(`/api/clinicroom/${clinicRoom.id}`);
+                let res = await Vue.prototype.$axios.delete(`/api/clinicroom/${clinicRoom.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinicRoom', clinicRoom);
             } catch (err) {
                 console.error(err);
             }
         },
-        async updateClinicRoomApi({commit}, clinicRoom) {
+        async updateClinicRoomApi({rootState, commit}, clinicRoom) {
             console.log(clinicRoom);
             try {
-                let {data: modified} = await Vue.prototype.$axios.put('/api/clinicroom', clinicRoom);
+                let {data: modified} = await Vue.prototype.$axios.put('/api/clinicroom', clinicRoom,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('updateClinicRoom', modified);
             } catch (err) {
                 console.error(err);

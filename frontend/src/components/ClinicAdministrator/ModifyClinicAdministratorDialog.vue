@@ -67,15 +67,7 @@
                                                         @click:append="showPassword2 = !showPassword2"
                                                 ></v-text-field>
                                             </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Username*"
-                                                        required
-                                                        :rules="usernameRules"
-                                                        v-model="clinicAdmin.username"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
+                                            <v-col cols="12">
                                                 <v-text-field
                                                         label="Email*"
                                                         required
@@ -96,7 +88,7 @@
                                                         label="State*"
                                                         required
                                                         :rules="stateRules"
-                                                        v-model="clinicAdmin.state"
+                                                        v-model="clinicAdmin.country"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -109,10 +101,10 @@
                                             </v-col>
                                             <v-col cols="6">
                                                 <v-text-field
-                                                        label="UMCN*"
+                                                        label="Personal ID*"
                                                         required
                                                         :rules="umcnRules"
-                                                        v-model="clinicAdmin.umnc"
+                                                        v-model="clinicAdmin.personalID"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -153,8 +145,8 @@
             emailRules: [v => !!v || "* Email is required",
                 v => /.+@.+/.test(v) || "E-mail must be valid"],
             cityRules: [v => !!v || "* City is required"],
-            stateRules: [v => !!v || "* State is required"],
-            umcnRules: [v => !!v || "* UMNC is required"],
+            stateRules: [v => !!v || "* Country is required"],
+            umcnRules: [v => !!v || "* Personal ID is required"],
             nameRules: [v => !!v || "* Name is required"],
             surnameRules: [v => !!v || "* Sutname is required"],
             usernameRules: [v => !!v || "* Username is required"],
@@ -194,7 +186,6 @@
                 if (valid) {
                     if (this.mode === "update"){
                         this.clinicToUpdate.password = this.clinicAdmin.password;
-                        this.clinicToUpdate.username = this.clinicAdmin.username;
                         this.clinicToUpdate.name = this.clinicAdmin.name;
                         this.clinicToUpdate.surname = this.clinicAdmin.surname;
                         this.clinicToUpdate.clinic = this.selectedClinic;

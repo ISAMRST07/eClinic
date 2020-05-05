@@ -29,17 +29,19 @@ export default {
         }
     },
     actions: {
-        async getClinics({commit}) {
+        async getClinics({rootState, commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinic/');
+                let res = await Vue.prototype.$axios.get('/api/clinic/',
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('setAllClinics', res.data);
             } catch (err) {
                 console.error(err);
             }
         },
-        async deleteClinicApi({commit}, clinic) {
+        async deleteClinicApi({rootState, commit}, clinic) {
             try{
-                let res = await Vue.prototype.$axios.delete(`/api/clinic/${clinic.id}`);
+                let res = await Vue.prototype.$axios.delete(`/api/clinic/${clinic.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteClinic', clinic);
             } catch(err) {
                 console.error(err);

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from "../views/Login";
 import Main from "../views/Main";
 import loggedRoutes from "./loggedRoutes";
+import store from "../store/index"
 Vue.use(VueRouter);
 
   const routes = [
@@ -11,14 +12,16 @@ Vue.use(VueRouter);
       component: Main,
       children: loggedRoutes,
       meta: {
-        public: false,
+        requiresLogin: true,
+        guest: false
       }
     },
     {
       path: '/login',
       component: Login,
       meta: {
-        public: true,
+        requiresLogin: false,
+        guest: true
       }
     }
 
@@ -29,10 +32,22 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // check if logged. if not, send them to login page no matter what
-  let isPublic = to.matched.some((routeRecord) => routeRecord.meta.public);
-  console.log(isPublic);
-  next();
+  console.log("DJESSSIIIIIIIIIIIIIIIIIIIIII");
+  let requiresLogin = to.matched.some((routeRecord) => routeRecord.meta.requiresLogin);
+  let onlyGuest = to.matched.some((routeRecord) => routeRecord.meta.guest);
+  let isLogged = store.getters['auth/loggedIn'];
+  console.log(isLogged);
+  if (!requiresLogin && !onlyGuest) {
+    next();
+  } else if (requiresLogin && !onlyGuest) {
+    if(isLogged) next();
+    else next('/login');
+  } else if (!requiresLogin && onlyGuest) {
+    if(isLogged) next('/');
+    else next();
+  } else {
+    console.error('An error occurred during routing');
+  }
 });
 
 export default router

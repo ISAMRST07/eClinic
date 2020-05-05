@@ -25,9 +25,10 @@ export default {
         }
     },
     actions: {
-        async getDoctor({commit}) {
+        async getDoctor({rootState, commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/doctor/getAll');
+                let res = await Vue.prototype.$axios.get('/api/doctor/getAll',
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log("actions getall doctor = " + res.data);
                 console.log(res.data);
                 commit('setAllDoctor', res.data);
@@ -35,20 +36,22 @@ export default {
                 console.error(err);
             }
         },
-        async addDoctorApi({commit}, doctor) {
+        async addDoctorApi({rootState, commit}, doctor) {
             try {
-                let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor);
+                let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log(doctor.name);
                 commit('addDoctor', added);
             } catch (err) {
                 console.error(err);
             }
         },
-        async deleteDoctorApi({commit}, doctor) {
+        async deleteDoctorApi({rootState, commit}, doctor) {
             try {
             	console.log("delete doctor = ");
             	console.log(doctor.id);
-                let res = await Vue.prototype.$axios.delete(`/api/doctor/deleteDoctor/${doctor.id}`);
+                let res = await Vue.prototype.$axios.delete(`/api/doctor/deleteDoctor/${doctor.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteDoctor', doctor);
             } catch (err) {
                 console.error(err);

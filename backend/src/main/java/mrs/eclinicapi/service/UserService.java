@@ -35,8 +35,8 @@ public class UserService {
         }
     }
 
-    public void updateUsername(String id, String newUsername) {
-        repository.updateUsername(id, newUsername);
+    public void updateEmail(String id, String newEmail) {
+        repository.updateEmail(id, newEmail);
     }
 
     public void updatePassword(String id, String newPassword) {
