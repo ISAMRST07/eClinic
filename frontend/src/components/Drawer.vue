@@ -20,34 +20,35 @@
                 </template>
                 <span>Expand</span>
             </v-tooltip>
+            <v-list-item-group>
+                <v-tooltip
+                        v-for="(item, i) in items"
+                        :key="i"
+                        right
+                        :disabled="!mini"
+                >
+                    <template v-slot:activator="{ on }">
+                        <v-list-item :to="item.path" link v-on="on">
+                            <v-list-item-icon>
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-icon>
 
-            <v-tooltip
-                    v-for="([icon, text], i) in items"
-                    :key="i"
-                    right
-                    :disabled="!mini"
-            >
-                <template v-slot:activator="{ on }">
-                    <v-list-item link v-on="on">
-                        <v-list-item-icon>
-                            <v-icon>{{ icon }}</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                            <v-list-item-title>{{ text }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
-                <span>{{ text }}</span>
-            </v-tooltip>
-
+                            <v-list-item-content>
+                                <v-list-item-title>{{ item.label }}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                    <span>{{ item.label }}</span>
+                </v-tooltip>
+            </v-list-item-group>
 
         </v-list>
     </v-navigation-drawer>
 </template>
 
 <script>
-    import { ClinicalCenterAdminItems } from "../utils/DrawerItems";
+    import { ClinicalCenterAdmin } from "../utils/DrawerItems";
+    import {mapState} from "vuex";
 
     export default {
         name: "Drawer",
@@ -55,20 +56,18 @@
             items: Array,
         }),
         props: {
-            role: {
-                type: String,
-                // PRIVREMENO
-                default: 'ClinicalCenterAdmin'
-            },
             mini: {
                 type: Boolean,
                 default: true
             },
         },
-        created() {
+        computed: {
+            ...mapState('auth', ['role']),
+        },
+        mounted() {
             switch (this.role) {
-                case 'ClinicalCenterAdmin':
-                    this.items = ClinicalCenterAdminItems;
+                case ClinicalCenterAdmin.code:
+                    this.items = ClinicalCenterAdmin.items;
                     break;
                 default:
 
@@ -78,5 +77,4 @@
 </script>
 
 <style scoped>
-
 </style>

@@ -1,37 +1,44 @@
-import Main from "../views/Main";
 import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
 import ClinicRooms from "../pages/ClinicRooms";
 import Doctor from "../pages/Doctor";
 import Medicine from "../pages/Medicine";
+import {
+    clinicAdministratorsPath,
+    clinicRoomsPath,
+    clinicsPath,
+    doctorsPath,
+    homePath,
+    medicinesPath
+} from "../utils/paths";
 
 const loggedRoutes = [
     {
-        path: '/',
+        path: homePath,
         component: Home,
     },
     {
-        path: '/clinics',
+        path: clinicsPath,
         component: Clinics,
     },
     {
-        path: '/clinicAdministrators',
+        path: clinicAdministratorsPath,
         component: ClinicAdministrators,
     },
 
     {
-        path: '/clinicRooms',
+        path: clinicRoomsPath,
         component: ClinicRooms,
     },
 
     {
-        path: '/doctor',
+        path: doctorsPath,
         component: Doctor,
     },
 
     {
-        path: '/medicine',
+        path: medicinesPath,
         component: Medicine,
     }
 
