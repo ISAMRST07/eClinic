@@ -8,18 +8,18 @@ import mrs.eclinicapi.security.TokenUtils;
 import mrs.eclinicapi.service.UserDetailsService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping(path = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,6 +51,16 @@ public class AuthenticationController {
         long expiresIn = tokenUtils.getExpiredIn();
 
         return ResponseEntity.ok(new TokenResponse(jwt, expiresIn, user));
+    }
+
+    @GetMapping("/exists/{email}")
+    public ResponseEntity<String> getUser(@PathVariable String email) {
+        try {
+            User u = (User) userDetailsService.loadUserByUsername(email);
+            return new ResponseEntity<>(u.getName(), HttpStatus.OK);
+        } catch(UsernameNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

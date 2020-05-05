@@ -4,6 +4,7 @@ import Login from "../views/Login";
 import Main from "../views/Main";
 import loggedRoutes from "./loggedRoutes";
 import store from "../store/index"
+import authRoutes from "./authRoutes";
 Vue.use(VueRouter);
 
   const routes = [
@@ -17,8 +18,9 @@ Vue.use(VueRouter);
       }
     },
     {
-      path: '/login',
+      path: '/auth/',
       component: Login,
+      children: authRoutes,
       meta: {
         requiresLogin: false,
         guest: true
@@ -32,16 +34,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("DJESSSIIIIIIIIIIIIIIIIIIIIII");
   let requiresLogin = to.matched.some((routeRecord) => routeRecord.meta.requiresLogin);
   let onlyGuest = to.matched.some((routeRecord) => routeRecord.meta.guest);
-  let isLogged = store.getters['auth/loggedIn'];
-  console.log(isLogged);
+  let isLogged = store.state.auth.loggedIn;
   if (!requiresLogin && !onlyGuest) {
     next();
   } else if (requiresLogin && !onlyGuest) {
     if(isLogged) next();
-    else next('/login');
+    else next('/auth/');
   } else if (!requiresLogin && onlyGuest) {
     if(isLogged) next('/');
     else next();
