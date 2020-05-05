@@ -1,5 +1,6 @@
 package mrs.eclinicapi.controller;
 
+import mrs.eclinicapi.DTO.DoctorDTO;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.User;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,20 +33,10 @@ public class DoctorController {
     @Autowired
     private ClinicService clinicService;
     
-    @PostMapping(path = "/addDoctor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Doctor addDoctor(@RequestParam String position,
-                            @RequestParam String name,
-                            @RequestParam String surname,
-                            @RequestParam String username,
-                            @RequestParam String password,
-                            @RequestParam String clinicId) {
-        System.out.println("adding doctor " + position + " " + username + " " + clinicId);
-        System.out.println("position = " + position);
-        System.out.println("name = " + name);
-        System.out.println("surname = " + surname);
-        System.out.println("username = " + username);
-        System.out.println("password = " + password);
-        System.out.println("clinicId = " + clinicId);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Doctor addDoctor(@RequestBody DoctorDTO doctor) {
+        System.out.println("adding doctor ");
+        System.out.println("doctordto = " + doctor);
 
         /*User user = userService.findOne(userId);
         if (user == null) {

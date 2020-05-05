@@ -41,12 +41,11 @@ export const emptyClinicRoom = {
 };
 
 export const emptyDoctor = {
-	position: '',
-	clinicId : '',
-	username : '',
 	name : '',
 	surname : '',
-	password : ''
+	username : '',
+	password : '',
+	position: '',
 };
 
 export const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

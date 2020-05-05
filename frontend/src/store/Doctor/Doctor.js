@@ -12,6 +12,12 @@ export default {
             Vue.set(state, 'doctor', doctor);
         },
         addDoctor(state, doctor) {
+        	console.log("mutations addDoctor");
+        	console.log(doctor.name);
+        	console.log(doctor.surname);
+        	console.log(doctor.username);
+        	console.log(doctor.password);
+        	
             state.doctor.push(doctor);
         },
         deleteDoctor(state, doctor) {
@@ -40,10 +46,20 @@ export default {
         async addDoctorApi({rootState, commit}, doctor) {
             try {
             	console.log("adddoctorapi");
-            	console.log(doctor)
-                let {data: added} = await Vue.prototype.$axios.post('/api/doctor/addDoctor', doctor,
+            	console.log(doctor);
+            	console.log(doctor.name);
+            	console.log(doctor.surname);
+            	console.log(doctor.username);
+            	console.log(doctor.password);
+            	
+                let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("after post added = " + added);
+                console.log(added.name);
                 console.log(doctor.name);
+            	console.log(doctor.surname);
+            	console.log(doctor.username);
+            	console.log(doctor.password);
                 commit('addDoctor', added);
             } catch (err) {
                 defaultError(err);

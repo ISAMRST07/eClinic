@@ -12,9 +12,7 @@
                 <v-container>
                     <v-form ref="form">
                     	<v-row>
-				                          <v-col cols="12">
-                                                <clinic-selection v-model="selectedClinic"/>
-                                            </v-col>
+				                          
                               
                                             <v-col cols="6">
                                                 <v-text-field
@@ -74,7 +72,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Close</v-btn>
-                <v-btn color="blue darken-1" v-if="mode === `add`" text @click="addDoctor">Add</v-btn>
+                <v-btn color="blue darken-1" v-if="mode === `add`" text @click="submit(addDoctorApi)">Add</v-btn>
                 <v-btn color="blue darken-1" v-else text @click="dialog = false">Update</v-btn>
             </v-card-actions>
         </v-card>
@@ -110,26 +108,22 @@
         },
         methods: {
             ...mapActions('doctor/doctor', ['addDoctorApi']),
-            addDoctor() {
-                if(this.$refs.form.validate()) {
+            submit(fun) {
+                console.log("adddoctor pressed");
+                if(this.$refs.form.validate()) {                    
                     console.log("name " + this.doctor.name);
                     console.log("surname " + this.doctor.surname);
                     console.log("username " + this.doctor.username);
                     console.log("password " + this.doctor.password);
                     console.log("position " + this.doctor.position);
-                    
-                    console.log("clinicId " + this.selectedClinic.id);
-                    console.log("clinicName " + this.selectedClinic.name);
-                    
-                    this.doctor.clinicId = this.selectedClinic;        
-                    
-                    this.addDoctorApi(this.doctor);
+               
+                    fun(this.doctor);
                     this.close();
                 }
             },
             close() {
                 this.$emit('input', false);
-                this.$refs.form.reset();
+                //if (this.mode === 'add') this.$refs.form.reset();      
             }
         }
     }
