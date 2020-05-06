@@ -14,17 +14,22 @@ import mrs.eclinicapi.model.enums.UserType;
 @Setter
 @AllArgsConstructor
 public class DoctorDTO {
-
+	
+	String id;
+	String email;
 	String name;
 	String surname;
-	String username;
-	String password;
+	String phone;
+	String address;
+	String city;
+	String country;
+	String jmbg;
 	String position;
 	
 	@Override
 	public String toString() {
-		return "DoctorDTO [name=" + name + ", surname=" + surname + ", username=" + username + ", password=" + password
-				+ ", position=" + position + "]";
+		return "DoctorDTO [id=" + id + " email=" + email + ", name=" + name + ", surname=" + surname + ", phone=" + phone
+			    + ", address=" + address + ", city=" + city + ", country=" + country
+				+ ", jmbg=" + jmbg + ", position=" + position + "]";
 	}
-
 }
