@@ -1,4 +1,11 @@
-import {clinicAdministratorsPath, clinicRoomsPath, clinicsPath, homePath, medicinesPath} from "./paths";
+import {
+    clinicAdministratorsPath,
+    clinicRoomsPath,
+    clinicsPath,
+    homePath,
+    medicinesPath,
+    unregisteredUsersPath
+} from "./paths";
 const homeItem = {
     icon: 'mdi-home',
     label: 'Home',
@@ -29,6 +36,12 @@ const clinicRoomsItem = {
     path: clinicRoomsPath
 };
 
+const unregisteredUsersItem = {
+    icon: 'mdi-account-multiple-check',
+    label: 'User requests',
+    path: unregisteredUsersPath,
+};
+
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
     code: 'clinicCentarAdministrator',
@@ -37,7 +50,8 @@ const ClinicalCenterAdmin = {
         clinicsItem,
         medicinesItem,
         clinicAdminsItem,
-        clinicRoomsItem
+        clinicRoomsItem,
+        unregisteredUsersItem
     ],
 };
 

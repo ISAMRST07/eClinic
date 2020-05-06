@@ -72,7 +72,8 @@ const AuthModule = {
 
 export default AuthModule;
 
-export function redirectToLogin(commit) {
+export function redirectToLogin(commit){
+    console.log(commit);
     localStorage.removeItem('tokenResponse');
     commit('auth/clearResponse', {root: true});
     router.push('/auth');

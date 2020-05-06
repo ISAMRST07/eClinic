@@ -7,6 +7,7 @@ import DoctorModules from "./DoctorModules";
 import AuthModule from "./AuthModule";
 import MedicinesModules from "./MedicinesModules";
 import DiseaseModules from "./DiseaseModules";
+import UnregisteredUsersModule from "./UnregisteredUsersModules";
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     medicines : MedicinesModules,
     doctor: DoctorModules,
     auth: AuthModule,
-    disease : DiseaseModules
+    disease: DiseaseModules,
+    unregisteredUsers: UnregisteredUsersModule
   }
 })

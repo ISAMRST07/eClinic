@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UnregisteredUserService {
 
@@ -22,5 +24,9 @@ public class UnregisteredUserService {
     public UnregisteredUser addUnregisteredUser(UnregisteredUser uu) {
         uu.getUser().setPassword(passwordEncoder.encode(uu.getUser().getPassword()));
         return repository.save(uu);
+    }
+
+    public List<UnregisteredUser> findAll() {
+        return repository.findAll();
     }
 }

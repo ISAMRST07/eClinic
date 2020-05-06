@@ -11,3 +11,5 @@ export const doctorsPath = '/doctors';
 export const medicinesPath = '/medicines';
 
 export const diseasePath = '/disease';
+
+export const unregisteredUsersPath = '/unregisteredUsers';

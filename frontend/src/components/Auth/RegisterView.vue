@@ -477,6 +477,7 @@
                 try{
                     let uUser = {
                         user: this.newUser,
+                        emailSent: false
                     };
                     let {data: res} = await this.$axios.post('/api/auth/register', uUser);
                     this.name = res.user.name;

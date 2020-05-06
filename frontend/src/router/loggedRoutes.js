@@ -11,9 +11,10 @@ import {
     clinicsPath, diseasePath,
     doctorsPath,
     homePath,
-    medicinesPath
+    medicinesPath, unregisteredUsersPath
 } from "../utils/paths";
 import Disease from "../pages/Disease";
+import UnregisteredUsers from "../pages/UnregisteredUsers";
 
 const loggedRoutes = [
     {
@@ -46,8 +47,11 @@ const loggedRoutes = [
     {
         path: diseasePath,
         component: Disease,
+    },
+    {
+        path: unregisteredUsersPath,
+        component: UnregisteredUsers
     }
-
 
 ];
 
