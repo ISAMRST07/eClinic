@@ -4,8 +4,23 @@ import {
     clinicsPath,
     homePath,
     medicinesPath,
-    unregisteredUsersPath
+    unregisteredUsersPath,
+    doctorsPath,
+    nursesPath
 } from "./paths";
+
+const doctorsItem = {
+    icon: 'mdi-account-tie',
+    label: 'Doctors',
+    path: doctorsPath		
+};
+
+const nursesItem = {
+    icon: 'mdi-account-tie',
+    label: 'Nurses',
+    path: nursesPath		
+};
+
 const homeItem = {
     icon: 'mdi-home',
     label: 'Home',
@@ -51,7 +66,9 @@ const ClinicalCenterAdmin = {
         medicinesItem,
         clinicAdminsItem,
         clinicRoomsItem,
-        unregisteredUsersItem
+        unregisteredUsersItem,
+        doctorsItem,
+        nursesItem
     ],
 };
 
