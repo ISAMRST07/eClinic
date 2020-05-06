@@ -3,7 +3,9 @@ package mrs.eclinicapi.controller;
 import mrs.eclinicapi.DTO.DoctorDTO;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
+import mrs.eclinicapi.model.Medicine;
 import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
 import mrs.eclinicapi.service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,40 +29,63 @@ public class DoctorController {
 
     @Autowired
     private DoctorService service;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ClinicService clinicService;
     
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Doctor addDoctor(@RequestBody DoctorDTO doctor) {
+    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorDTO doctorDto) {
         System.out.println("adding doctor ");
-        System.out.println("doctordto = " + doctor);
+        System.out.println("doctordto = " + doctorDto);
+        Doctor newDoctor = new Doctor();
+        
+        User newUser = new User();
+        newUser.setName(doctorDto.getName());
+        newUser.setSurname(doctorDto.getSurname());
+        newUser.setPassword(doctorDto.getJmbg().toString());
+        newUser.setEmail(doctorDto.getEmail());
+        newUser.setAddress(doctorDto.getAddress());
+        newUser.setCity(doctorDto.getCity());
+        newUser.setCountry(doctorDto.getCountry());
+        newUser.setType(UserType.doctor);
+        newUser.setPersonalID(doctorDto.getJmbg());
+        newUser.setPhoneNumber(doctorDto.getPhone());
+       
+        newDoctor.setUser(newUser);
+        newDoctor.setPosition(doctorDto.getPosition());
+        
+        service.addDoctor(newDoctor);
+        //userService.addUser(newUser);
 
-        /*User user = userService.findOne(userId);
-        if (user == null) {
-            System.out.println("user with id = " + userId + " == null");
-        }
-        System.out.println("found userId = " + userId + " = " + user);
+        System.out.println("newUser added now= " + newUser);
+        System.out.println("newDoctor added = " + newDoctor);
 
-        Clinic clinic = clinicService.findOne(clinicId);
-        if (clinic == null) {
-            System.out.println("clinic with id = " + clinicId + " == null");
-        }
-        System.out.println("found clinicId = " + clinicId + " = " + clinic);
-
-        Doctor doctor = new Doctor();
-        doctor.setPosition(position);
-        doctor.setUser(user);
-        doctor.setClinic(clinic);
-
-        service.addDoctor(doctor);
-        System.out.println("newDoctor = " + doctor);*/
-        return null;
+        return new ResponseEntity<>(newDoctor, HttpStatus.OK);
     }
 
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody DoctorDTO doctorDto) {
+    	System.out.println("updateDoctor = " + doctorDto);
+    	Doctor oldDoctor = service.findOne(doctorDto.getId());
+    	User oldUser = oldDoctor.getUser();
+    	oldUser.setName(doctorDto.getName());
+    	oldUser.setSurname(doctorDto.getSurname());
+    	oldUser.setPassword(doctorDto.getJmbg().toString());
+    	oldUser.setEmail(doctorDto.getEmail());
+    	oldUser.setAddress(doctorDto.getAddress());
+    	oldUser.setCity(doctorDto.getCity());
+    	oldUser.setCountry(doctorDto.getCountry());
+    	oldUser.setPersonalID(doctorDto.getJmbg());
+    	oldUser.setPhoneNumber(doctorDto.getPhone());
+    	oldDoctor.setPosition(doctorDto.getPosition());
+
+        System.out.println("new doctor oldDoctor = " + oldDoctor);
+        
+        Doctor modified = service.addDoctor(oldDoctor);
+        System.out.println("new doctor modified = " + modified);
+        if (modified == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(modified, HttpStatus.OK);
+    }
+    
     @RequestMapping(path = "/deleteDoctor/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") String id) {
         System.out.println("delete doctor " + id);
