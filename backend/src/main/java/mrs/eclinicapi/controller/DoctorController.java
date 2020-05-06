@@ -1,6 +1,6 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.DoctorDTO;
+import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Medicine;
@@ -31,7 +31,7 @@ public class DoctorController {
     private DoctorService service;
     
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorDTO doctorDto) {
+    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorNurseDTO doctorDto) {
         System.out.println("adding doctor ");
         System.out.println("doctordto = " + doctorDto);
         Doctor newDoctor = new Doctor();
@@ -54,14 +54,13 @@ public class DoctorController {
         service.addDoctor(newDoctor);
         //userService.addUser(newUser);
 
-        System.out.println("newUser added now= " + newUser);
         System.out.println("newDoctor added = " + newDoctor);
 
         return new ResponseEntity<>(newDoctor, HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Doctor> updateDoctor(@RequestBody DoctorDTO doctorDto) {
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody DoctorNurseDTO doctorDto) {
     	System.out.println("updateDoctor = " + doctorDto);
     	Doctor oldDoctor = service.findOne(doctorDto.getId());
     	User oldUser = oldDoctor.getUser();
@@ -123,34 +122,5 @@ public class DoctorController {
         System.out.println("get this doctor = " + doctor);
 
         return new ResponseEntity<>(doctor, HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/updatePosition")
-    public ResponseEntity<String> updatePosition(@RequestParam String id,
-                                                 @RequestParam String newPosition) {
-        System.out.println("get doctor " + id);
-        Doctor doctor = service.findOne(id);
-        if (doctor == null) {
-            System.out.println("doctor not found");
-            return new ResponseEntity<>("doctor not found", HttpStatus.NOT_FOUND);
-        }
-        System.out.println("update this doctor = " + doctor);
-        doctor.setPosition(newPosition);
-        service.addDoctor(doctor);
-        return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/deleteDoctorFromClinic")
-    public ResponseEntity<String> deleteDoctorFromClinic(@RequestParam String id) {
-        System.out.println("get doctor " + id);
-        Doctor doctor = service.findOne(id);
-        if (doctor == null) {
-            System.out.println("doctor not found");
-            return new ResponseEntity<>("doctor not found", HttpStatus.NOT_FOUND);
-        }
-        doctor.setClinic(null);
-        System.out.println("update this doctor = " + doctor);
-        service.addDoctor(doctor);
-        return new ResponseEntity<>("doctor clinic removed", HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ import ClinicModules from "./ClinicModules";
 import ClinicAdministratorModules from "./ClinicAdministratorModules";
 import ClinicRoomModules from "./ClinicRoomModules";
 import DoctorModules from "./DoctorModules";
+import NurseModules from "./NurseModules";
 import AuthModule from "./AuthModule";
 import MedicinesModules from "./MedicinesModules";
 import DiseaseModules from "./DiseaseModules";
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     clinicRooms: ClinicRoomModules,
     medicines : MedicinesModules,
     doctor: DoctorModules,
+    nurse: NurseModules,
     auth: AuthModule,
     disease: DiseaseModules,
     unregisteredUsers: UnregisteredUsersModule

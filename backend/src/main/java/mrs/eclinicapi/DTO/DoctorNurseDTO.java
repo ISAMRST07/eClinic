@@ -13,7 +13,7 @@ import mrs.eclinicapi.model.enums.UserType;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DoctorDTO {
+public class DoctorNurseDTO {
 	
 	String id;
 	String email;
