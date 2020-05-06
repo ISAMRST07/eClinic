@@ -130,7 +130,7 @@ public class User implements UserDetails {
                 + id + "]";
     }
 
-
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(this.type.name()));
@@ -159,6 +159,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return this.type != UserType.unregisteredUser;

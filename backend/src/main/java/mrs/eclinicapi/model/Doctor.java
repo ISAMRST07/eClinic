@@ -1,5 +1,6 @@
 package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,10 @@ public class Doctor extends MedicalStaff {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
+
+    @JsonIgnoreProperties("doctors")
+    @Override
+    public Clinic getClinic() {
+        return super.getClinic();
+    }
 }
