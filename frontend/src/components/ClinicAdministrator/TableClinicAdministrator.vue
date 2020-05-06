@@ -44,6 +44,7 @@
         />
         <modify-clinic-administrator-dialog
                 mode="update"
+                :edit-clinic-admin="editClinicAdmin"
                 :clinicToUpdate="clinicToUpdate"
                 v-model="editDialog"/>
     </div>
@@ -59,6 +60,7 @@
         components: {ModifyClinicAdministratorDialog, ClinicAdministratorDeleteDialog},
         data: () => ({
             editDialog: false,
+            editClinicAdmin: null,
             dialog: false,
             clinicToDelete: null,
             clinicToUpdate:null,
@@ -104,6 +106,7 @@
                 this.descriptionDialog = !this.descriptionDialog;
             },
             updateDialog(clinicAdmin) {
+                this.editClinicAdmin = clinicAdmin;
                 this.clinicToUpdate = clinicAdmin;
                 this.editDialog = true;
             }
