@@ -2,6 +2,7 @@ package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class ClinicRoom {
 
     @Id
@@ -38,7 +36,7 @@ public class ClinicRoom {
     @OneToMany(mappedBy = "clinicRoom", fetch = FetchType.LAZY)
     private Set<Intervention> interventions = new HashSet<>();
 
-    @JsonIgnore
+    @JsonIgnoreProperties("clinicRoom")
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 

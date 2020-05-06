@@ -1,6 +1,7 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Clinic {
 
     @Id
@@ -39,21 +37,27 @@ public class Clinic {
     @Embedded
     private Coordinates coordinates;
 
+    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClinicAdministrator> clinicAdministrator;
 
+    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClinicRoom> clinicRoom = new HashSet<>();
 
+    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Doctor> doctors = new HashSet<>();
 
+    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Nurse> nurses = new HashSet<>();
 
+    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Patient> patients;
 
+    @JsonIgnoreProperties("clinic")
     @ManyToOne
     private ClinicalCentarAdministrator admin;
 
