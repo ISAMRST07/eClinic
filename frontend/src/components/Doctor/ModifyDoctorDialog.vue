@@ -1,134 +1,213 @@
 <template>
-    <v-dialog
-            :value="value"
-            @input="$emit('input', $event)"
-            persistent max-width="600px">
-        <v-card>
-            <v-card-title>
-                <span v-if="mode === 'add'" class="headline">Add a doctor</span>
-                <span v-else class="headline">Update doctor</span>
-            </v-card-title>
-            <v-card-text>
-                <v-container>
-                    <v-form ref="form">
-                    	<v-row>
-				                          
-                              
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Position*"
-                                                        required
-                                                        :rules="nameRules"
-                                                        v-model="doctor.position"
-                                                >
-                                                </v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Username*"
-                                                        required
-                                                        :rules="nameRules"
-                                                        v-model="doctor.username"
-                                                >
-                                                </v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Name*"
-                                                        required
-                                                        :rules="nameRules"
-                                                        v-model="doctor.name"
-                                                >
-                                                </v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Surname*"
-                                                        required
-                                                        :rules="surnameRules"
-                                                        v-model="doctor.surname"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-text-field
-                                                        label="Password*"
-                                                        required
-                                                        v-model="doctor.password"
-                                                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                                        :rules="passwordRules"
-                                                        :type="showPassword ? 'text' : 'password'"
-                                                        name="input-10-2"
-                                                        hint="At least 8 characters"
-                                                        class="input-group--focused"
-                                                        @click:append="showPassword = !showPassword"
-                                                >
-                                                </v-text-field>
-                                   </v-col>
-                               </v-row>
-                    </v-form>
-                </v-container>
-                <small>*indicates required field</small>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Close</v-btn>
-                <v-btn color="blue darken-1" v-if="mode === `add`" text @click="submit(addDoctorApi)">Add</v-btn>
-                <v-btn color="blue darken-1" v-else text @click="dialog = false">Update</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+	<v-dialog
+		:value="value"
+		@input="$emit('input', $event)"
+		persistent
+		max-width="600px"
+	>
+		<v-card>
+			<v-card-title>
+				<span v-if="mode === 'add'" class="headline">Add a doctor</span>
+				<span v-else class="headline">Update doctor</span>
+			</v-card-title>
+			<v-card-text>
+				<v-container>
+					<v-form ref="form">
+						<v-row>
+							<v-col cols="6">
+								<v-text-field
+									label="Email*"
+									required
+									:rules="emailRules"
+									v-model="email"
+								>
+								</v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Name*"
+									required
+									:rules="nameRules"
+									v-model="name"
+								>
+								</v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Surname*"
+									required
+									:rules="surnameRules"
+									v-model="surname"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Phone number"
+									required
+									:rules="phoneRules"
+									v-model="phone"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Address"
+									required
+									:rules="addressRules"
+									v-model="address"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="City"
+									required
+									:rules="cityRules"
+									v-model="city"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Country"
+									required
+									:rules="countryRules"
+									v-model="country"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="JMBG"
+									required
+									:rules="jmbgRules"
+									v-model="jmbg"
+								></v-text-field>
+							</v-col>
+							<v-col cols="6">
+								<v-text-field
+									label="Position*"
+									required
+									:rules="positionRules"
+									v-model="position"
+								>
+								</v-text-field>
+							</v-col>
+						</v-row>
+					</v-form>
+				</v-container>
+				<small>*indicates required field</small>
+			</v-card-text>
+			<v-card-actions>
+				<v-spacer></v-spacer>
+				<v-btn color="blue darken-1" text @click="close">Close</v-btn>
+				<v-btn
+					color="blue darken-1"
+					v-if="mode === `add`"
+					text
+					@click="submit(addDoctorApi)"
+					>Add</v-btn
+				>
+				<v-btn 
+					color="blue darken-1" 
+					v-else 
+					text 
+					@click="submit(updateDoctorApi)"
+					>Update</v-btn
+				>
+				
+			</v-card-actions>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script>
-    import ClinicSelection from "../Clinics/ClinicSelection";
-    import DoctorSelection from "../Doctor/DoctorSelection"; 
-    import {mapActions} from "vuex";
-    import {emptyDoctor} from "../../utils/skeletons";
-    export default {
-        name: "ModifyDoctorDialog",
-        components: {ClinicSelection, DoctorSelection},
-        data: () => ({
-            name: null,
-            doctor: emptyDoctor,
-            selectedDoctor: null,
-            selectedClinic: null,  
-            showPassword: false,    
-            nameRules: [v => !!v || 'Name is required.'],
-            surnameRules: [v => !!v || "* Surname is required"],
-            usernameRules: [v => !!v || "* Surname is required"],
-            passwordRules : [v => !!v || "* Surname is required"],
-        }),
-        props: {
-            clinic: null,
-            value: false,
-            mode: {
-                type: String,
-                default: 'add'
+
+import { mapActions } from "vuex";
+import { emptyDoctor } from "../../utils/skeletons";
+export default {
+	name: "ModifyDoctorDialog",
+	components: {},
+	data: () => ({
+		email : null,
+		name : null,
+		surname : null,
+		phone : null,
+		address : null,
+		city : null,
+		country : null,
+		jmbg : null,
+		position: null,
+		
+		doctor: emptyDoctor,
+
+		showPassword: false,
+
+		emailRules: [v => !!v || "Email is required."],
+		nameRules: [v => !!v || "Name is required."],
+		surnameRules: [v => !!v || "Surname is required"],
+		phoneRules: [v => !!v || "Phone is required."],
+		addressRules: [v => !!v || "Address is required."],
+		cityRules: [v => !!v || "City is required"],
+		countryRules: [v => !!v || "Country is required"],
+		jmbgRules: [v => !!v || "JMBG is required"],
+		positionRules: [v => !!v || "Position is required"]
+		
+	}),
+	props: {
+	    editDoctor: null,
+		value: false,
+		mode: {
+			type: String,
+			default: "add"
+		}
+	},
+	watch: {
+		value() {
+        	if(this.editDoctor) {
+            	this.doctor = this.editDoctor;
+            	console.log("value changed");
+            	console.log("doctorename = " + this.doctor.name);
             }
-        },
-        methods: {
-            ...mapActions('doctor/doctor', ['addDoctorApi']),
-            submit(fun) {
-                console.log("adddoctor pressed");
-                if(this.$refs.form.validate()) {                    
-                    console.log("name " + this.doctor.name);
-                    console.log("surname " + this.doctor.surname);
-                    console.log("username " + this.doctor.username);
-                    console.log("password " + this.doctor.password);
-                    console.log("position " + this.doctor.position);
-               
-                    fun(this.doctor);
-                    this.close();
-                }
-            },
-            close() {
-                this.$emit('input', false);
-                //if (this.mode === 'add') this.$refs.form.reset();      
-            }
+            this.email = this.doctor.email;
+            this.name = this.doctor.name;
+            this.surname = this.doctor.surname;
+            this.phone = this.doctor.phone;
+            this.address = this.doctor.address;
+            this.city = this.doctor.city;
+            this.country = this.doctor.country;
+            this.jmbg = this.doctor.jmbg;
+            this.position = this.doctor.position;
+			console.log("thisname = " + this.name);
         }
-    }
+	},
+	methods: {
+		...mapActions("doctor/doctor", ["addDoctorApi"]),
+		...mapActions("doctor/doctor", ["updateDoctorApi"]),
+		submit(fun) {
+			console.log("adddoctor or updatedoctor pressed");
+			console.log(fun);
+			if (this.$refs.form.validate()) {
+				this.doctor.email = this.email;
+	            this.doctor.name = this.name;
+	            this.doctor.surname = this.surname;
+	            this.doctor.phone = this.phone;
+	            this.doctor.address = this.address;
+	            this.doctor.city = this.city;
+	            this.doctor.country = this.country;
+	            this.doctor.jmbg = this.jmbg;
+	            this.doctor.position = this.position;
+                fun(this.doctor);
+                this.close();
+			}
+		},
+		close() {
+			this.$emit('input', false);
+            if (this.mode === 'add') this.$refs.form.reset();
+		},
+		resetLayout() {
+			console.log("resetlayout");
+			this.doctor = emptyDoctor;
+			this.$refs.form.reset();
+		}
+	}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

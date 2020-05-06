@@ -45,7 +45,7 @@
         />
         <modify-doctor-dialog
                 mode="update"
-                :doctorToUpdate="doctorToUpdate"
+                :edit-doctor="editDoctor"
                 v-model="editDialog"/>
     </div>
 </template>
@@ -63,11 +63,14 @@
             editDialog: false,
             dialog: false,
             doctorToDelete: null,
-            doctorToUpdate: null,     
+            editDoctor: null,     
             headers: [
-                { text: 'Doctor', align: 'start', value: 'user.username' },
+                { text: 'Name', align: 'start', value: 'user.name' },
+                { text: 'Surname', align: 'center', value: 'user.surname' },
+                { text: 'Email', align: 'center', value: 'user.email' },
+                { text: 'Phone number', align: 'center', value: 'user.phoneNumber' },
+                { text: 'Address', align: 'center', value: 'user.address' },
                 { text: 'Position', align: 'center', value: 'position' },
-                { text: 'Clinic', align: 'center', value: 'clinic.name' },
                 { text: 'Update', value: 'update', sortable: false, align: 'center' },      
                 { text: 'Remove', sortable: false, value: 'remove' },
             ],
@@ -88,9 +91,19 @@
                 this.deleteDialog(null);
             },
             updateDialog(doctor) {
-            	console.log("updateDialog");
-            	console.log(doctor.position);
-                this.doctorToUpdate = doctor;
+            	console.log("updateDialog id = " + doctor.id);
+                this.editDoctor = {
+                	id : doctor.id,
+                	email : doctor.user.email,
+					name : doctor.user.name,
+					surname : doctor.user.surname,
+					phone : doctor.user.phoneNumber,
+					address : doctor.user.address,
+					city : doctor.user.city,
+					country : doctor.user.country,
+					jmbg : doctor.user.personalID,
+					position: doctor.position
+                };
                 this.editDialog = true;
             }
         },
