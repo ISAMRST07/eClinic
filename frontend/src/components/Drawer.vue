@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
             dark
-            class="cyan elevation-5"
+            class="primary elevation-5"
             :mini-variant="mini"
             permanent
             app

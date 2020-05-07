@@ -3,6 +3,8 @@
         <v-data-table
                 :headers="headers"
                 :items="clinicAdmins"
+                :loading="loading"
+                loading-text="Gathering all the clinic administrators..."
                 class="elevation-1"
         >
             <template v-slot:top>
@@ -33,7 +35,7 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <p>There are no existing clinics</p>
+                <p>There are no existing clinic administrators.</p>
             </template>
         </v-data-table>
         <clinic-administrator-delete-dialog
@@ -58,6 +60,7 @@
         name: "TableClinicAdministrator",
         components: {ModifyClinicAdministratorDialog, ClinicAdministratorDeleteDialog},
         data: () => ({
+            loading: false,
             editDialog: false,
             dialog: false,
             clinicToDelete: null,
@@ -87,6 +90,11 @@
                 }
             }
         },
+        watch: {
+            clinicAdmins(arr) {
+                this.loading = false;
+            }
+        },
         methods: {
             ...mapActions('clinicAdmins/readClinicAdmins', ['getClinicAdmins']),
             ...mapActions('clinicAdmins/readClinicAdmins', ['deleteClinicAdminApi']),
@@ -110,6 +118,7 @@
 
         },
         created() {
+            this.loading = true;
             this.getClinicAdmins();
         },
         filters: {

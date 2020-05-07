@@ -1,5 +1,13 @@
 <template>
     <v-container fluid class="pa-0">
+        <v-progress-linear
+                :active="loading"
+                :indeterminate="loading"
+                absolute
+                top
+                height="3px"
+                color="primary"
+        ></v-progress-linear>
         <v-stepper v-model="loginStep" class="elevation-0 pa-0">
             <v-stepper-items>
                 <v-stepper-content step="1" class="pa-0">
@@ -115,6 +123,7 @@
         name: "LoginView",
         data: () => ({
             loginStep: 1,
+            loading: false,
             emailError: {
                 isError: false,
                 errorMessage: ''
@@ -146,11 +155,15 @@
             loginStep(val) {
             },
             loggedIn(val) {
+                this.loading = false;
+
                 if (val === loginState.LOGGED) {
                     this.$router.push('/');
                 } else if (val === loginState.NOT_LOGGED) {
                     this.loginError.isError = true;
                     this.loginError.errorMessage = 'Incorrect password';
+                } else if (val === loginState.LOGGING) {
+                    this.loading = true;
                 }
             }
         },
@@ -167,6 +180,7 @@
                 this.emailError.errorMessage = '';
                 let valid = this.$refs.emailForm.validate();
                 if(valid) {
+                    this.loading = true;
                     this.exists()
                 }
             },
@@ -178,6 +192,8 @@
                 } catch(err) {
                     this.emailError.isError = true;
                     this.emailError.errorMessage = `Couldn't find your account`;
+                } finally {
+                    this.loading = false;
                 }
             },
             returnToEmail() {

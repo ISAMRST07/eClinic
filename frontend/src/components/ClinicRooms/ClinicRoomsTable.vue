@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="clinicRooms"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Visiting all the clinic rooms..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -61,6 +63,7 @@
         name: "ClinicRoomsTable",
         components: {ModifyClinicRoomDialog, DeleteDialog},
         data: () => ({
+            loading: false,
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
@@ -77,14 +80,11 @@
         }),
         computed: {
             ...mapState('clinicRooms/clinicRooms', ['clinicRooms']),
-            // editClinic: {
-            //     get() {
-            //         return this.$store.state.clinics.addClinic.clinic;
-            //     },
-            //     set(val) {
-            //         this.$store.commit('clinics/addClinic/updateClinic', val);
-            //     }
-            // }
+        },
+        watch: {
+            clinicRooms() {
+                this.loading = false;
+            }
         },
         methods: {
             ...mapActions('clinics/readClinics', ['getClinics']),
@@ -106,6 +106,7 @@
 
         },
         created() {
+            this.loading = true;
             this.getClinics();
             this.getClinicRooms();
         }

@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="diseases"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Reading all the known diagnoses..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -62,6 +64,7 @@
         name: "TableDisease",
         components: {ModifyDisease, DeleteDisease},
         data: () => ({
+            loading: false,
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
@@ -97,7 +100,13 @@
 
         },
         created() {
+            this.loading = true;
             this.getDiseases();
+        },
+        watch: {
+            diseases() {
+                this.loading = false;
+            }
         }
     }
 </script>

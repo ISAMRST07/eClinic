@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="medicines"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Loading all the medicines..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -105,7 +107,13 @@
 
         },
         created() {
+            this.loading = true;
             this.getMedicines();
+        },
+        watch: {
+            medicines() {
+                this.loading = false;
+            }
         }
     }
 </script>

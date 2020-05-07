@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="doctor"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Contacting all the doctors to see if they still work here..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -59,16 +61,17 @@
         name: "DoctorTable",
         components: {DeleteDialog, ModifyDoctorDialog},
         data: () => ({
+            loading: false,
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
             doctorToDelete: null,
-            doctorToUpdate: null,     
+            doctorToUpdate: null,
             headers: [
                 { text: 'Doctor', align: 'start', value: 'user.username' },
                 { text: 'Position', align: 'center', value: 'position' },
                 { text: 'Clinic', align: 'center', value: 'clinic.name' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },      
+                { text: 'Update', value: 'update', sortable: false, align: 'center' },
                 { text: 'Remove', sortable: false, value: 'remove' },
             ],
         }),
@@ -95,8 +98,13 @@
             }
         },
         created() {
-        	console.log("created");
+        	this.loading = true;
             this.getDoctor();
+        },
+        watch: {
+            doctors() {
+                this.loading = false;
+            }
         }
     }
 </script>

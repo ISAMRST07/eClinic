@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="unregisteredUsers"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Gathering all requests..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -45,6 +47,7 @@
     export default {
         name: "UnregisteredUsersTable",
         data: () => ({
+            loading: false,
             headers: [
                 {
                     text: 'Name',
@@ -69,7 +72,13 @@
             }
         },
         created() {
+            this.loading = true;
             this.getUnregisteredUsers();
+        },
+        watch: {
+            unregisteredUsers() {
+                this.loading = false;
+            }
         }
 
     }

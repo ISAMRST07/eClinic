@@ -3,6 +3,8 @@
         <v-data-table
                 :headers="headers"
                 :items="clinics"
+                :loading="loading"
+                loading-text="Building all the clinics..."
                 class="elevation-1"
         >
             <template v-slot:top>
@@ -69,6 +71,7 @@
         name: "ClinicsTable",
         components: {ModifyClinicDialog, DeleteDialog, DescriptionDialog},
         data: () => ({
+            loading: false,
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
@@ -97,6 +100,11 @@
                 }
             }
         },
+        watch: {
+            clinics() {
+                this.loading = false;
+            }
+        },
         methods: {
             ...mapActions('clinics/readClinics', ['getClinics']),
             ...mapActions('clinics/readClinics', ['deleteClinicApi']),
@@ -119,6 +127,7 @@
 
         },
         created() {
+            this.loading = true;
             this.getClinics();
         }
 
