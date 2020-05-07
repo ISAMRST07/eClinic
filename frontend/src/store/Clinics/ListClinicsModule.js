@@ -1,7 +1,5 @@
 import Vue from 'vue';
-import {redirectToLogin} from "../AuthModule";
 import {defaultError} from "../../utils/defaultErrorBehavior";
-
 export default {
     namespaced: true,
     state: {

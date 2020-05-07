@@ -1,5 +1,7 @@
 package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,10 +16,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@JsonIdentityInfo(generator = JSOGGenerator.class)
 public class ClinicalCentarAdministrator {
 
     @Id
-@Column(length=50)
+    @Column(length=50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cca_seq")
     @GenericGenerator(name = "cca_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

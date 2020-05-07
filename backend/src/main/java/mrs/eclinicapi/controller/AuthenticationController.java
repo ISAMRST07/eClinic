@@ -55,9 +55,8 @@ public class AuthenticationController {
 
         User user = (User) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername());
-        long expiresIn = tokenUtils.getExpiredIn();
 
-        return ResponseEntity.ok(new TokenResponse(jwt, expiresIn, user));
+        return ResponseEntity.ok(new TokenResponse(jwt, user));
     }
 
     @GetMapping("/exists/{email}")

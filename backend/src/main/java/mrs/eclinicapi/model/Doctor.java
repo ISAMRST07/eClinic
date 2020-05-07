@@ -1,6 +1,8 @@
 package mrs.eclinicapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+
 public class Doctor extends MedicalStaff {
 
     private String position;
@@ -29,7 +33,7 @@ public class Doctor extends MedicalStaff {
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
 
-    @JsonIgnoreProperties("doctors")
+//    @JsonIgnoreProperties("doctors")
     @Override
     public Clinic getClinic() {
         return super.getClinic();

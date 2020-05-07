@@ -3,6 +3,7 @@ package mrs.eclinicapi.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+
 public class ClinicAdministrator {
 
 
@@ -32,7 +35,7 @@ public class ClinicAdministrator {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @JsonIgnoreProperties("clinicAdministrator")
+//    @JsonIgnoreProperties("clinicAdministrator")
     @ManyToOne
     public Clinic clinic;
 

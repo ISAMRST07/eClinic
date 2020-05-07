@@ -5,20 +5,16 @@ const loginState = {
     NOT_LOGGED: 0,
     LOGGING: 1,
     LOGGED: 2
-}
-let initialExpiresIn = 0;
+};
 let initialToken = '';
 let initialUser = null;
 let initialRole = '';
 let initialLoggedIn = loginState.NOT_LOGGED;
 if (tokenResponse) {
-    initialExpiresIn = tokenResponse.expiresIn;
-    if (initialExpiresIn > 0) {
-        initialToken = tokenResponse.accessToken;
-        initialUser = tokenResponse.loggedUser;
-        initialRole = initialUser.type;
-        initialLoggedIn = loginState.LOGGED;
-    }
+    initialToken = tokenResponse.accessToken;
+    initialUser = tokenResponse.loggedUser;
+    initialRole = initialUser.type;
+    initialLoggedIn = loginState.LOGGED;
 }
 
 
@@ -26,7 +22,6 @@ const AuthModule = {
     namespaced: true,
     state: {
         token: initialToken,
-        expiresIn: initialExpiresIn,
         user: initialUser,
         role: initialRole,
         loggedIn: initialLoggedIn
@@ -34,14 +29,12 @@ const AuthModule = {
     mutations: {
         updateResponse(state, tokenResponse) {
             state.token = tokenResponse.accessToken;
-            state.expiresIn = tokenResponse.expiresIn;
             state.user = tokenResponse.loggedUser;
             state.role = tokenResponse.loggedUser.type;
             state.loggedIn = loginState.LOGGED;
         },
         clearResponse(state) {
             state.token = '';
-            state.expiresIn = 0;
             state.user = null;
             state.role = '';
             state.loggedIn = loginState.NOT_LOGGED;

@@ -1,5 +1,7 @@
 package mrs.eclinicapi.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,8 @@ import mrs.eclinicapi.model.User;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class TokenResponse {
     private String accessToken;
-    private Long expiresIn;
     private User loggedUser;
 }

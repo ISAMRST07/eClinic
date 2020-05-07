@@ -2,6 +2,7 @@ package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +20,12 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+
 public class Codebook {
 
     @Id
-@Column(length=50)
+    @Column(length=50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cb_seq")
     @GenericGenerator(name = "cb_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

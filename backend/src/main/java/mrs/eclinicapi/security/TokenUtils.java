@@ -26,7 +26,7 @@ public class TokenUtils {
     public String SECRET;
 
     // Period vazenja
-    @Value("600000")
+    @Value("-1")
     private int EXPIRES_IN;
 
     // Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent
@@ -49,7 +49,7 @@ public class TokenUtils {
                 .setSubject(username)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
-                .setExpiration(generateExpirationDate())
+//                .setExpiration()
                 // .claim("key", value) //moguce je postavljanje proizvoljnih podataka u telo JWT tokena
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+
 public class Patient {
     @Id
     @Column(length=50)
@@ -32,7 +35,7 @@ public class Patient {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @JsonIgnoreProperties("patients")
+//    @JsonIgnoreProperties("patients")
     @ManyToOne
     private ClinicAdministrator clinic;
 

@@ -2,6 +2,7 @@ package mrs.eclinicapi.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,8 @@ import mrs.eclinicapi.model.enums.UserType;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+
 public class ClinicAdministratorDto {
     private String id;
     private String password;
@@ -38,8 +38,8 @@ public class ClinicAdministratorDto {
         this.name = clinicAdministrator.getUser().getName();
         this.type = clinicAdministrator.getUser().getType();
         this.clinic = clinicAdministrator.getClinic();
-        this.email = clinicAdministrator.getUser().getEmail();;
-        this.city = clinicAdministrator.getUser().getCity();;
+        this.email = clinicAdministrator.getUser().getEmail();
+        this.city = clinicAdministrator.getUser().getCity();
         this.country = clinicAdministrator.getUser().getCountry();
         this.userID = clinicAdministrator.getUser().getId();
         this.address = clinicAdministrator.getUser().getAddress();

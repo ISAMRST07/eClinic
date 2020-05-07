@@ -39,27 +39,21 @@ public class Clinic {
     @Embedded
     private Coordinates coordinates;
 
-    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClinicAdministrator> clinicAdministrator;
 
-    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClinicRoom> clinicRoom = new HashSet<>();
 
-    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Doctor> doctors = new HashSet<>();
 
-    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Nurse> nurses = new HashSet<>();
 
-    @JsonIgnoreProperties("clinic")
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
     private List<Patient> patients;
 
-    @JsonIgnoreProperties("clinic")
     @ManyToOne
     private ClinicalCentarAdministrator admin;
 
