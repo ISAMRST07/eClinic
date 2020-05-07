@@ -12,9 +12,7 @@ import mrs.eclinicapi.model.enums.UserType;
 @Getter
 @Setter
 @AllArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+
 public class UserDTO {
     protected String id;
     protected String password;

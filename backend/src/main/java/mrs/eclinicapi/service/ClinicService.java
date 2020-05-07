@@ -24,9 +24,15 @@ public class ClinicService {
         return clinicRepository.findById(id).orElseGet(null);
     }
 
+    @Transactional
     public Clinic modifyClinic(Clinic clinic) {
-        if (this.findOne(clinic.getId()) == null) return null;
-        return clinicRepository.save(clinic);
+        Clinic toModify = this.findOne(clinic.getId());
+        if (toModify == null) return null;
+        toModify.setName(clinic.getName());
+        toModify.setCoordinates(clinic.getCoordinates());
+        toModify.setDescription(clinic.getDescription());
+        toModify.setAddress(clinic.getAddress());
+        return clinicRepository.save(toModify);
     }
 
     public List<Clinic> findAll() {
