@@ -13,6 +13,7 @@ import mrs.eclinicapi.model.enums.UserType;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class DoctorNurseDTO {

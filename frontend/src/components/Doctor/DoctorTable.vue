@@ -115,7 +115,7 @@
             this.getDoctor();
         },
         watch: {
-            doctors() {
+            doctor() {
                 this.loading = false;
             }
         }

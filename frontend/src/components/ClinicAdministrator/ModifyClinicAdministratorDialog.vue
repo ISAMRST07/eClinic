@@ -182,6 +182,7 @@
                     this.username = this.editClinicAdmin.username;
                     this.confpass = this.editClinicAdmin.password;
                     this.city = this.editClinicAdmin.city;
+                    this.email = this.editClinicAdmin.email;
                     this.country =this.editClinicAdmin.country;
                     this.personalID = this.editClinicAdmin.personalID;
                     this.address = this.editClinicAdmin.address;
@@ -198,7 +199,7 @@
                     this.personalID = "";
                     this.address = "";
                     this.selectedClinic = null;
-                    this.clinicAdmin = "";
+                    this.clinicAdmin = emptyClinicAdmin;
                 }
 
             }
@@ -226,16 +227,30 @@
                 let valid = this.$refs.form.validate();
                 if (valid) {
                     if (this.mode === "update"){
-                        this.clinicToUpdate.password = this.clinicAdmin.password;
-                        this.clinicToUpdate.name = this.clinicAdmin.name;
-                        this.clinicToUpdate.surname = this.clinicAdmin.surname;
+                        this.clinicToUpdate.name = this.name;
+                        this.clinicToUpdate.surname = this.surname;
+                        this.clinicToUpdate.password = this.password;
+                        this.clinicToUpdate.username = this.username;
+                        this.clinicToUpdate.city = this.city;
+                        this.clinicToUpdate.country =this.country;
+                        this.clinicToUpdate.personalID = this.personalID;
+                        this.clinicToUpdate.address = this.address;
+                        this.clinicToUpdate.email = this.email;
                         this.clinicToUpdate.clinic = this.selectedClinic;
                         console.log(this.selectedClinic.id)
                         console.log(this.selectedClinic)
                         fun(this.clinicToUpdate);
                     }
                     if (this.mode === "add") {
-                        console.log("this.clinicToUpdate")
+                        this.clinicAdmin.name = this.name;
+                        this.clinicAdmin.surname = this.surname;
+                        this.clinicAdmin.password = this.password;
+                        this.clinicAdmin.username = this.username;
+                        this.clinicAdmin.city = this.city;
+                        this.clinicAdmin.country =this.country;
+                        this.clinicAdmin.personalID = this.personalID;
+                        this.clinicAdmin.address = this.address;
+                        this.clinicAdmin.email = this.email;
                         this.clinicAdmin.clinic = this.selectedClinic;
                         fun(this.clinicAdmin);
                     }

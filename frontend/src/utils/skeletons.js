@@ -41,7 +41,6 @@ export const emptyClinicRoom = {
 };
 
 export const emptyDoctor = {
-	id : '',
 	email : '',
 	name : '',
 	surname : '',
