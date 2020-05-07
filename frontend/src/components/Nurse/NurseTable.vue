@@ -2,14 +2,12 @@
     <div>
         <v-data-table
                 :headers="headers"
-                :items="doctor"
+                :items="nurse"
                 class="elevation-1"
-                :loading="loading"
-                loading-text="Contacting all the doctors to see if they still work here..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>Doctors</v-toolbar-title>
+                    <v-toolbar-title>Nurse</v-toolbar-title>
                     <v-divider
                             class="mx-4"
                             inset
@@ -36,18 +34,18 @@
             </template>
 
             <template v-slot:no-data>
-                <p>There are no doctors</p>
+                <p>There are no nurses</p>
             </template>
         </v-data-table>
         <delete-dialog
                 v-model="dialog"
-                :doctor="doctorToDelete"
+                :nurse="nurseToDelete"
                 @close="deleteDialog(null)"
-                @delete="deleteDoctor"
+                @delete="deleteNurse"
         />
-        <modify-doctor-dialog
+        <modify-nurse-dialog
                 mode="update"
-                :edit-doctor="editDoctor"
+                :edit-nurse="editNurse"
                 v-model="editDialog"/>
     </div>
 </template>
@@ -55,18 +53,17 @@
 <script>
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
-    import ModifyDoctorDialog from "./ModifyDoctorDialog";
+    import ModifyNurseDialog from "./ModifyNurseDialog";
 
     export default {
-        name: "DoctorTable",
-        components: {DeleteDialog, ModifyDoctorDialog},
+        name: "NurseTable",
+        components: {DeleteDialog, ModifyNurseDialog},
         data: () => ({
-            loading: false,
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
-            doctorToDelete: null,
-            editDoctor: null,
+            nurseToDelete: null,
+            editNurse: null,     
             headers: [
                 { text: 'Name', align: 'start', value: 'user.name' },
                 { text: 'Surname', align: 'center', value: 'user.surname' },
@@ -74,50 +71,45 @@
                 { text: 'Phone number', align: 'center', value: 'user.phoneNumber' },
                 { text: 'Address', align: 'center', value: 'user.address' },
                 { text: 'Position', align: 'center', value: 'position' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },
+                { text: 'Update', value: 'update', sortable: false, align: 'center' },      
                 { text: 'Remove', sortable: false, value: 'remove' },
             ],
         }),
         computed: {
-            ...mapState('doctor/doctor', ['doctor']),
+            ...mapState('nurse/nurse', ['nurse']),
         },
         methods: {
-            ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['deleteDoctorApi']),
+            ...mapActions('nurse/nurse', ['getNurse']),
+            ...mapActions('nurse/nurse', ['deleteNurseApi']),
 
-            deleteDialog(doctorToDelete) {
-                this.doctorToDelete = doctorToDelete;
+            deleteDialog(nurseToDelete) {
+                this.nurseToDelete = nurseToDelete;
                 this.dialog = !this.dialog;
             },
-            deleteDoctor() {
-                this.deleteDoctorApi(this.doctorToDelete);
+            deleteNurse() {
+                this.deleteNurseApi(this.nurseToDelete);
                 this.deleteDialog(null);
             },
-            updateDialog(doctor) {
-            	console.log("updateDialog id = " + doctor.id);
-                this.editDoctor = {
-                	id : doctor.id,
-                	email : doctor.user.email,
-					name : doctor.user.name,
-					surname : doctor.user.surname,
-					phone : doctor.user.phoneNumber,
-					address : doctor.user.address,
-					city : doctor.user.city,
-					country : doctor.user.country,
-					jmbg : doctor.user.personalID,
-					position: doctor.position
+            updateDialog(nurse) {
+            	console.log("updateDialog id = " + nurse.id);
+                this.editNurse = {
+                	id : nurse.id,
+                	email : nurse.user.email,
+					name : nurse.user.name,
+					surname : nurse.user.surname,
+					phone : nurse.user.phoneNumber,
+					address : nurse.user.address,
+					city : nurse.user.city,
+					country : nurse.user.country,
+					jmbg : nurse.user.personalID,
+					position: nurse.position
                 };
                 this.editDialog = true;
             }
         },
         created() {
-        	this.loading = true;
-            this.getDoctor();
-        },
-        watch: {
-            doctors() {
-                this.loading = false;
-            }
+        	console.log("created");
+            this.getNurse();
         }
     }
 </script>

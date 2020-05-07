@@ -7,8 +7,8 @@
 	>
 		<v-card>
 			<v-card-title>
-				<span v-if="mode === 'add'" class="headline">Add a doctor</span>
-				<span v-else class="headline">Update doctor</span>
+				<span v-if="mode === 'add'" class="headline">Add a nurse</span>
+				<span v-else class="headline">Update nurse</span>
 			</v-card-title>
 			<v-card-text>
 				<v-container>
@@ -101,14 +101,14 @@
 					color="blue darken-1"
 					v-if="mode === `add`"
 					text
-					@click="submit(addDoctorApi)"
+					@click="submit(addNurseApi)"
 					>Add</v-btn
 				>
 				<v-btn 
 					color="blue darken-1" 
 					v-else 
 					text 
-					@click="submit(updateDoctorApi)"
+					@click="submit(updateNurseApi)"
 					>Update</v-btn
 				>
 				
@@ -120,9 +120,9 @@
 <script>
 
 import { mapActions } from "vuex";
-import { emptyDoctor } from "../../utils/skeletons";
+import { emptyNurse } from "../../utils/skeletons";
 export default {
-	name: "ModifyDoctorDialog",
+	name: "ModifyNurseDialog",
 	components: {},
 	data: () => ({
 		email : null,
@@ -135,7 +135,7 @@ export default {
 		jmbg : null,
 		position: null,
 		
-		doctor: emptyDoctor,
+		nurse: emptyNurse,
 
 		showPassword: false,
 
@@ -151,7 +151,7 @@ export default {
 		
 	}),
 	props: {
-	    editDoctor: null,
+	    editNurse: null,
 		value: false,
 		mode: {
 			type: String,
@@ -160,40 +160,40 @@ export default {
 	},
 	watch: {
 		value() {
-        	if(this.editDoctor) {
-            	this.doctor = this.editDoctor;
+        	if(this.editNurse) {
+            	this.nurse = this.editNurse;
             	console.log("value changed");
-            	console.log("doctorename = " + this.doctor.name);
+            	console.log("nurseename = " + this.nurse.name);
             }
-            this.email = this.doctor.email;
-            this.name = this.doctor.name;
-            this.surname = this.doctor.surname;
-            this.phone = this.doctor.phone;
-            this.address = this.doctor.address;
-            this.city = this.doctor.city;
-            this.country = this.doctor.country;
-            this.jmbg = this.doctor.jmbg;
-            this.position = this.doctor.position;
+            this.email = this.nurse.email;
+            this.name = this.nurse.name;
+            this.surname = this.nurse.surname;
+            this.phone = this.nurse.phone;
+            this.address = this.nurse.address;
+            this.city = this.nurse.city;
+            this.country = this.nurse.country;
+            this.jmbg = this.nurse.jmbg;
+            this.position = this.nurse.position;
 			console.log("thisname = " + this.name);
         }
 	},
 	methods: {
-		...mapActions("doctor/doctor", ["addDoctorApi"]),
-		...mapActions("doctor/doctor", ["updateDoctorApi"]),
+		...mapActions("nurse/nurse", ["addNurseApi"]),
+		...mapActions("nurse/nurse", ["updateNurseApi"]),
 		submit(fun) {
-			console.log("adddoctor or updatedoctor pressed");
+			console.log("addnurse or updatenurse pressed");
 			console.log(fun);
 			if (this.$refs.form.validate()) {
-				this.doctor.email = this.email;
-	            this.doctor.name = this.name;
-	            this.doctor.surname = this.surname;
-	            this.doctor.phone = this.phone;
-	            this.doctor.address = this.address;
-	            this.doctor.city = this.city;
-	            this.doctor.country = this.country;
-	            this.doctor.jmbg = this.jmbg;
-	            this.doctor.position = this.position;
-                fun(this.doctor);
+				this.nurse.email = this.email;
+	            this.nurse.name = this.name;
+	            this.nurse.surname = this.surname;
+	            this.nurse.phone = this.phone;
+	            this.nurse.address = this.address;
+	            this.nurse.city = this.city;
+	            this.nurse.country = this.country;
+	            this.nurse.jmbg = this.jmbg;
+	            this.nurse.position = this.position;
+                fun(this.nurse);
                 this.close();
 			}
 		},
@@ -203,7 +203,7 @@ export default {
 		},
 		resetLayout() {
 			console.log("resetlayout");
-			this.doctor = emptyDoctor;
+			this.nurse = emptyNurse;
 			this.$refs.form.reset();
 		}
 	}

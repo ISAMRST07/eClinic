@@ -100,8 +100,8 @@
                 this.deleteMedicineApi(this.medicineToDelete);
                 this.deleteDialog(null);
             },
-            updateDialog(room) {
-                this.editMedicine = room;
+            updateDialog(medicine) {
+                this.editMedicine = medicine;
                 this.editDialog = true;
             }
 

@@ -26,7 +26,7 @@
                                                         label="Name*"
                                                         required
                                                         :rules="nameRules"
-                                                        v-model="clinicAdmin.name"
+                                                        v-model="name"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -34,7 +34,7 @@
                                                         label="Surname*"
                                                         required
                                                         :rules="surnameRules"
-                                                        v-model="clinicAdmin.surname"
+                                                        v-model="surname"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -42,7 +42,7 @@
                                                         ref="password"
                                                         label="Password*"
                                                         required
-                                                        v-model="clinicAdmin.password"
+                                                        v-model="password"
                                                         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                                         :rules="passwordRules"
                                                         :type="showPassword ? 'text' : 'password'"
@@ -72,7 +72,7 @@
                                                         label="Email*"
                                                         required
                                                         :rules="emailRules"
-                                                        v-model="clinicAdmin.email"
+                                                        v-model="email"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -80,7 +80,7 @@
                                                         label="City*"
                                                         required
                                                         :rules="cityRules"
-                                                        v-model="clinicAdmin.city"
+                                                        v-model="city"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -88,7 +88,7 @@
                                                         label="State*"
                                                         required
                                                         :rules="stateRules"
-                                                        v-model="clinicAdmin.country"
+                                                        v-model="country"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -96,7 +96,7 @@
                                                         label="Address*"
                                                         required
                                                         :rules="addressRules"
-                                                        v-model="clinicAdmin.address"
+                                                        v-model="address"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="6">
@@ -104,7 +104,7 @@
                                                         label="Personal ID*"
                                                         required
                                                         :rules="umcnRules"
-                                                        v-model="clinicAdmin.personalID"
+                                                        v-model="personalID"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -139,6 +139,16 @@
             //*************************************************************************************************************
             confpass : '',
             clinicAdmin: emptyClinicAdmin,
+            name: '',
+            surname: '',
+            password: '',
+            username: '',
+            city : '',
+            country : '',
+            email : '',
+            personalID : '',
+            address: '',
+
             showPassword: false,
             showPassword2: false,
             addressRules : [v => !!v || "* Address is required"],
@@ -153,6 +163,7 @@
             passwordRules : [v => !!v || "* Password is required"]
         }),
         props: {
+            editClinicAdmin : null,
             clinicToUpdate:{
                 default: null
             },
@@ -160,6 +171,36 @@
             mode: {
                 type: String,
                 default: 'add'
+            }
+        },
+        watch: {
+            value() {
+                if(this.editClinicAdmin) {
+                    this.name = this.editClinicAdmin.name;
+                    this.surname = this.editClinicAdmin.surname;
+                    this.password = this.editClinicAdmin.password;
+                    this.username = this.editClinicAdmin.username;
+                    this.confpass = this.editClinicAdmin.password;
+                    this.city = this.editClinicAdmin.city;
+                    this.country =this.editClinicAdmin.country;
+                    this.personalID = this.editClinicAdmin.personalID;
+                    this.address = this.editClinicAdmin.address;
+                    this.selectedClinic = this.editClinicAdmin.clinic;
+                    this.clinicAdmin = this.editClinicAdmin;
+                }
+                else{
+                    this.name = "";
+                    this.surname = "";
+                    this.password = "";
+                    this.username = "";
+                    this.city = "";
+                    this.country = "";
+                    this.personalID = "";
+                    this.address = "";
+                    this.selectedClinic = null;
+                    this.clinicAdmin = "";
+                }
+
             }
         },
         filters: {
@@ -193,7 +234,7 @@
                         console.log(this.selectedClinic)
                         fun(this.clinicToUpdate);
                     }
-                    else {
+                    if (this.mode === "add") {
                         console.log("this.clinicToUpdate")
                         this.clinicAdmin.clinic = this.selectedClinic;
                         fun(this.clinicAdmin);

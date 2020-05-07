@@ -8,6 +8,8 @@ export const clinicRoomsPath = '/clinicRooms';
 
 export const doctorsPath = '/doctors';
 
+export const nursesPath = '/nurses';
+
 export const medicinesPath = '/medicines';
 
 export const diseasePath = '/disease';

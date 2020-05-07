@@ -14,9 +14,6 @@ export default {
         addDoctor(state, doctor) {
         	console.log("mutations addDoctor");
         	console.log(doctor.name);
-        	console.log(doctor.surname);
-        	console.log(doctor.username);
-        	console.log(doctor.password);
         	
             state.doctor.push(doctor);
         },
@@ -25,6 +22,7 @@ export default {
             state.doctor.splice(index, 1);
         },
         updateDoctor(state, doctor) {
+        	console.log("updateDoctor");
             state.doctor = [
                 ...state.doctor.filter(c => c.id !== doctor.id),
                 doctor
@@ -45,21 +43,9 @@ export default {
         },
         async addDoctorApi({rootState, commit}, doctor) {
             try {
-            	console.log("adddoctorapi");
-            	console.log(doctor);
-            	console.log(doctor.name);
-            	console.log(doctor.surname);
-            	console.log(doctor.username);
-            	console.log(doctor.password);
-            	
+            	console.log("adddoctorapi");            	
                 let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
-                console.log("after post added = " + added);
-                console.log(added.name);
-                console.log(doctor.name);
-            	console.log(doctor.surname);
-            	console.log(doctor.username);
-            	console.log(doctor.password);
                 commit('addDoctor', added);
             } catch (err) {
                 defaultError(err);
@@ -75,6 +61,15 @@ export default {
             } catch (err) {
                 defaultError(err);
             }
-        }
+        },
+        async updateDoctorApi({rootState,commit}, doctor) {
+            console.log("updateDoctorApi");
+            try {
+                let {data: modified} = await Vue.prototype.$axios.put('/api/doctor', doctor, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('updateDoctor', modified);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
     },
 };

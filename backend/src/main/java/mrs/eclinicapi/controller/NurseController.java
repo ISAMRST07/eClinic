@@ -1,17 +1,19 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.model.Nurse;
 import mrs.eclinicapi.model.User;
-import mrs.eclinicapi.service.ClinicService;
+import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.NurseService;
-import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,37 +25,60 @@ public class NurseController {
     @Autowired
     private NurseService service;
 
-    @Autowired
-    private UserService userService;
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Nurse> addNurse(@RequestBody DoctorNurseDTO nurseDto) {
+        System.out.println("adding nurse ");
+        System.out.println("nurseDto = " + nurseDto);
+        Nurse newNurse = new Nurse();
+        
+        User newUser = new User();
+        newUser.setName(nurseDto.getName());
+        newUser.setSurname(nurseDto.getSurname());
+        newUser.setPassword(nurseDto.getJmbg().toString());
+        newUser.setEmail(nurseDto.getEmail());
+        newUser.setAddress(nurseDto.getAddress());
+        newUser.setCity(nurseDto.getCity());
+        newUser.setCountry(nurseDto.getCountry());
+        newUser.setType(UserType.nurse);
+        newUser.setPersonalID(nurseDto.getJmbg());
+        newUser.setPhoneNumber(nurseDto.getPhone());
+       
+        newNurse.setUser(newUser);
+        newNurse.setPosition(nurseDto.getPosition());
+        
+        service.addNurse(newNurse);
 
-    @Autowired
-    private ClinicService clinicService;
+        System.out.println("newDoctor added = " + newNurse);
 
+        return new ResponseEntity<>(newNurse, HttpStatus.OK);
+    }
+    
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Nurse> updateNurse(@RequestBody DoctorNurseDTO nurseDto) {
+    	System.out.println("updateNurse = " + nurseDto);
+    	
+    	Nurse oldNurse = service.findOne(nurseDto.getId());
+    	User oldUser = oldNurse.getUser();
+    	
+    	oldUser.setName(nurseDto.getName());
+    	oldUser.setSurname(nurseDto.getSurname());
+    	oldUser.setPassword(nurseDto.getJmbg().toString());
+    	oldUser.setEmail(nurseDto.getEmail());
+    	oldUser.setAddress(nurseDto.getAddress());
+    	oldUser.setCity(nurseDto.getCity());
+    	oldUser.setCountry(nurseDto.getCountry());
+    	oldUser.setPersonalID(nurseDto.getJmbg());
+    	oldUser.setPhoneNumber(nurseDto.getPhone());
+    	oldNurse.setPosition(nurseDto.getPosition());
 
-    @RequestMapping(path = "/addNurse")
-    public Nurse addNurse(@RequestParam String position,
-                          @RequestParam String userId,
-                          @RequestParam String clinicId) {
-
-        User user = userService.findOne(userId);
-        if (user == null) {
-            System.out.println("user with id = " + userId + " == null");
+        System.out.println("new nurse oldNUrse = " + oldNurse);
+        
+        Nurse modified = service.addNurse(oldNurse);
+        System.out.println("new nurse modified = " + modified);
+        if (modified == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        System.out.println("found userId = " + userId + " = " + user);
-
-        Clinic clinic = clinicService.findOne(clinicId);
-        if (clinic == null) {
-            System.out.println("clinic with id = " + clinicId + " == null");
-        }
-        System.out.println("found clinicId = " + clinicId + " = " + clinic);
-
-        Nurse nurse = new Nurse(position);
-        nurse.setUser(user);
-        nurse.setClinic(clinic);
-
-        service.addNurse(nurse);
-        System.out.println("newNurse = " + nurse);
-        return nurse;
+        return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/deleteNurse/{id}")
@@ -70,7 +95,7 @@ public class NurseController {
         service.deleteById(id);
         return new ResponseEntity<>("nurse deleted", HttpStatus.OK);
     }
-
+    
     @RequestMapping(path = "/getAll")
     public ResponseEntity<List<Nurse>> getAll() {
         System.out.println("get all nurse ");
@@ -95,32 +120,4 @@ public class NurseController {
         return new ResponseEntity<>(nurse, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/updatePosition")
-    public ResponseEntity<String> updatePosition(@RequestParam String id,
-                                                 @RequestParam String newPosition) {
-        System.out.println("get nurse " + id);
-        Nurse nurse = service.findOne(id);
-        if (nurse == null) {
-            System.out.println("nurse not found");
-            return new ResponseEntity<>("nurse not found", HttpStatus.NOT_FOUND);
-        }
-        System.out.println("update this nurse = " + nurse);
-        nurse.setPosition(newPosition);
-        service.addNurse(nurse);
-        return new ResponseEntity<>("positionUpdated", HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/deleteNurseFromClinic")
-    public ResponseEntity<String> deleteNurseFromClinic(@RequestParam String id) {
-        System.out.println("get nurse " + id);
-        Nurse nurse = service.findOne(id);
-        if (nurse == null) {
-            System.out.println("nurse not found");
-            return new ResponseEntity<>("nurse not found", HttpStatus.NOT_FOUND);
-        }
-        System.out.println("update this nurse = " + nurse);
-        nurse.setClinic(null);
-        service.addNurse(nurse);
-        return new ResponseEntity<>("nurse clinic removed", HttpStatus.OK);
-    }
 }
