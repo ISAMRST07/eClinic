@@ -56,6 +56,7 @@
     import {mapActions, mapState} from "vuex";
     import ClinicAdministratorDeleteDialog from "./ClinicAdministratorDeleteDialog";
     import ModifyClinicAdministratorDialog from "./ModifyClinicAdministratorDialog";
+    import JSOG from 'jsog';
 
     export default {
         name: "TableClinicAdministrator",
@@ -82,7 +83,11 @@
             ],
         }),
         computed: {
-            ...mapState('clinicAdmins/readClinicAdmins', ['clinicAdmins']),
+            clinicAdmins: {
+                get() {
+                    return JSOG.decode(this.$store.state.clinicAdmins.readClinicAdmins.clinicAdmins);
+                }
+            },
             editClinic: {
                 get() {
                     return this.$store.state.clinicAdmins.readClinicAdmins.clinicAdmins;
