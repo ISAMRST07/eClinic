@@ -27,7 +27,7 @@ public class UserDTO {
     protected String city;
     protected String country;
     protected String address;
-    protected String personalID; //JMBG
+    protected String personalID;
 
     public UserDTO() {
     }

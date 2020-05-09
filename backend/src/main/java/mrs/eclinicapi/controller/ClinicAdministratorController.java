@@ -24,6 +24,7 @@ public class ClinicAdministratorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ClinicAdministratorDto addClinicAdministrator(@RequestBody ClinicAdministratorDto clinicAdministratorDto) {
+        System.out.println(clinicAdministratorDto);
         return service.addClinicAdministraor(clinicAdministratorDto);
 
     }

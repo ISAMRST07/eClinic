@@ -13,25 +13,14 @@ import mrs.eclinicapi.model.enums.UserType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 
-public class ClinicAdministratorDto {
-    private String id;
-    private String password;
-    private String surname;
-    private String name;
-    private UserType type;
-    private Clinic clinic;
-    private String email;
-    private String userID;
-    private String city;
-    private String country;
-    private String address;
-    private String personalID; //JMBG
+public class ClinicAdministratorDto extends UserDTO{
+
 
     public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator, int i) {
+        super();
         this.id = clinicAdministrator.getId();
         this.password = clinicAdministrator.getUser().getPassword();
         this.surname = clinicAdministrator.getUser().getSurname();
@@ -44,5 +33,23 @@ public class ClinicAdministratorDto {
         this.userID = clinicAdministrator.getUser().getId();
         this.address = clinicAdministrator.getUser().getAddress();
         this.personalID = clinicAdministrator.getUser().getPersonalID(); //JMBG
+    }
+
+    @Override
+    public String toString() {
+        return "ClinicAdministratorDto{" +
+                "id='" + id + '\'' +
+                ", password='" + password + '\'' +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", clinic=" + clinic +
+                ", email='" + email + '\'' +
+                ", userID='" + userID + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", address='" + address + '\'' +
+                ", personalID='" + personalID + '\'' +
+                '}';
     }
 }

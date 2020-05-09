@@ -9,6 +9,7 @@ import mrs.eclinicapi.repository.ClinicAdministratorRepository;
 import mrs.eclinicapi.repository.ClinicRepository;
 import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,10 +20,12 @@ import java.util.Optional;
 @Service
 public class ClinicAdministratorService {
     private ClinicAdministratorRepository clinicAdminRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ClinicAdministratorService(ClinicAdministratorRepository clinicAdminRepository, ClinicRepository clinicRepository, UserRepository userRepository) {
+    public ClinicAdministratorService(ClinicAdministratorRepository clinicAdminRepository, PasswordEncoder passwordEncoder) {
         this.clinicAdminRepository = clinicAdminRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -34,9 +37,11 @@ public class ClinicAdministratorService {
 //            System.out.println("Sokole ne postoji ovaj");
 //        }
         User newUser = new User(clinicAdministratorDto);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
+
 
         return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator), 0);
     }
@@ -45,6 +50,7 @@ public class ClinicAdministratorService {
     public ClinicAdministratorDto updateClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto) {
         User newUser = new User(clinicAdministratorDto);
         newUser.setId(clinicAdministratorDto.getUserID());
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setId(clinicAdministratorDto.getId());

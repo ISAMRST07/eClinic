@@ -34,6 +34,15 @@ export default {
                 defaultError(err);
             }
         },
+        async getOneClinicRooms({rootState, commit}, user) {
+            try {
+                let res = await Vue.prototype.$axios.get(`/api/clinicroom/${user.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                commit('setAllClinicRooms', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async addClinicRoomApi({rootState, commit}, clinicRoom) {
             try {
                 let {data: added} = await Vue.prototype.$axios.post('/api/clinicroom', clinicRoom,

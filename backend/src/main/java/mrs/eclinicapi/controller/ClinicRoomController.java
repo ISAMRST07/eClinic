@@ -42,6 +42,13 @@ public class ClinicRoomController {
         return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ClinicRoomDTO>> getOneClinicRooms(@PathVariable("id") String clinicAdminID) {
+        List<ClinicRoom> clinicRooms = service.findOneClinicRooms(clinicAdminID);
+        List<ClinicRoomDTO> clinicRoomDTOS = clinicRooms.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
+    }
+
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ClinicRoomDTO> updateClinicRoom(@RequestBody ClinicRoomDTO clinicRoomDTO) {
         ClinicRoom clinicRoom = this.convertToEntity(clinicRoomDTO);

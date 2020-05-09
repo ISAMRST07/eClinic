@@ -58,6 +58,8 @@
     import {mapActions, mapGetters, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyClinicRoomDialog from "./ModifyClinicRoomDialog";
+    import authRoutes from "../../router/authRoutes";
+    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
     export default {
         name: "ClinicRoomsTable",
@@ -80,6 +82,7 @@
         }),
         computed: {
             ...mapState('clinicRooms/clinicRooms', ['clinicRooms']),
+            ...mapState('auth', ['user']),
         },
         watch: {
             clinicRooms() {
@@ -90,6 +93,7 @@
             ...mapActions('clinics/readClinics', ['getClinics']),
             ...mapActions('clinicRooms/clinicRooms', ['getClinicRooms']),
             ...mapActions('clinicRooms/clinicRooms', ['deleteRoomApi']),
+            ...mapActions('clinicRooms/clinicRooms', ['getOneClinicRooms']),
 
             deleteDialog(room) {
                 this.roomToDelete = room;
@@ -107,8 +111,21 @@
         },
         created() {
             this.loading = true;
-            this.getClinics();
-            this.getClinicRooms();
+            switch (this.user.type) {
+                case ClinicalCenterAdmin.code:
+                    this.getClinics();
+                    this.getClinicRooms();
+                    break;
+                case ClinicalAdmin.code:
+                    console.log(this.user)
+                    this.getClinics();
+                    this.getOneClinicRooms(this.user);
+                    break;
+                default:
+
+            }
+
+
         }
     }
 </script>

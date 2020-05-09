@@ -11,9 +11,9 @@ export const emptyClinicAdmin = {
     password: '',
     username: '',
     city : '',
-    state : '',
+    country : '',
     email : '',
-    umnc : '',
+    personalID : '',
     address: '',
     clinic : null
 };
