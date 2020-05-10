@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
-
+import JSOG from 'jsog'
 export default {
     namespaced: true,
     state: {
@@ -9,7 +9,7 @@ export default {
     mutations: {
         setAllDoctor(state, doctor){
         	console.log("mutations getall doctor = " + doctor);
-            Vue.set(state, 'doctor', doctor);
+            Vue.set(state, 'doctor', JSOG.decode(doctor));
         },
         addDoctor(state, doctor) {
         	console.log("mutations addDoctor");
@@ -35,7 +35,7 @@ export default {
                 let res = await Vue.prototype.$axios.get('/api/doctor/getAll',
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log("actions getall doctor = " + res.data);
-                console.log(res.data);
+                res.data.forEach(item => console.log(item));
                 commit('setAllDoctor', res.data);
             } catch (err) {
                 defaultError(err);
@@ -47,7 +47,7 @@ export default {
                 let res = await Vue.prototype.$axios.get('/api/doctor/getDoctorForClinic/'+clinicId,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log("actions getall doctor = " + res.data);
-                console.log(res.data);
+                res.data.forEach(item => console.log(item));
                 commit('setAllDoctor', res.data);
             } catch (err) {
                 defaultError(err);

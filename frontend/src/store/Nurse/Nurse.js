@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
+import JSOG from 'jsog'
 
 export default {
     namespaced: true,
@@ -9,7 +10,7 @@ export default {
     mutations: {
         setAllNurse(state, nurse){
         	console.log("mutations getall nurse = " + nurse);
-            Vue.set(state, 'nurse', nurse);
+            Vue.set(state, 'nurse', JSOG.decode(nurse));
         },
         addNurse(state, nurse) {
         	console.log("mutations addNurse");

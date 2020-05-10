@@ -36,8 +36,11 @@ export default {
         },
         async getOneClinicRooms({rootState, commit}, user) {
             try {
+            	console.log("get clinicrooms for user = " + user.id);
                 let res = await Vue.prototype.$axios.get(`/api/clinicroom/${user.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("array items");
+                res.data.forEach(item => console.log(item));
                 commit('setAllClinicRooms', res.data);
             } catch (err) {
                 defaultError(err);

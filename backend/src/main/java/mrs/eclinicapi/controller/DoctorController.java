@@ -128,6 +128,12 @@ public class DoctorController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         System.out.println(doctorList);
+        System.out.println("printing doctor clinic and user objects");
+        for(Doctor d : doctorList) {
+        	System.out.println(d.getClinic());
+        	System.out.println(d.getUser());
+        	System.out.println(d.getPosition());
+        }
         return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }
 

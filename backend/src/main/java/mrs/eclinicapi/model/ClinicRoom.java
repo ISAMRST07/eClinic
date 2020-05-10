@@ -42,6 +42,5 @@ public class ClinicRoom {
 //    @JsonIgnoreProperties("clinicRoom")
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
-
-
+    
 }
