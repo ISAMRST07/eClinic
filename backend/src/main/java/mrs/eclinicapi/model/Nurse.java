@@ -22,9 +22,16 @@ public class Nurse extends MedicalStaff {
 
     private String position;
 
+    
 //    @JsonIgnoreProperties("nurses")
     @Override
     public Clinic getClinic() {
         return super.getClinic();
     }
+
+
+	@Override
+	public String toString() {
+		return "Nurse [position=" + position + "]";
+	}
 }
