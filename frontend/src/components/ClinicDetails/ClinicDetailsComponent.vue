@@ -1,6 +1,7 @@
 /* this.$route.params.id*/
 <template>
 	<div>
+		
 		<v-col cols="12">
             <v-text-field
                     label="Name*"
@@ -89,8 +90,7 @@ export default {
         descriptionRules: [v=> !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.']
 	}),
 	computed: {
-		...mapState("clinics/oneClinic", ["clinic"]),
-        ...mapState('auth', ['user']),
+        ...mapState('auth', ['clinic']),
 		
 		name: {
         	get() {
@@ -110,7 +110,6 @@ export default {
         }
 	},
 	methods: {
-		...mapActions("clinics/oneClinic", ["getOneClinicApi"]),
 		submit(fun) {
         	let valid = this.$refs.form.validate();
             if (valid) {
@@ -135,8 +134,7 @@ export default {
 	},
 	created() {
 		console.log("created");
-		console.log("getting clinic id = " + this.$route.params.id);
-		this.getOneClinicApi(this.$route.params.id);
+		console.log("getting clinic id = " + this.clinic.id);
 	}
 };
 

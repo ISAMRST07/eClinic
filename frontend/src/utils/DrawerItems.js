@@ -6,7 +6,8 @@ import {
     medicinesPath,
     unregisteredUsersPath,
     doctorsPath,
-    nursesPath
+    nursesPath,
+    clinicDetailsPath
 } from "./paths";
 
 const doctorsItem = {
@@ -25,6 +26,12 @@ const homeItem = {
     icon: 'mdi-home',
     label: 'Home',
     path: homePath
+};
+
+const clinicDetailsItem = {
+    icon: 'mdi-home',
+    label: 'Clinic details',
+    path: clinicDetailsPath
 };
 
 const clinicsItem = {
@@ -78,7 +85,7 @@ const ClinicalAdmin = {
     name: 'Clinical Admin',
     code: 'clinicAdministrator',
     items: [
-        homeItem,
+    	clinicDetailsItem,
         medicinesItem,
         clinicRoomsItem,
         doctorsItem,

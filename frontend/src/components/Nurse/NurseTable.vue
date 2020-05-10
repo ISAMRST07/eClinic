@@ -56,6 +56,7 @@
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyNurseDialog from "./ModifyNurseDialog";
+    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
     export default {
         name: "NurseTable",
@@ -80,6 +81,8 @@
         }),
         computed: {
             ...mapState('nurse/nurse', ['nurse']),
+            ...mapState('auth', ['user']),
+            ...mapState('auth', ['clinic']),    
         },
         methods: {
             ...mapActions('nurse/nurse', ['getNurse']),
@@ -114,15 +117,17 @@
         created() {
            	this.loading = true;
         	console.log("created");
-        	if(this.$route.params.id == undefined){	
-        		//ovde prikazi sve sestre koje postoje
-        		console.log("sve sestre");
-            	this.getNurse();        	
-        	}else{
-        		//ovde priakzi sestre sa klinike ciji id = this.$route.params.id
-				console.log("samo sa klinike sestre");
-        		this.getClinicNurse(this.$route.params.id);     	   	
-        	}
+        	switch (this.user.type) {
+                case ClinicalCenterAdmin.code:
+                	console.log("user = ClinicalCenterAdmin")
+                	this.getNurse();	//sve sestre
+                    break;
+                case ClinicalAdmin.code:
+                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);   
+                   	this.getClinicNurse(this.clinic.id);  //sestre samo za clinic.id 
+                    break;
+                default:
+            }
         },
         watch: {
             nurse() {

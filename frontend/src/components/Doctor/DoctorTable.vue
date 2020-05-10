@@ -56,6 +56,7 @@
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyDoctorDialog from "./ModifyDoctorDialog";
+    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
     export default {
         name: "DoctorTable",
@@ -80,6 +81,8 @@
         }),
         computed: {
             ...mapState('doctor/doctor', ['doctor']),
+            ...mapState('auth', ['user']),
+            ...mapState('auth', ['clinic']),     
         },
         methods: {
             ...mapActions('doctor/doctor', ['getDoctor']),
@@ -113,16 +116,18 @@
         },
         created() {
         	this.loading = true;
-        	console.log("created doctor component id = " + this.$route.params.id);
-        	if(this.$route.params.id == undefined){	
-        		//ovde prikazi sve doktore koji postoje
-        		console.log("svi doktori");
-            	this.getDoctor();        	
-        	}else{
-        		//ovde priakzi doktore sa klinike ciji id = this.$route.params.id
-				console.log("samo sa klinike doktori");
-        		this.getClinicDoctor(this.$route.params.id);     	   	
-        	}
+            console.log(this.user)
+        	switch (this.user.type) {
+                case ClinicalCenterAdmin.code:
+                	console.log("user = ClinicalCenterAdmin")
+                	this.getDoctor();	//svi doktori
+                    break;
+                case ClinicalAdmin.code:
+                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);   
+                   	this.getClinicDoctor(this.clinic.id);  //doktori samo za clinic.id 
+                    break;
+                default:
+            }
         },
         watch: {
             doctor() {

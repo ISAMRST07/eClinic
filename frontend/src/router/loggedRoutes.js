@@ -20,6 +20,7 @@ import {
     homePath,
     medicinesPath, 
     unregisteredUsersPath,
+    clinicDetailsPath
 } from "../utils/paths";
 
 const loggedRoutes = [
@@ -64,17 +65,9 @@ const loggedRoutes = [
         component: UnregisteredUsers
     },
     {
-    	path: "clinic/:id/details",
+    	path: clinicDetailsPath,
     	component: ClinicDetails
-    },
-    {
-    	path: "clinic/:id/doctors",
-    	component: Doctor
-    },
-    {
-    	path: "clinic/:id/nurses",
-    	component: Nurse
-    },
+    }
 ];
 
 export default loggedRoutes;
