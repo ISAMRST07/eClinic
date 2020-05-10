@@ -83,6 +83,7 @@
         },
         methods: {
             ...mapActions('nurse/nurse', ['getNurse']),
+            ...mapActions('nurse/nurse', ['getClinicNurse']),      
             ...mapActions('nurse/nurse', ['deleteNurseApi']),
 
             deleteDialog(nurseToDelete) {
@@ -120,7 +121,7 @@
         	}else{
         		//ovde priakzi sestre sa klinike ciji id = this.$route.params.id
 				console.log("samo sa klinike sestre");
-        		this.getNurse(this.$route.params.id);     	   	
+        		this.getClinicNurse(this.$route.params.id);     	   	
         	}
         },
         watch: {
