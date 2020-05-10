@@ -110,6 +110,19 @@ public class DoctorController {
         }
         return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }
+    
+    @RequestMapping(path = "/getDoctorForClinic/{id}")
+    public ResponseEntity<List<Doctor>> getDoctorsForClinic(@PathVariable("id") String id) {
+        System.out.println("get doctors for clinic " + id);
+
+        List<Doctor> doctorList = service.getDoctorsForClinic(id);
+        if(doctorList == null) {
+            System.out.println("doctor not found");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        System.out.println(doctorList);
+        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+    }
 
     @RequestMapping(path = "/getDoctor/{id}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("id") String id) {

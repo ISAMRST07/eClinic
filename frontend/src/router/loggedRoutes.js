@@ -6,6 +6,11 @@ import ClinicRooms from "../pages/ClinicRooms";
 import Doctor from "../pages/Doctor";
 import Nurse from "../pages/Nurse";
 import Medicine from "../pages/Medicine";
+import Disease from "../pages/Disease";
+import UnregisteredUsers from "../pages/UnregisteredUsers";
+
+import ClinicDetails from "../pages/ClinicDetails";
+
 import {
     clinicAdministratorsPath,
     clinicRoomsPath,
@@ -13,10 +18,9 @@ import {
     doctorsPath,
     nursesPath,
     homePath,
-    medicinesPath, unregisteredUsersPath
+    medicinesPath, 
+    unregisteredUsersPath,
 } from "../utils/paths";
-import Disease from "../pages/Disease";
-import UnregisteredUsers from "../pages/UnregisteredUsers";
 
 const loggedRoutes = [
     {
@@ -58,8 +62,19 @@ const loggedRoutes = [
     {
         path: unregisteredUsersPath,
         component: UnregisteredUsers
-    }
-
+    },
+    {
+    	path: "clinic/:id/details",
+    	component: ClinicDetails
+    },
+    {
+    	path: "clinic/:id/doctors",
+    	component: Doctor
+    },
+    {
+    	path: "clinic/:id/nurses",
+    	component: Nurse
+    },
 ];
 
 export default loggedRoutes;

@@ -52,6 +52,19 @@ public class ClinicController {
         return new ResponseEntity<>(clinics, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Clinic> getOneClinic(@PathVariable("id") String id) {
+        System.out.println("getOneClinic id = " + id);
+
+        Clinic clinic = service.findOne(id);
+        System.out.println("returned to controller = " + clinic);
+        if (clinic == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        System.out.println("get one  clinics = " + clinic);
+        return new ResponseEntity<>(clinic, HttpStatus.OK);
+    }
+    
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteClinic(@PathVariable("id") String id) {
         Clinic clinic = service.findOne(id);

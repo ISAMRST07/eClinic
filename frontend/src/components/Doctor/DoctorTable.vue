@@ -83,6 +83,7 @@
         },
         methods: {
             ...mapActions('doctor/doctor', ['getDoctor']),
+            ...mapActions('doctor/doctor', ['getClinicDoctor']),      
             ...mapActions('doctor/doctor', ['deleteDoctorApi']),
 
             deleteDialog(doctorToDelete) {
@@ -112,7 +113,16 @@
         },
         created() {
         	this.loading = true;
-            this.getDoctor();
+        	console.log("created doctor component id = " + this.$route.params.id);
+        	if(this.$route.params.id == undefined){	
+        		//ovde prikazi sve doktore koji postoje
+        		console.log("svi doktori");
+            	this.getDoctor();        	
+        	}else{
+        		//ovde priakzi doktore sa klinike ciji id = this.$route.params.id
+				console.log("samo sa klinike doktori");
+        		this.getClinicDoctor(this.$route.params.id);     	   	
+        	}
         },
         watch: {
             doctor() {

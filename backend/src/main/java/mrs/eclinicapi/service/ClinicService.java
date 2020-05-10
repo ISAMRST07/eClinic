@@ -21,7 +21,7 @@ public class ClinicService {
     }
 
     public Clinic findOne(String id) {
-        return clinicRepository.findById(id).orElseGet(null);
+        return clinicRepository.findById(id).orElse(null);
     }
 
     @Transactional

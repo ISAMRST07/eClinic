@@ -1,6 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Nurse;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
@@ -107,6 +108,18 @@ public class NurseController {
         return new ResponseEntity<>(nurseList, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/getNurseForClinic/{id}")
+    public ResponseEntity<List<Nurse>> getNurseForClinic(@PathVariable("id") String id) {
+        System.out.println("get nurse for clinic " + id);
+
+        List<Nurse> nurseList = service.getNurseForClinic(id);
+        if(nurseList == null) {
+            System.out.println("nurse not found");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        System.out.println(nurseList);
+        return new ResponseEntity<>(nurseList, HttpStatus.OK);
+    }
     @RequestMapping(path = "/getNurse/{id}")
     public ResponseEntity<Nurse> getNurse(@PathVariable("id") String id) {
         System.out.println("get nurse " + id);

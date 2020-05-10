@@ -4,6 +4,8 @@
                 :headers="headers"
                 :items="nurse"
                 class="elevation-1"
+                :loading="loading"
+                loading-text="Contacting all the nurses to see if they still work here..."
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -59,6 +61,7 @@
         name: "NurseTable",
         components: {DeleteDialog, ModifyNurseDialog},
         data: () => ({
+            loading: false,  
             descriptionDialog: false,
             editDialog: false,
             dialog: false,
@@ -108,8 +111,22 @@
             }
         },
         created() {
+           	this.loading = true;
         	console.log("created");
-            this.getNurse();
+        	if(this.$route.params.id == undefined){	
+        		//ovde prikazi sve sestre koje postoje
+        		console.log("sve sestre");
+            	this.getNurse();        	
+        	}else{
+        		//ovde priakzi sestre sa klinike ciji id = this.$route.params.id
+				console.log("samo sa klinike sestre");
+        		this.getNurse(this.$route.params.id);     	   	
+        	}
+        },
+        watch: {
+            nurse() {
+                this.loading = false;
+            }
         }
     }
 </script>

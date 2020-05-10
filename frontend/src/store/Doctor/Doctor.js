@@ -41,6 +41,18 @@ export default {
                 defaultError(err);
             }
         },
+        async getClinicDoctor({rootState, commit}, clinicId) {
+            try {
+            	console.log("getClinicDoctor = " + clinicId);
+                let res = await Vue.prototype.$axios.get('/api/doctor/getDoctorForClinic/'+clinicId,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("actions getall doctor = " + res.data);
+                console.log(res.data);
+                commit('setAllDoctor', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async addDoctorApi({rootState, commit}, doctor) {
             try {
             	console.log("adddoctorapi");            	

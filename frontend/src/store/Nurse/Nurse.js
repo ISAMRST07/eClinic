@@ -40,6 +40,18 @@ export default {
                 defaultError(err);
             }
         },
+        async getClinicNurse({rootState, commit}, clinicId) {
+            try {
+            	console.log("getClinicNurse = " + clinicId);
+                let res = await Vue.prototype.$axios.get('/api/nurse/getNurseForClinic/'+clinicId,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("actions getall nurse = " + res.data);
+                console.log(res.data);
+                commit('setAllNurse', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async addNurseApi({rootState, commit}, nurse) {
             try {
             	console.log("addnurseapi");            	
