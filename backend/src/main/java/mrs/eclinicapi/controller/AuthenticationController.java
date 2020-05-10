@@ -3,9 +3,11 @@ package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.AuthenticationRequest;
 import mrs.eclinicapi.DTO.TokenResponse;
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.UnregisteredUser;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.security.TokenUtils;
+import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.UnregisteredUserService;
 import mrs.eclinicapi.service.UserDetailsService;
 import mrs.eclinicapi.service.UserService;
@@ -41,6 +43,9 @@ public class AuthenticationController {
     private UserService userService;
 
     @Autowired
+    private ClinicService clinicService;
+
+    @Autowired
     private UnregisteredUserService unregisteredUserService;
 
     @PostMapping("/login")
@@ -55,8 +60,9 @@ public class AuthenticationController {
 
         User user = (User) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getUsername());
+        Clinic clinic = clinicService.findByUser(user.getId());
 
-        return ResponseEntity.ok(new TokenResponse(jwt, user));
+        return ResponseEntity.ok(new TokenResponse(jwt, user, clinic));
     }
 
     @GetMapping("/exists/{email}")

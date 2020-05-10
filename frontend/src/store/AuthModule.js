@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import router from '../router/index'
+import {defaultError} from "../utils/defaultErrorBehavior";
 const tokenResponse = JSON.parse(localStorage.getItem('tokenResponse'));
 const loginState = {
     NOT_LOGGED: 0,
@@ -8,6 +9,7 @@ const loginState = {
 };
 let initialToken = '';
 let initialUser = null;
+let initialClinic = null;
 let initialRole = '';
 let initialLoggedIn = loginState.NOT_LOGGED;
 if (tokenResponse) {
@@ -15,12 +17,14 @@ if (tokenResponse) {
     initialUser = tokenResponse.loggedUser;
     initialRole = initialUser.type;
     initialLoggedIn = loginState.LOGGED;
+    initialClinic = tokenResponse.clinic;
 }
 
 
 const AuthModule = {
     namespaced: true,
     state: {
+        clinic : initialClinic,
         token: initialToken,
         user: initialUser,
         role: initialRole,
@@ -32,18 +36,18 @@ const AuthModule = {
             state.user = tokenResponse.loggedUser;
             state.role = tokenResponse.loggedUser.type;
             state.loggedIn = loginState.LOGGED;
+            state.clinic = tokenResponse.clinic;
         },
         clearResponse(state) {
             state.token = '';
             state.user = null;
             state.role = '';
             state.loggedIn = loginState.NOT_LOGGED;
+            state.clinic = null;
         },
         logging(state, currentState) {
             state.loggedIn = currentState;
         }
-    },
-    getters: {
     },
     actions: {
         login({state, commit}, authRequest) {
@@ -54,6 +58,7 @@ const AuthModule = {
             }).catch(err => {
                 commit('logging', loginState.NOT_LOGGED);
             })
+
         },
         logout({commit}) {
             localStorage.removeItem('tokenResponse');

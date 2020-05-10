@@ -49,7 +49,8 @@ export const emptyDoctor = {
 	city : '',
 	country : '',
 	jmbg : '',
-	position: ''
+	position: '',
+    clinic : null
 };
 
 export const emptyNurse = {

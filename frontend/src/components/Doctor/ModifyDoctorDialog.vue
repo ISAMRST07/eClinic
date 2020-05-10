@@ -119,7 +119,7 @@
 
 <script>
 
-import { mapActions } from "vuex";
+	import {mapActions, mapState} from "vuex";
 import { emptyDoctor } from "../../utils/skeletons";
 export default {
 	name: "ModifyDoctorDialog",
@@ -158,6 +158,10 @@ export default {
 			default: "add"
 		}
 	},
+	computed: {
+		...mapState('auth', ['user']),
+		...mapState('auth', ['clinic']),
+	},
 	watch: {
 		value() {
         	if(this.editDoctor) {
@@ -177,13 +181,18 @@ export default {
 			console.log("thisname = " + this.name);
         }
 	},
+	created() {;
+	},
 	methods: {
 		...mapActions("doctor/doctor", ["addDoctorApi"]),
 		...mapActions("doctor/doctor", ["updateDoctorApi"]),
 		submit(fun) {
 			console.log("adddoctor or updatedoctor pressed");
-			console.log(fun);
+			console.log(this.clinic);
+
+			this.doctor.clinic = this.clinic;
 			if (this.$refs.form.validate()) {
+				this.doctor.clinic = this.clinic;
 				this.doctor.email = this.email;
 	            this.doctor.name = this.name;
 	            this.doctor.surname = this.surname;
@@ -193,6 +202,8 @@ export default {
 	            this.doctor.country = this.country;
 	            this.doctor.jmbg = this.jmbg;
 	            this.doctor.position = this.position;
+				console.log("DOKTOREEE");
+				console.log(this.doctor);
                 fun(this.doctor);
                 this.close();
 			}

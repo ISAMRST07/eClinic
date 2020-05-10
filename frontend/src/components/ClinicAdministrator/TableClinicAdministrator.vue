@@ -44,6 +44,7 @@
                 @close="deleteDialog(null)"
                 @delete="deleteClinic"
         />
+
         <modify-clinic-administrator-dialog
                 mode="update"
                 :edit-clinic-admin="editClinicAdmin"
@@ -128,12 +129,7 @@
         created() {
             this.loading = true;
             this.getClinicAdmins();
-        },
-        filters: {
-            descriptionShortener(val) {
-                return val.slice(0, 10)
-            }
-        },
+        }
 
     }
 </script>
