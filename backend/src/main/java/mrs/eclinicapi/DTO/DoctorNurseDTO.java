@@ -28,12 +28,13 @@ public class DoctorNurseDTO {
 	String country;
 	String jmbg;
 	String position;
-
+	String clinic;
+	
 	@Override
 	public String toString() {
 		return "DoctorDTO [id=" + id + " email=" + email + ", name=" + name + ", surname=" + surname + ", phone=" + phone
 			    + ", address=" + address + ", city=" + city + ", country=" + country
-				+ ", jmbg=" + jmbg + ", position=" + position + "]";
+				+ ", jmbg=" + jmbg + ", position=" + position + ", clinic= " + clinic + "]";
 	}
 
 }

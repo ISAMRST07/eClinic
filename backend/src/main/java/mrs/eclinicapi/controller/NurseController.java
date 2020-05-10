@@ -1,10 +1,12 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Nurse;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
+import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.NurseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +28,17 @@ public class NurseController {
     @Autowired
     private NurseService service;
 
+    @Autowired
+    private ClinicService clinicService;
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Nurse> addNurse(@RequestBody DoctorNurseDTO nurseDto) {
         System.out.println("adding nurse ");
         System.out.println("nurseDto = " + nurseDto);
         Nurse newNurse = new Nurse();
+        
+        Clinic clinic = clinicService.findOne(nurseDto.getClinic());
+        newNurse.setClinic(clinic);
         
         User newUser = new User();
         newUser.setName(nurseDto.getName());

@@ -30,12 +30,17 @@ public class DoctorController {
     @Autowired
     private DoctorService service;
     
+    @Autowired
+    private ClinicService clinicService;
+    
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorNurseDTO doctorDto) {
         System.out.println("adding doctor ");
         System.out.println("doctordto = " + doctorDto);
         Doctor newDoctor = new Doctor();
         
+        Clinic clinic = clinicService.findOne(doctorDto.getClinic());
+        newDoctor.setClinic(clinic);
         User newUser = new User();
         newUser.setName(doctorDto.getName());
         newUser.setSurname(doctorDto.getSurname());
@@ -64,6 +69,7 @@ public class DoctorController {
     	System.out.println("updateDoctor = " + doctorDto);
     	Doctor oldDoctor = service.findOne(doctorDto.getId());
     	User oldUser = oldDoctor.getUser();
+    	System.out.println("oldUser = " + oldUser);
     	oldUser.setName(doctorDto.getName());
     	oldUser.setSurname(doctorDto.getSurname());
     	oldUser.setPassword(doctorDto.getJmbg().toString());
@@ -74,6 +80,7 @@ public class DoctorController {
     	oldUser.setPersonalID(doctorDto.getJmbg());
     	oldUser.setPhoneNumber(doctorDto.getPhone());
     	oldDoctor.setPosition(doctorDto.getPosition());
+    	System.out.println("updated = " + oldUser);
 
         System.out.println("new doctor oldDoctor = " + oldDoctor);
         

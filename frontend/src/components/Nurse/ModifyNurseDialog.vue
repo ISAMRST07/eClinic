@@ -119,7 +119,7 @@
 
 <script>
 
-import { mapActions } from "vuex";
+import {mapActions, mapState} from "vuex";
 import { emptyNurse } from "../../utils/skeletons";
 export default {
 	name: "ModifyNurseDialog",
@@ -158,6 +158,10 @@ export default {
 			default: "add"
 		}
 	},
+	computed: {
+		...mapState('auth', ['user']),
+		...mapState('auth', ['clinic']),
+	},
 	watch: {
 		value() {
         	if(this.editNurse) {
@@ -183,7 +187,11 @@ export default {
 		submit(fun) {
 			console.log("addnurse or updatenurse pressed");
 			console.log(fun);
+			console.log(this.clinic.id);
+			
+			this.nurse.clinic = this.clinic.id;
 			if (this.$refs.form.validate()) {
+				this.nurse.clinic = this.clinic.id;
 				this.nurse.email = this.email;
 	            this.nurse.name = this.name;
 	            this.nurse.surname = this.surname;
@@ -198,6 +206,7 @@ export default {
 			}
 		},
 		close() {
+			console.log("close");
 			this.$emit('input', false);
             if (this.mode === 'add') this.$refs.form.reset();
 		},
