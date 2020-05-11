@@ -1,8 +1,10 @@
+import Main from "../views/Main";
 import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
 import ClinicRooms from "../pages/ClinicRooms";
 import Doctor from "../pages/Doctor";
+import InterventionType from "../pages/InterventionType";
 import Nurse from "../pages/Nurse";
 import Medicine from "../pages/Medicine";
 import Disease from "../pages/Disease";
@@ -12,15 +14,15 @@ import ClinicDetails from "../pages/ClinicDetails";
 
 import {
     clinicAdministratorsPath,
-    clinicDetailsPath,
     clinicRoomsPath,
-    clinicsPath,
-    diseasePath,
+    clinicsPath, diseasePath,
     doctorsPath,
-    homePath,
-    medicinesPath,
     nursesPath,
-    unregisteredUsersPath
+    homePath,
+    medicinesPath, 
+    unregisteredUsersPath,
+    clinicDetailsPath,
+    interventionTypePath
 } from "../utils/paths";
 
 const loggedRoutes = [
@@ -46,7 +48,7 @@ const loggedRoutes = [
         path: doctorsPath,
         component: Doctor,
     },
-
+    
     {
         path: nursesPath,
         component: Nurse,
@@ -65,8 +67,12 @@ const loggedRoutes = [
         component: UnregisteredUsers
     },
     {
-        path: clinicDetailsPath,
-        component: ClinicDetails
+    	path: clinicDetailsPath,
+    	component: ClinicDetails
+    },
+    {
+    	path : interventionTypePath,
+    	component : InterventionType
     }
 ];
 

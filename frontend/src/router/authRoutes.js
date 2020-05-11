@@ -1,3 +1,4 @@
+import LoginRegister from "../components/Auth/LoginRegister";
 import LoginView from "../components/Auth/LoginView";
 import RegisterView from "../components/Auth/RegisterView";
 
