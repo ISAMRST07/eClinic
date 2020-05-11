@@ -8,7 +8,6 @@
 <script>
     import ClinicRoomsTable from "../components/ClinicRooms/ClinicRoomsTable";
     import AddClinicRoom from "../components/ClinicRooms/AddClinicRoom";
-
     export default {
         name: "ClinicRooms",
         components: {AddClinicRoom, ClinicRoomsTable}

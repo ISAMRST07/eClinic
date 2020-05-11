@@ -6,7 +6,6 @@
 
 <script>
     import ClinicDetailsComponent from "../components/ClinicDetails/ClinicDetailsComponent";
-
     export default {
         name: "ClinicDetails",
         components: {ClinicDetailsComponent}
