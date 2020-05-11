@@ -5,6 +5,7 @@ import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.plugin2.message.StopAppletMessage;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class UserService {
     }
 
     public User findOne(String id) {
-        return repository.findById(id).orElseGet(null);
+        return repository.findById(id).orElse(null);
     }
 
     public List<User> findAll() {
@@ -31,20 +32,20 @@ public class UserService {
         try {
             repository.deleteById(id);
         } catch (Exception NullPointerException) {
-
+            // pa metni mu nesto odje
         }
     }
 
-    public void updateEmail(String id, String newEmail) {
-        repository.updateEmail(id, newEmail);
+    @Transactional
+    public User updateUser(String id, User u) {
+        User toModify = repository.findById(id).orElse(null);
+        if(toModify == null) return null;
+        toModify.setAddress(u.getAddress());
+        toModify.setCity(u.getCity());
+        toModify.setCountry(u.getCountry());
+        toModify.setName(u.getName());
+        toModify.setSurname(u.getSurname());
+        toModify.setPhoneNumber(u.getPhoneNumber());
+        return repository.save(toModify);
     }
-
-    public void updatePassword(String id, String newPassword) {
-        repository.updatePassword(id, newPassword);
-    }
-
-    public void updateName(String id, String newName) {
-        repository.updateName(id, newName);
-    }
-
 }

@@ -65,49 +65,10 @@ public class UserController {
         return new ResponseEntity<>("deleted user", HttpStatus.OK);
     }
 
-
-    @RequestMapping(path = "/updateEmail")
-    public ResponseEntity<String> updateEmail(@RequestParam String id,
-                                              @RequestParam String newEmail) {
-        User user = service.findOne(id);
-        if (user == null) {
-            return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
-        }
-        List<User> allUsers = service.findAll();
-        for (User u : allUsers) {
-            System.out.println("User u = " + u);
-            if (u.getEmail().toUpperCase().equals(newEmail.toUpperCase())) {
-                return new ResponseEntity<>("email already exists", HttpStatus.BAD_REQUEST);
-            }
-        }
-        System.out.println("foudn user with id = " + id);
-        service.updateEmail(id, newEmail);
-        return new ResponseEntity<>("updated user email", HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestParam String id,
-                                                 @RequestParam String newPassword) {
-        User user = service.findOne(id);
-        if (user == null) {
-            return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
-        }
-
-        System.out.println("foudn user with id = " + id);
-        service.updatePassword(id, newPassword);
-        return new ResponseEntity<>("updated user password", HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/updateName")
-    public ResponseEntity<String> updateName(@RequestParam String id,
-                                             @RequestParam String newName) {
-        User user = service.findOne(id);
-        if (user == null) {
-            return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
-        }
-
-        System.out.println("foudn user with id = " + id);
-        service.updateName(id, newName);
-        return new ResponseEntity<>("updated user password", HttpStatus.OK);
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<User> modifyUser(@PathVariable String id, @RequestBody User modified) {
+        User updated = service.updateUser(id, modified);
+        if(updated == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 }

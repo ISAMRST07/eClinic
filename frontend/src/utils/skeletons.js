@@ -18,14 +18,6 @@ export const emptyClinicAdmin = {
     clinic : null
 };
 
-export const resetClinic = {
-    name: '',
-    description: '',
-    address: null,
-    coordinates: null,
-    reset: true
-};
-
 export const emptyDisease = {
     name: null
 };
@@ -39,6 +31,15 @@ export const emptyClinicRoom = {
     name: null,
     clinicId: null
 };
+
+
+/*
+*
+*           TODO
+*           EMPTY DOCTOR I EMPTY NURSE SE NE POKLAPAJU SA MODELOM!
+*
+*
+* */
 
 export const emptyDoctor = {
 	email : '',
@@ -81,6 +82,25 @@ export const emptyNurse = {
 	country : '',
 	jmbg : '',
 	position: ''
+};
+
+/*
+*
+*           TODO
+*           EMPTY DOCTOR I EMPTY NURSE SE NE POKLAPAJU SA MODELOM
+*
+*
+* */
+
+export const emptyUser = {
+    email: '',
+    name: '',
+    surname: '',
+    phoneNumber: '',
+    address: '',
+    city: '',
+    country: '',
+    personalID: '',
 };
 
 export const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

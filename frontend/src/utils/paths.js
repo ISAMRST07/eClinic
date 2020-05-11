@@ -22,3 +22,5 @@ export const interventionTypePath = '/interventionType';
 
 export const interventionPath = '/intervention';
 
+export const userProfilePath = '/profile/:id';
+
