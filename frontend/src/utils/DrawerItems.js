@@ -86,7 +86,6 @@ const ClinicalCenterAdmin = {
     ],
 };
 
-export { ClinicalCenterAdmin };
 
 const ClinicalAdmin = {
     name: 'Clinical Admin',
@@ -101,4 +100,13 @@ const ClinicalAdmin = {
     ],
 };
 
-export { ClinicalAdmin };
+
+const Patient = {
+    name: 'Patient',
+    code: 'Patient',
+    items: [
+        homeItem,
+    ]
+};
+
+export {ClinicalCenterAdmin, ClinicalAdmin, Patient};
