@@ -17,3 +17,5 @@ export const diseasePath = '/disease';
 export const unregisteredUsersPath = '/unregisteredUsers';
 
 export const clinicDetailsPath = '/clinicDetails';
+
+export const interventionTypePath = '/interventionType';

@@ -1,25 +1,26 @@
 import {
     clinicAdministratorsPath,
-    clinicDetailsPath,
     clinicRoomsPath,
     clinicsPath,
-    doctorsPath,
     homePath,
     medicinesPath,
+    unregisteredUsersPath,
+    doctorsPath,
     nursesPath,
-    unregisteredUsersPath
+    clinicDetailsPath,
+    interventionTypePath
 } from "./paths";
 
 const doctorsItem = {
     icon: 'mdi-account-tie',
     label: 'Doctors',
-    path: doctorsPath
+    path: doctorsPath		
 };
 
 const nursesItem = {
     icon: 'mdi-account-tie',
     label: 'Nurses',
-    path: nursesPath
+    path: nursesPath		
 };
 
 const homeItem = {
@@ -32,6 +33,12 @@ const clinicDetailsItem = {
     icon: 'mdi-home',
     label: 'Clinic details',
     path: clinicDetailsPath
+};
+
+const interventionTypeItem = {
+    icon: 'mdi-home',
+    label: 'Intervention type',
+    path: interventionTypePath
 };
 
 const clinicsItem = {
@@ -79,11 +86,14 @@ const ClinicalCenterAdmin = {
     ],
 };
 
-const ClinicAdmin = {
+export { ClinicalCenterAdmin };
+
+const ClinicalAdmin = {
     name: 'Clinical Admin',
     code: 'clinicAdministrator',
     items: [
-        clinicDetailsItem,
+    	clinicDetailsItem,
+    	interventionTypeItem,
         medicinesItem,
         clinicRoomsItem,
         doctorsItem,
@@ -91,14 +101,4 @@ const ClinicAdmin = {
     ],
 };
 
-const Patient = {
-    name: 'Patient',
-    code: 'Patient',
-    items: [
-        homeItem,
-    ]
-};
-
-export {ClinicalCenterAdmin, ClinicAdmin, Patient};
-
-
+export { ClinicalAdmin };
