@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +20,7 @@ import javax.persistence.*;
 
 public class MedicalRecord {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mr_seq")
     @GenericGenerator(name = "mr_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

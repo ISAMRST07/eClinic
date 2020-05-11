@@ -7,17 +7,17 @@
     >
         <template v-slot:activator="{ on }">
             <v-btn icon class="ml-1 mr-2" v-on="on">
-                <v-avatar size="35" color="primary">
-                    <span class="white--text headline">{{ avatarInitials }}</span>
+                <v-avatar size="37" color="primary">
+                    <span class="white--text subtitle-1">{{ avatarInitials }}</span>
                 </v-avatar>
             </v-btn>
         </template>
         <v-card outlined elevation="6">
             <v-list>
                 <v-list-item class="mt-5">
-                        <v-avatar class="ma-auto" color="primary" size="96">
-                            <span class="white--text display-2">{{ avatarInitials }}</span>
-                        </v-avatar>
+                    <v-avatar class="ma-auto" color="primary" size="96">
+                        <span class="white--text display-2">{{ avatarInitials }}</span>
+                    </v-avatar>
                 </v-list-item>
                 <v-list-item>
                     <v-list-item-content>
@@ -35,7 +35,7 @@
                     </v-btn>
                 </v-list-item>
 
-            <v-divider class="my-2"></v-divider>
+                <v-divider class="my-2"></v-divider>
                 <v-list-item>
                     <v-btn color="grey darken-2" class="mx-auto" @click="btLogout" outlined>
                         Sign out
@@ -73,6 +73,7 @@
                 if (!this.user) return '';
                 let firstName = this.user.name;
                 let firstNameInitial = !!firstName ? firstName[0].toUpperCase() : 'A';
+                console.log(firstNameInitial);
                 return `${firstNameInitial}`;
             }
         },

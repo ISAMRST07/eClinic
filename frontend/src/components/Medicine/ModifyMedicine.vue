@@ -46,14 +46,15 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
+    import {mapActions} from "vuex";
     import {emptyMedicine} from "../../utils/skeletons";
+
     export default {
         name: "ModifyMedicine",
         components: {},
         data: () => ({
             name: null,
-            manufacturer : null,
+            manufacturer: null,
             medicine: emptyMedicine,
             nameRules: [v => !!v || 'Name is required.'],
             manufacturerRules: [v => !!v || 'Manufacturer is required.']
@@ -68,7 +69,7 @@
         },
         watch: {
             value() {
-                if(this.editMedicine) {
+                if (this.editMedicine) {
                     this.medicine = this.editMedicine;
                 }
                 this.name = this.medicine.name;
@@ -80,7 +81,7 @@
             ...mapActions('medicines/medicines', ['updateMedicineApi']),
 
             submit(fun) {
-                if(this.$refs.form.validate()) {
+                if (this.$refs.form.validate()) {
                     this.medicine.name = this.name;
                     this.medicine.manufacturer = this.manufacturer;
                     fun(this.medicine);

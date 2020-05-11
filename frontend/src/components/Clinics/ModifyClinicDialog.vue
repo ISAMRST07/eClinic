@@ -105,7 +105,7 @@
         },
         watch: {
             value(val) {
-                if(!val) this.resetLayout();
+                if (!val) this.resetLayout();
             }
         },
         computed: {
@@ -140,7 +140,7 @@
             ...mapActions('clinics/addClinic', ['modifyClinicApi']),
 
             setAddress(event) {
-                if(!event) this.address = null;
+                if (!event) this.address = null;
                 else {
                     this.address = event[0];
                 }
@@ -176,7 +176,8 @@
         width: 100%;
         padding: 0 !important;
     }
-    .footer{
+
+    .footer {
         position: absolute;
         bottom: 0;
         height: fit-content;

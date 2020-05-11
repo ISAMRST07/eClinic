@@ -1,7 +1,5 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.ClinicAdministrator;
-import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.Medicine;
 import mrs.eclinicapi.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ public class MedicineService {
     }
 
     public List<Medicine> findAll() {
-        return  repository.findAll();
+        return repository.findAll();
     }
 
     @Transactional

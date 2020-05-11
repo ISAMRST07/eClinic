@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
+
 export default {
     namespaced: true,
     state: {
         clinics: []
     },
     mutations: {
-        setAllClinics(state, clinics){
+        setAllClinics(state, clinics) {
             Vue.set(state, 'clinics', clinics);
         },
         addClinic(state, clinic) {
@@ -32,18 +33,18 @@ export default {
         async getClinics({rootState, commit}) {
             try {
                 let res = await Vue.prototype.$axios.get('/api/clinic/',
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('setAllClinics', res.data);
             } catch (err) {
                 defaultError(err);
             }
         },
         async deleteClinicApi({rootState, commit}, clinic) {
-            try{
+            try {
                 let res = await Vue.prototype.$axios.delete(`/api/clinic/${clinic.id}`,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteClinic', clinic);
-            } catch(err) {
+            } catch (err) {
                 defaultError(err);
             }
         },

@@ -8,6 +8,7 @@
 <script>
     import DoctorTable from "../components/Doctor/DoctorTable";
     import AddDoctor from "../components/Doctor/AddDoctor";
+
     export default {
         name: "Doctor",
         components: {AddDoctor, DoctorTable}

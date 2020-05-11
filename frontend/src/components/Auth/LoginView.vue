@@ -15,10 +15,12 @@
                         <v-col cols="12" md="8" class="text-center py-0"><span class="display-1">Sign in</span></v-col>
                     </v-row>
                     <v-row align="center" justify="center">
-                        <v-col cols="12" md="8" class="text-center py-0"><span class="subtitle-1">to continue to eClinic</span></v-col>
+                        <v-col cols="12" md="8" class="text-center py-0"><span
+                                class="subtitle-1">to continue to eClinic</span></v-col>
                     </v-row>
                     <v-row class="ma-4 mb-0">
-                        <v-col cols="12" md="8" class="pb-0"><span class="grey--text text--darken-1">First, tell us your email:</span></v-col>
+                        <v-col cols="12" md="8" class="pb-0"><span class="grey--text text--darken-1">First, tell us your email:</span>
+                        </v-col>
                     </v-row>
                     <v-form ref="emailForm" @submit.prevent="checkEmail" lazy-validation>
                         <v-row class="ma-4 mt-0 mb-0">
@@ -40,7 +42,8 @@
                                 <span class="text--secondary d-inline-flex">
                                     Don't have an account?
                                 </span>
-                                <v-btn type="button" text color="primary" @click="$router.push('/auth/register')" class="px-2" small>
+                                <v-btn type="button" text color="primary" @click="$router.push('/auth/register')"
+                                       class="px-2" small>
                                     apply here
                                 </v-btn>
                             </v-col>
@@ -170,7 +173,7 @@
         methods: {
             ...mapActions('auth', ['login']),
             postLogin() {
-                if(this.$refs.passwordForm.validate()) {
+                if (this.$refs.passwordForm.validate()) {
                     this.authRequest.password = this.formElements.password;
                     this.login(this.authRequest);
                 }
@@ -179,17 +182,17 @@
                 this.emailError.isError = false;
                 this.emailError.errorMessage = '';
                 let valid = this.$refs.emailForm.validate();
-                if(valid) {
+                if (valid) {
                     this.loading = true;
                     this.exists()
                 }
             },
-            async exists(){
-                try{
+            async exists() {
+                try {
                     this.name = (await Vue.prototype.$axios.get(`/api/auth/exists/${this.formElements.email}`)).data;
                     this.authRequest.email = this.formElements.email;
                     this.loginStep = 2;
-                } catch(err) {
+                } catch (err) {
                     this.emailError.isError = true;
                     this.emailError.errorMessage = `Couldn't find your account`;
                 } finally {
@@ -206,7 +209,7 @@
             },
             goBack(event) {
                 alert('GOBACK');
-                if(this.loginStep === 2){
+                if (this.loginStep === 2) {
                     event.stop();
                     this.returnToEmail();
                 }

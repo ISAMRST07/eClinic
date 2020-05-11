@@ -42,7 +42,8 @@
     .fade-enter-active, .fade-leave-active {
         transition: all .5s
     }
-    .fade-enter, .fade-leave-to{
+
+    .fade-enter, .fade-leave-to {
         opacity: 0;
     }
 </style>

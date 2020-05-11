@@ -6,7 +6,7 @@ export default {
         diseases: [],
     },
     mutations: {
-        setAllDiseases(state, diseases){
+        setAllDiseases(state, diseases) {
             Vue.set(state, 'diseases', diseases);
         },
         addDisease(state, disease) {
@@ -24,7 +24,7 @@ export default {
         }
     },
     actions: {
-        async getDiseases({rootState,commit}) {
+        async getDiseases({rootState, commit}) {
             try {
                 let res = await Vue.prototype.$axios.get('/api/disease', {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('setAllDiseases', res.data);
@@ -32,7 +32,7 @@ export default {
                 console.error(err);
             }
         },
-        async addDiseaseApi({rootState,commit}, disease) {
+        async addDiseaseApi({rootState, commit}, disease) {
             try {
                 let {data: added} = await Vue.prototype.$axios.post('/api/disease', disease, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log(disease.name);
@@ -41,7 +41,7 @@ export default {
                 console.error(err);
             }
         },
-        async deleteDiseaseApi({rootState,commit}, disease) {
+        async deleteDiseaseApi({rootState, commit}, disease) {
             try {
                 let res = await Vue.prototype.$axios.delete(`/api/disease/${disease.id}`, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteDisease', disease);
@@ -49,7 +49,7 @@ export default {
                 console.error(err);
             }
         },
-        async updateDiseaseApi({rootState,commit}, disease) {
+        async updateDiseaseApi({rootState, commit}, disease) {
             console.log(disease);
             try {
                 let {data: modified} = await Vue.prototype.$axios.put('/api/disease', disease, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});

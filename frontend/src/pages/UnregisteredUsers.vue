@@ -6,8 +6,6 @@
 
 <script>
 
-    import AddClinicAdministrator from "../components/ClinicAdministrator/AddClinicAdministrator";
-    import TableClinicAdministrator from "../components/ClinicAdministrator/TableClinicAdministrator";
     import UnregisteredUsersTable from "../components/UnregisteredUsers/UnregisteredUsersTable";
 
     export default {

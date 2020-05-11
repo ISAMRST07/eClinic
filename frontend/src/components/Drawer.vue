@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import {ClinicalAdmin, ClinicalCenterAdmin} from "../utils/DrawerItems";
+    import {ClinicAdmin, ClinicalCenterAdmin, Patient} from "../utils/DrawerItems";
     import {mapState} from "vuex";
 
     export default {
@@ -65,12 +65,16 @@
             ...mapState('auth', ['role']),
         },
         mounted() {
+            console.log(this.role);
             switch (this.role) {
                 case ClinicalCenterAdmin.code:
                     this.items = ClinicalCenterAdmin.items;
                     break;
-                case ClinicalAdmin.code:
-                    this.items = ClinicalAdmin.items;
+                case ClinicAdmin.code:
+                    this.items = ClinicAdmin.items;
+                    break;
+                case Patient.code:
+                    this.items = Patient.items;
                     break;
                 default:
 

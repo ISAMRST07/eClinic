@@ -1,4 +1,5 @@
 import Nurse from "./Nurse/Nurse";
+
 const NurseModules = {
     namespaced: true,
     modules: {

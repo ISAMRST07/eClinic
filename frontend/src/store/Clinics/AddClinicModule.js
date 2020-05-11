@@ -16,7 +16,7 @@ export default {
         async saveClinic({rootState, commit}, clinic) {
             try {
                 let {data: res} = await Vue.prototype.$axios.post('/api/clinic', clinic,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 // tu ce ic update za prikaz
                 commit('clinics/readClinics/addClinic', res, {root: true});
             } catch (err) {
@@ -27,7 +27,7 @@ export default {
         async modifyClinicApi({rootState, commit}, clinic) {
             try {
                 let {data: res} = await Vue.prototype.$axios.put('/api/clinic', clinic,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('clinics/readClinics/updateClinic', res, {root: true});
             } catch (err) {
                 defaultError(err);

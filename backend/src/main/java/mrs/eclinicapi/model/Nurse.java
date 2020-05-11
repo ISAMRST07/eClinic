@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,16 +21,16 @@ public class Nurse extends MedicalStaff {
 
     private String position;
 
-    
-//    @JsonIgnoreProperties("nurses")
+
+    //    @JsonIgnoreProperties("nurses")
     @Override
     public Clinic getClinic() {
         return super.getClinic();
     }
 
 
-	@Override
-	public String toString() {
-		return "Nurse [position=" + position + "]";
-	}
+    @Override
+    public String toString() {
+        return "Nurse [position=" + position + "]";
+    }
 }

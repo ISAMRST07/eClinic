@@ -35,7 +35,8 @@
                                 <span class="text--secondary d-inline-flex">
                                     Already have an account?
                                 </span>
-                                <v-btn type="button" text color="primary" @click="$router.push('/auth')" class="px-2" small>
+                                <v-btn type="button" text color="primary" @click="$router.push('/auth')" class="px-2"
+                                       small>
                                     sign in
                                 </v-btn>
                             </v-col>
@@ -390,14 +391,14 @@
             emailSelected() {
                 this.emailError.isError = false;
                 this.emailError.errorMessage = '';
-                if(this.$refs.emailForm.validate()) this.exists();
+                if (this.$refs.emailForm.validate()) this.exists();
             },
-            async exists(){
-                try{
+            async exists() {
+                try {
                     this.name = (await Vue.prototype.$axios.get(`/api/auth/exists/${this.formElements.email}`)).data;
                     this.emailError.isError = true;
                     this.emailError.errorMessage = `That account already exists.`;
-                } catch(err) {
+                } catch (err) {
                     this.newUser.email = this.formElements.email;
                     this.registerStep = 2;
                 }
@@ -426,7 +427,7 @@
             },
             nameSelected() {
                 this.$refs.nameForm.resetValidation();
-                if(this.$refs.nameForm.validate()) {
+                if (this.$refs.nameForm.validate()) {
                     this.newUser.name = this.formElements.firstName;
                     this.newUser.surname = this.formElements.lastName;
                     this.newUser.personalID = this.formElements.personalID;
@@ -443,7 +444,7 @@
             },
             addressSelected() {
                 this.$refs.addressForm.resetValidation();
-                if(this.$refs.addressForm.validate()) {
+                if (this.$refs.addressForm.validate()) {
                     this.newUser.country = this.formElements.country;
                     this.newUser.city = this.formElements.city;
                     this.newUser.address = this.formElements.address;
@@ -458,9 +459,9 @@
                     this.$refs.addressForm.reset();
                 });
             },
-            phoneSelected(){
+            phoneSelected() {
                 this.$refs.phoneForm.resetValidation();
-                if(this.$refs.phoneForm.validate()) {
+                if (this.$refs.phoneForm.validate()) {
                     this.newUser.phoneNumber = this.formElements.phoneNumber;
                     this.registerApi();
                 }
@@ -474,7 +475,7 @@
                 });
             },
             async registerApi() {
-                try{
+                try {
                     let uUser = {
                         user: this.newUser,
                         emailSent: false
@@ -482,7 +483,7 @@
                     let {data: res} = await this.$axios.post('/api/auth/register', uUser);
                     this.name = res.user.name;
                     this.registerStep = 6;
-                } catch(err) {
+                } catch (err) {
 
                 }
             }

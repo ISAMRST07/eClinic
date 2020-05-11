@@ -39,6 +39,7 @@
 <script>
     import {mapActions} from "vuex";
     import {emptyDisease} from "../../utils/skeletons";
+
     export default {
         name: "ModifyDisease",
         components: {},
@@ -57,7 +58,7 @@
         },
         watch: {
             value() {
-                if(this.editDisease) {
+                if (this.editDisease) {
                     this.disease = this.editDisease;
                 }
                 this.name = this.disease.name;
@@ -68,7 +69,7 @@
             ...mapActions('disease/disease', ['updateDiseaseApi']),
 
             submit(fun) {
-                if(this.$refs.form.validate()) {
+                if (this.$refs.form.validate()) {
                     this.disease.name = this.name;
                     fun(this.disease);
                     this.close();

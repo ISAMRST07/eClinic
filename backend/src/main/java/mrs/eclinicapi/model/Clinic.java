@@ -1,8 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +23,7 @@ import java.util.Set;
 public class Clinic {
 
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "c_seq")
     @GenericGenerator(name = "c_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

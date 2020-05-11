@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ import javax.persistence.*;
 
 public class Medicine {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "m_seq")
     @GenericGenerator(name = "m_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -36,7 +35,6 @@ public class Medicine {
 
 //    @ManyToOne
 //    private Codebook codebook;
-
 
 
 }

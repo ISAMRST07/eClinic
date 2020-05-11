@@ -43,6 +43,7 @@
     import ClinicSelection from "../Clinics/ClinicSelection";
     import {mapActions, mapGetters} from "vuex";
     import {emptyClinicRoom} from "../../utils/skeletons";
+
     export default {
         name: "ModifyClinicRoomDialog",
         components: {ClinicSelection},
@@ -62,7 +63,7 @@
         },
         watch: {
             value() {
-                if(this.editRoom) {
+                if (this.editRoom) {
                     this.clinicRoom = this.editRoom;
                 }
                 this.name = this.clinicRoom.name;
@@ -74,7 +75,7 @@
             ...mapActions('clinicRooms/clinicRooms', ['updateClinicRoomApi']),
 
             submit(fun) {
-                if(this.$refs.form.validate()) {
+                if (this.$refs.form.validate()) {
                     this.clinicRoom.name = this.name;
                     this.clinicRoom.clinicId = this.selectedClinic.id;
                     fun(this.clinicRoom);

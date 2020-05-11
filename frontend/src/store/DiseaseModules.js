@@ -1,4 +1,5 @@
 import Disease from "./Disease/Disease";
+
 const DiseaseModules = {
     namespaced: true,
     modules: {

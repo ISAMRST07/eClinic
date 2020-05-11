@@ -68,7 +68,7 @@ public class UserController {
 
     @RequestMapping(path = "/updateEmail")
     public ResponseEntity<String> updateEmail(@RequestParam String id,
-                                                 @RequestParam String newEmail) {
+                                              @RequestParam String newEmail) {
         User user = service.findOne(id);
         if (user == null) {
             return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);

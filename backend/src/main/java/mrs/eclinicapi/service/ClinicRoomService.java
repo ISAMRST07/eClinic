@@ -37,27 +37,29 @@ public class ClinicRoomService {
         return repository.findAll();
     }
 
-    public List<ClinicRoom> findOneClinicRooms(String clinicAdminID){
+    public List<ClinicRoom> findOneClinicRooms(String clinicAdminID) {
         List<ClinicRoom> clinicRooms = repository.findAll();
         List<ClinicRoom> oneClinicRooms = new ArrayList<>();
         Optional<User> user = userRepository.findById(clinicAdminID);
-        if(!user.isPresent()){
+        if (!user.isPresent()) {
             return oneClinicRooms;
         }
         Optional<ClinicAdministrator> cAdmin = clinicAdministratorRepository.findClinicAdministratorByUser(user.get());
         System.out.println("ADMINEEEE");
         System.out.println(clinicAdminID);
         System.out.println(cAdmin.isPresent());
-        if(!cAdmin.isPresent()){
+        if (!cAdmin.isPresent()) {
             return oneClinicRooms;
         }
-        for (ClinicRoom cRoom: clinicRooms) {
-            if(cAdmin.get().getClinic().getId().equals(cRoom.getClinic().getId())){
+        for (ClinicRoom cRoom : clinicRooms) {
+            if (cAdmin.get().getClinic().getId().equals(cRoom.getClinic().getId())) {
                 oneClinicRooms.add(cRoom);
             }
         }
-        return  oneClinicRooms;
-    };
+        return oneClinicRooms;
+    }
+
+    ;
 
     public void deleteById(String id) {
         repository.deleteById(id);

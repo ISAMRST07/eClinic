@@ -48,17 +48,16 @@
                 @delete="deleteRoom"
         />
         <modify-clinic-room-dialog
-                    mode="update"
-                    :edit-room="editRoom"
-                    v-model="editDialog"/>
+                mode="update"
+                :edit-room="editRoom"
+                v-model="editDialog"/>
     </div>
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyClinicRoomDialog from "./ModifyClinicRoomDialog";
-    import authRoutes from "../../router/authRoutes";
     import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
     export default {
@@ -72,11 +71,11 @@
             roomToDelete: null,
             editRoom: null,
             headers: [
-                { text: 'ID', align: 'start', value: 'id' },
-                { text: 'Name', value: 'name', align: 'center'},
-                { text: 'Clinic ID', value: 'clinicId' },
-                { text: 'Update', value: 'update', sortable: false },
-                { text: 'Remove', value: 'remove', sortable: false },
+                {text: 'ID', align: 'start', value: 'id'},
+                {text: 'Name', value: 'name', align: 'center'},
+                {text: 'Clinic ID', value: 'clinicId'},
+                {text: 'Update', value: 'update', sortable: false},
+                {text: 'Remove', value: 'remove', sortable: false},
 
             ],
         }),

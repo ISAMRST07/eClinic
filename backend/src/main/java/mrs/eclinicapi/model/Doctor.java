@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class Doctor extends MedicalStaff {
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
 
-//    @JsonIgnoreProperties("doctors")
+    //    @JsonIgnoreProperties("doctors")
     @Override
     public Clinic getClinic() {
         return super.getClinic();

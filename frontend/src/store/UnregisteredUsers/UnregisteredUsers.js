@@ -1,4 +1,3 @@
-import {emptyClinicAdmin} from "../../utils/skeletons";
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
 
@@ -8,15 +7,25 @@ export default {
         unregisteredUsers: [],
     },
     mutations: {
-        setAllUnregisteredUsers(state, unregisteredUsers){
+        setAllUnregisteredUsers(state, unregisteredUsers) {
             Vue.set(state, 'unregisteredUsers', unregisteredUsers);
+        },
+        deleteRequest(state, id) {
+            let index = state.unregisteredUsers.findIndex(r => r.id === id);
+            state.unregisteredUsers.splice(index, 1);
+        },
+        updateRequest(state, req) {
+            state.unregisteredUsers = [
+                ...state.unregisteredUsers.filter(r => r.id !== req.id),
+                req
+            ]
         }
     },
     actions: {
         async getUnregisteredUsers({rootState, commit}) {
             try {
                 let res = await Vue.prototype.$axios.get('/api/unregisteredusers',
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log(res.data);
                 commit('setAllUnregisteredUsers', res.data);
             } catch (err) {
@@ -24,13 +33,23 @@ export default {
                 defaultError(err, commit);
             }
         },
-        async sendEmailApi({rootState, dispatch}, unregisteredUser) {
-            try{
-                let res = await Vue.prototype.$axios.put(`/api/unregisteredusers/${unregisteredUser.id}`,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
-                dispatch('getUnregisteredUsers');
-            } catch(err) {
-                defaultError(err);
+        async sendEmailApi({rootState, commit}, unregisteredUser) {
+            try {
+                let {data: user} = await Vue.prototype.$axios.put(`/api/unregisteredusers/${unregisteredUser.id}`,
+                    null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('updateRequest', user);
+            } catch (err) {
+                defaultError(err, commit);
+            }
+        },
+        async deleteUnregisteredUserApi({rootState, commit}, user) {
+            try {
+                let {data: id} = await Vue.prototype.$axios.delete(`/api/unregisteredusers/${user.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                console.log(id);
+                commit('deleteRequest', id);
+            } catch (err) {
+                defaultError(err, commit);
             }
         }
 

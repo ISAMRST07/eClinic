@@ -31,8 +31,8 @@ public class DoctorService {
         repository.deleteById(id);
     }
 
-    public List<Doctor> getDoctorsForClinic(String id){
-    	System.out.println("getDoctorsForClinic service");
-    	return repository.getDoctorsForClinic(id);	
+    public List<Doctor> getDoctorsForClinic(String id) {
+        System.out.println("getDoctorsForClinic service");
+        return repository.getDoctorsForClinic(id);
     }
 }

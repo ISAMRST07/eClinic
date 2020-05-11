@@ -17,6 +17,7 @@
 
 <script>
     import AvatarMenu from "./Auth/AvatarMenu";
+
     export default {
         name: "NavBar",
         components: {AvatarMenu},

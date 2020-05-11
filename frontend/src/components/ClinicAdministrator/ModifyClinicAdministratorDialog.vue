@@ -73,7 +73,7 @@
                                                 @click:append="showPassword2 = !showPassword2"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col  cols="6">
+                                    <v-col cols="6">
                                         <v-text-field
                                                 label="Email*"
                                                 required
@@ -135,8 +135,8 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations} from "vuex";
-    import {emailPattern, emptyClinic, emptyClinicAdmin} from "../../utils/skeletons";
+    import {mapActions} from "vuex";
+    import {emailPattern, emptyClinicAdmin} from "../../utils/skeletons";
     import ClinicSelection from "../Clinics/ClinicSelection";
     import Vue from "vue";
 
@@ -153,16 +153,16 @@
                 errorMessage: ''
             },
             selectedClinic: null,
-            confpass : '',
+            confpass: '',
             clinicAdmin: emptyClinicAdmin,
             name: '',
             surname: '',
             password: '',
             username: '',
-            city : '',
-            country : '',
-            email : '',
-            personalID : '',
+            city: '',
+            country: '',
+            email: '',
+            personalID: '',
             address: '',
 
             showPassword: false,
@@ -175,8 +175,8 @@
             }
         }),
         props: {
-            editClinicAdmin : null,
-            clinicToUpdate:{
+            editClinicAdmin: null,
+            clinicToUpdate: {
                 default: null
             },
             value: null,
@@ -187,7 +187,7 @@
         },
         watch: {
             value() {
-                if(this.editClinicAdmin) {
+                if (this.editClinicAdmin) {
                     this.name = this.editClinicAdmin.name;
                     this.surname = this.editClinicAdmin.surname;
                     this.password = this.editClinicAdmin.password;
@@ -195,13 +195,12 @@
                     this.confpass = this.editClinicAdmin.password;
                     this.city = this.editClinicAdmin.city;
                     this.email = this.editClinicAdmin.email;
-                    this.country =this.editClinicAdmin.country;
+                    this.country = this.editClinicAdmin.country;
                     this.personalID = this.editClinicAdmin.personalID;
                     this.address = this.editClinicAdmin.address;
                     this.selectedClinic = this.editClinicAdmin.clinic;
                     this.clinicAdmin = this.editClinicAdmin;
-                }
-                else{
+                } else {
                     this.name = "";
                     this.email = "";
                     this.surname = "";
@@ -227,19 +226,19 @@
             ...mapActions('clinicAdmins/readClinicAdmins', ['saveClinicAdmin']),
             ...mapActions('clinicAdmins/readClinicAdmins', ['modifyClinicApi']),
             setAddress(event) {
-                if(!event) this.address = null;
+                if (!event) this.address = null;
                 else {
                     this.address = event[0];
                 }
 
             },
-            async exists(){
-                try{
+            async exists() {
+                try {
                     this.name = (await Vue.prototype.$axios.get(`/api/auth/exists/${this.formElements.email}`)).data;
                     this.emailError.isError = true;
                     this.emailError.errorMessage = `That account already exists.`;
                     console.log("Vec postoji.")
-                } catch(err) {
+                } catch (err) {
                     console.log("Ne postoji.")
                 }
 
@@ -247,10 +246,10 @@
             emailSelected() {
                 this.emailError.isError = false;
                 this.emailError.errorMessage = '';
-                if(this.email !== "") {
+                if (this.email !== "") {
                     return this.exists();
                 }
-                return  false;
+                return false;
             },
             passwordSelected() {
                 this.passwordError.isError = false;
@@ -269,7 +268,7 @@
             submit(fun) {
                 let valid = this.$refs.form.validate();
                 this.emailSelected();
-                if (valid && this.passwordSelected()===true) {
+                if (valid && this.passwordSelected() === true) {
                     let clinicA = emptyClinicAdmin;
                     this.clinicAdmin.password = this.password;
                     this.clinicAdmin.name = this.name;
@@ -298,7 +297,8 @@
         width: 100%;
         padding: 0 !important;
     }
-    .footer{
+
+    .footer {
         position: absolute;
         bottom: 0;
         height: fit-content;

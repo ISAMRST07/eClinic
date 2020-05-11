@@ -44,19 +44,19 @@ public class ClinicService {
         return clinicRepository.save(toModify);
     }
 
-    public Clinic findByUser(String userID){
+    public Clinic findByUser(String userID) {
         Optional<User> user = userRepository.findById(userID);
-        if(!user.isPresent()){
+        if (!user.isPresent()) {
             System.out.println("NE IDEEEE");
             return null;
         }
         System.out.println("DAKHE IDEEEE");
-        Optional<ClinicAdministrator> clinicAdministrator =  clinicAdministratorRepository.findClinicAdministratorByUser(user.get());
-        Optional<Doctor> doctor =  doctorRepository.findDoctorByUser(user.get());
-        Optional<Nurse> nurse =  nurseRepository.findNurseByUser(user.get());
-        if(clinicAdministrator.isPresent()) return  clinicAdministrator.get().getClinic();
-        if(doctor.isPresent()) return  doctor.get().getClinic();
-        if(nurse.isPresent()) return  nurse.get().getClinic();
+        Optional<ClinicAdministrator> clinicAdministrator = clinicAdministratorRepository.findClinicAdministratorByUser(user.get());
+        Optional<Doctor> doctor = doctorRepository.findDoctorByUser(user.get());
+        Optional<Nurse> nurse = nurseRepository.findNurseByUser(user.get());
+        if (clinicAdministrator.isPresent()) return clinicAdministrator.get().getClinic();
+        if (doctor.isPresent()) return doctor.get().getClinic();
+        if (nurse.isPresent()) return nurse.get().getClinic();
         return null;
     }
 

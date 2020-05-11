@@ -1,7 +1,5 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.ClinicRoomDTO;
-import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.Medicine;
 import mrs.eclinicapi.service.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/medicine")

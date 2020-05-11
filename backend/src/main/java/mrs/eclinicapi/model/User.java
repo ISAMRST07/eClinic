@@ -4,7 +4,6 @@ package mrs.eclinicapi.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import lombok.Setter;
 import mrs.eclinicapi.DTO.ClinicAdministratorDto;
 import mrs.eclinicapi.generator.IdGenerator;
 import mrs.eclinicapi.model.enums.UserType;
-import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,9 +21,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -39,7 +35,7 @@ import java.util.Collections;
 public class User implements UserDetails {
 
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "u_seq")
     @GenericGenerator(name = "u_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -63,6 +59,7 @@ public class User implements UserDetails {
     private String personalID;
     private Timestamp lastPasswordResetDate;
 
+
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
@@ -77,7 +74,7 @@ public class User implements UserDetails {
         this.type = type;
     }
 
-    public User(ClinicAdministratorDto clinicAdminDto){
+    public User(ClinicAdministratorDto clinicAdminDto) {
         this.password = clinicAdminDto.getPassword();
         this.name = clinicAdminDto.getName();
         this.surname = clinicAdminDto.getSurname();
@@ -95,6 +92,7 @@ public class User implements UserDetails {
         this.name = name;
         this.type = type;
     }
+
     public User(String email, String password, String name, String surname,
                 UserType type, String phoneNumber, String address,
                 String city, String country, String personalID) {

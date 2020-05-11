@@ -48,9 +48,9 @@
                 @delete="deleteDisease"
         />
         <modify-disease
-                    mode="update"
-                    :edit-disease="editDisease"
-                    v-model="editDialog"/>
+                mode="update"
+                :edit-disease="editDisease"
+                v-model="editDialog"/>
     </div>
 </template>
 
@@ -71,10 +71,10 @@
             diseaseToDelete: null,
             editDisease: null,
             headers: [
-                { text: 'ID', align: 'start', value: 'id' },
-                { text: 'Name', value: 'name', align: 'center'},
-                { text: 'Update', value: 'update', sortable: false },
-                { text: 'Remove', value: 'remove', sortable: false },
+                {text: 'ID', align: 'start', value: 'id'},
+                {text: 'Name', value: 'name', align: 'center'},
+                {text: 'Update', value: 'update', sortable: false},
+                {text: 'Remove', value: 'remove', sortable: false},
 
             ],
         }),

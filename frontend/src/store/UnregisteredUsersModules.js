@@ -1,4 +1,5 @@
 import UnregisteredUsers from "./UnregisteredUsers/UnregisteredUsers";
+
 const UnregisteredUsersModule = {
     namespaced: true,
     modules: {

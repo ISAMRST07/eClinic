@@ -48,14 +48,14 @@
                 @delete="deleteMedicine"
         />
         <modify-medicine
-                    mode="update"
-                    :edit-medicine="editMedicine"
-                    v-model="editDialog"/>
+                mode="update"
+                :edit-medicine="editMedicine"
+                v-model="editDialog"/>
     </div>
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import DeleteMedicine from "./DeleteMedicine";
     import ModifyMedicine from "./ModifyMedicine";
 
@@ -69,11 +69,11 @@
             medicineToDelete: null,
             editMedicine: null,
             headers: [
-                { text: 'ID', align: 'start', value: 'id' },
-                { text: 'Name', value: 'name', align: 'center'},
-                { text: 'Manufacturer', value: 'manufacturer' },
-                { text: 'Update', value: 'update', sortable: false },
-                { text: 'Remove', value: 'remove', sortable: false },
+                {text: 'ID', align: 'start', value: 'id'},
+                {text: 'Name', value: 'name', align: 'center'},
+                {text: 'Manufacturer', value: 'manufacturer'},
+                {text: 'Update', value: 'update', sortable: false},
+                {text: 'Remove', value: 'remove', sortable: false},
 
             ],
         }),

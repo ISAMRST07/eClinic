@@ -13,16 +13,16 @@ import UnregisteredUsersModule from "./UnregisteredUsersModules";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  namespaced: true,
-  modules: {
-    clinics: ClinicModules,
-    clinicAdmins: ClinicAdministratorModules,
-    clinicRooms: ClinicRoomModules,
-    medicines : MedicinesModules,
-    doctor: DoctorModules,
-    nurse: NurseModules,
-    auth: AuthModule,
-    disease: DiseaseModules,
-    unregisteredUsers: UnregisteredUsersModule
-  }
+    namespaced: true,
+    modules: {
+        clinics: ClinicModules,
+        clinicAdmins: ClinicAdministratorModules,
+        clinicRooms: ClinicRoomModules,
+        medicines: MedicinesModules,
+        doctor: DoctorModules,
+        nurse: NurseModules,
+        auth: AuthModule,
+        disease: DiseaseModules,
+        unregisteredUsers: UnregisteredUsersModule
+    }
 })

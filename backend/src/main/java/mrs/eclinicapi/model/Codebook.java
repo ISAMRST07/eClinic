@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +10,6 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +21,7 @@ import java.util.List;
 public class Codebook {
 
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cb_seq")
     @GenericGenerator(name = "cb_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

@@ -1,4 +1,5 @@
 import Doctor from "./Doctor/Doctor";
+
 const DoctorModules = {
     namespaced: true,
     modules: {

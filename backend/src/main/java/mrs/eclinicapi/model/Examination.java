@@ -20,7 +20,7 @@ import javax.persistence.*;
 
 public class Examination {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "e_seq")
     @GenericGenerator(name = "e_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

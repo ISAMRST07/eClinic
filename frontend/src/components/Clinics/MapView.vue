@@ -9,6 +9,7 @@
 <script>
     import 'leaflet/dist/leaflet.css';
     import L from 'leaflet';
+
     export default {
         name: "MapView",
         data: () => ({
@@ -38,17 +39,16 @@
         },
         watch: {
             address(newAddress, oldAddress) {
-                if(!newAddress || newAddress.length === 0){
+                if (!newAddress || newAddress.length === 0) {
                     this.resetMap();
-                }
-                else if(newAddress !== oldAddress) {
+                } else if (newAddress !== oldAddress) {
                     this.coordsFromAddress(newAddress);
                 }
             },
             value(newCoords) {
-                if(!newCoords) return;
+                if (!newCoords) return;
                 this.placeMarker(newCoords);
-                if(this.formerInput &&
+                if (this.formerInput &&
                     this.formerInput.lat === newCoords.lat &&
                     this.formerInput.lng === newCoords.lng) return;
                 this.map.setView([newCoords.lat, newCoords.lng], 15);
@@ -86,7 +86,7 @@
                 this.$emit('input', e.latlng);
             },
             placeMarker(latlng) {
-                if(this.currentMarker !== null)
+                if (this.currentMarker !== null)
                     this.map.removeLayer(this.currentMarker);
                 this.currentMarker = L.marker(latlng);
                 this.currentMarker.addTo(this.map);
@@ -94,7 +94,7 @@
             },
             async addressFromCoords(latlng) {
                 let res = await this.reverseGeoCode(latlng);
-                let address= res.data.display_name;
+                let address = res.data.display_name;
 
                 if (!address) this.$emit('clickAddress', null);
                 else this.$emit('clickAddress', [res.data.display_name]);

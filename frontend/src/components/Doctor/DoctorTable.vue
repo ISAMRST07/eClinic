@@ -18,7 +18,7 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
             </template>
-			<template v-slot:item.update="{ item }">
+            <template v-slot:item.update="{ item }">
                 <v-icon
                         @click="updateDialog(item)"
                         color="amber darken-2"
@@ -69,24 +69,24 @@
             doctorToDelete: null,
             editDoctor: null,
             headers: [
-                { text: 'Name', align: 'start', value: 'user.name' },
-                { text: 'Surname', align: 'center', value: 'user.surname' },
-                { text: 'Email', align: 'center', value: 'user.email' },
-                { text: 'Phone number', align: 'center', value: 'user.phoneNumber' },
-                { text: 'Address', align: 'center', value: 'user.address' },
-                { text: 'Position', align: 'center', value: 'position' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },
-                { text: 'Remove', sortable: false, value: 'remove' },
+                {text: 'Name', align: 'start', value: 'user.name'},
+                {text: 'Surname', align: 'center', value: 'user.surname'},
+                {text: 'Email', align: 'center', value: 'user.email'},
+                {text: 'Phone number', align: 'center', value: 'user.phoneNumber'},
+                {text: 'Address', align: 'center', value: 'user.address'},
+                {text: 'Position', align: 'center', value: 'position'},
+                {text: 'Update', value: 'update', sortable: false, align: 'center'},
+                {text: 'Remove', sortable: false, value: 'remove'},
             ],
         }),
         computed: {
             ...mapState('doctor/doctor', ['doctor']),
             ...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),     
+            ...mapState('auth', ['clinic']),
         },
         methods: {
             ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['getClinicDoctor']),      
+            ...mapActions('doctor/doctor', ['getClinicDoctor']),
             ...mapActions('doctor/doctor', ['deleteDoctorApi']),
 
             deleteDialog(doctorToDelete) {
@@ -98,33 +98,33 @@
                 this.deleteDialog(null);
             },
             updateDialog(doctor) {
-            	console.log("updateDialog id = " + doctor.id);
+                console.log("updateDialog id = " + doctor.id);
                 this.editDoctor = {
-                	id : doctor.id,
-                	email : doctor.user.email,
-					name : doctor.user.name,
-					surname : doctor.user.surname,
-					phone : doctor.user.phoneNumber,
-					address : doctor.user.address,
-					city : doctor.user.city,
-					country : doctor.user.country,
-					jmbg : doctor.user.personalID,
-					position: doctor.position
+                    id: doctor.id,
+                    email: doctor.user.email,
+                    name: doctor.user.name,
+                    surname: doctor.user.surname,
+                    phone: doctor.user.phoneNumber,
+                    address: doctor.user.address,
+                    city: doctor.user.city,
+                    country: doctor.user.country,
+                    jmbg: doctor.user.personalID,
+                    position: doctor.position
                 };
                 this.editDialog = true;
             }
         },
         created() {
-        	this.loading = true;
+            this.loading = true;
             console.log(this.user)
-        	switch (this.user.type) {
+            switch (this.user.type) {
                 case ClinicalCenterAdmin.code:
-                	console.log("user = ClinicalCenterAdmin")
-                	this.getDoctor();	//svi doktori
+                    console.log("user = ClinicalCenterAdmin")
+                    this.getDoctor();	//svi doktori
                     break;
                 case ClinicalAdmin.code:
-                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);   
-                   	this.getClinicDoctor(this.clinic.id);  //doktori samo za clinic.id 
+                    console.log("user = ClinicalAdmin id = " + this.clinic.id);
+                    this.getClinicDoctor(this.clinic.id);  //doktori samo za clinic.id
                     break;
                 default:
             }

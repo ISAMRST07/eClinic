@@ -1,13 +1,9 @@
 package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.DTO.ClinicAdministratorDto;
-import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.model.User;
-import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.repository.ClinicAdministratorRepository;
-import mrs.eclinicapi.repository.ClinicRepository;
-import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClinicAdministratorService {
@@ -59,13 +54,13 @@ public class ClinicAdministratorService {
     }
 
     public List<ClinicAdministratorDto> findAll() {
-        List<ClinicAdministrator> clinicAdministrators =  clinicAdminRepository.findAll();
+        List<ClinicAdministrator> clinicAdministrators = clinicAdminRepository.findAll();
 
         List<ClinicAdministratorDto> clinicAdministratorsDto = new ArrayList<>();
         for (ClinicAdministrator c : clinicAdministrators) {
             System.out.println("ODJEEEEEEEEEEEEEE");
             System.out.println(c.getClinic());
-            ClinicAdministratorDto cdto =new ClinicAdministratorDto(c, 0);
+            ClinicAdministratorDto cdto = new ClinicAdministratorDto(c, 0);
             clinicAdministratorsDto.add(cdto);
             System.out.println(cdto.getClinic());
         }

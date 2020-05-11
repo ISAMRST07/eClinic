@@ -20,9 +20,10 @@
             </template>
             <template v-slot:item.description="{ item }">
                 <v-icon
-                    color="success"
-                    @click="toggleClinicDescription(item)"
-                >mdi-information</v-icon>
+                        color="success"
+                        @click="toggleClinicDescription(item)"
+                >mdi-information
+                </v-icon>
             </template>
             <template v-slot:item.remove="{ item }">
                 <v-icon
@@ -83,10 +84,10 @@
                     align: 'start',
                     value: 'name',
                 },
-                { text: 'Description', value: 'description', sortable: false, align: 'center'},
-                { text: 'Address', value: 'address' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },
-                { text: 'Remove', value: 'remove', sortable: false, align: 'center' }
+                {text: 'Description', value: 'description', sortable: false, align: 'center'},
+                {text: 'Address', value: 'address'},
+                {text: 'Update', value: 'update', sortable: false, align: 'center'},
+                {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
             ],
         }),
         computed: {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import router from '../router/index'
-import {defaultError} from "../utils/defaultErrorBehavior";
+
 const tokenResponse = JSON.parse(localStorage.getItem('tokenResponse'));
 const loginState = {
     NOT_LOGGED: 0,
@@ -24,7 +24,7 @@ if (tokenResponse) {
 const AuthModule = {
     namespaced: true,
     state: {
-        clinic : initialClinic,
+        clinic: initialClinic,
         token: initialToken,
         user: initialUser,
         role: initialRole,
@@ -70,8 +70,7 @@ const AuthModule = {
 
 export default AuthModule;
 
-export function redirectToLogin(commit){
-    console.log(commit);
+export function redirectToLogin(commit) {
     localStorage.removeItem('tokenResponse');
     commit('auth/clearResponse', {root: true});
     router.push('/auth');

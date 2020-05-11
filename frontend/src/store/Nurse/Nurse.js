@@ -8,13 +8,13 @@ export default {
         nurse: [],
     },
     mutations: {
-        setAllNurse(state, nurse){
-        	console.log("mutations getall nurse = " + nurse);
+        setAllNurse(state, nurse) {
+            console.log("mutations getall nurse = " + nurse);
             Vue.set(state, 'nurse', JSOG.decode(nurse));
         },
         addNurse(state, nurse) {
-        	console.log("mutations addNurse");
-        	console.log(nurse.name);
+            console.log("mutations addNurse");
+            console.log(nurse.name);
             state.nurse.push(nurse);
         },
         deleteNurse(state, nurse) {
@@ -22,7 +22,7 @@ export default {
             state.nurse.splice(index, 1);
         },
         updateNurse(state, nurse) {
-        	console.log("updateNurse");
+            console.log("updateNurse");
             state.nurse = [
                 ...state.nurse.filter(c => c.id !== nurse.id),
                 nurse
@@ -33,7 +33,7 @@ export default {
         async getNurse({rootState, commit}) {
             try {
                 let res = await Vue.prototype.$axios.get('/api/nurse/getAll',
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log("actions getall nurse = " + res.data);
                 console.log(res.data);
                 commit('setAllNurse', res.data);
@@ -43,9 +43,9 @@ export default {
         },
         async getClinicNurse({rootState, commit}, clinicId) {
             try {
-            	console.log("getClinicNurse = " + clinicId);
-                let res = await Vue.prototype.$axios.get('/api/nurse/getNurseForClinic/'+clinicId,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("getClinicNurse = " + clinicId);
+                let res = await Vue.prototype.$axios.get('/api/nurse/getNurseForClinic/' + clinicId,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log("actions getClinicNurse nurse = " + res.data);
                 console.log(res.data);
                 commit('setAllNurse', res.data);
@@ -55,9 +55,9 @@ export default {
         },
         async addNurseApi({rootState, commit}, nurse) {
             try {
-            	console.log("addnurseapi");            	
+                console.log("addnurseapi");
                 let {data: added} = await Vue.prototype.$axios.post('/api/nurse', nurse,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('addNurse', added);
             } catch (err) {
                 defaultError(err);
@@ -65,16 +65,16 @@ export default {
         },
         async deleteNurseApi({rootState, commit}, nurse) {
             try {
-            	console.log("delete nurse = ");
-            	console.log(nurse.id);
+                console.log("delete nurse = ");
+                console.log(nurse.id);
                 let res = await Vue.prototype.$axios.delete(`/api/nurse/deleteNurse/${nurse.id}`,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteNurse', nurse);
             } catch (err) {
                 defaultError(err);
             }
         },
-        async updateNurseApi({rootState,commit}, nurse) {
+        async updateNurseApi({rootState, commit}, nurse) {
             console.log("updateNurseApi");
             try {
                 let {data: modified} = await Vue.prototype.$axios.put('/api/nurse', nurse, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});

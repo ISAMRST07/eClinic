@@ -1,4 +1,3 @@
-import Main from "../views/Main";
 import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
@@ -13,14 +12,15 @@ import ClinicDetails from "../pages/ClinicDetails";
 
 import {
     clinicAdministratorsPath,
+    clinicDetailsPath,
     clinicRoomsPath,
-    clinicsPath, diseasePath,
+    clinicsPath,
+    diseasePath,
     doctorsPath,
-    nursesPath,
     homePath,
-    medicinesPath, 
-    unregisteredUsersPath,
-    clinicDetailsPath
+    medicinesPath,
+    nursesPath,
+    unregisteredUsersPath
 } from "../utils/paths";
 
 const loggedRoutes = [
@@ -46,7 +46,7 @@ const loggedRoutes = [
         path: doctorsPath,
         component: Doctor,
     },
-    
+
     {
         path: nursesPath,
         component: Nurse,
@@ -65,8 +65,8 @@ const loggedRoutes = [
         component: UnregisteredUsers
     },
     {
-    	path: clinicDetailsPath,
-    	component: ClinicDetails
+        path: clinicDetailsPath,
+        component: ClinicDetails
     }
 ];
 

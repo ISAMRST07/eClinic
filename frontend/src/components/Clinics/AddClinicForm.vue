@@ -63,7 +63,7 @@
         name: "AddClinicForm",
         data: () => ({
             nameRules: [v => !!v || "* Name is required"],
-            descriptionRules: [v=> !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.'],
+            descriptionRules: [v => !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.'],
             addressRules: [value => !!value || '* Valid address required.']
         }),
         computed: {

@@ -28,7 +28,7 @@ public class IdGenerator extends SequenceStyleGenerator {
         super.configure(LongType.INSTANCE, params, serviceRegistry);
         valuePrefix = ConfigurationHelper.getString(VALUE_PREFIX_PARAMETER,
                 params, "");
-        if(valuePrefix.length() == 0) {
+        if (valuePrefix.length() == 0) {
             valuePrefix = ConfigurationHelper.getString(SEQUENCE_PARAM,
                     params, "");
         }

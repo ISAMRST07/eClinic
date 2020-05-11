@@ -3,16 +3,14 @@ package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.AuthenticationRequest;
 import mrs.eclinicapi.DTO.TokenResponse;
-import mrs.eclinicapi.model.Clinic;
-import mrs.eclinicapi.model.UnregisteredUser;
-import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.*;
+import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.security.TokenUtils;
 import mrs.eclinicapi.service.ClinicService;
+import mrs.eclinicapi.service.PatientService;
 import mrs.eclinicapi.service.UnregisteredUserService;
 import mrs.eclinicapi.service.UserDetailsService;
-import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +18,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping(path = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,7 +37,7 @@ public class AuthenticationController {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private UserService userService;
+    private PatientService patientService;
 
     @Autowired
     private ClinicService clinicService;
@@ -70,7 +67,7 @@ public class AuthenticationController {
         try {
             User u = (User) userDetailsService.loadUserByUsername(email);
             return new ResponseEntity<>(u.getName(), HttpStatus.OK);
-        } catch(UsernameNotFoundException e) {
+        } catch (NullPointerException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -85,6 +82,33 @@ public class AuthenticationController {
 
         UnregisteredUser user = this.unregisteredUserService.addUnregisteredUser(userRequest);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/confirmRegistration/{token}")
+    public ResponseEntity<String> confirmRegistration(@PathVariable String token) {
+        VerificationToken foundToken = unregisteredUserService.findToken(token);
+        if (foundToken == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (foundToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        String requestId = foundToken.getUser().getId();
+        User user = foundToken.getUser().getUser();
+        unregisteredUserService.deleteById(requestId);
+        Patient p = new Patient();
+        p.setUser(user);
+        user.setType(UserType.Patient);
+
+        patientService.addPatient(p);
+        unregisteredUserService.deleteTokenById(foundToken.getId());
+
+        return new ResponseEntity<>(user.getName(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    String noHandlerFound(NoHandlerFoundException ex) {
+        return "classpath:index.html";
     }
 
 }

@@ -30,8 +30,7 @@
 <script>
     export default {
         name: "DescriptionDialog",
-        data: () => ({
-        }),
+        data: () => ({}),
         computed: {
             clinicName() {
                 return this.clinic ? this.clinic.name : '';
@@ -41,8 +40,7 @@
             }
         },
         props: ['clinic', 'value'],
-        methods: {
-        }
+        methods: {}
     }
 </script>
 

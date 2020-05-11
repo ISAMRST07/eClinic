@@ -54,7 +54,7 @@
 </template>
 
 <script>
-    import {mapActions, mapState} from "vuex";
+    import {mapActions} from "vuex";
     import ClinicAdministratorDeleteDialog from "./ClinicAdministratorDeleteDialog";
     import ModifyClinicAdministratorDialog from "./ModifyClinicAdministratorDialog";
     import JSOG from 'jsog';
@@ -68,7 +68,7 @@
             editClinicAdmin: null,
             dialog: false,
             clinicToDelete: null,
-            clinicToUpdate:null,
+            clinicToUpdate: null,
             clinicWithDescription: null,
             headers: [
                 {
@@ -76,11 +76,11 @@
                     align: 'start',
                     value: 'name',
                 },
-                { text: 'Surname', value: 'surname' },
-                { text: 'Email', value: 'email' },
-                { text: 'Clinic name', value: 'clinic.name' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },
-                { text: 'Remove', value: 'remove', sortable: false, align: 'center' }
+                {text: 'Surname', value: 'surname'},
+                {text: 'Email', value: 'email'},
+                {text: 'Clinic name', value: 'clinic.name'},
+                {text: 'Update', value: 'update', sortable: false, align: 'center'},
+                {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
             ],
         }),
         computed: {

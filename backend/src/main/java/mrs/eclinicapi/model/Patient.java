@@ -1,9 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +21,7 @@ import java.util.List;
 
 public class Patient {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pt_seq")
     @GenericGenerator(name = "pt_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -35,7 +32,7 @@ public class Patient {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-//    @JsonIgnoreProperties("patients")
+    //    @JsonIgnoreProperties("patients")
     @ManyToOne
     private ClinicAdministrator clinic;
 

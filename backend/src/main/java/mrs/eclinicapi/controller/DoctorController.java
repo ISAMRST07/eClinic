@@ -3,23 +3,15 @@ package mrs.eclinicapi.controller;
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
-import mrs.eclinicapi.model.Medicine;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
-import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,16 +21,16 @@ public class DoctorController {
 
     @Autowired
     private DoctorService service;
-    
+
     @Autowired
     private ClinicService clinicService;
-    
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorNurseDTO doctorDto) {
         System.out.println("adding doctor ");
         System.out.println("doctordto = " + doctorDto);
         Doctor newDoctor = new Doctor();
-        
+
         Clinic clinic = clinicService.findOne(doctorDto.getClinic());
         newDoctor.setClinic(clinic);
         User newUser = new User();
@@ -52,10 +44,10 @@ public class DoctorController {
         newUser.setType(UserType.doctor);
         newUser.setPersonalID(doctorDto.getJmbg());
         newUser.setPhoneNumber(doctorDto.getPhone());
-       
+
         newDoctor.setUser(newUser);
         newDoctor.setPosition(doctorDto.getPosition());
-        
+
         service.addDoctor(newDoctor);
         //userService.addUser(newUser);
 
@@ -66,24 +58,24 @@ public class DoctorController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Doctor> updateDoctor(@RequestBody DoctorNurseDTO doctorDto) {
-    	System.out.println("updateDoctor = " + doctorDto);
-    	Doctor oldDoctor = service.findOne(doctorDto.getId());
-    	User oldUser = oldDoctor.getUser();
-    	System.out.println("oldUser = " + oldUser);
-    	oldUser.setName(doctorDto.getName());
-    	oldUser.setSurname(doctorDto.getSurname());
-    	oldUser.setPassword(doctorDto.getJmbg().toString());
-    	oldUser.setEmail(doctorDto.getEmail());
-    	oldUser.setAddress(doctorDto.getAddress());
-    	oldUser.setCity(doctorDto.getCity());
-    	oldUser.setCountry(doctorDto.getCountry());
-    	oldUser.setPersonalID(doctorDto.getJmbg());
-    	oldUser.setPhoneNumber(doctorDto.getPhone());
-    	oldDoctor.setPosition(doctorDto.getPosition());
-    	System.out.println("updated = " + oldUser);
+        System.out.println("updateDoctor = " + doctorDto);
+        Doctor oldDoctor = service.findOne(doctorDto.getId());
+        User oldUser = oldDoctor.getUser();
+        System.out.println("oldUser = " + oldUser);
+        oldUser.setName(doctorDto.getName());
+        oldUser.setSurname(doctorDto.getSurname());
+        oldUser.setPassword(doctorDto.getJmbg().toString());
+        oldUser.setEmail(doctorDto.getEmail());
+        oldUser.setAddress(doctorDto.getAddress());
+        oldUser.setCity(doctorDto.getCity());
+        oldUser.setCountry(doctorDto.getCountry());
+        oldUser.setPersonalID(doctorDto.getJmbg());
+        oldUser.setPhoneNumber(doctorDto.getPhone());
+        oldDoctor.setPosition(doctorDto.getPosition());
+        System.out.println("updated = " + oldUser);
 
         System.out.println("new doctor oldDoctor = " + oldDoctor);
-        
+
         Doctor modified = service.addDoctor(oldDoctor);
         System.out.println("new doctor modified = " + modified);
         if (modified == null) {
@@ -91,7 +83,7 @@ public class DoctorController {
         }
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
-    
+
     @RequestMapping(path = "/deleteDoctor/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") String id) {
         System.out.println("delete doctor " + id);
@@ -117,22 +109,22 @@ public class DoctorController {
         }
         return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }
-    
+
     @RequestMapping(path = "/getDoctorForClinic/{id}")
     public ResponseEntity<List<Doctor>> getDoctorsForClinic(@PathVariable("id") String id) {
         System.out.println("get doctors for clinic " + id);
 
         List<Doctor> doctorList = service.getDoctorsForClinic(id);
-        if(doctorList == null) {
+        if (doctorList == null) {
             System.out.println("doctor not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         System.out.println(doctorList);
         System.out.println("printing doctor clinic and user objects");
-        for(Doctor d : doctorList) {
-        	System.out.println(d.getClinic());
-        	System.out.println(d.getUser());
-        	System.out.println(d.getPosition());
+        for (Doctor d : doctorList) {
+            System.out.println(d.getClinic());
+            System.out.println(d.getUser());
+            System.out.println(d.getPosition());
         }
         return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }

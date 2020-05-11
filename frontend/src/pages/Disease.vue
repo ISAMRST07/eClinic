@@ -8,6 +8,7 @@
 <script>
     import TableDisease from "../components/Disease/TableDisease";
     import AddDisease from "../components/Disease/AddDisease";
+
     export default {
         name: "Disease",
         components: {AddDisease, TableDisease}

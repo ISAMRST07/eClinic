@@ -10,12 +10,12 @@ export const emptyClinicAdmin = {
     surname: '',
     password: '',
     username: '',
-    city : '',
-    country : '',
-    email : '',
-    personalID : '',
+    city: '',
+    country: '',
+    email: '',
+    personalID: '',
     address: '',
-    clinic : null
+    clinic: null
 };
 
 export const resetClinic = {
@@ -41,29 +41,29 @@ export const emptyClinicRoom = {
 };
 
 export const emptyDoctor = {
-	email : '',
-	name : '',
-	surname : '',
-	phone : '',
-	address : '',
-	city : '',
-	country : '',
-	jmbg : '',
-	position: '',
-    clinic : ''
+    email: '',
+    name: '',
+    surname: '',
+    phone: '',
+    address: '',
+    city: '',
+    country: '',
+    jmbg: '',
+    position: '',
+    clinic: ''
 };
 
 export const emptyNurse = {
-	id : '',
-	email : '',
-	name : '',
-	surname : '',
-	phone : '',
-	address : '',
-	city : '',
-	country : '',
-	jmbg : '',
-	position: ''
+    id: '',
+    email: '',
+    name: '',
+    surname: '',
+    phone: '',
+    address: '',
+    city: '',
+    country: '',
+    jmbg: '',
+    position: ''
 };
 
 export const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

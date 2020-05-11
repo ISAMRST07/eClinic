@@ -20,7 +20,7 @@ import java.util.List;
 public class ClinicalCentarAdministrator {
 
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cca_seq")
     @GenericGenerator(name = "cca_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -38,11 +38,11 @@ public class ClinicalCentarAdministrator {
     private List<Clinic> clinics;
 
     /*
-    *
-    * OVO JE VRLO PROBLEMATICAN DIO DOLJE
-    *
-    *
-    * */
+     *
+     * OVO JE VRLO PROBLEMATICAN DIO DOLJE
+     *
+     *
+     * */
 
 
 //

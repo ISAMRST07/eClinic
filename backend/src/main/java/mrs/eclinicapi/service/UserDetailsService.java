@@ -1,6 +1,5 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

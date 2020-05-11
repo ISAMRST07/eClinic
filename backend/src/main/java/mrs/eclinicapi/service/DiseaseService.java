@@ -18,7 +18,7 @@ public class DiseaseService {
     }
 
     public List<Disease> findAll() {
-        return  repository.findAll();
+        return repository.findAll();
     }
 
     public Disease add(Disease disease) {
@@ -34,6 +34,6 @@ public class DiseaseService {
     }
 
     public void deleteById(String id) {
-            repository.deleteById(id);
+        repository.deleteById(id);
     }
 }

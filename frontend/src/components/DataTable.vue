@@ -87,11 +87,11 @@
                     sortable: false,
                     value: 'name',
                 },
-                { text: 'Calories', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Actions', value: 'actions', sortable: false },
+                {text: 'Calories', value: 'calories'},
+                {text: 'Fat (g)', value: 'fat'},
+                {text: 'Carbs (g)', value: 'carbs'},
+                {text: 'Protein (g)', value: 'protein'},
+                {text: 'Actions', value: 'actions', sortable: false},
             ],
             desserts: [],
             editedIndex: -1,
@@ -112,23 +112,23 @@
         }),
 
         computed: {
-            formTitle () {
+            formTitle() {
                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
             },
         },
 
         watch: {
-            dialog (val) {
+            dialog(val) {
                 val || this.close()
             },
         },
 
-        created () {
+        created() {
             this.initialize()
         },
 
         methods: {
-            initialize () {
+            initialize() {
                 this.desserts = [
                     {
                         name: 'Frozen Yogurt',
@@ -203,18 +203,18 @@
                 ]
             },
 
-            editItem (item) {
+            editItem(item) {
                 this.editedIndex = this.desserts.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
             },
 
-            deleteItem (item) {
+            deleteItem(item) {
                 const index = this.desserts.indexOf(item)
                 confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
             },
 
-            close () {
+            close() {
                 this.dialog = false
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem)
@@ -222,7 +222,7 @@
                 }, 300)
             },
 
-            save () {
+            save() {
                 if (this.editedIndex > -1) {
                     Object.assign(this.desserts[this.editedIndex], this.editedItem)
                 } else {
