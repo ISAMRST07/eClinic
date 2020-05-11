@@ -62,13 +62,12 @@ export const emptyInterventionType = {
 
 export const emptyIntervention = {
 	id : '',
-	date : '',
-    time : '',
-    selectedClinicRoom: '',    
-    selectedDoctor: '',   
-    selectedInterventionType: '', 
-    duration: '',  
-    price: '' 
+	dateTime: null,
+    selectedClinicRoom: null,
+    selectedDoctor: null,
+    selectedInterventionType: '',
+    duration: '',
+    price: ''
 };
 
 export const emptyNurse = {
