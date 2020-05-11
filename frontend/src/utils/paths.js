@@ -19,3 +19,6 @@ export const unregisteredUsersPath = '/unregisteredUsers';
 export const clinicDetailsPath = '/clinicDetails';
 
 export const interventionTypePath = '/interventionType';
+
+export const interventionPath = '/intervention';
+

@@ -46,4 +46,13 @@ public class Intervention {
     private InterventionType interventionType;
     
     private double duration;
+    
+    private double price;
+
+	@Override
+	public String toString() {
+		return "Intervention [id=" + id + ", dateTime=" + dateTime + ", interventionType=" + interventionType
+				+ ", duration=" + duration + ", price=" + price + "]";
+	}
+    
 }

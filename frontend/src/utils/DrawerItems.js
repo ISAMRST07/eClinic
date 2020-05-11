@@ -8,7 +8,8 @@ import {
     doctorsPath,
     nursesPath,
     clinicDetailsPath,
-    interventionTypePath
+    interventionTypePath,
+    interventionPath
 } from "./paths";
 
 const doctorsItem = {
@@ -40,6 +41,13 @@ const interventionTypeItem = {
     label: 'Intervention type',
     path: interventionTypePath
 };
+
+const interventionItem = {
+    icon: 'mdi-home',
+    label: 'Intervention',
+    path: interventionPath
+};
+
 
 const clinicsItem = {
     icon: 'mdi-hospital-building',
@@ -93,6 +101,7 @@ const ClinicalAdmin = {
     items: [
     	clinicDetailsItem,
     	interventionTypeItem,
+    	interventionItem,
         medicinesItem,
         clinicRoomsItem,
         doctorsItem,

@@ -5,6 +5,7 @@ import ClinicAdministrators from "../pages/ClinicAdministrators";
 import ClinicRooms from "../pages/ClinicRooms";
 import Doctor from "../pages/Doctor";
 import InterventionType from "../pages/InterventionType";
+import Intervention from "../pages/Intervention";
 import Nurse from "../pages/Nurse";
 import Medicine from "../pages/Medicine";
 import Disease from "../pages/Disease";
@@ -22,7 +23,8 @@ import {
     medicinesPath, 
     unregisteredUsersPath,
     clinicDetailsPath,
-    interventionTypePath
+    interventionTypePath,
+    interventionPath
 } from "../utils/paths";
 
 const loggedRoutes = [
@@ -73,6 +75,10 @@ const loggedRoutes = [
     {
     	path : interventionTypePath,
     	component : InterventionType
+    },
+    {
+    	path : interventionPath,
+    	component : Intervention
     }
 ];
 

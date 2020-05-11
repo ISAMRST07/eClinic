@@ -60,6 +60,17 @@ export const emptyInterventionType = {
 	clinic : ''
 };
 
+export const emptyIntervention = {
+	id : '',
+	date : '',
+    time : '',
+    selectedClinicRoom: '',    
+    selectedDoctor: '',   
+    selectedInterventionType: '', 
+    duration: '',  
+    price: '' 
+};
+
 export const emptyNurse = {
 	id : '',
 	email : '',
