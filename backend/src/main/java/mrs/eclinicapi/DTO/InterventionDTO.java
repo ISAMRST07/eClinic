@@ -2,6 +2,9 @@ package mrs.eclinicapi.DTO;
 
 import mrs.eclinicapi.model.Doctor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
@@ -20,18 +23,18 @@ import mrs.eclinicapi.model.InterventionType;
 public class InterventionDTO {
 
 	String id;
-	String date;
-    String time;
-    ClinicRoom selectedClinicRoom;    
-    Doctor selectedDoctor;
-    InterventionType selectedInterventionType; 
-    double duration;
-    double price;
+	LocalDateTime dateTime;
+	String selectedClinicRoom;    
+	String selectedDoctor;
+	String selectedInterventionType; 
+	double duration;
+	double price;
     
 	@Override
 	public String toString() {
-		return "InterventionDTO [id=" + id + ", date=" + date + ", time=" + time + ", duration=" + duration + ", price="
-				+ price + "]";
+		return "InterventionDTO [id=" + id + ", dateTime=" + dateTime + ", selectedClinicRoom=" + selectedClinicRoom
+				+ ", selectedDoctor=" + selectedDoctor + ", selectedInterventionType=" + selectedInterventionType
+				+ ", duration=" + duration + ", price=" + price + "]";
 	}
 	
 }

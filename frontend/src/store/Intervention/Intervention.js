@@ -55,7 +55,8 @@ export default {
         },
         async addInterventionApi({rootState, commit}, intervention) {
             try {
-            	console.log("addIntervention");            	
+            	console.log("addInterventionApi");    
+            	console.log(intervention);            	
                 let {data: added} = await Vue.prototype.$axios.post('/api/intervention', intervention,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('addIntervention', added);

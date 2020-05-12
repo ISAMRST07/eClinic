@@ -185,9 +185,9 @@
             	if (current.getFullYear() === this.dateTime.getFullYear() &&
 					current.getMonth() === this.dateTime.getMonth() &&
 					current.getDate() === this.dateTime.getDate()) {
-            		console.log(current.getHours());
-            		console.log(current.getMinutes());
-            		return `${current.getHours()}:${current.getMinutes()}`;
+            		//console.log(current.getHours());
+            		//console.log(current.getMinutes());
+            		return '${current.getHours()}:${current.getMinutes()}';
 				}
             	else return null;
 			},
@@ -249,18 +249,18 @@
             submit(fun) {
                 if (this.$refs.form.validate()) {
                 	console.log("add pressed");
-                	console.log(this.selectedClinicRoom.name);
-                  	console.log(this.selectedDoctor.user.name);
-                    console.log(this.selectedInterventionType.name);
+                	console.log(this.selectedClinicRoom);
+                  	console.log(this.selectedDoctor);
+                    console.log(this.selectedInterventionType);
                     console.log(this.duration);
                     console.log(this.price);
 
                     this.intervention.dateTime = this.dateTime;
-                    this.intervention.selectedClinicRoom = this.selectedClinicRoom;
-                    this.intervention.selectedDoctor = this.selectedDoctor;
-                    this.intervention.selectedInterventionType = this.selectedInterventionType;
-                    this.intervention.duration = this.duration;
-                    this.intervention.price = this.price;
+                    this.intervention.selectedClinicRoom = this.selectedClinicRoom.id;
+                    this.intervention.selectedDoctor = this.selectedDoctor.id;
+                    this.intervention.selectedInterventionType = this.selectedInterventionType.id;
+                    this.intervention.duration = parseFloat(this.duration);
+                    this.intervention.price = parseFloat(this.price);
                     console.log("intervention = ");
                     console.log(this.intervention);
                     fun(this.intervention);
