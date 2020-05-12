@@ -14,15 +14,19 @@ export default {
         },
         addIntervention(state, intervention) {
         	console.log("mutations addIntervention");
-        	console.log(intervention.dateTime);
-            state.intervention.push(intervention);
+        	intervention = JSOG.decode(intervention);
+        	console.log(intervention);
+        	state.intervention.push(intervention);
         },
         deleteIntervention(state, intervention) {
+        	intervention = JSOG.decode(intervention);
             let index = state.intervention.findIndex(c => c.id === intervention.id);
             state.intervention.splice(index, 1);
         },
         updateIntervention(state, intervention) {
         	console.log("mutations updateIntervention");
+        	console.log(intervention);
+        	intervention = JSOG.decode(intervention);
             state.intervention = [
                 ...state.intervention.filter(c => c.id !== intervention.id),
                 intervention
@@ -60,6 +64,8 @@ export default {
             	console.log(intervention);            	
                 let {data: added} = await Vue.prototype.$axios.post('/api/intervention', intervention,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+            	console.log("addInterventionApi added");
+            	console.log(added)
                 commit('addIntervention', added);
             } catch (err) {
                 defaultError(err);
@@ -77,9 +83,9 @@ export default {
             }
         },
         async updateInterventionApi({rootState,commit}, intervention) {
-            console.log("updateInterventionApi");
             try {
-                let {data: modified} = await Vue.prototype.$axios.put('/api/intervention', intervention, 
+                console.log("updateInterventionApi");
+            	let {data: modified} = await Vue.prototype.$axios.put('/api/intervention', intervention, 
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateIntervention', modified);
             } catch (err) {

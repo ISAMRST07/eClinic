@@ -42,6 +42,9 @@ public class Intervention {
     @ManyToOne
     private Doctor doctor;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    private Clinic clinic;
+    
     @OneToOne
     private InterventionType interventionType;
     

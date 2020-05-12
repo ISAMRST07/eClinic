@@ -1,10 +1,12 @@
 package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.DTO.InterventionDTO;
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Intervention;
 import mrs.eclinicapi.model.InterventionType;
+import mrs.eclinicapi.repository.ClinicRepository;
 import mrs.eclinicapi.repository.ClinicRoomRepository;
 import mrs.eclinicapi.repository.DoctorRepository;
 import mrs.eclinicapi.repository.InterventionRepository;
@@ -32,15 +34,20 @@ public class InterventionService {
     @Autowired
     private InterventionTypeRepository interventionTypeRepository;
     
+    @Autowired
+    private ClinicRepository clinicRepository;
+    
     public Intervention addNewIntervention(InterventionDTO iDTO) {
     	ClinicRoom clinicRoom = clinicRoomRepository.findById(iDTO.getSelectedClinicRoom()).orElse(null);
     	Doctor doctor = doctorRepository.findById(iDTO.getSelectedDoctor()).orElse(null);
     	InterventionType interventionType = interventionTypeRepository.findById(iDTO.getSelectedInterventionType()).orElse(null);
+    	Clinic clinic = clinicRepository.findById(iDTO.getClinic()).orElse(null);
     	
     	Intervention newIntervention = new Intervention();
     	newIntervention.setClinicRoom(clinicRoom);
     	newIntervention.setDoctor(doctor);
     	newIntervention.setInterventionType(interventionType);
+    	newIntervention.setClinic(clinic);    
     	newIntervention.setDateTime(iDTO.getDateTime());
     	newIntervention.setDuration(iDTO.getDuration());
     	newIntervention.setPrice(iDTO.getPrice());
@@ -78,6 +85,10 @@ public class InterventionService {
 
     public void deleteById(String id) {
         repository.deleteById(id);
+    }
+    
+    public List<Intervention> getClinicIntervention(String clinicId){
+    	return repository.getClinicIntervention(clinicId);
     }
   
 }

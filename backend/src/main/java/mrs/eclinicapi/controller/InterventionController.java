@@ -31,7 +31,7 @@ public class InterventionController {
     	System.out.println("addIntervention dto = " + iDTO);
     	
     	Intervention added = service.addNewIntervention(iDTO);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(added, HttpStatus.OK);
     }
     
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,13 +41,13 @@ public class InterventionController {
         return new ResponseEntity<>(it, HttpStatus.OK);
     }
     
-    /*@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Intervention>> getClinicIntervention(@PathVariable("id") String clinicId) {
     	System.out.println("getClinicIntervention clinicId = " + clinicId);
-    	List<Intervention> it = service.getClinicInterventionType(clinicId);
+    	List<Intervention> it = service.getClinicIntervention(clinicId);
     	System.out.println("getClinicInterventionType it = " + it);
         return new ResponseEntity<>(it, HttpStatus.OK);
-    }*/
+    }
     
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Intervention> modifyIntervention(@RequestBody InterventionDTO iDTO) {

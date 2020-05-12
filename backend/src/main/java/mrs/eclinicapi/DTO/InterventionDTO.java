@@ -27,6 +27,7 @@ public class InterventionDTO {
 	String selectedClinicRoom;    
 	String selectedDoctor;
 	String selectedInterventionType; 
+	String clinic;
 	double duration;
 	double price;
     
@@ -34,7 +35,7 @@ public class InterventionDTO {
 	public String toString() {
 		return "InterventionDTO [id=" + id + ", dateTime=" + dateTime + ", selectedClinicRoom=" + selectedClinicRoom
 				+ ", selectedDoctor=" + selectedDoctor + ", selectedInterventionType=" + selectedInterventionType
-				+ ", duration=" + duration + ", price=" + price + "]";
+				+ ", clinic=" + clinic + ", duration=" + duration + ", price=" + price + "]";
 	}
 	
 }

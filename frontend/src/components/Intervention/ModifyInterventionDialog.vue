@@ -247,6 +247,9 @@
             ...mapActions('intervention/intervention', ['updateInterventionApi']),
 
             submit(fun) {
+          
+          		this.intervention.clinic = this.clinic.id;
+            
                 if (this.$refs.form.validate()) {
                 	console.log("add pressed");
                 	console.log(this.selectedClinicRoom);

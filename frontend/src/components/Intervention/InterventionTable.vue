@@ -114,9 +114,8 @@ export default {
                 break;
             case ClinicalAdmin.code:
                 console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                //this.getClinicInterventionApi(this.clinic.id);
                 console.log("callapi");
-                this.getAllInterventionApi();
+                this.getClinicInterventionApi(this.clinic.id);
                 break;
             default:
         }

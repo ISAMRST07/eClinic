@@ -67,6 +67,7 @@ export const emptyIntervention = {
     selectedClinicRoom: null,
     selectedDoctor: null,
     selectedInterventionType: '',
+	clinic : '',
     duration: 0,
     price: 0
 };
