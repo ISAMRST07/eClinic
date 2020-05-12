@@ -29,16 +29,8 @@ public class InterventionController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Intervention> addIntervention(@RequestBody InterventionDTO iDTO) {
     	System.out.println("addIntervention dto = " + iDTO);
-    	/*Intervention newIntervention = new Intervention();
-    	//newIntervention.setDateTime(iDTO.getDateTime());
-    	newIntervention.setClinicRoom(iDTO.getSelectedClinicRoom());
-    	newIntervention.setDoctor(iDTO.getSelectedDoctor());
-    	newIntervention.setInterventionType(iDTO.getSelectedInterventionType());
-    	newIntervention.setDuration(iDTO.getDuration());
-    	newIntervention.setPrice(iDTO.getPrice());
-
-    	System.out.println("added newIntervention = " + newIntervention);
-    	Intervention added = service.add(newIntervention);*/
+    	
+    	Intervention added = service.addNewIntervention(iDTO);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
     
@@ -60,15 +52,10 @@ public class InterventionController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Intervention> modifyIntervention(@RequestBody InterventionDTO iDTO) {
     	System.out.println("modifyIntervention iDTO = " + iDTO);
-    	Intervention newIT = service.findOne(iDTO.getId());
-    	/*newIT.setClinicRoom(iDTO.getSelectedClinicRoom());
-    	newIT.setDoctor(iDTO.getSelectedDoctor());
-    	newIT.setInterventionType(iDTO.getSelectedInterventionType());
-    	newIT.setDuration(iDTO.getDuration());
-    	newIT.setPrice(iDTO.getPrice());*/
+    	
 
     	
-    	Intervention modified = service.add(newIT);
+    	Intervention modified = service.modify(iDTO);
         if (modified == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
