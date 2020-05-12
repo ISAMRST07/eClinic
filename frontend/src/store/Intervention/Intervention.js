@@ -32,6 +32,7 @@ export default {
     actions: {
     	async getAllInterventionApi({rootState, commit}) {
             try {
+            	console.log("getAllInterventionApi");
                 let res = await Vue.prototype.$axios.get('/api/intervention/',
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log("actions getAllInterventionApi = " + res.data);

@@ -233,7 +233,7 @@
                     console.log(this.editIntervention.date);
                     this.intervention = this.editIntervention;
                 }
-                this.dateTime = this.intervention.dateTime;
+                this.dateTime = new Date(this.intervention.dateTime); 
                 this.selectedClinicRoom = this.intervention.selectedClinicRoom;
                 this.selectedDoctor = this.intervention.selectedDoctor;
                 this.selectedInterventionType = this.intervention.selectedInterventionType;
