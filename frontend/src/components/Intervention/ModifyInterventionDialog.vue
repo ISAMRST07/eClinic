@@ -180,20 +180,23 @@
 			},
 			now() {
             	let current = new Date();
-            	current.setMinutes(current.getMinutes() + 10);
+            	current.setMinutes(current.getMinutes() + 5);
             	if(!this.dateTime) this.dateTime = current;
             	if (current.getFullYear() === this.dateTime.getFullYear() &&
 					current.getMonth() === this.dateTime.getMonth() &&
 					current.getDate() === this.dateTime.getDate()) {
-            		//console.log(current.getHours());
-            		//console.log(current.getMinutes());
-            		return '${current.getHours()}:${current.getMinutes()}';
+
+
+            		return `${current.getHours()}:${current.getMinutes()}`;
 				}
             	else return null;
 			},
 			date: {
             	get() {
-					if(!this.dateTime) return ''
+					if(!this.dateTime) {
+						this.dateTime = new Date();
+						this.dateTime.setMinutes(this.dateTime.getMinutes() + 10);
+					}
 					return this.dateTime.toISOString().substr(0, 10);
 				},
 				set(val){
@@ -210,12 +213,19 @@
 			},
 			time: {
             	get() {
-            		if (!this.dateTime) return ''
+            		if (!this.dateTime) {
+            			this.dateTime = new Date();
+						this.dateTime.setMinutes(this.dateTime.getMinutes() + 10);
+					}
 					return ('0' + this.dateTime.getHours()).slice(-2) + ':' +
 							('0' + this.dateTime.getMinutes()).slice(-2);
 				},
 				set(val){
-            		if(!this.dateTime) this.dateTime = new Date();
+            		if(!val) val = '00:00';
+            		if(!this.dateTime) {
+            			this.dateTime = new Date();
+						this.dateTime.setMinutes(this.dateTime.getMinutes() + 10);
+					}
 					let hours = val.slice(0, 2);
 					let minutes = val.slice(-2);
 					this.dateTime.setHours(hours);
@@ -229,11 +239,10 @@
         watch: {
             value() {
                 if (this.editIntervention) {
-                    console.log("value changed editIntervention");
-                    console.log(this.editIntervention.date);
                     this.intervention = this.editIntervention;
                 }
-                this.dateTime = new Date(this.intervention.dateTime); 
+                if(!this.intervention.dateTime) this.dateTime = new Date();
+                else this.dateTime = new Date(this.intervention.dateTime);
                 this.selectedClinicRoom = this.intervention.selectedClinicRoom;
                 this.selectedDoctor = this.intervention.selectedDoctor;
                 this.selectedInterventionType = this.intervention.selectedInterventionType;
@@ -247,9 +256,9 @@
             ...mapActions('intervention/intervention', ['updateInterventionApi']),
 
             submit(fun) {
-          
+
           		this.intervention.clinic = this.clinic.id;
-            
+
                 if (this.$refs.form.validate()) {
                 	console.log("add pressed");
                 	console.log(this.selectedClinicRoom);

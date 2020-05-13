@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 // Utility klasa za rad sa JSON Web Tokenima
@@ -40,13 +42,21 @@ public class TokenUtils {
     // Algoritam za potpisivanje JWT
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    // Funkcija za generisanje JWT token
     public String generateToken(String username) {
+        return this.generateToken(username, null);
+    }
+
+    // Funkcija za generisanje JWT token
+    public String generateToken(String username, Timestamp date) {
+        Date dateIssued;
+        if (date == null) dateIssued = new Date();
+        else dateIssued = new Date(date.getTime());
+
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())
-                .setIssuedAt(new Date())
+//                .setIssuedAt(dateIssued) nema ni ovoga
 //                .setExpiration()
                 // .claim("key", value) //moguce je postavljanje proizvoljnih podataka u telo JWT tokena
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
@@ -98,8 +108,8 @@ public class TokenUtils {
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
 
-        return (username != null && username.equals(userDetails.getUsername())
-                && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+        return (username != null && username.equals(userDetails.getUsername()));
+//                && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }
 
     public String getUsernameFromToken(String token) {

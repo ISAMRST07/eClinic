@@ -59,13 +59,18 @@
             firstName: null,
             lastName: null
         }),
+        watch: {
+            user(newUser) {
+                this.firstName = newUser.name;
+                this.lastName = newUser.surname;
+            }
+        },
         props: {
             value: {
                 type: Boolean,
                 default: false
             },
             user: emptyUser
-
         },
         methods:{
             save() {
@@ -76,10 +81,6 @@
                 this.$emit('modify', modifiedUser);
             }
         },
-        mounted() {
-            this.firstName = this.user.name;
-            this.lastName = this.user.surname;
-        }
     }
 </script>
 

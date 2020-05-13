@@ -60,6 +60,12 @@
             user: emptyUser,
 
         },
+        watch: {
+            user(newUser) {
+                this.phoneNumber = newUser.phoneNumber;
+
+            }
+        },
         methods:{
             save() {
                 let modifiedUser = this.user;
@@ -68,9 +74,6 @@
                 this.$emit('input', false);
                 this.$emit('modify', modifiedUser);
             }
-        },
-        mounted() {
-            this.phoneNumber = this.user.phoneNumber;
         }
     }
 </script>

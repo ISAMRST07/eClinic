@@ -15,13 +15,13 @@ import {
 const doctorsItem = {
     icon: 'mdi-account-tie',
     label: 'Doctors',
-    path: doctorsPath		
+    path: doctorsPath
 };
 
 const nursesItem = {
     icon: 'mdi-account-tie',
     label: 'Nurses',
-    path: nursesPath		
+    path: nursesPath
 };
 
 const homeItem = {
@@ -89,8 +89,6 @@ const ClinicalCenterAdmin = {
         clinicAdminsItem,
         clinicRoomsItem,
         unregisteredUsersItem,
-        doctorsItem,
-        nursesItem
     ],
 };
 
