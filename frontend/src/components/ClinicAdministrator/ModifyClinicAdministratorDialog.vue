@@ -200,19 +200,20 @@
                     this.address = this.editClinicAdmin.address;
                     this.selectedClinic = this.editClinicAdmin.clinic;
                     this.clinicAdmin = this.editClinicAdmin;
-                } else {
-                    this.name = "";
-                    this.email = "";
-                    this.surname = "";
-                    this.password = "";
-                    this.username = "";
-                    this.city = "";
-                    this.country = "";
-                    this.personalID = "";
-                    this.address = "";
-                    this.selectedClinic = null;
-                    this.clinicAdmin = emptyClinicAdmin;
                 }
+                // } else {
+                //     this.name = "";
+                //     this.email = "";
+                //     this.surname = "";
+                //     this.password = "";
+                //     this.username = "";
+                //     this.city = "";
+                //     this.country = "";
+                //     this.personalID = "";
+                //     this.address = "";
+                //     this.selectedClinic = null;
+                //     this.clinicAdmin = emptyClinicAdmin;
+                // }
 
             }
         },
