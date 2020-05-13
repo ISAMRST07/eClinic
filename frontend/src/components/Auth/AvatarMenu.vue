@@ -30,7 +30,13 @@
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
-                    <v-btn class="mx-auto" small color="grey darken-2" rounded outlined>
+                    <v-btn
+                            class="mx-auto"
+                            small
+                            color="grey darken-2"
+                            @click="toProfile"
+                            rounded
+                            outlined>
                         Manage your account
                     </v-btn>
                 </v-list-item>
@@ -82,6 +88,10 @@
             btLogout() {
                 this.logout();
             },
+            toProfile() {
+                this.$router.push(`/profile/${this.user.id}`);
+                this.menuActive = false;
+            }
         }
     }
 </script>

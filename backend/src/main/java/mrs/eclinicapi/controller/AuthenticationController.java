@@ -6,15 +6,14 @@ import mrs.eclinicapi.DTO.TokenResponse;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.security.TokenUtils;
-import mrs.eclinicapi.service.ClinicService;
-import mrs.eclinicapi.service.PatientService;
-import mrs.eclinicapi.service.UnregisteredUserService;
-import mrs.eclinicapi.service.UserDetailsService;
+import mrs.eclinicapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +43,9 @@ public class AuthenticationController {
 
     @Autowired
     private UnregisteredUserService unregisteredUserService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
@@ -109,6 +111,32 @@ public class AuthenticationController {
     @ExceptionHandler(NoHandlerFoundException.class)
     String noHandlerFound(NoHandlerFoundException ex) {
         return "classpath:index.html";
+    }
+
+    @PutMapping(value = "/changepassword/{id}")
+    @PreAuthorize("!hasRole('unregisteredUser')")
+    public ResponseEntity<TokenResponse> changePassword(@RequestBody PasswordChanger passwordChanger, @PathVariable String id) {
+
+        try {
+            User added = userService.changePassword(id, passwordChanger.oldPassword, passwordChanger.newPassword,
+                    passwordChanger.personal);
+            String jwt = tokenUtils.generateToken(added.getUsername(), added.getLastPasswordResetDate());
+            Clinic clinic = clinicService.findByUser(added.getId());
+
+            return ResponseEntity.ok(new TokenResponse(jwt, added, clinic));
+        } catch (UserService.UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
+    static class PasswordChanger {
+        public String oldPassword;
+        public String newPassword;
+        public boolean personal;
     }
 
 }

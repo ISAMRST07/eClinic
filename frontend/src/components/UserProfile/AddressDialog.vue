@@ -87,6 +87,13 @@
             user: emptyUser
 
         },
+        watch: {
+            user(newUser) {
+                this.address = newUser.address;
+                this.city = newUser.city;
+                this.country = newUser.country;
+            }
+        },
         methods:{
             save() {
                 let modifiedUser = this.user;
@@ -96,11 +103,6 @@
                 this.$emit('input', false);
                 this.$emit('modify', modifiedUser);
             }
-        },
-        mounted() {
-            this.address = this.user.address;
-            this.city = this.user.city;
-            this.country = this.user.country;
         }
     }
 </script>

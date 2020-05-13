@@ -88,16 +88,26 @@
                                     disabled
                             ></profile-info-item>
                             <v-divider></v-divider>
-                            <v-list-item link>
+                            <v-list-item link @click="passwordDialog = true">
                                 <v-list-item-content>
                                     <v-list-item-title>
                                         ••••••••
                                     </v-list-item-title>
                                     <v-list-item-subtitle>
-                                        Password - Last changed {{ lastChanged }}
+                                        Password
                                     </v-list-item-subtitle>
                                 </v-list-item-content>
+                                <v-list-item-action>
+                                    <v-icon>
+                                        mdi-chevron-right
+                                    </v-icon>
+                                </v-list-item-action>
                             </v-list-item>
+                            <profile-info-item
+                                    :content="lastChanged"
+                                    subtitle="Last time the password was changed"
+                                    disabled
+                            ></profile-info-item>
                         </v-list>
                     </v-card>
                 </v-col>
@@ -106,6 +116,12 @@
         <name-dialog v-model="nameDialog" :user="profile" @modify="updateProfile"></name-dialog>
         <address-dialog v-model="addressDialog" :user="profile" @modify="updateProfile"></address-dialog>
         <phone-number-dialog v-model="phoneNumberDialog" :user="profile" @modify="updateProfile"></phone-number-dialog>
+        <password-dialog
+                v-model="passwordDialog"
+                :user="profile"
+                @passwordChange="passwordChanged"
+                :personal="profile.id === $store.state.auth.user.id"
+        ></password-dialog>
     </div>
 </template>
 
@@ -117,14 +133,16 @@
     import PhoneNumberDialog from "./PhoneNumberDialog";
     import {ClinicalCenterAdmin} from "../../utils/DrawerItems";
     import store from '../../store/index'
+    import PasswordDialog from "./PasswordDialog";
 
     export default {
         name: "UserProfileView",
-        components: {PhoneNumberDialog, AddressDialog, NameDialog, ProfileInfoItem},
+        components: {PasswordDialog, PhoneNumberDialog, AddressDialog, NameDialog, ProfileInfoItem},
         data: () => ({
             nameDialog: false,
             addressDialog: false,
-            phoneNumberDialog: false
+            phoneNumberDialog: false,
+            passwordDialog: false
         }),
         computed: {
             ...mapState('profile', ['profile']),
@@ -135,14 +153,19 @@
                 return `${firstNameInitial}`;
             },
             lastChanged() {
-                if (!this.profile.lastPasswordResetDate) return 'long time ago';
+                if (!this.profile.lastPasswordResetDate) return 'a long time ago';
                 let lastChange = new Date(this.profile.lastPasswordResetDate);
                 let today = new Date();
                 let difference = today - lastChange;
                 let days = Math.round(difference / (1000 * 60 * 60 * 24));
                 if (days === 1) return `${days} day ago`;
-                else if (days !== 0) return `${days} days ago`;
-                else return `${Math.round(difference / (1000 * 60 * 60))} hours ago`;
+                if (days !== 0) return `${days} days ago`;
+                let hours = Math.round(difference / (1000 * 60 * 60));
+                if (hours === 1) return `${hours} hour ago`;
+                if (hours !== 0) return `${hours} hours ago`;
+                let minutes = Math.round(difference / (1000 * 60));
+                if (minutes <= 1) return '1 minute ago';
+                else return `${minutes} minutes ago`;
             },
             greetingMessages() {
                 // da napravimo neku glupost od koda ovde, i ja malo da se poigram....
@@ -157,13 +180,15 @@
         },
         created() {
             this.getProfileApi(this.$route.params.id);
-            this.lastChanged;
         },
         methods: {
             ...mapActions('profile', ['getProfileApi']),
             ...mapActions('profile', ['updateProfileApi']),
             updateProfile(profile) {
                 this.updateProfileApi(profile);
+            },
+            passwordChanged() {
+                this.getProfileApi(this.$route.params.id);
             }
 
         },
@@ -175,7 +200,7 @@
                 next('/')
             }
             next();
-        }
+        },
     }
 </script>
 
