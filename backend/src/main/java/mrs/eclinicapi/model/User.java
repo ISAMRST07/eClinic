@@ -75,6 +75,7 @@ public class User implements UserDetails {
     }
 
     public User(ClinicAdministratorDto clinicAdminDto) {
+        this.phoneNumber = clinicAdminDto.getPhoneNumber();
         this.password = clinicAdminDto.getPassword();
         this.name = clinicAdminDto.getName();
         this.surname = clinicAdminDto.getSurname();

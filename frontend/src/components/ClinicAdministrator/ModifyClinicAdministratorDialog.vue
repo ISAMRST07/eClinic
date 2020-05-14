@@ -18,8 +18,18 @@
                         <v-form ref="form">
                             <template>
                                 <v-row>
-                                    <v-col cols="12">
+                                    <v-col cols="6">
                                         <clinic-selection v-model="selectedClinic"/>
+                                    </v-col>
+                                    <v-col cols="6">
+                                        <v-text-field
+                                                label="Email*"
+                                                required
+                                                :rules="[rules.required, rules.email]"
+                                                v-model="email"
+                                                :error="emailError.isError"
+                                                :error-messages="emailError.errorMessage"
+                                        ></v-text-field>
                                     </v-col>
                                     <v-col cols="6">
                                         <v-text-field
@@ -75,12 +85,10 @@
                                     </v-col>
                                     <v-col cols="6">
                                         <v-text-field
-                                                label="Email*"
+                                                label="Phone number*"
                                                 required
                                                 :rules="[rules.required, rules.email]"
-                                                v-model="email"
-                                                :error="emailError.isError"
-                                                :error-messages="emailError.errorMessage"
+                                                v-model="phoneNumber"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="6">
@@ -164,6 +172,7 @@
             email: '',
             personalID: '',
             address: '',
+            phoneNumber: '',
 
             showPassword: false,
             showPassword2: false,
@@ -200,6 +209,7 @@
                     this.address = this.editClinicAdmin.address;
                     this.selectedClinic = this.editClinicAdmin.clinic;
                     this.clinicAdmin = this.editClinicAdmin;
+                    this.phoneNumber = this.editClinicAdmin.phoneNumber;
                 }
                 // } else {
                 //     this.name = "";
@@ -280,8 +290,10 @@
                     this.clinicAdmin.country = this.country;
                     this.clinicAdmin.personalID = this.personalID;
                     this.clinicAdmin.address = this.address;
+                    this.clinicAdmin.phoneNumber = this.phoneNumber;
                     this.clinicAdmin.clinic = this.selectedClinic;
                     if (this.mode === "update")
+
                         clinicA.id = this.editClinicAdmin.id;
                     fun(this.clinicAdmin);
                     this.closeAddDialog();

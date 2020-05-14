@@ -26,6 +26,7 @@ public class UserDTO {
     protected String country;
     protected String address;
     protected String personalID;
+    protected String phoneNumber;
 
     public UserDTO() {
     }

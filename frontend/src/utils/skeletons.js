@@ -15,6 +15,7 @@ export const emptyClinicAdmin = {
     email : '',
     personalID : '',
     address: '',
+    phoneNumber: '',
     clinic : null
 };
 

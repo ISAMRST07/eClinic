@@ -131,7 +131,7 @@
     import NameDialog from "./NameDialog";
     import AddressDialog from "./AddressDialog";
     import PhoneNumberDialog from "./PhoneNumberDialog";
-    import {ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
     import store from '../../store/index'
     import PasswordDialog from "./PasswordDialog";
 
@@ -196,7 +196,8 @@
             let loggedUser = store.state.auth.user;
             let id = to.params.id;
             let role = store.state.auth.role;
-            if (role !== ClinicalCenterAdmin.code && loggedUser.id !== id) {
+            console.log(to)
+            if (role !== ClinicalCenterAdmin.code && role !== ClinicalAdmin.code && loggedUser.id !== id) {
                 next('/')
             }
             next();

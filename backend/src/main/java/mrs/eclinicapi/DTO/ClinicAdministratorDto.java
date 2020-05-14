@@ -28,6 +28,7 @@ public class ClinicAdministratorDto extends UserDTO {
         this.country = clinicAdministrator.getUser().getCountry();
         this.userID = clinicAdministrator.getUser().getId();
         this.address = clinicAdministrator.getUser().getAddress();
+        this.phoneNumber = clinicAdministrator.getUser().getPhoneNumber();
         this.personalID = clinicAdministrator.getUser().getPersonalID(); //JMBG
     }
 

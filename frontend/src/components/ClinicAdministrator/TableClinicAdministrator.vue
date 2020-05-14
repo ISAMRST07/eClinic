@@ -120,9 +120,10 @@
                 this.descriptionDialog = !this.descriptionDialog;
             },
             updateDialog(clinicAdmin) {
-                this.editClinicAdmin = clinicAdmin;
-                this.clinicToUpdate = clinicAdmin;
-                this.editDialog = true;
+                // this.editClinicAdmin = clinicAdmin;
+                // this.clinicToUpdate = clinicAdmin;
+                // this.editDialog = true;
+                this.$router.push(`/profile/${clinicAdmin.userID}`)
             }
 
         },

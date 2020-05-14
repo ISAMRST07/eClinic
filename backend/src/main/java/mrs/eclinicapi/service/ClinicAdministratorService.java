@@ -58,11 +58,8 @@ public class ClinicAdministratorService {
 
         List<ClinicAdministratorDto> clinicAdministratorsDto = new ArrayList<>();
         for (ClinicAdministrator c : clinicAdministrators) {
-            System.out.println("ODJEEEEEEEEEEEEEE");
-            System.out.println(c.getClinic());
             ClinicAdministratorDto cdto = new ClinicAdministratorDto(c, 0);
             clinicAdministratorsDto.add(cdto);
-            System.out.println(cdto.getClinic());
         }
         return clinicAdministratorsDto;
     }

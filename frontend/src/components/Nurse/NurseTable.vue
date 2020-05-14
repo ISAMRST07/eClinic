@@ -104,20 +104,20 @@
                 this.deleteDialog(null);
             },
             updateDialog(nurse) {
-                console.log("updateDialog id = " + nurse.id);
-                this.editNurse = {
-                    id: nurse.id,
-                    email: nurse.user.email,
-                    name: nurse.user.name,
-                    surname: nurse.user.surname,
-                    phone: nurse.user.phoneNumber,
-                    address: nurse.user.address,
-                    city: nurse.user.city,
-                    country: nurse.user.country,
-                    jmbg: nurse.user.personalID,
-                    position: nurse.position
-                };
-                this.editDialog = true;
+                this.$router.push(`/profile/${nurse.user.id}`)
+                // this.editNurse = {
+                //     id: nurse.id,
+                //     email: nurse.user.email,
+                //     name: nurse.user.name,
+                //     surname: nurse.user.surname,
+                //     phone: nurse.user.phoneNumber,
+                //     address: nurse.user.address,
+                //     city: nurse.user.city,
+                //     country: nurse.user.country,
+                //     jmbg: nurse.user.personalID,
+                //     position: nurse.position
+                // };
+                // this.editDialog = true;
             }
         },
         created() {
