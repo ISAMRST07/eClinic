@@ -74,6 +74,18 @@
                         <v-btn @click="patientsDetails" text>Details</v-btn>
                     </v-card-actions>
                 </v-card>
+                
+                <v-card>
+                    <v-card-title primary-title class="blue--text">
+                        Interventions:
+                    </v-card-title>
+                    <v-card-text class="body-1">
+                        {{ clinic.interventions.length }}
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn @click="interventionsDetails" text>Details</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-layout>
         </v-container>
     </div>
@@ -119,17 +131,23 @@
             },
             doctorDetails() {
                 console.log("doctorDetails");
-                //this.$router.push('Doctors')
+                this.$router.push('doctors')
             },
             nurseDetails() {
                 console.log("nurseDetails details");
+                this.$router.push('nurses')       
             },
             clinicRoomDetails() {
                 console.log("clinicRoomDetails");
+                this.$router.push('clinicRooms')  
             },
             patientsDetails() {
                 console.log("patientsDetails");
             },
+            interventionsDetails(){
+                console.log("interventionsDetails");
+                this.$router.push('intervention')       
+            }
 
         },
         created() {
