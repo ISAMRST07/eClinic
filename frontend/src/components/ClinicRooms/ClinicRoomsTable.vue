@@ -1,24 +1,27 @@
 <template>
     <div>
+    	<v-card>
+			<v-card-title>
+				Clinic rooms
+				<v-spacer></v-spacer>
+				<v-text-field
+					v-model="search"
+					append-icon="mdi-magnify"
+					label="Search"
+					single-line
+					hide-details
+				></v-text-field>
+			</v-card-title>
+		</v-card>
+		
         <v-data-table
                 :headers="headers"
                 :items="clinicRooms"
+           		:search="search"                     
                 class="elevation-1"
                 :loading="loading"
                 loading-text="Visiting all the clinic rooms..."
         >
-            <template v-slot:top>
-                <v-toolbar flat color="white">
-                    <v-toolbar-title>Clinic rooms</v-toolbar-title>
-                    <v-divider
-                            class="mx-4"
-                            inset
-                            vertical
-                    ></v-divider>
-                    <v-spacer></v-spacer>
-                </v-toolbar>
-            </template>
-
             <template v-slot:item.update="{ item }">
                 <v-icon
                         @click="updateDialog(item)"
@@ -64,6 +67,7 @@
         name: "ClinicRoomsTable",
         components: {ModifyClinicRoomDialog, DeleteDialog},
         data: () => ({
+        	search : "",
             loading: false,
             descriptionDialog: false,
             editDialog: false,
