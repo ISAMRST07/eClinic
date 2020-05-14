@@ -12,13 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/doctor")
 public class DoctorController {
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Autowired
     private DoctorService service;
 
@@ -36,7 +39,7 @@ public class DoctorController {
         User newUser = new User();
         newUser.setName(doctorDto.getName());
         newUser.setSurname(doctorDto.getSurname());
-        newUser.setPassword(doctorDto.getPassword());
+        newUser.setPassword(passwordEncoder.encode(doctorDto.getPassword()));
         newUser.setEmail(doctorDto.getEmail());
         newUser.setAddress(doctorDto.getAddress());
         newUser.setCity(doctorDto.getCity());
@@ -64,7 +67,7 @@ public class DoctorController {
         System.out.println("oldUser = " + oldUser);
         oldUser.setName(doctorDto.getName());
         oldUser.setSurname(doctorDto.getSurname());
-        oldUser.setPassword(doctorDto.getJmbg().toString());
+        oldUser.setPassword(passwordEncoder.encode(doctorDto.getPassword()));
         oldUser.setEmail(doctorDto.getEmail());
         oldUser.setAddress(doctorDto.getAddress());
         oldUser.setCity(doctorDto.getCity());
