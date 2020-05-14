@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
 public class Patient {
     @Id
     @Column(length = 50)
@@ -27,19 +26,16 @@ public class Patient {
             strategy = "mrs.eclinicapi.generator.IdGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "PT")})
+
     private String id;
+
+    @ManyToMany
+    private List<Clinic> clinic;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    //    @JsonIgnoreProperties("patients")
-    @ManyToOne
-    private ClinicAdministrator clinic;
-
     @OneToOne
     public MedicalRecord medicalRecord;
-
-    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private List<Intervention> intervention;
 
 }

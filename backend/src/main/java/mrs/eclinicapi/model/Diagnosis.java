@@ -10,6 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 
-public class Disease {
+public class Diagnosis {
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "d_seq")
@@ -28,4 +29,5 @@ public class Disease {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
     private String name;
+
 }

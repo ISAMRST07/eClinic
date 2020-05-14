@@ -10,7 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,20 +18,28 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
-public class Prescription {
+public class Visit {
     @Id
-    @Column(length = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pr_seq")
-    @GenericGenerator(name = "pr_seq",
+    @Column(length=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "v_seq")
+    @GenericGenerator(name = "v_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "PR")})
+                    @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "V")})
     private String id;
 
-    @ManyToOne
-    private Medicine medicine;
+    private String anamnesis;
 
-    private Long quantity;
+    @ManyToOne
+    private MedicalRecord medicalRecord;
+
+    @OneToOne
+    private Intervention intervention;
+
+    @ManyToMany
+    private List<Diagnosis> diagnoses;
+
+    @ManyToMany
+    private List<Prescription> prescriptions;
 
 }

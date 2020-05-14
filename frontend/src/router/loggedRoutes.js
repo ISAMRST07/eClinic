@@ -26,8 +26,10 @@ import {
     unregisteredUsersPath,
     interventionTypePath,
     interventionPath,
-    userProfilePath
+    userProfilePath,
+    patientsPath
 } from "../utils/paths";
+import Patients from "../pages/Patients";
 
 const loggedRoutes = [
     {
@@ -86,6 +88,12 @@ const loggedRoutes = [
         path: userProfilePath,
         component: UserProfileView
     }
+    ,
+    {
+        path: patientsPath,
+        component: Patients
+    }
+
 ];
 
 export default loggedRoutes;

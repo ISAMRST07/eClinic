@@ -38,7 +38,7 @@ public class ClinicController {
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Clinic>> getAllClinic() {
 
         List<Clinic> clinics = service.findAll();

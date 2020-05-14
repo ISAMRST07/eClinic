@@ -12,6 +12,7 @@ import MedicinesModules from "./MedicinesModules";
 import DiseaseModules from "./DiseaseModules";
 import UnregisteredUsersModule from "./UnregisteredUsersModules";
 import ProfileModule from "./ProfileModule";
+import PatientsModule from "./PatientsModule";
 
 Vue.use(Vuex);
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     unregisteredUsers: UnregisteredUsersModule,
     interventionType : InterventionTypeModule,
     intervention : InterventionModule,
-      profile: ProfileModule
+    profile: ProfileModule,
+    patients: PatientsModule
   }
 })

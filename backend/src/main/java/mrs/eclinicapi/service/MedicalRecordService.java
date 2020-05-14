@@ -1,5 +1,6 @@
 package mrs.eclinicapi.service;
 
+import mrs.eclinicapi.model.MedicalRecord;
 import mrs.eclinicapi.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,4 +15,5 @@ public class MedicalRecordService {
         this.repository = repository;
     }
 
+    public MedicalRecord save(MedicalRecord medicalRecord) { return this.repository.save(medicalRecord); }
 }

@@ -44,12 +44,15 @@ public class Intervention {
 
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
-    
+
     @OneToOne
     private InterventionType interventionType;
-    
+
+    @OneToOne
+    private Visit visit;
+
     private double duration;
-    
+
     private double price;
 
 	@Override
@@ -57,5 +60,5 @@ public class Intervention {
 		return "Intervention [id=" + id + ", dateTime=" + dateTime + ", interventionType=" + interventionType
 				+ ", duration=" + duration + ", price=" + price + "]";
 	}
-    
+
 }

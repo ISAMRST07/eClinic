@@ -1,8 +1,9 @@
 <template>
     <div>
         <modify-clinic-dialog
-                v-model="addDialog"/>
+            v-model="addDialog"/>
         <v-btn
+                v-if="role === adminCode"
                 fab
                 dark
                 large
@@ -17,13 +18,19 @@
 
 <script>
     import ModifyClinicDialog from "./ModifyClinicDialog";
+    import {mapState} from "vuex";
+    import {ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
     export default {
         name: "AddClinic",
         components: {ModifyClinicDialog},
         data: () => ({
-            addDialog: false
-        })
+            addDialog: false,
+            adminCode: ClinicalCenterAdmin.code
+        }),
+        computed: {
+            ...mapState('auth', ['role']),
+        }
 
     }
 </script>

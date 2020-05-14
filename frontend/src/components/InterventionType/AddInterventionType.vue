@@ -2,6 +2,7 @@
     <div>
         <modify-intervention-type-dialog v-model="addDialog"/>
         <v-btn
+                v-if="role === adminCode"
                 fab
                 dark
                 large
@@ -16,12 +17,18 @@
 
 <script>
     import ModifyInterventionTypeDialog from "./ModifyInterventionTypeDialog";
+    import {ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {mapState} from "vuex";
     export default {
         name: "AddInterventionType",
         components: {ModifyInterventionTypeDialog},
         data: () => ({
-            addDialog: false
-        })
+            addDialog: false,
+            adminCode: ClinicalCenterAdmin.code
+        }),
+        computed: {
+            ...mapState('auth', ['role']),
+        }
     }
 </script>
 

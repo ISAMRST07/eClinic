@@ -9,7 +9,8 @@ import {
     nursesPath,
     clinicDetailsPath,
     interventionTypePath,
-    interventionPath
+    interventionPath,
+    patientsPath
 } from "./paths";
 
 const doctorsItem = {
@@ -37,8 +38,8 @@ const clinicDetailsItem = {
 };
 
 const interventionTypeItem = {
-    icon: 'mdi-home',
-    label: 'Intervention type',
+    icon: 'mdi-currency-eur',
+    label: 'Intervention types and pricing',
     path: interventionTypePath
 };
 
@@ -79,6 +80,12 @@ const unregisteredUsersItem = {
     path: unregisteredUsersPath,
 };
 
+const patientsItem = {
+    icon: 'mdi-account-heart',
+    label: 'Patients',
+    path: patientsPath,
+};
+
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
     code: 'clinicCentarAdministrator',
@@ -88,6 +95,7 @@ const ClinicalCenterAdmin = {
         medicinesItem,
         clinicAdminsItem,
         clinicRoomsItem,
+        patientsItem,
         unregisteredUsersItem,
     ],
 };
@@ -113,6 +121,9 @@ const Patient = {
     code: 'Patient',
     items: [
         homeItem,
+        clinicsItem,
+        interventionTypeItem,
+
     ]
 };
 

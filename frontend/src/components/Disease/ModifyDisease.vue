@@ -5,8 +5,8 @@
             persistent max-width="600px">
         <v-card>
             <v-card-title>
-                <span v-if="mode === 'add'" class="headline">Add disease</span>
-                <span v-else class="headline">Update disease</span>
+                <span v-if="mode === 'add'" class="headline">Add diagnosis</span>
+                <span v-else class="headline">Update diagnosis</span>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -45,7 +45,7 @@
         components: {},
         data: () => ({
             name: null,
-            disease: emptyDisease,
+            diagnosis: emptyDisease,
             nameRules: [v => !!v || 'Name is required.']
         }),
         props: {
@@ -59,19 +59,19 @@
         watch: {
             value() {
                 if (this.editDisease) {
-                    this.disease = this.editDisease;
+                    this.diagnosis = this.editDisease;
                 }
-                this.name = this.disease.name;
+                this.name = this.diagnosis.name;
             }
         },
         methods: {
-            ...mapActions('disease/disease', ['addDiseaseApi']),
-            ...mapActions('disease/disease', ['updateDiseaseApi']),
+            ...mapActions('diagnosis/diagnosis', ['addDiseaseApi']),
+            ...mapActions('diagnosis/diagnosis', ['updateDiseaseApi']),
 
             submit(fun) {
                 if (this.$refs.form.validate()) {
-                    this.disease.name = this.name;
-                    fun(this.disease);
+                    this.diagnosis.name = this.name;
+                    fun(this.diagnosis);
                     this.close();
                 }
             },

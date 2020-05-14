@@ -16,7 +16,7 @@
         <v-data-table
                 :headers="headers"
                 :items="interventionType"
-                :search="search"   
+                :search="search"
                 class="elevation-1"
                 :loading="loading"
                 loading-text="Getting intervention types"
@@ -59,7 +59,7 @@
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyInterventionTypeDialog from "./ModifyInterventionTypeDialog";
-    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
 
     export default {
         name: "InterventionTypeTable",
@@ -72,21 +72,28 @@
             dialog: false,
             interventionTypeToDelete: null,
             editInterventionType: null,
-            headers: [
-                { text: 'Name', align: 'start', value: 'name' },
-                { text: 'Price', align: 'center', value: 'price' },
-                { text: 'Update', value: 'update', sortable: false, align: 'center' },
-                { text: 'Remove', sortable: false, value: 'remove' },
-            ],
+
         }),
         computed: {
             ...mapState('interventionType/interventionType', ['interventionType']),
-            ...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),     
+            ...mapState('auth', ['role']),
+            ...mapState('auth', ['clinic']),
+            headers() {
+                let regularHeaders = [
+                    { text: 'Name', align: 'start', value: 'name' },
+                    { text: 'Price', align: 'center', value: 'price' }
+                ];
+                let adminHeaders = [
+                    { text: 'Update', value: 'update', sortable: false, align: 'center' },
+                    { text: 'Remove', sortable: false, value: 'remove' }
+                ];
+                if (this.role !== Patient.code) regularHeaders = regularHeaders.concat(adminHeaders);
+                return regularHeaders;
+            }
         },
         methods: {
             ...mapActions('interventionType/interventionType', ['getAllInterventionTypeApi']),
-            ...mapActions('interventionType/interventionType', ['getClinicInterventionTypeApi']),      
+            ...mapActions('interventionType/interventionType', ['getClinicInterventionTypeApi']),
             ...mapActions('interventionType/interventionType', ['deleteInterventionTypeApi']),
 
             deleteDialog(interventionTypeToDelete) {
@@ -109,15 +116,13 @@
         },
         created() {
         	this.loading = true;
-            console.log(this.user)
-        	switch (this.user.type) {
+        	switch (this.role) {
                 case ClinicalCenterAdmin.code:
-                	console.log("user = ClinicalCenterAdmin")
+                case Patient.code:
                 	this.getAllInterventionTypeApi();
                     break;
                 case ClinicalAdmin.code:
-                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);   
-                   	this.getClinicInterventionTypeApi(this.clinic.id); 
+                   	this.getClinicInterventionTypeApi(this.clinic.id);
                     break;
                 default:
             }

@@ -24,3 +24,5 @@ export const interventionPath = '/intervention';
 
 export const userProfilePath = '/profile/:id';
 
+export const patientsPath ='/patients'
+

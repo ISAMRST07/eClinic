@@ -2,7 +2,7 @@
     <div>
         <v-data-table
                 :headers="headers"
-                :items="diseases"
+                :items="diagnoses"
                 class="elevation-1"
                 :loading="loading"
                 loading-text="Reading all the known diagnoses..."
@@ -38,18 +38,18 @@
             </template>
 
             <template v-slot:no-data>
-                <p>There are no existing disease</p>
+                <p>There are no existing diagnosis</p>
             </template>
         </v-data-table>
-        <delete-disease
+        <delete-diagnosis
                 v-model="dialog"
-                :disease="diseaseToDelete"
+                :diagnosis="diseaseToDelete"
                 @close="deleteDialog(null)"
                 @delete="deleteDisease"
         />
-        <modify-disease
+        <modify-diagnosis
                 mode="update"
-                :edit-disease="editDisease"
+                :edit-diagnosis="editDisease"
                 v-model="editDialog"/>
     </div>
 </template>
@@ -79,22 +79,22 @@
             ],
         }),
         computed: {
-            ...mapState('disease/disease', ['diseases']),
+            ...mapState('diagnosis/diagnosis', ['diagnoses']),
         },
         methods: {
-            ...mapActions('disease/disease', ['getDiseases']),
-            ...mapActions('disease/disease', ['deleteDiseaseApi']),
+            ...mapActions('diagnosis/diagnosis', ['getDiseases']),
+            ...mapActions('diagnosis/diagnosis', ['deleteDiseaseApi']),
 
-            deleteDialog(disease) {
-                this.diseaseToDelete = disease;
+            deleteDialog(diagnosis) {
+                this.diseaseToDelete = diagnosis;
                 this.dialog = !this.dialog;
             },
             deleteDisease() {
                 this.deleteDiseaseApi(this.diseaseToDelete);
                 this.deleteDialog(null);
             },
-            updateDialog(disease) {
-                this.editDisease = disease;
+            updateDialog(diagnosis) {
+                this.editDisease = diagnosis;
                 this.editDialog = true;
             }
 
@@ -104,7 +104,7 @@
             this.getDiseases();
         },
         watch: {
-            diseases() {
+            diagnoses() {
                 this.loading = false;
             }
         }

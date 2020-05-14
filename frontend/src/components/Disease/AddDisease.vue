@@ -1,6 +1,6 @@
 <template>
     <div>
-        <modify-disease v-model="addDialog"/>
+        <modify-diagnosis v-model="addDialog"/>
         <v-btn
                 fab
                 dark

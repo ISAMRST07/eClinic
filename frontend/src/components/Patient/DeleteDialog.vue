@@ -39,11 +39,11 @@
 <script>
 
     export default {
-        name: "DeleteDisease",
-        props: ['diagnosis', 'value'],
+        name: "DeleteDialog",
+        props: ['patient', 'value'],
         computed: {
             deleteName() {
-                return this.diagnosis ? this.diagnosis.name : '';
+                return this.patient ? this.patient.name : '';
             }
         }
 

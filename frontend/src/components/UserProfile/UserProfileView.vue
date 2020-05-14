@@ -169,7 +169,8 @@
             },
             greetingMessages() {
                 // da napravimo neku glupost od koda ovde, i ja malo da se poigram....
-                return this.$store.state.auth.user.id === this.$route.id ? {
+
+                return this.$store.state.auth.user.id === this.$route.params.id ? {
                     welcome: `Welcome, ${this.profile.name} ${this.profile.surname}`,
                     subtitle: `Manage your info and security to make eClinic work better for you.`
                 } : {

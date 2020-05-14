@@ -25,7 +25,7 @@
                 >mdi-information
                 </v-icon>
             </template>
-            <template v-slot:item.remove="{ item }">
+            <template v-if="role === adminCode" v-slot:item.remove="{ item }">
                 <v-icon
                         @click="deleteDialog(item)"
                         color="red"
@@ -33,7 +33,7 @@
                     mdi-delete
                 </v-icon>
             </template>
-            <template v-slot:item.update="{ item }">
+            <template v-if="role === adminCode" v-slot:item.update="{ item }">
                 <v-icon
                         @click="updateDialog(item)"
                         color="amber darken-2"
@@ -67,6 +67,7 @@
     import DescriptionDialog from "./DescriptionDialog";
     import DeleteDialog from "./DeleteDialog";
     import ModifyClinicDialog from "./ModifyClinicDialog";
+    import {ClinicalCenterAdmin} from '../../utils/DrawerItems';
 
     export default {
         name: "ClinicsTable",
@@ -78,20 +79,12 @@
             dialog: false,
             clinicToDelete: null,
             clinicWithDescription: null,
-            headers: [
-                {
-                    text: 'Name',
-                    align: 'start',
-                    value: 'name',
-                },
-                {text: 'Description', value: 'description', sortable: false, align: 'center'},
-                {text: 'Address', value: 'address'},
-                {text: 'Update', value: 'update', sortable: false, align: 'center'},
-                {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
-            ],
+            adminCode: ClinicalCenterAdmin.code
         }),
         computed: {
             ...mapState('clinics/readClinics', ['clinics']),
+            ...mapState('auth', ['role']),
+
             editClinic: {
                 get() {
                     return this.$store.state.clinics.addClinic.clinic;
@@ -99,6 +92,22 @@
                 set(val) {
                     this.$store.commit('clinics/addClinic/updateClinic', val);
                 }
+            },
+
+            headers() {
+                let regularHeaders = [
+                    {text: 'Name', align: 'start', value: 'name'},
+                    {text: 'Description', value: 'description', sortable: false, align: 'center'},
+                    {text: 'Address', value: 'address'}
+                ];
+                let adminHeaders = [
+                    {text: 'Update', value: 'update', sortable: false, align: 'center'},
+                    {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
+                ];
+                if (this.role === this.adminCode) {
+                    regularHeaders = regularHeaders.concat(adminHeaders);
+                }
+                return regularHeaders;
             }
         },
         watch: {
