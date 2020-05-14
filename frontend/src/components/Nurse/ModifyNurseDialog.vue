@@ -24,6 +24,22 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">
+                                   <v-text-field
+                                          ref="password"
+                                          label="Password*"
+                                          required
+                                          v-model="password"
+                                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                          :rules="passwordRules"
+                                          :type="showPassword ? 'text' : 'password'"
+                                          name="input-10-2"
+                                          hint="At least 8 characters"
+                                          class="input-group--focused"
+                                          type="password"
+                                          @click:append="showPassword = !showPassword"
+                                  ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
                                 <v-text-field
                                         label="Name*"
                                         required
@@ -129,6 +145,7 @@
         components: {},
         data: () => ({
             email: null,
+            password: null,
             name: null,
             surname: null,
             phone: null,
@@ -143,6 +160,7 @@
             showPassword: false,
 
             emailRules: [v => !!v || "Email is required."],
+            passwordRules: [v => !!v || "Password is required."],          
             nameRules: [v => !!v || "Name is required."],
             surnameRules: [v => !!v || "Surname is required"],
             phoneRules: [v => !!v || "Phone is required."],
@@ -196,6 +214,7 @@
                 if (this.$refs.form.validate()) {
                     this.nurse.clinic = this.clinic.id;
                     this.nurse.email = this.email;
+                    this.nurse.password = this.password;
                     this.nurse.name = this.name;
                     this.nurse.surname = this.surname;
                     this.nurse.phone = this.phone;

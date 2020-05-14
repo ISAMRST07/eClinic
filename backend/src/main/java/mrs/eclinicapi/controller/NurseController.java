@@ -37,7 +37,7 @@ public class NurseController {
         User newUser = new User();
         newUser.setName(nurseDto.getName());
         newUser.setSurname(nurseDto.getSurname());
-        newUser.setPassword(nurseDto.getJmbg().toString());
+        newUser.setPassword(nurseDto.getPassword());
         newUser.setEmail(nurseDto.getEmail());
         newUser.setAddress(nurseDto.getAddress());
         newUser.setCity(nurseDto.getCity());

@@ -16,6 +16,7 @@ public class DoctorNurseDTO {
 
     String id;
     String email;
+    String password;
     String name;
     String surname;
     String phone;
@@ -27,10 +28,10 @@ public class DoctorNurseDTO {
     String clinic;
 
     @Override
-    public String toString() {
-        return "DoctorDTO [id=" + id + " email=" + email + ", name=" + name + ", surname=" + surname + ", phone=" + phone
-                + ", address=" + address + ", city=" + city + ", country=" + country
-                + ", jmbg=" + jmbg + ", position=" + position + ", clinic= " + clinic + "]";
-    }
+	public String toString() {
+		return "DoctorNurseDTO [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
+				+ ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", city=" + city + ", country="
+				+ country + ", jmbg=" + jmbg + ", position=" + position + ", clinic=" + clinic + "]";
+	}
 
 }

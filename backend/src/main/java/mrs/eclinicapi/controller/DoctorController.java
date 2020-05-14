@@ -36,7 +36,7 @@ public class DoctorController {
         User newUser = new User();
         newUser.setName(doctorDto.getName());
         newUser.setSurname(doctorDto.getSurname());
-        newUser.setPassword(doctorDto.getJmbg().toString());
+        newUser.setPassword(doctorDto.getPassword());
         newUser.setEmail(doctorDto.getEmail());
         newUser.setAddress(doctorDto.getAddress());
         newUser.setCity(doctorDto.getCity());

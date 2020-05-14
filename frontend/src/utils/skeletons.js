@@ -33,17 +33,10 @@ export const emptyClinicRoom = {
     clinicId: null
 };
 
-
-/*
-*
-*           TODO
-*           EMPTY DOCTOR I EMPTY NURSE SE NE POKLAPAJU SA MODELOM!
-*
-*
-* */
-
 export const emptyDoctor = {
+	id : '',
 	email : '',
+	password : '',
 	name : '',
 	surname : '',
 	phone : '',
@@ -53,6 +46,21 @@ export const emptyDoctor = {
 	jmbg : '',
 	position: '',
     clinic : ''
+};
+
+export const emptyNurse = {
+	id : '',
+	email : '',
+	password : '',
+	name : '',
+	surname : '',
+	phone : '',
+	address : '',
+	city : '',
+	country : '',
+	jmbg : '',
+	position: '',
+	clinic : ''
 };
 
 export const emptyInterventionType = {
@@ -73,26 +81,6 @@ export const emptyIntervention = {
     price: 0
 };
 
-export const emptyNurse = {
-	id : '',
-	email : '',
-	name : '',
-	surname : '',
-	phone : '',
-	address : '',
-	city : '',
-	country : '',
-	jmbg : '',
-	position: ''
-};
-
-/*
-*
-*           TODO
-*           EMPTY DOCTOR I EMPTY NURSE SE NE POKLAPAJU SA MODELOM
-*
-*
-* */
 
 export const emptyUser = {
     email: '',
