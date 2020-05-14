@@ -86,6 +86,18 @@
                         <v-btn @click="interventionsDetails" text>Details</v-btn>
                     </v-card-actions>
                 </v-card>
+                
+                <v-card>
+                    <v-card-title primary-title class="blue--text">
+                        Intervention types:
+                    </v-card-title>
+                    <v-card-text class="body-1">
+                        {{ clinic.interventionTypes.length }}
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn @click="interventionTypesDetails" text>Details</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-layout>
         </v-container>
     </div>
@@ -147,6 +159,10 @@
             interventionsDetails(){
                 console.log("interventionsDetails");
                 this.$router.push('intervention')       
+            },
+            interventionTypesDetails(){
+                console.log("interventionTypesDetails");
+                this.$router.push('interventionType')       
             }
 
         },
