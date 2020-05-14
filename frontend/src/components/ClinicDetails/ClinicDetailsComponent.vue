@@ -32,7 +32,7 @@
                         Doctors:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.doctors.length }}
+                        {{ adminClinic.doctors.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="doctorDetails" text>Details</v-btn>
@@ -44,7 +44,7 @@
                         Nurses:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.nurses.length }}
+                        {{ adminClinic.nurses.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="nurseDetails" text>Details</v-btn>
@@ -56,7 +56,7 @@
                         Clinic rooms:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.clinicRoom.length }}
+                        {{ adminClinic.clinicRoom.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="clinicRoomDetails" text>Details</v-btn>
@@ -68,7 +68,7 @@
                         Patients:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.patients.length }}
+                        {{ adminClinic.patients.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="patientsDetails" text>Details</v-btn>
@@ -80,7 +80,7 @@
                         Interventions:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.interventions.length }}
+                        {{ adminClinic.interventions.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="interventionsDetails" text>Details</v-btn>
@@ -92,7 +92,7 @@
                         Intervention types:
                     </v-card-title>
                     <v-card-text class="body-1">
-                        {{ clinic.interventionTypes.length }}
+                        {{ adminClinic.interventionTypes.length }}
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="interventionTypesDetails" text>Details</v-btn>
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "ClinicDetailsComponent",
@@ -115,10 +115,11 @@
         }),
         computed: {
             ...mapState('auth', ['clinic']),
+            ...mapState('clinics/adminClinic', ['adminClinic']),
 
             name: {
                 get() {
-                    return this.clinic.name;
+                    return this.adminClinic.name;
                 },
                 set(val) {
                     this.updateClinic({name: val});
@@ -126,7 +127,7 @@
             },
             description: {
                 get() {
-                    return this.clinic.description;
+                    return this.adminClinic.description;
                 },
                 set(val) {
                     this.updateClinic({description: val});
@@ -134,6 +135,8 @@
             }
         },
         methods: {
+            ...mapActions('clinics/adminClinic', ['getAdminClinicApi']),
+        
             submit(fun) {
                 let valid = this.$refs.form.validate();
                 if (valid) {
@@ -169,6 +172,7 @@
         created() {
             console.log("created");
             console.log("getting clinic id = " + this.clinic.id);
+            this.getAdminClinicApi(this.clinic.id);
         }
     };
 
