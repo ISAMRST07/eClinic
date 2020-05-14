@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ import java.util.List;
 @RequestMapping(value = "api/nurse")
 public class NurseController {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Autowired
     private NurseService service;
 
@@ -37,7 +41,7 @@ public class NurseController {
         User newUser = new User();
         newUser.setName(nurseDto.getName());
         newUser.setSurname(nurseDto.getSurname());
-        newUser.setPassword(nurseDto.getPassword());
+        newUser.setPassword(passwordEncoder.encode(nurseDto.getPassword()));
         newUser.setEmail(nurseDto.getEmail());
         newUser.setAddress(nurseDto.getAddress());
         newUser.setCity(nurseDto.getCity());
@@ -65,7 +69,7 @@ public class NurseController {
 
         oldUser.setName(nurseDto.getName());
         oldUser.setSurname(nurseDto.getSurname());
-        oldUser.setPassword(nurseDto.getJmbg().toString());
+        oldUser.setPassword(passwordEncoder.encode(nurseDto.getPassword()));
         oldUser.setEmail(nurseDto.getEmail());
         oldUser.setAddress(nurseDto.getAddress());
         oldUser.setCity(nurseDto.getCity());
