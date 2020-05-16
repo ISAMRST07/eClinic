@@ -31,11 +31,13 @@ const homeItem = {
     path: homePath
 };
 
-const clinicDetailsItem = {
-    icon: 'mdi-home',
-    label: 'Clinic details',
-    path: clinicDetailsPath
-};
+function clinicDetailsItem(id) {
+    return {
+        icon: 'mdi-home',
+        label: 'Clinic',
+        path: clinicDetailsPath.replace(":id", id)
+    };
+}
 
 const interventionTypeItem = {
     icon: 'mdi-currency-eur',
@@ -45,7 +47,7 @@ const interventionTypeItem = {
 
 const interventionItem = {
     icon: 'mdi-home',
-    label: 'Intervention',
+    label: 'Interventions',
     path: interventionPath
 };
 
@@ -101,19 +103,21 @@ const ClinicalCenterAdmin = {
 };
 
 
-const ClinicalAdmin = {
-    name: 'Clinical Admin',
-    code: 'clinicAdministrator',
-    items: [
-    	clinicDetailsItem,
-    	interventionTypeItem,
-    	interventionItem,
-        medicinesItem,
-        clinicRoomsItem,
-        doctorsItem,
-        nursesItem
-    ],
-};
+function ClinicalAdmin(id) {
+    return {
+        name: 'Clinical Admin',
+        code: 'clinicAdministrator',
+        items: [
+            clinicDetailsItem(id),
+            interventionTypeItem,
+            interventionItem,
+            medicinesItem,
+            clinicRoomsItem,
+            doctorsItem,
+            nursesItem
+        ],
+    };
+}
 
 
 const Patient = {

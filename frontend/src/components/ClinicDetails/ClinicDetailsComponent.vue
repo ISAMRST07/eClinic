@@ -28,7 +28,7 @@
                                 color="primary"
                                 fab
                                 small
-                                @click="modifyDialog = true"
+                                @click="openModificationDialog"
                         >
                             <v-icon>
                                 mdi-pencil
@@ -234,7 +234,6 @@
             modifyDialog: false,
         }),
         computed: {
-            ...mapState('auth', ['clinic']),
             adminClinic: {
                 get() {
                     return this.$store.state.clinics.adminClinic.adminClinic;
@@ -253,21 +252,19 @@
             },
         },
         watch: {
-            adminClinic(val) {
-                if(this.editClinic !== val) {
-                    console.log("zamijenio ADMINAAAAAAAAAAAAAAAAA");
-                    this.editClinic = val;
-                }
-            }
         },
         methods: {
             ...mapActions('clinics/adminClinic', ['getAdminClinicApi']),
             modified(clinic) {
                 this.adminClinic = clinic;
+            },
+            openModificationDialog() {
+                this.modifyDialog = true;
+                this.editClinic = this.adminClinic;
             }
         },
         created() {
-            this.getAdminClinicApi(this.clinic.id);
+            this.getAdminClinicApi(this.$route.params.id);
         }
     };
 

@@ -45,8 +45,9 @@
                     this.coordsFromAddress(newAddress);
                 }
             },
-            value(newCoords) {
+            value(newCoords, oldCoords) {
                 if (!newCoords) return;
+                if(newCoords === oldCoords) return;
                 this.placeMarker(newCoords);
                 if (this.formerInput &&
                     this.formerInput.lat === newCoords.lat &&
@@ -82,7 +83,6 @@
             if (this.value) {
                 this.placeMarker(this.value);
                 this.map.setView([this.value.lat, this.value.lng], 15);
-
             }
             this.$nextTick(() => this.map.invalidateSize());
         },
@@ -104,11 +104,15 @@
                 if (this.useAddress) this.addressFromCoords(latlng);
             },
             async addressFromCoords(latlng) {
-                let res = await this.reverseGeoCode(latlng);
-                let address = res.data.display_name;
+                try {
+                    let res = await this.reverseGeoCode(latlng);
+                    let address = res.data.display_name;
 
-                if (!address) this.$emit('clickAddress', null);
-                else this.$emit('clickAddress', [res.data.display_name]);
+                    if (!address) this.$emit('clickAddress', null);
+                    else this.$emit('clickAddress', [res.data.display_name]);
+                } catch(err) {
+                    console.log(err.response);
+                }
             },
             async coordsFromAddress(newAddress) {
                 try {
@@ -135,6 +139,7 @@
             resetMap() {
                 if (this.currentMarker) this.map.removeLayer(this.currentMarker);
                 this.currentMarker = null;
+                this.formerInput = null;
                 this.map.setView([0, 0], 2);
                 this.map.invalidateSize();
             }

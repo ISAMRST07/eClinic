@@ -12,7 +12,7 @@ export default {
             Vue.set(state, 'adminClinic', clinic);
         },
         updateClinic(state, newParts) {
-            state.clinic = Object.assign({}, state.clinic, newParts);
+            state.adminClinic = Object.assign({}, state.adminClinic, newParts);
         }
     },
     actions: {

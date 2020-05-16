@@ -63,15 +63,17 @@
         },
         computed: {
             ...mapState('auth', ['role']),
+            ...mapState('auth', ['clinic']),
+
         },
         mounted() {
-            console.log(this.role);
+            let clinicalAdmin = ClinicalAdmin(this.clinic.id);
             switch (this.role) {
                 case ClinicalCenterAdmin.code:
                     this.items = ClinicalCenterAdmin.items;
                     break;
-                case ClinicalAdmin.code:
-                    this.items = ClinicalAdmin.items;
+                case clinicalAdmin.code:
+                    this.items = clinicalAdmin.items;
                     break;
                 case Patient.code:
                     this.items = Patient.items;
