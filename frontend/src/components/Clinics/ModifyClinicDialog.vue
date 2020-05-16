@@ -153,6 +153,7 @@
                 let valid = this.$refs.form.validate();
                 if (valid) {
                     fun(this.clinic);
+                    this.$emit('modified', this.clinic);
                     this.closeAddDialog();
                 }
             },

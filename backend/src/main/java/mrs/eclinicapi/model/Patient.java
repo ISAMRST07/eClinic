@@ -35,7 +35,8 @@ public class Patient {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     public MedicalRecord medicalRecord;
+
 
 }

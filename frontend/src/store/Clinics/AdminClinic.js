@@ -1,16 +1,18 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
+import {emptyClinic} from "../../utils/skeletons";
 
 export default {
     namespaced: true,
     state: {
-    	adminClinic: ''
+    	adminClinic: emptyClinic
     },
     mutations: {
     	setClinic(state, clinic) {
-    		console.log("mutations setClinic = ");
-    		console.log(clinic);
             Vue.set(state, 'adminClinic', clinic);
+        },
+        updateClinic(state, newParts) {
+            state.clinic = Object.assign({}, state.clinic, newParts);
         }
     },
     actions: {
@@ -26,6 +28,6 @@ export default {
                 defaultError(err);
             }
         },
-        
+
     },
 };

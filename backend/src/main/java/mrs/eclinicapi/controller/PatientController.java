@@ -39,15 +39,15 @@ public class PatientController {
         Patient found = service.getPatientById(id);
         if (found == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        MedicalRecord newMedicalRecord = new MedicalRecord();
 
-        medicalRecordService.save(newMedicalRecord);
+        MedicalRecord newMedicalRecord = new MedicalRecord();
 
         found.setMedicalRecord(newMedicalRecord);
 
-        Patient saved = service.addPatient(found);
+        Patient newPatient = service.addPatient(found);
 
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return new ResponseEntity<>(newPatient, HttpStatus.OK);
+
     }
 
     @DeleteMapping(path = "{id}")

@@ -1,6 +1,6 @@
 <template>
     <div :id="mapId"
-         style="width: 100%; height: 100%;"
+         style="width: 100%; height: 100%; z-index: 0;"
     >
 
     </div>
@@ -35,7 +35,7 @@
             address: {
                 type: String,
                 default: null
-            },
+            }
         },
         watch: {
             address(newAddress, oldAddress) {
@@ -61,12 +61,23 @@
                 iconUrl: require("leaflet/dist/images/marker-icon.png"),
                 shadowUrl: require("leaflet/dist/images/marker-shadow.png")
             });
-
-            this.map = L.map(this.mapId).setView([0, 0], 2);
-            this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            let mapOptions = {};
+            if(!this.clickable) {
+                mapOptions.zoomControl = false;
+                mapOptions.touchZoom = false;
+                mapOptions.doubleClickZoom = false;
+                mapOptions.scrollWheelZoom = false;
+                mapOptions.boxZoom = false;
+                mapOptions.keyboard = false;
+                mapOptions.dragging = false;
+            }
+            this.map = L.map(this.mapId, mapOptions).setView([0, 0], 2);
+            let options = {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(this.map);
+            };
+            this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', options)
+                .addTo(this.map);
             if (this.clickable) this.map.on('click', this.addMarker);
             if (this.value) {
                 this.placeMarker(this.value);

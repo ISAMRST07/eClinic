@@ -27,7 +27,8 @@ public class MedicalRecord {
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "MR")})
     private String id;
-    @OneToOne
+
+    @OneToOne(mappedBy = "medicalRecord")
     private Patient patient;
 
     @ManyToMany
@@ -35,5 +36,7 @@ public class MedicalRecord {
 
     @OneToMany
     private List<Visit> visits;
+
+    public Patient getPatient() { return this.patient; }
 
 }

@@ -1,181 +1,293 @@
 /* this.$route.params.id*/
 <template>
     <div>
+        <v-container>
+            <v-row justify="center">
+                <v-col cols="12">
+                    <v-card class="mt-5" outlined height="300px">
+                        <map-view
+                                v-if="adminClinic"
+                                map-id="static-map"
+                                v-model="adminClinic.coordinates"
+                        ></map-view>
+                    </v-card>
+                </v-col>
 
-        <v-col cols="12">
-            <v-text-field
-                    label="Name*"
-                    required
-                    :rules="nameRules"
-                    v-model="name"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12">
-            <v-textarea
-                    counter="256"
-                    outlined
-                    label="Description"
-                    rows="5"
-                    no-resize
-                    v-model="description"
-                    :rules="descriptionRules"
-            ></v-textarea>
-        </v-col>
-        <v-col cols="12">
-            <v-btn>Update</v-btn>
-        </v-col>
+            </v-row>
+            <v-row>
+                <v-col
+                        align-self="center"
+                        cols="12"
+                        md="4"
+                        order-md="2"
+                        class="clinic-column">
+                    <v-card class="clinic-card" height="16.81em">
+                        <v-btn
+                                elevation="2"
+                                class="edit-clinic"
+                                color="primary"
+                                fab
+                                small
+                                @click="modifyDialog = true"
+                        >
+                            <v-icon>
+                                mdi-pencil
+                            </v-icon>
+                        </v-btn>
+                        <v-card-title class="justify-center">
+                            <span v-if="adminClinic" class="headline text-center">
+                                {{ adminClinic.name }}
+                            </span>
 
-        <v-container grid-list-md>
-            <v-layout row wrap>
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Doctors:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.doctors.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="doctorDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
+                        </v-card-title>
+                        <v-card-subtitle class="text-center">
+                            <span class="subtitle-1 text-center">
+                                Thank you for visiting us!
+                            </span>
+                        </v-card-subtitle>
+                        <v-divider></v-divider>
+                        <v-container fluid>
+                            <v-row justify="space-between">
+                                <v-col class="pb-0" cols="12">
+                                    <span class="subtitle-1">
+                                        You can find us at the address
+                                    </span>
+                                </v-col>
+                                <v-col class="pt-0" cols="12">
+                                    <span class="subtitle-2">
+                                        {{ adminClinic.address }}
+                                    </span>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="4" order-md="1">
+                    <v-card link hover @click="$router.push('/doctors')">
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.doctors" tile size="125">
+                                <span class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.doctors.length }}
+                                </span>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-doctor
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Doctors</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
 
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Nurses:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.nurses.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="nurseDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
+                <v-col cols="12" md="4" order-md="3">
+                    <v-card link hover @click="$router.push('/nurses')">
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.nurses" tile size="125">
+                                <span class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.nurses.length }}
+                                </span>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-mother-nurse
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Nurses</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" md="3" order-md="1">
+                    <v-card link hover @click="$router.push('/clinicRooms')">
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.clinicRoom" tile size="125">
+                                <span v-if="adminClinic.clinicRoom.length < 100"
+                                      class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.clinicRoom.length }}
+                                </span>
+                                <span v-else-if="adminClinic.clinicRoom.length < 1000"
+                                      class="display-2 grey--text text--darken-2">
+                                    {{ adminClinic.clinicRoom.length }}
+                                </span>
+                                <v-icon v-else x-large>
+                                    mdi-infinity
+                                </v-icon>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-bed-empty
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Rooms</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="3" order-md="1">
+                    <v-card link hover @click="$router.push('/patients')">
 
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Clinic rooms:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.clinicRoom.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="clinicRoomDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
-
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Patients:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.patients.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="patientsDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
-                
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Interventions:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.interventions.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="interventionsDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
-                
-                <v-card>
-                    <v-card-title primary-title class="blue--text">
-                        Intervention types:
-                    </v-card-title>
-                    <v-card-text class="body-1">
-                        {{ adminClinic.interventionTypes.length }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="interventionTypesDetails" text>Details</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-layout>
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.patients" tile size="125">
+                                <span v-if="adminClinic.patients.length < 100"
+                                      class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.patients.length }}
+                                </span>
+                                <span v-else-if="adminClinic.patients.length < 1000"
+                                  class="display-1 grey--text text--darken-2">
+                                    {{ adminClinic.patients.length }}
+                                </span>
+                                <v-icon v-else x-large>
+                                    mdi-infinity
+                                </v-icon>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-doctor
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Patients</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="3" order-md="1">
+                    <v-card link hover @click="$router.push('/interventionType')">
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.interventionTypes" tile size="125">
+                                <span v-if="adminClinic.interventionTypes.length < 100"
+                                      class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.interventionTypes.length }}
+                                </span>
+                                <span v-else-if="adminClinic.interventionTypes.length < 1000"
+                                      class="display-1 grey--text text--darken-2">
+                                        {{ adminClinic.interventionTypes.length }}
+                                </span>
+                                <v-icon v-else x-large>
+                                    mdi-infinity
+                                </v-icon>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-currency-eur
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Pricing</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="3" order-md="1">
+                    <v-card link hover @click="$router.push('/interventions')">
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.interventions" tile size="125">
+                                <span v-if="adminClinic.interventions.length < 100"
+                                             class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.interventions.length }}
+                                </span>
+                                <span v-else-if="adminClinic.interventions.length < 1000"
+                                      class="display-4 grey--text text--darken-2">
+                                    {{ adminClinic.interventions.length }}
+                                </span>
+                                <v-icon v-else x-large>
+                                    mdi-infinity
+                                </v-icon>
+                            </v-avatar>
+                            <div class="text-center pa-4">
+                                <v-icon x-large>
+                                    mdi-medical-bag
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Schedule</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
         </v-container>
+        <modify-clinic-dialog
+                mode="update"
+                v-model="modifyDialog"
+                @modified="modified"
+        ></modify-clinic-dialog>
     </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
+    import MapView from "../Clinics/MapView";
+    import ModifyClinicDialog from "../Clinics/ModifyClinicDialog";
 
     export default {
         name: "ClinicDetailsComponent",
-        components: {},
+        components: {ModifyClinicDialog, MapView},
         data: () => ({
-            nameRules: [v => !!v || "* Name is required"],
-            descriptionRules: [v => !!v || "* Required.", v => v?.length <= 255 || 'Max 256 characters.']
+            modifyDialog: false,
         }),
         computed: {
             ...mapState('auth', ['clinic']),
-            ...mapState('clinics/adminClinic', ['adminClinic']),
-
-            name: {
+            adminClinic: {
                 get() {
-                    return this.adminClinic.name;
+                    return this.$store.state.clinics.adminClinic.adminClinic;
                 },
                 set(val) {
-                    this.updateClinic({name: val});
+                    this.$store.commit('clinics/adminClinic/updateClinic', val);
                 }
             },
-            description: {
+            editClinic: {
                 get() {
-                    return this.adminClinic.description;
+                    return this.$store.state.clinics.addClinic.clinic;
                 },
                 set(val) {
-                    this.updateClinic({description: val});
+                    this.$store.commit('clinics/addClinic/updateClinic', val);
+                }
+            },
+        },
+        watch: {
+            adminClinic(val) {
+                if(this.editClinic !== val) {
+                    console.log("zamijenio ADMINAAAAAAAAAAAAAAAAA");
+                    this.editClinic = val;
                 }
             }
         },
         methods: {
             ...mapActions('clinics/adminClinic', ['getAdminClinicApi']),
-        
-            submit(fun) {
-                let valid = this.$refs.form.validate();
-                if (valid) {
-                    fun(this.clinic);
-                    this.closeAddDialog();
-                }
-            },
-            doctorDetails() {
-                console.log("doctorDetails");
-                this.$router.push('doctors')
-            },
-            nurseDetails() {
-                console.log("nurseDetails details");
-                this.$router.push('nurses')       
-            },
-            clinicRoomDetails() {
-                console.log("clinicRoomDetails");
-                this.$router.push('clinicRooms')  
-            },
-            patientsDetails() {
-                console.log("patientsDetails");
-            },
-            interventionsDetails(){
-                console.log("interventionsDetails");
-                this.$router.push('intervention')       
-            },
-            interventionTypesDetails(){
-                console.log("interventionTypesDetails");
-                this.$router.push('interventionType')       
+            modified(clinic) {
+                this.adminClinic = clinic;
             }
-
         },
         created() {
-            console.log("created");
-            console.log("getting clinic id = " + this.clinic.id);
             this.getAdminClinicApi(this.clinic.id);
         }
     };
 
 </script>
-
-<style scoped></style>
+<style scoped>
+    .clinic-card {
+        z-index: 10;
+    }
+    .clinic-column {
+        margin-top: -9em;
+    }
+    @media only screen and (max-width: 960px) {
+        .clinic-column {
+            margin-top: 2em;
+        }
+    }
+    .edit-clinic {
+        position: absolute;
+        right: -1.5em;
+        top: -1.5em;
+        z-index: 10;
+    }
+</style>

@@ -36,7 +36,6 @@ public class ClinicRoom {
     @OneToMany(mappedBy = "clinicRoom", fetch = FetchType.LAZY)
     private Set<Intervention> interventions = new HashSet<>();
 
-    //    @JsonIgnoreProperties("clinicRoom")
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 

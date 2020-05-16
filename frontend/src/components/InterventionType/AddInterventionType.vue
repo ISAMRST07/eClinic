@@ -17,14 +17,14 @@
 
 <script>
     import ModifyInterventionTypeDialog from "./ModifyInterventionTypeDialog";
-    import {ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
     import {mapState} from "vuex";
     export default {
         name: "AddInterventionType",
         components: {ModifyInterventionTypeDialog},
         data: () => ({
             addDialog: false,
-            adminCode: ClinicalCenterAdmin.code
+            adminCode: ClinicalAdmin.code
         }),
         computed: {
             ...mapState('auth', ['role']),
