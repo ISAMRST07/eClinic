@@ -81,6 +81,14 @@ export const emptyIntervention = {
     price: 0
 };
 
+export const emptyVacationRequest = {
+	id : '',
+	user: '',
+    clinic: '',
+	startDate: null,
+    endDate: null,
+    approved: null
+};
 
 export const emptyUser = {
     email: '',

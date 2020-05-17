@@ -42,5 +42,13 @@ public class VacationRequest {
 	
 	private LocalDateTime endDate;
 	
-	private boolean appapproved;
+	private boolean approved;
+
+	@Override
+	public String toString() {
+		return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", approved=" + approved + "]";
+	}
+	
+	
 }

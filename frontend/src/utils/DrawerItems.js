@@ -11,7 +11,8 @@ import {
     interventionTypePath,
     interventionPath,
     patientsPath,
-    doctorHomePath
+    doctorHomePath,
+    vacationRequestPath
 } from "./paths";
 
 const doctorsItem = {
@@ -91,9 +92,15 @@ const patientsItem = {
 
 const doctorHomeItem = {
     icon: 'mdi-home',
-    label: 'DoctorHome',
+    label: 'Doctor Home',
     path: doctorHomePath,
 };
+
+const vacationRequestItem = {
+	icon: 'mdi-home',
+	label: 'Vacation request',
+    path: vacationRequestPath,
+}
 
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
@@ -143,6 +150,7 @@ const Doctor = {
     code: 'doctor',
     items: [
         doctorHomeItem,
+        vacationRequestItem
     ]	
 }
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};
