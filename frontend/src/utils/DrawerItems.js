@@ -142,10 +142,7 @@ const Doctor = {
 	name: 'Doctor',
     code: 'doctor',
     items: [
-        homeItem,
         doctorHomeItem,
-        clinicsItem,
-        interventionTypeItem,
     ]	
 }
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};

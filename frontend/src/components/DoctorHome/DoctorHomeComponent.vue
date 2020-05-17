@@ -8,7 +8,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="patientsDetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -21,7 +21,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="interventionsDetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -34,7 +34,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="calendarDetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -47,7 +47,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="vacationDetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -60,7 +60,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="profileDetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -73,7 +73,7 @@
 					</p>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn text color="deep-purple accent-4">
+					<v-btn text color="deep-purple accent-4" @click="appoinDtmentetails()">
 						Details
 					</v-btn>
 				</v-card-actions>
@@ -99,7 +99,25 @@
         watch: {
         },
         methods: {
-            
+            patientsDetails(){
+            	console.log("patientsDetails");
+            },
+            interventionsDetails(){
+            	console.log("interventionsDetails");
+            },
+            calendarDetails(){
+            	console.log("calendarDetails");
+            },
+            vacationDetails(){
+            	console.log("vacationDetails");
+            },
+            profileDetails(){
+            	console.log("profileDetails");
+            	this.$router.push(`/profile/${this.user.id}`)
+            },
+            appoinDtmentetails(){
+            	console.log("appoinDtmentetails");
+            },
         },
         created() {
         	console.log("created");
