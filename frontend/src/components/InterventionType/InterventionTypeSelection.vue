@@ -11,6 +11,8 @@
             :rules="rules"
             return-object
             prepend-icon="mdi-hospital-building"
+            :multiple="multiple"
+            :chips="multiple"
     >
         <template v-slot:no-data>
             <v-list-item>
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-   
+
     import {mapActions, mapState} from "vuex";
     import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
@@ -37,28 +39,31 @@
             value: null,
             disabled: {
                 type: Boolean,
-                value: false,
+                value: false
             },
+            multiple: {
+                type: Boolean,
+                value: false
+            }
         },
         computed: {
             ...mapState('interventionType/interventionType', ['interventionType']),
             ...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),   
+            ...mapState('auth', ['clinic']),
         },
         methods: {
             ...mapActions('interventionType/interventionType', ['getAllInterventionTypeApi']),
-            ...mapActions('interventionType/interventionType', ['getClinicInterventionTypeApi']),      
+            ...mapActions('interventionType/interventionType', ['getClinicInterventionTypeApi']),
         },
         created() {
-           console.log("interventiontypeselection created");
            switch (this.user.type) {
                 case ClinicalCenterAdmin.code:
                 	console.log("user = ClinicalCenterAdmin")
                 	this.getAllInterventionTypeApi();
                     break;
                 case ClinicalAdmin.code:
-                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);   
-                   	this.getClinicInterventionTypeApi(this.clinic.id); 
+                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);
+                   	this.getClinicInterventionTypeApi(this.clinic.id);
                     break;
                 default:
             }

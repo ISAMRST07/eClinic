@@ -32,7 +32,7 @@ export default {
     actions: {
         async getNurse({rootState, commit}) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/nurse/getAll',
+                let res = await Vue.prototype.$axios.get('/api/nurse/',
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log("actions getall nurse = " + res.data);
                 console.log(res.data);
@@ -67,7 +67,7 @@ export default {
             try {
                 console.log("delete nurse = ");
                 console.log(nurse.id);
-                let res = await Vue.prototype.$axios.delete(`/api/nurse/deleteNurse/${nurse.id}`,
+                let res = await Vue.prototype.$axios.delete(`/api/nurse/${nurse.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteNurse', nurse);
             } catch (err) {

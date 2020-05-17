@@ -3,7 +3,7 @@
             :value="value"
             @input="$emit('input', $event)"
             persistent
-            max-width="600px"
+            max-width="900px"
     >
         <v-card>
             <v-card-title>
@@ -14,97 +14,94 @@
                 <v-container>
                     <v-form ref="form">
                         <v-row>
-                            <v-col cols="6">
+                            <v-col cols="12">
+                                <intervention-type-selection
+                                        v-model="modifiableDoctor.specialties"
+                                        multiple
+                                ></intervention-type-selection>
+                            </v-col>
+                            <v-col cols="12" sm="6" lg="8">
                                 <v-text-field
                                         label="Email*"
                                         required
-                                        :rules="emailRules"
-                                        v-model="email"
+                                        :rules="[rules.required('Email')]"
+                                        v-model="modifiableDoctor.email"
                                 >
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="4">
                                    <v-text-field
                                           ref="password"
                                           label="Password*"
                                           required
-                                          v-model="password"
+                                          v-model="modifiableDoctor.password"
                                           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                          :rules="passwordRules"
+                                          :rules="[rules.required('Password')]"
                                           :type="showPassword ? 'text' : 'password'"
                                           name="input-10-2"
                                           hint="At least 8 characters"
                                           class="input-group--focused"
-                                          type="password"
                                           @click:append="showPassword = !showPassword"
                                   ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
-                                        label="Name*"
+                                        label="First name*"
                                         required
-                                        :rules="nameRules"
-                                        v-model="name"
+                                        :rules="[rules.required('Name')]"
+                                        v-model="modifiableDoctor.name"
                                 >
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
-                                        label="Surname*"
+                                        label="Last name*"
                                         required
-                                        :rules="surnameRules"
-                                        v-model="surname"
+                                        :rules="[rules.required('Last name')]"
+                                        v-model="modifiableDoctor.surname"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="4">
                                 <v-text-field
                                         label="Phone number"
                                         required
-                                        :rules="phoneRules"
-                                        v-model="phone"
+                                        :rules="[rules.required('Phone number')]"
+                                        v-model="modifiableDoctor.phoneNumber"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="8">
+                                <v-text-field
+                                        label="Personal ID"
+                                        required
+                                        :rules="[rules.required('Personal ID')]"
+                                        v-model="modifiableDoctor.personalID"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" lg="7">
                                 <v-text-field
                                         label="Address"
                                         required
-                                        :rules="addressRules"
-                                        v-model="address"
+                                        :rules="[rules.required('Address')]"
+                                        v-model="modifiableDoctor.address"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="3">
                                 <v-text-field
                                         label="City"
                                         required
-                                        :rules="cityRules"
-                                        v-model="city"
+                                        :rules="[rules.required('City')]"
+                                        v-model="modifiableDoctor.city"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="2">
                                 <v-text-field
                                         label="Country"
                                         required
-                                        :rules="countryRules"
-                                        v-model="country"
+                                        :rules="[rules.required('Country')]"
+                                        v-model="modifiableDoctor.country"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
-                                <v-text-field
-                                        label="JMBG"
-                                        required
-                                        :rules="jmbgRules"
-                                        v-model="jmbg"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="6">
-                                <v-text-field
-                                        label="Position*"
-                                        required
-                                        :rules="positionRules"
-                                        v-model="position"
-                                >
-                                </v-text-field>
-                            </v-col>
+
                         </v-row>
                     </v-form>
                 </v-container>
@@ -139,36 +136,21 @@
 
     import {mapActions, mapState} from "vuex";
     import {emptyDoctor} from "../../utils/skeletons";
-
+    import InterventionTypeSelection from "../InterventionType/InterventionTypeSelection";
+    import JSOG from 'jsog';
     export default {
         name: "ModifyDoctorDialog",
-        components: {},
+        components: {InterventionTypeSelection},
         data: () => ({
-            email: null,
-            name: null,
-            surname: null,
-            password : null,
-            phone: null,
-            address: null,
-            city: null,
-            country: null,
-            jmbg: null,
-            position: null,
+            modifiableDoctor: emptyDoctor,
 
             doctor: emptyDoctor,
 
             showPassword: false,
 
-            emailRules: [v => !!v || "Email is required."],
-            passwordRules: [v => !!v || "Password is required."],  
-            nameRules: [v => !!v || "Name is required."],
-            surnameRules: [v => !!v || "Surname is required"],
-            phoneRules: [v => !!v || "Phone is required."],
-            addressRules: [v => !!v || "Address is required."],
-            cityRules: [v => !!v || "City is required"],
-            countryRules: [v => !!v || "Country is required"],
-            jmbgRules: [v => !!v || "JMBG is required"],
-            positionRules: [v => !!v || "Position is required"]
+            rules: {
+                required: fieldName => v => !!v || `${fieldName} is required`,
+            },
 
         }),
         props: {
@@ -187,45 +169,22 @@
             value() {
                 if (this.editDoctor) {
                     this.doctor = this.editDoctor;
-                    console.log("value changed");
-                    console.log("doctorename = " + this.doctor.name);
                 }
-                this.email = this.doctor.email;
-                this.name = this.doctor.name;
-                this.surname = this.doctor.surname;
-                this.phone = this.doctor.phone;
-                this.address = this.doctor.address;
-                this.city = this.doctor.city;
-                this.country = this.doctor.country;
-                this.jmbg = this.doctor.jmbg;
-                this.position = this.doctor.position;
+                this.modifiableDoctor = this.doctor;
                 console.log("thisname = " + this.name);
             }
         },
         created() {
-            ;
         },
         methods: {
             ...mapActions("doctor/doctor", ["addDoctorApi"]),
             ...mapActions("doctor/doctor", ["updateDoctorApi"]),
             submit(fun) {
-                console.log("adddoctor or updatedoctor pressed");
-                console.log(this.clinic.id);
-
-                this.doctor.clinic = this.clinic.id;
+                if (!this.clinic) return;
                 if (this.$refs.form.validate()) {
-                    this.doctor.clinic = this.clinic.id;
-                    this.doctor.email = this.email;
-                    this.doctor.password = this.password;
-                    this.doctor.name = this.name;
-                    this.doctor.surname = this.surname;
-                    this.doctor.phone = this.phone;
-                    this.doctor.address = this.address;
-                    this.doctor.city = this.city;
-                    this.doctor.country = this.country;
-                    this.doctor.jmbg = this.jmbg;
-                    this.doctor.position = this.position;
-                    console.log(this.doctor);
+                    this.doctor.clinicID = this.clinic.id;
+                    this.doctor = JSOG.parse(JSOG.stringify(this.modifiableDoctor));
+                    this.doctor.specialties = this.doctor.specialties.map(type => type.id);
                     fun(this.doctor);
                     this.close();
                 }

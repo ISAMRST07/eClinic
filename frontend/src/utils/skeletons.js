@@ -34,33 +34,32 @@ export const emptyClinicRoom = {
 };
 
 export const emptyDoctor = {
-	id : '',
+	id : null,
 	email : '',
 	password : '',
 	name : '',
 	surname : '',
-	phone : '',
+	phoneNumber : '',
 	address : '',
 	city : '',
 	country : '',
-	jmbg : '',
-	position: '',
-    clinic : ''
+	personalID : '',
+	specialties: [],
+    clinicID: null
 };
 
 export const emptyNurse = {
-	id : '',
-	email : '',
-	password : '',
-	name : '',
-	surname : '',
-	phone : '',
-	address : '',
-	city : '',
-	country : '',
-	jmbg : '',
-	position: '',
-	clinic : ''
+    id : null,
+    email : '',
+    password : '',
+    name : '',
+    surname : '',
+    phoneNumber : '',
+    address : '',
+    city : '',
+    country : '',
+    personalID : '',
+    clinicID: null
 };
 
 export const emptyInterventionType = {

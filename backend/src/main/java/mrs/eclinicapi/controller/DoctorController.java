@@ -3,10 +3,12 @@ package mrs.eclinicapi.controller;
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
+import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
+import mrs.eclinicapi.service.InterventionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,79 +17,48 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/doctor")
 public class DoctorController {
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private DoctorService service;
 
     @Autowired
     private ClinicService clinicService;
 
+    @Autowired
+    private InterventionTypeService interventionTypeService;
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorNurseDTO doctorDto) {
-        System.out.println("adding doctor ");
-        System.out.println("doctordto = " + doctorDto);
-        Doctor newDoctor = new Doctor();
+    public ResponseEntity<DoctorNurseDTO> addDoctor(@RequestBody DoctorNurseDTO doctorNurseDTO) {
 
-        Clinic clinic = clinicService.findOne(doctorDto.getClinic());
-        newDoctor.setClinic(clinic);
-        User newUser = new User();
-        newUser.setName(doctorDto.getName());
-        newUser.setSurname(doctorDto.getSurname());
-        newUser.setPassword(passwordEncoder.encode(doctorDto.getPassword()));
-        newUser.setEmail(doctorDto.getEmail());
-        newUser.setAddress(doctorDto.getAddress());
-        newUser.setCity(doctorDto.getCity());
-        newUser.setCountry(doctorDto.getCountry());
-        newUser.setType(UserType.doctor);
-        newUser.setPersonalID(doctorDto.getJmbg());
-        newUser.setPhoneNumber(doctorDto.getPhone());
-
-        newDoctor.setUser(newUser);
-        newDoctor.setPosition(doctorDto.getPosition());
-
+        Doctor newDoctor = this.convertToEntity(doctorNurseDTO);
+        if (newDoctor == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         service.addDoctor(newDoctor);
         //userService.addUser(newUser);
 
-        System.out.println("newDoctor added = " + newDoctor);
 
-        return new ResponseEntity<>(newDoctor, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(newDoctor), HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Doctor> updateDoctor(@RequestBody DoctorNurseDTO doctorDto) {
-        System.out.println("updateDoctor = " + doctorDto);
-        Doctor oldDoctor = service.findOne(doctorDto.getId());
-        User oldUser = oldDoctor.getUser();
-        System.out.println("oldUser = " + oldUser);
-        oldUser.setName(doctorDto.getName());
-        oldUser.setSurname(doctorDto.getSurname());
-        oldUser.setPassword(passwordEncoder.encode(doctorDto.getPassword()));
-        oldUser.setEmail(doctorDto.getEmail());
-        oldUser.setAddress(doctorDto.getAddress());
-        oldUser.setCity(doctorDto.getCity());
-        oldUser.setCountry(doctorDto.getCountry());
-        oldUser.setPersonalID(doctorDto.getJmbg());
-        oldUser.setPhoneNumber(doctorDto.getPhone());
-        oldDoctor.setPosition(doctorDto.getPosition());
-        System.out.println("updated = " + oldUser);
-
-        System.out.println("new doctor oldDoctor = " + oldDoctor);
-
-        Doctor modified = service.addDoctor(oldDoctor);
-        System.out.println("new doctor modified = " + modified);
-        if (modified == null) {
+    public ResponseEntity<DoctorNurseDTO> updateDoctor(@RequestBody DoctorNurseDTO doctorDto) {
+        Doctor newDoctor = this.convertToEntity(doctorDto);
+        if (newDoctor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(modified, HttpStatus.OK);
+        Doctor modified = service.addDoctor(newDoctor);
+        return new ResponseEntity<>(this.convertToDTO(modified), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/deleteDoctor/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") String id) {
         System.out.println("delete doctor " + id);
 
@@ -102,19 +73,20 @@ public class DoctorController {
         return new ResponseEntity<>("doctor deleted", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getAll")
-    public ResponseEntity<List<Doctor>> getAll() {
+    @GetMapping
+    public ResponseEntity<List<DoctorNurseDTO>> getAll() {
         System.out.println("get all doctor ");
         List<Doctor> doctorList = service.findAll();
         if (doctorList == null) {
             System.out.println("doctor not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+        return new ResponseEntity<>(doctorList.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getDoctorForClinic/{id}")
-    public ResponseEntity<List<Doctor>> getDoctorsForClinic(@PathVariable("id") String id) {
+    @GetMapping(path = "/getDoctorForClinic/{id}")
+    public ResponseEntity<List<DoctorNurseDTO>> getDoctorsForClinic(@PathVariable("id") String id) {
         System.out.println("get doctors for clinic " + id);
 
         List<Doctor> doctorList = service.getDoctorsForClinic(id);
@@ -127,13 +99,14 @@ public class DoctorController {
         for (Doctor d : doctorList) {
             System.out.println(d.getClinic());
             System.out.println(d.getUser());
-            System.out.println(d.getPosition());
+            System.out.println(d.getSpecialties());
         }
-        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+        return new ResponseEntity<>(doctorList.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getDoctor/{id}")
-    public ResponseEntity<Doctor> getDoctor(@PathVariable("id") String id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<DoctorNurseDTO> getDoctor(@PathVariable("id") String id) {
         System.out.println("get doctor " + id);
         Doctor doctor = service.findOne(id);
         if (doctor == null) {
@@ -142,6 +115,50 @@ public class DoctorController {
         }
         System.out.println("get this doctor = " + doctor);
 
-        return new ResponseEntity<>(doctor, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(doctor), HttpStatus.OK);
+    }
+
+    private Doctor convertToEntity(DoctorNurseDTO doctorNurseDTO) {
+        Doctor toAdd = new Doctor();
+        Clinic foundClinic = clinicService.findOne(doctorNurseDTO.getClinicID());
+        if(foundClinic == null) return null;
+
+        toAdd.setClinic(foundClinic);
+        User doctorUser = new User(
+                doctorNurseDTO.getEmail(),
+                passwordEncoder.encode(doctorNurseDTO.getPassword()),
+                doctorNurseDTO.getName(),
+                doctorNurseDTO.getSurname(),
+                UserType.doctor,
+                doctorNurseDTO.getPhoneNumber(),
+                doctorNurseDTO.getAddress(),
+                doctorNurseDTO.getCity(),
+                doctorNurseDTO.getCountry(),
+                doctorNurseDTO.getPersonalID());
+
+        toAdd.setUser(doctorUser);
+
+        List<InterventionType> interventionTypes = interventionTypeService.findMany(doctorNurseDTO.getSpecialties());
+        if(interventionTypes == null) return null;
+        toAdd.setSpecialties(interventionTypes);
+        return toAdd;
+    }
+
+    private DoctorNurseDTO convertToDTO(Doctor doctor) {
+        DoctorNurseDTO doctorNurseDTO = new DoctorNurseDTO(
+                doctor.getId(),
+                doctor.getUser().getEmail(),
+                null,
+                doctor.getUser().getName(),
+                doctor.getUser().getSurname(),
+                doctor.getUser().getPhoneNumber(),
+                doctor.getUser().getAddress(),
+                doctor.getUser().getCity(),
+                doctor.getUser().getCountry(),
+                doctor.getUser().getPersonalID(),
+                doctor.getClinic().getId(),
+                doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList())
+        );
+        return doctorNurseDTO;
     }
 }

@@ -66,8 +66,9 @@ public class Clinic {
 
     @Override
     public String toString() {
-        return "Clinic [id=" + id + ", name=" + name + ", clinicAdministrator=" + clinicAdministrator + ", clinicRoom="
-                + clinicRoom + ", doctors=" + doctors + ", nurses=" + nurses + ", patients=" + patients + ", admin="
-                + admin + "]";
+        return "Clinic{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

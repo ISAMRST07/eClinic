@@ -13,16 +13,16 @@
 				></v-text-field>
 			</v-card-title>
 		</v-card>
-		
+
         <v-data-table
         	:headers="headers"
             :items="nurse"
-       		:search="search"         
+       		:search="search"
             class="elevation-1"
             :loading="loading"
             loading-text="Contacting all the nurses to see if they still work here..."
         >
-            
+
             <template v-slot:item.update="{ item }">
                 <v-icon
                         @click="updateDialog(item)"
@@ -75,12 +75,11 @@
             nurseToDelete: null,
             editNurse: null,
             headers: [
-                {text: 'Name', align: 'start', value: 'user.name'},
-                {text: 'Surname', align: 'center', value: 'user.surname'},
-                {text: 'Email', align: 'center', value: 'user.email'},
-                {text: 'Phone number', align: 'center', value: 'user.phoneNumber'},
-                {text: 'Address', align: 'center', value: 'user.address'},
-                {text: 'Position', align: 'center', value: 'position'},
+                {text: 'Name', align: 'start', value: 'name'},
+                {text: 'Surname', align: 'center', value: 'surname'},
+                {text: 'Email', align: 'center', value: 'email'},
+                {text: 'Phone number', align: 'center', value: 'phoneNumber'},
+                {text: 'Address', align: 'center', value: 'address'},
                 {text: 'Update', value: 'update', sortable: false, align: 'center'},
                 {text: 'Remove', sortable: false, value: 'remove'},
             ],

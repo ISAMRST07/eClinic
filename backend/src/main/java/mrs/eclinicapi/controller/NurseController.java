@@ -1,9 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
-import mrs.eclinicapi.model.Clinic;
-import mrs.eclinicapi.model.Nurse;
-import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.NurseService;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/nurse")
@@ -22,7 +21,7 @@ public class NurseController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private NurseService service;
 
@@ -30,65 +29,28 @@ public class NurseController {
     private ClinicService clinicService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Nurse> addNurse(@RequestBody DoctorNurseDTO nurseDto) {
-        System.out.println("adding nurse ");
-        System.out.println("nurseDto = " + nurseDto);
-        Nurse newNurse = new Nurse();
-
-        Clinic clinic = clinicService.findOne(nurseDto.getClinic());
-        newNurse.setClinic(clinic);
-
-        User newUser = new User();
-        newUser.setName(nurseDto.getName());
-        newUser.setSurname(nurseDto.getSurname());
-        newUser.setPassword(passwordEncoder.encode(nurseDto.getPassword()));
-        newUser.setEmail(nurseDto.getEmail());
-        newUser.setAddress(nurseDto.getAddress());
-        newUser.setCity(nurseDto.getCity());
-        newUser.setCountry(nurseDto.getCountry());
-        newUser.setType(UserType.nurse);
-        newUser.setPersonalID(nurseDto.getJmbg());
-        newUser.setPhoneNumber(nurseDto.getPhone());
-
-        newNurse.setUser(newUser);
-        newNurse.setPosition(nurseDto.getPosition());
-
-        service.addNurse(newNurse);
+    public ResponseEntity<DoctorNurseDTO> addNurse(@RequestBody DoctorNurseDTO nurseDto) {
+        Nurse newNurse = this.convertToEntity(nurseDto);
+        Nurse added = service.addNurse(newNurse);
 
         System.out.println("newDoctor added = " + newNurse);
 
-        return new ResponseEntity<>(newNurse, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Nurse> updateNurse(@RequestBody DoctorNurseDTO nurseDto) {
-        System.out.println("updateNurse = " + nurseDto);
+    public ResponseEntity<DoctorNurseDTO> updateNurse(@RequestBody DoctorNurseDTO nurseDto) {
+        Nurse toModify = this.convertToEntity(nurseDto);
 
-        Nurse oldNurse = service.findOne(nurseDto.getId());
-        User oldUser = oldNurse.getUser();
-
-        oldUser.setName(nurseDto.getName());
-        oldUser.setSurname(nurseDto.getSurname());
-        oldUser.setPassword(passwordEncoder.encode(nurseDto.getPassword()));
-        oldUser.setEmail(nurseDto.getEmail());
-        oldUser.setAddress(nurseDto.getAddress());
-        oldUser.setCity(nurseDto.getCity());
-        oldUser.setCountry(nurseDto.getCountry());
-        oldUser.setPersonalID(nurseDto.getJmbg());
-        oldUser.setPhoneNumber(nurseDto.getPhone());
-        oldNurse.setPosition(nurseDto.getPosition());
-
-        System.out.println("new nurse oldNUrse = " + oldNurse);
-
-        Nurse modified = service.addNurse(oldNurse);
+        Nurse modified = service.addNurse(toModify);
         System.out.println("new nurse modified = " + modified);
         if (modified == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(modified, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(modified), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/deleteNurse/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteNurse(@PathVariable("id") String id) {
         System.out.println("delete nurse " + id);
 
@@ -103,19 +65,20 @@ public class NurseController {
         return new ResponseEntity<>("nurse deleted", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getAll")
-    public ResponseEntity<List<Nurse>> getAll() {
+    @GetMapping
+    public ResponseEntity<List<DoctorNurseDTO>> getAll() {
         System.out.println("get all nurse ");
         List<Nurse> nurseList = service.findAll();
         if (nurseList == null) {
             System.out.println("nurse not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(nurseList, HttpStatus.OK);
+        return new ResponseEntity<>(nurseList.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getNurseForClinic/{id}")
-    public ResponseEntity<List<Nurse>> getNurseForClinic(@PathVariable("id") String id) {
+    @GetMapping(path = "/getNurseForClinic/{id}")
+    public ResponseEntity<List<DoctorNurseDTO>> getNurseForClinic(@PathVariable("id") String id) {
         System.out.println("get nurse for clinic " + id);
 
         List<Nurse> nurseList = service.getNurseForClinic(id);
@@ -124,11 +87,12 @@ public class NurseController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         System.out.println(nurseList);
-        return new ResponseEntity<>(nurseList, HttpStatus.OK);
+        return new ResponseEntity<>(nurseList.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/getNurse/{id}")
-    public ResponseEntity<Nurse> getNurse(@PathVariable("id") String id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<DoctorNurseDTO> getNurse(@PathVariable("id") String id) {
         System.out.println("get nurse " + id);
         Nurse nurse = service.findOne(id);
         if (nurse == null) {
@@ -137,7 +101,48 @@ public class NurseController {
         }
         System.out.println("get this nurse = " + nurse);
 
-        return new ResponseEntity<>(nurse, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(nurse), HttpStatus.OK);
     }
+
+    private Nurse convertToEntity(DoctorNurseDTO doctorNurseDTO) {
+        Nurse toAdd = new Nurse();
+        Clinic foundClinic = clinicService.findOne(doctorNurseDTO.getClinicID());
+        if(foundClinic == null) return null;
+
+        toAdd.setClinic(foundClinic);
+        User nurseUser = new User(
+                doctorNurseDTO.getEmail(),
+                passwordEncoder.encode(doctorNurseDTO.getPassword()),
+                doctorNurseDTO.getName(),
+                doctorNurseDTO.getSurname(),
+                UserType.doctor,
+                doctorNurseDTO.getPhoneNumber(),
+                doctorNurseDTO.getAddress(),
+                doctorNurseDTO.getCity(),
+                doctorNurseDTO.getCountry(),
+                doctorNurseDTO.getPersonalID());
+
+        toAdd.setUser(nurseUser);
+        return toAdd;
+    }
+
+    private DoctorNurseDTO convertToDTO(Nurse nurse) {
+        DoctorNurseDTO doctorNurseDTO = new DoctorNurseDTO(
+                nurse.getId(),
+                nurse.getUser().getEmail(),
+                null,
+                nurse.getUser().getName(),
+                nurse.getUser().getSurname(),
+                nurse.getUser().getPhoneNumber(),
+                nurse.getUser().getAddress(),
+                nurse.getUser().getCity(),
+                nurse.getUser().getCountry(),
+                nurse.getUser().getPersonalID(),
+                nurse.getClinic().getId(),
+                null
+        );
+        return doctorNurseDTO;
+    }
+
 
 }

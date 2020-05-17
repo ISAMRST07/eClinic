@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.model.InterventionType;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,19 +22,12 @@ public class DoctorNurseDTO {
     String password;
     String name;
     String surname;
-    String phone;
+    String phoneNumber;
     String address;
     String city;
     String country;
-    String jmbg;
-    String position;
-    String clinic;
-
-    @Override
-	public String toString() {
-		return "DoctorNurseDTO [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
-				+ ", surname=" + surname + ", phone=" + phone + ", address=" + address + ", city=" + city + ", country="
-				+ country + ", jmbg=" + jmbg + ", position=" + position + ", clinic=" + clinic + "]";
-	}
+    String personalID;
+    String clinicID;
+    List<String> specialties;
 
 }

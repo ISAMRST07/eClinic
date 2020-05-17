@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.generator.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 
 @Getter
@@ -16,21 +18,20 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
 public class Nurse extends MedicalStaff {
 
-    private String position;
-
-
-    //    @JsonIgnoreProperties("nurses")
-    @Override
-    public Clinic getClinic() {
-        return super.getClinic();
-    }
-
+    @Id
+    @Column(length = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "n_seq")
+    @GenericGenerator(name = "n_seq",
+            strategy = "mrs.eclinicapi.generator.IdGenerator",
+            parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "N")})
+    private String id;
 
     @Override
     public String toString() {
-        return "Nurse [position=" + position + "]";
+        return "Nurse{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

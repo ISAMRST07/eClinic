@@ -3,7 +3,7 @@
             :value="value"
             @input="$emit('input', $event)"
             persistent
-            max-width="600px"
+            max-width="900px"
     >
         <v-card>
             <v-card-title>
@@ -14,96 +14,86 @@
                 <v-container>
                     <v-form ref="form">
                         <v-row>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="8">
                                 <v-text-field
                                         label="Email*"
                                         required
-                                        :rules="emailRules"
-                                        v-model="email"
+                                        :rules="[rules.required('Email')]"
+                                        v-model="modifiableNurse.email"
                                 >
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="4">
                                    <v-text-field
                                           ref="password"
                                           label="Password*"
                                           required
-                                          v-model="password"
+                                          v-model="modifiableNurse.password"
                                           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                          :rules="passwordRules"
+                                          :rules="[rules.required('Password')]"
                                           :type="showPassword ? 'text' : 'password'"
                                           name="input-10-2"
                                           hint="At least 8 characters"
                                           class="input-group--focused"
-                                          type="password"
                                           @click:append="showPassword = !showPassword"
                                   ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
-                                        label="Name*"
+                                        label="First name*"
                                         required
-                                        :rules="nameRules"
-                                        v-model="name"
+                                        :rules="[rules.required('First name')]"
+                                        v-model="modifiableNurse.name"
                                 >
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
-                                        label="Surname*"
+                                        label="Last name*"
                                         required
-                                        :rules="surnameRules"
-                                        v-model="surname"
+                                        :rules="[rules.required('Last name')]"
+                                        v-model="modifiableNurse.surname"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="4">
                                 <v-text-field
                                         label="Phone number"
                                         required
-                                        :rules="phoneRules"
-                                        v-model="phone"
+                                        :rules="[rules.required('Phone number')]"
+                                        v-model="modifiableNurse.phoneNumber"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6" lg="8">
                                 <v-text-field
                                         label="Address"
                                         required
-                                        :rules="addressRules"
-                                        v-model="address"
+                                        :rules="[rules.required('Address')]"
+                                        v-model="modifiableNurse.address"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
                                         label="City"
                                         required
-                                        :rules="cityRules"
-                                        v-model="city"
+                                        :rules="[rules.required('City')]"
+                                        v-model="modifiableNurse.city"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12" sm="6">
                                 <v-text-field
                                         label="Country"
                                         required
-                                        :rules="countryRules"
-                                        v-model="country"
+                                        :rules="[rules.required('Country')]"
+                                        v-model="modifiableNurse.country"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <v-col cols="12">
                                 <v-text-field
-                                        label="JMBG"
+                                        label="Personal ID"
                                         required
-                                        :rules="jmbgRules"
-                                        v-model="jmbg"
+                                        :rules="[rules.required('Personal ID')]"
+                                        v-model="modifiableNurse.personalID"
                                 ></v-text-field>
-                            </v-col>
-                            <v-col cols="6">
-                                <v-text-field
-                                        label="Position*"
-                                        required
-                                        :rules="positionRules"
-                                        v-model="position"
-                                >
-                                </v-text-field>
                             </v-col>
                         </v-row>
                     </v-form>
@@ -129,7 +119,6 @@
                 >Update
                 </v-btn
                 >
-
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -139,36 +128,20 @@
 
     import {mapActions, mapState} from "vuex";
     import {emptyNurse} from "../../utils/skeletons";
-
+    import JSOG from 'jsog'
     export default {
         name: "ModifyNurseDialog",
         components: {},
         data: () => ({
-            email: null,
-            password: null,
-            name: null,
-            surname: null,
-            phone: null,
-            address: null,
-            city: null,
-            country: null,
-            jmbg: null,
-            position: null,
+            modifiableNurse: emptyNurse,
 
             nurse: emptyNurse,
 
             showPassword: false,
 
-            emailRules: [v => !!v || "Email is required."],
-            passwordRules: [v => !!v || "Password is required."],          
-            nameRules: [v => !!v || "Name is required."],
-            surnameRules: [v => !!v || "Surname is required"],
-            phoneRules: [v => !!v || "Phone is required."],
-            addressRules: [v => !!v || "Address is required."],
-            cityRules: [v => !!v || "City is required"],
-            countryRules: [v => !!v || "Country is required"],
-            jmbgRules: [v => !!v || "JMBG is required"],
-            positionRules: [v => !!v || "Position is required"]
+            rules: {
+                required: fieldName => v => !!v || `${fieldName} is required`,
+            },
 
         }),
         props: {
@@ -185,44 +158,23 @@
         },
         watch: {
             value() {
-                if (this.editNurse) {
-                    this.nurse = this.editNurse;
-                    console.log("value changed");
-                    console.log("nurseename = " + this.nurse.name);
-                }
-                this.email = this.nurse.email;
-                this.name = this.nurse.name;
-                this.surname = this.nurse.surname;
-                this.phone = this.nurse.phone;
-                this.address = this.nurse.address;
-                this.city = this.nurse.city;
-                this.country = this.nurse.country;
-                this.jmbg = this.nurse.jmbg;
-                this.position = this.nurse.position;
-                console.log("thisname = " + this.name);
+                // if (this.editNurse) {
+                //     this.nurse = this.editNurse;
+                //     console.log("value changed");
+                //     console.log("nurseename = " + this.nurse.name);
+                // }
+                // this.nurse = this.modifiableNurse;
+                // console.log("thisname = " + this.name);
             }
         },
         methods: {
             ...mapActions("nurse/nurse", ["addNurseApi"]),
             ...mapActions("nurse/nurse", ["updateNurseApi"]),
             submit(fun) {
-                console.log("addnurse or updatenurse pressed");
-                console.log(fun);
-                console.log(this.clinic.id);
-
                 this.nurse.clinic = this.clinic.id;
                 if (this.$refs.form.validate()) {
-                    this.nurse.clinic = this.clinic.id;
-                    this.nurse.email = this.email;
-                    this.nurse.password = this.password;
-                    this.nurse.name = this.name;
-                    this.nurse.surname = this.surname;
-                    this.nurse.phone = this.phone;
-                    this.nurse.address = this.address;
-                    this.nurse.city = this.city;
-                    this.nurse.country = this.country;
-                    this.nurse.jmbg = this.jmbg;
-                    this.nurse.position = this.position;
+                    this.nurse.clinicID = this.clinic.id;
+                    this.nurse = JSOG.parse(JSOG.stringify(this.modifiableNurse));
                     fun(this.nurse);
                     this.close();
                 }

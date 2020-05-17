@@ -32,9 +32,16 @@ public class InterventionTypeService {
     public void deleteById(String id) {
         repository.deleteById(id);
     }
-    
+
     public List<InterventionType> getClinicInterventionType(String clinicId) {
         return repository.getClinicInterventionType(clinicId);
+    }
+
+    @Transactional
+    public List<InterventionType> findMany(List<String> ids) {
+        List<InterventionType> interventionTypes = repository.findAllById(ids);
+        if (interventionTypes.size() != ids.size()) return null;
+        return interventionTypes;
     }
 
 }
