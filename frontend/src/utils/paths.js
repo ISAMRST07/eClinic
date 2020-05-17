@@ -26,3 +26,5 @@ export const userProfilePath = '/profile/:id';
 
 export const patientsPath ='/patients'
 
+export const doctorHomePath ='/doctorHome'
+

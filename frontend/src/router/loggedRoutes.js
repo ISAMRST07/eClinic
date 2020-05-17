@@ -10,8 +10,9 @@ import Medicine from "../pages/Medicine";
 import Disease from "../pages/Disease";
 import UnregisteredUsers from "../pages/UnregisteredUsers";
 import UserProfileView from "../components/UserProfile/UserProfileView";
-
 import ClinicDetails from "../pages/ClinicDetails";
+import Patients from "../pages/Patients";
+import DoctorHome from "../pages/DoctorHome";
 
 import {
     clinicAdministratorsPath,
@@ -27,9 +28,9 @@ import {
     interventionTypePath,
     interventionPath,
     userProfilePath,
-    patientsPath
+    patientsPath,
+    doctorHomePath
 } from "../utils/paths";
-import Patients from "../pages/Patients";
 
 const loggedRoutes = [
     {
@@ -92,7 +93,11 @@ const loggedRoutes = [
     {
         path: patientsPath,
         component: Patients
-    }
+    },
+    {
+        path: doctorHomePath,
+        component: DoctorHome
+    },
 
 ];
 

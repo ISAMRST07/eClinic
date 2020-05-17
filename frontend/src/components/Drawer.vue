@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin, Patient, Doctor} from "../utils/DrawerItems";
     import {mapState} from "vuex";
 
     export default {
@@ -76,6 +76,9 @@
                     break;
                 case Patient.code:
                     this.items = Patient.items;
+                    break;
+                case Doctor.code:
+                    this.items = Doctor.items;
                     break;
                 default:
 

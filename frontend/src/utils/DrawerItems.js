@@ -10,7 +10,8 @@ import {
     clinicDetailsPath,
     interventionTypePath,
     interventionPath,
-    patientsPath
+    patientsPath,
+    doctorHomePath
 } from "./paths";
 
 const doctorsItem = {
@@ -88,6 +89,12 @@ const patientsItem = {
     path: patientsPath,
 };
 
+const doctorHomeItem = {
+    icon: 'mdi-home',
+    label: 'DoctorHome',
+    path: doctorHomePath,
+};
+
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
     code: 'clinicCentarAdministrator',
@@ -131,4 +138,14 @@ const Patient = {
     ]
 };
 
-export {ClinicalCenterAdmin, ClinicalAdmin, Patient};
+const Doctor = {
+	name: 'Doctor',
+    code: 'doctor',
+    items: [
+        homeItem,
+        doctorHomeItem,
+        clinicsItem,
+        interventionTypeItem,
+    ]	
+}
+export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};
