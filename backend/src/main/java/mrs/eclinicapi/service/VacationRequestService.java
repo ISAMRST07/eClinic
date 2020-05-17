@@ -48,4 +48,8 @@ public class VacationRequestService {
     public List<VacationRequest> getVacationRequestForClinic(String id){
     	return repository.getVacationRequestForClinic(id);
     }
+    
+    public List<VacationRequest> getVacationRequestForUser(String id){
+    	return repository.getVacationRequestForUser(id);
+    }
 }

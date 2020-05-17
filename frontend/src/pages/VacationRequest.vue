@@ -29,12 +29,14 @@
         computed: {
             ...mapState('auth', ['user']),
             ...mapState('auth', ['clinic']),
+            ...mapState('clinics/vacationRequest', ['userVacationRequest']),
             
         },
         watch: {
         },
         methods: {
         	...mapActions('clinics/vacationRequest', ['addVacationRequestApi']),
+            ...mapActions('clinics/vacationRequest', ['getUserVacationRequestApi']),
         
         	request(){
         		console.log("request");
@@ -65,6 +67,8 @@
         	console.log("created");
 			console.log(this.user);		//doctor id = user.id
 			console.log(this.clinic);	//klinika kojoj ovaj doctor pripada
+			this.getUserVacationRequestApi(this.user.id);
+			
         }
     }
     var dates = {

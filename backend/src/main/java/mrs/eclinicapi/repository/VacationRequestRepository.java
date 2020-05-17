@@ -12,4 +12,7 @@ public interface VacationRequestRepository extends JpaRepository<VacationRequest
 
     @Query("select d from VacationRequest d where d.clinic.id = ?1")
     List<VacationRequest> getVacationRequestForClinic(String id);
+    
+    @Query("select d from VacationRequest d where d.user.id = ?1")
+    List<VacationRequest> getVacationRequestForUser(String id);
 }

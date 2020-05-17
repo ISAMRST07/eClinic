@@ -39,6 +39,23 @@ public class VacationRequestController {
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
 	
+	@RequestMapping(path = "/user/{id}")
+    public ResponseEntity<List<VacationRequest>> getVacationRequestForUser(@PathVariable("id") String id) {
+        System.out.println("get vacationRequest for user " + id);
+
+        List<VacationRequest> vacationRequest = service.getVacationRequestForUser(id);
+        if (vacationRequest == null) {
+            System.out.println("vacationRequest not found");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        System.out.println(vacationRequest);
+        System.out.println("printing vacationRequest user");
+        for (VacationRequest d : vacationRequest) {
+            System.out.println(d);
+        }
+        return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
+    }
+	
 	@RequestMapping(path = "/{id}")
     public ResponseEntity<List<VacationRequest>> getVacationRequestForClinic(@PathVariable("id") String id) {
         System.out.println("get vacationRequest for clinic " + id);

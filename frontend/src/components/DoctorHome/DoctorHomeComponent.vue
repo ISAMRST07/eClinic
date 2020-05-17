@@ -110,6 +110,7 @@
             },
             vacationDetails(){
             	console.log("vacationDetails");
+            	this.$router.push(`/vacationRequest`)
             },
             profileDetails(){
             	console.log("profileDetails");

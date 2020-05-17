@@ -1,6 +1,5 @@
 <template>
     <v-container fluid>
-    	
         <doctor-home-component/>
     </v-container>
 </template>
