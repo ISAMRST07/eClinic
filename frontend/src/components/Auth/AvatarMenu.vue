@@ -3,6 +3,7 @@
             v-model="menuActive"
             :close-on-content-click="false"
             :nudge-width="250"
+            z-index="14"
             offset-y
     >
         <template v-slot:activator="{ on }">

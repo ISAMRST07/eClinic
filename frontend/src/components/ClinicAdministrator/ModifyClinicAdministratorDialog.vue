@@ -310,13 +310,4 @@
         width: 100%;
         padding: 0 !important;
     }
-
-    .footer {
-        position: absolute;
-        bottom: 0;
-        height: fit-content;
-        width: 100%;
-        z-index: 1000;
-        background-color: red;
-    }
 </style>

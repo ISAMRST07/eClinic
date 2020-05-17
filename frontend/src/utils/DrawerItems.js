@@ -103,11 +103,11 @@ const ClinicalCenterAdmin = {
 };
 
 
-function ClinicalAdmin(id) {
-    return {
-        name: 'Clinical Admin',
-        code: 'clinicAdministrator',
-        items: [
+class ClinicalAdmin {
+    static name = 'Clinical Admin';
+    static code = 'clinicAdministrator';
+    constructor(id) {
+        this.items = [
             clinicDetailsItem(id),
             interventionTypeItem,
             interventionItem,
@@ -115,8 +115,8 @@ function ClinicalAdmin(id) {
             clinicRoomsItem,
             doctorsItem,
             nursesItem
-        ],
-    };
+        ]
+    }
 }
 
 

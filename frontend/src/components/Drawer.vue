@@ -67,13 +67,12 @@
 
         },
         mounted() {
-            let clinicalAdmin;
             switch (this.role) {
                 case ClinicalCenterAdmin.code:
                     this.items = ClinicalCenterAdmin.items;
                     break;
-                case (clinicalAdmin = ClinicalAdmin(this.clinic?.id)).code:
-                    this.items = clinicalAdmin.items;
+                case ClinicalAdmin.code:
+                    this.items = (new ClinicalAdmin(this.clinic.id)).items;
                     break;
                 case Patient.code:
                     this.items = Patient.items;

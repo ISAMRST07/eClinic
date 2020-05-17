@@ -30,6 +30,6 @@
         position: absolute;
         right: 2em;
         bottom: 3em;
-        z-index: 20;
+        z-index: 11;
     }
 </style>
