@@ -1,5 +1,18 @@
 <template>
     <v-container fluid>
+		<div>
+			<v-data-table
+	                :headers="headers"
+	                :items="userVacationRequest"
+	                class="elevation-1"
+	                :loading="loading"
+	                loading-text="Getting vacation requests types"
+	        >
+		        <template v-slot:no-data>
+		        	<p>There are no vacation requests</p>
+		        </template>
+	        </v-data-table>
+		</div>
 		<v-row justify="space-around">
 			Start date:
 		    <v-date-picker v-model="startDate" color="green lighten-1"></v-date-picker>
@@ -25,6 +38,11 @@
         	startDate : '',
         	endDate : '',
         	vacationRequest : emptyVacationRequest,
+        	headers: [
+                {text: 'Start date', align: 'start', value: 'startDate'},
+                {text: 'End date', align: 'center', value: 'endDate'},
+                {text: 'Approved', align: 'center', value: 'approved'},
+            ],
         }),
         computed: {
             ...mapState('auth', ['user']),
