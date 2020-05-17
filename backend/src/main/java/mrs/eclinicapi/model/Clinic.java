@@ -53,6 +53,9 @@ public class Clinic {
     private Set<Intervention> interventions = new HashSet<>();
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<VacationRequest> vacationRequests = new HashSet<>();
+    
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<InterventionType> interventionTypes = new HashSet<>();
 
     @ManyToMany
