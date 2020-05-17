@@ -72,7 +72,7 @@
                 case ClinicalCenterAdmin.code:
                     this.items = ClinicalCenterAdmin.items;
                     break;
-                case (clinicalAdmin = ClinicalAdmin(this.clinic.id)).code:
+                case (clinicalAdmin = ClinicalAdmin(this.clinic?.id)).code:
                     this.items = clinicalAdmin.items;
                     break;
                 case Patient.code:
