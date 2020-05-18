@@ -91,7 +91,7 @@
 	        			this.vacationRequest.clinic = this.clinic;
 	        			this.vacationRequest.startDate = start;
 	        			this.vacationRequest.endDate = end;
-	        			this.vacationRequest.approved = false;
+	        			this.vacationRequest.status = "pending";
 	        			console.log("created vacation request = ");
 	        			console.log(this.vacationRequest);
 	        			fun(this.vacationRequest);

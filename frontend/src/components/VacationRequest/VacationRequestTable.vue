@@ -27,11 +27,6 @@
 					mdi-email-check
 				</v-icon>
 			</template>
-			<template  v-if="role === doctorCode" v-slot:item.update="{ item }">
-				<v-icon @click="updateDialog(item)" color="amber darken-2">
-					mdi-pencil
-				</v-icon>
-			</template>
 			
 			<template  v-if="role === adminCode" v-slot:item.disapprove="{ item }">
 				<v-icon @click="disapproveVacation(item)" color="amber darken-2">
@@ -54,31 +49,23 @@
 			@close="deleteDialog(null)"
 			@delete="deleteVacationRequest"
 		/>
-		<modify-vacation-request-dialog
-			mode="update"
-			:edit-vacation-request="editVacationRequest"
-			v-model="editDialog"
-		/>
 	</div>
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
 import DeleteDialog from "./DeleteDialog";
-import ModifyVacationRequestDialog from "./ModifyVacationRequestDialog";
 import {ClinicalAdmin, Doctor} from '../../utils/DrawerItems';
 
 export default {
     name: "VacationRequestTable",
-    components: {DeleteDialog, ModifyVacationRequestDialog},
+    components: {DeleteDialog},
     data: () => ({
     	search : "",
         loading: false,
         descriptionDialog: false,
-        editDialog: false,
         dialog: false,
         vacationRequestToDelete: null,
-        editVacationRequest: null,
         adminCode: ClinicalAdmin.code,
         doctorCode : Doctor.code,
     }),
@@ -91,8 +78,7 @@ export default {
         	let regularHeaders = [
             	{text: 'Start date', align: 'start', value: 'startDate'},
             	{text: 'End date', align: 'center', value: 'endDate'},
-            	{text: 'Approved', align: 'center', value: 'approved'},
-	            {text: 'Update', value: 'update', align: 'center', sortable: false},
+            	{text: 'Status', align: 'center', value: 'status'},
     	        {text: 'Remove', value: 'remove', align: 'center', sortable: false},
             ];
             let adminHeaders = [
@@ -100,7 +86,7 @@ export default {
                 {text: 'Staff email', align: 'center', value: 'user.email'},                
                 {text: 'Start date', align: 'center', value: 'startDate'},
             	{text: 'End date', align: 'center', value: 'endDate'},
-            	{text: 'Approved', align: 'center', value: 'approved'},
+            	{text: 'Status', align: 'center', value: 'status'},
 	            {text: 'Approve', align: 'center', value: 'approve', sortable: false },
     	        {text: 'Disapprove', align: 'center', value: 'disapprove', sortable: false},
             ];   
@@ -114,6 +100,8 @@ export default {
         ...mapActions('clinics/vacationRequest', ['getUserVacationRequestApi']),   
         ...mapActions('clinics/vacationRequest', ['getClinicVacationRequestApi']),        
         ...mapActions('clinics/vacationRequest', ['deleteVacationRequestApi']),
+        ...mapActions('clinics/vacationRequest', ['approveVacationRequestApi']),
+        ...mapActions('clinics/vacationRequest', ['disapproveVacationRequestApi']),
         
         deleteDialog(vacationRequestToDelete) {
             this.vacationRequestToDelete = vacationRequestToDelete;
@@ -123,26 +111,15 @@ export default {
             this.deleteVacationRequestApi(this.vacationRequestToDelete);
             this.deleteDialog(null);
         },
-        updateDialog(vacationRequest) {
-            console.log("updateDialog id = " + vacationRequest.id);
-            console.log(vacationRequest);
-            this.editVacationRequest = {
-                id : vacationRequest.id,
-                startDate : new Date(vacationRequest.startDate),
-                endDate : new Date(vacationRequest.endDate),
-                approved : vacationRequest.approved,
-                user : vacationRequest.user,
-                clinic : vacationRequest.clinic
-            };
-            this.editDialog = true;
-        },
         approveVacation(item){
         	console.log("approveVacation");
-        	console.log(item);
+        	console.log(item.id);
+        	this.approveVacationRequestApi(item.id);
         },
         disapproveVacation(item){
         	console.log("disapproveVacation");
-        	console.log(item);
+        	console.log(item.id);
+        	this.disapproveVacationRequestApi(item.id);
         }
     },
     created() {

@@ -86,7 +86,7 @@ export const emptyVacationRequest = {
     clinic: '',
 	startDate: null,
     endDate: null,
-    approved: null
+    status: ''
 };
 
 export const emptyUser = {

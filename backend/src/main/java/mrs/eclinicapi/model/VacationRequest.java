@@ -42,12 +42,12 @@ public class VacationRequest {
 	
 	private LocalDateTime endDate;
 	
-	private boolean approved;
+	private String status;
 
 	@Override
 	public String toString() {
 		return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", approved=" + approved + "]";
+				+ ", endDate=" + endDate + ", status=" + status + "]";
 	}
 	
 	

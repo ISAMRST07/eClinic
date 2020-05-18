@@ -128,7 +128,8 @@ class ClinicalAdmin {
             medicinesItem,
             clinicRoomsItem,
             doctorsItem,
-            nursesItem
+            nursesItem,
+            vacationRequestItem
         ]
     }
 }

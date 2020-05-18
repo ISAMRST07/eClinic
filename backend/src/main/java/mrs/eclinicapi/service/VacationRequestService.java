@@ -41,7 +41,7 @@ public class VacationRequestService {
         toModify.setEndDate(vacationRequest.getEndDate());
         toModify.setClinic(vacationRequest.getClinic());
         toModify.setUser(vacationRequest.getUser());
-        toModify.setApproved(vacationRequest.isApproved());
+        toModify.setStatus(vacationRequest.getStatus());
         return repository.save(toModify);
     }
     
