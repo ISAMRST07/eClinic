@@ -22,8 +22,10 @@
 			:loading="loading"
 			loading-text="Loading vacation requests..."
 		>
-			<template  v-if="role === adminCode" >
-				  <button>Approve</button>
+			<template  v-if="role === adminCode" v-slot:item.approve="{ item }">
+				<v-icon @click="approveVacation(item)" color="amber darken-2">
+					mdi-email-check
+				</v-icon>
 			</template>
 			<template  v-if="role === doctorCode" v-slot:item.update="{ item }">
 				<v-icon @click="updateDialog(item)" color="amber darken-2">
@@ -31,8 +33,10 @@
 				</v-icon>
 			</template>
 			
-			<template v-if="role === adminCode" >
-				  <button>Delete</button>
+			<template  v-if="role === adminCode" v-slot:item.disapprove="{ item }">
+				<v-icon @click="disapproveVacation(item)" color="amber darken-2">
+					mdi-email-check
+				</v-icon>
 			</template>
 			<template v-if="role === doctorCode" v-slot:item.remove="{ item }">
 				<v-icon @click="deleteDialog(item)" color="red">
@@ -77,24 +81,40 @@ export default {
         editVacationRequest: null,
         adminCode: ClinicalAdmin.code,
         doctorCode : Doctor.code,
-        headers: [
-            {text: 'Start date', align: 'start', value: 'startDate'},
-            {text: 'End date', align: 'center', value: 'endDate'},
-            {text: 'Approved', align: 'center', value: 'approved'},
-            {text: 'Update', value: 'update', sortable: false, align: 'center'},
-            {text: 'Remove', sortable: false, value: 'remove'},
-        ],
     }),
     computed: {
         ...mapState('auth', ['user']),
         ...mapState('auth', ['clinic']),
         ...mapState('clinics/vacationRequest', ['vacationRequest']),
         ...mapState('auth', ['role']),
+        headers() {
+        	let regularHeaders = [
+            	{text: 'Start date', align: 'start', value: 'startDate'},
+            	{text: 'End date', align: 'center', value: 'endDate'},
+            	{text: 'Approved', align: 'center', value: 'approved'},
+	            {text: 'Update', value: 'update', align: 'center', sortable: false},
+    	        {text: 'Remove', value: 'remove', align: 'center', sortable: false},
+            ];
+            let adminHeaders = [
+                {text: 'Staff name', align: 'start', value: 'user.name'},
+                {text: 'Staff email', align: 'center', value: 'user.email'},                
+                {text: 'Start date', align: 'center', value: 'startDate'},
+            	{text: 'End date', align: 'center', value: 'endDate'},
+            	{text: 'Approved', align: 'center', value: 'approved'},
+	            {text: 'Approve', align: 'center', value: 'approve', sortable: false },
+    	        {text: 'Disapprove', align: 'center', value: 'disapprove', sortable: false},
+            ];   
+            if (this.role === this.adminCode) {
+                    return adminHeaders;
+            }
+            return regularHeaders;
+        },
     },
     methods: {
-        ...mapActions('clinics/vacationRequest', ['getUserVacationRequestApi']),
+        ...mapActions('clinics/vacationRequest', ['getUserVacationRequestApi']),   
+        ...mapActions('clinics/vacationRequest', ['getClinicVacationRequestApi']),        
         ...mapActions('clinics/vacationRequest', ['deleteVacationRequestApi']),
-
+        
         deleteDialog(vacationRequestToDelete) {
             this.vacationRequestToDelete = vacationRequestToDelete;
             this.dialog = !this.dialog;
@@ -108,31 +128,36 @@ export default {
             console.log(vacationRequest);
             this.editVacationRequest = {
                 id : vacationRequest.id,
-                startDate : vacationRequest.startDate,
-                endDate : vacationRequest.endDate,
+                startDate : new Date(vacationRequest.startDate),
+                endDate : new Date(vacationRequest.endDate),
                 approved : vacationRequest.approved,
                 user : vacationRequest.user,
                 clinic : vacationRequest.clinic
             };
             this.editDialog = true;
+        },
+        approveVacation(item){
+        	console.log("approveVacation");
+        	console.log(item);
+        },
+        disapproveVacation(item){
+        	console.log("disapproveVacation");
+        	console.log(item);
         }
     },
     created() {
         this.loading = true;
-        console.log(this.user)
-        this.getUserVacationRequestApi(this.user.id);
-        console.log("role = " + this.role);
-        /*switch (this.user.type) {
-            case ClinicalCenterAdmin.code:
-                console.log("user = ClinicalCenterAdmin");
+        switch (this.user.type) {
+            case Doctor.code:
+                console.log("user = Doctor user.id = " + this.user.id);
+				this.getUserVacationRequestApi(this.user.id);
                 break;
             case ClinicalAdmin.code:
                 console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                console.log("callapi");
-                this.getClinicInterventionApi(this.clinic.id);
+                this.getClinicVacationRequestApi(this.clinic.id);
                 break;
             default:
-        }*/
+        }
         
     },
     watch: {
