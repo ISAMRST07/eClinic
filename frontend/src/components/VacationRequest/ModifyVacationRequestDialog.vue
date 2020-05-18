@@ -94,7 +94,6 @@
 	        			this.vacationRequest.approved = false;
 	        			console.log("created vacation request = ");
 	        			console.log(this.vacationRequest);
-	        			this.addVacationRequestApi(this.vacationRequest);
 	        			fun(this.vacationRequest);
                     	this.close();
 	        		}

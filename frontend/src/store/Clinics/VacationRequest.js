@@ -6,16 +6,11 @@ export default {
     namespaced: true,
     state: {
         vacationRequest: [],
-        userVacationRequest : []
     },
     mutations: {
         setAllVacationRequest(state, vacationRequest) {
             console.log("mutations setAllVacationRequest vacationRequest = " + vacationRequest);
             Vue.set(state, 'vacationRequest', JSOG.decode(vacationRequest));
-        },
-        setUserVacationRequest(state, vacationRequest) {
-            console.log("mutations setUserVacationRequest vacationRequest = " + vacationRequest);
-            Vue.set(state, 'userVacationRequest', JSOG.decode(vacationRequest));
         },
         addVacationRequest(state, vacationRequest) {
             console.log("mutations vacationRequest");
@@ -41,7 +36,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log("actions getUserVacationRequestApi vacationRequest = " + res.data);
                 res.data.forEach(item => console.log(item));
-                commit('setUserVacationRequest', res.data);
+                commit('setAllVacationRequest', res.data);
             } catch (err) {
                 defaultError(err);
             }

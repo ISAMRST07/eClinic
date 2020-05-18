@@ -16,18 +16,25 @@
 		
 		<v-data-table
 			:headers="headers"
-			:items="userVacationRequest"
+			:items="vacationRequest"
 			:search="search"   
 			class="elevation-1"
 			:loading="loading"
 			loading-text="Loading vacation requests..."
 		>
-			<template v-slot:item.update="{ item }">
+			<template  v-if="role === adminCode" >
+				  <button>Approve</button>
+			</template>
+			<template  v-if="role === doctorCode" v-slot:item.update="{ item }">
 				<v-icon @click="updateDialog(item)" color="amber darken-2">
 					mdi-pencil
 				</v-icon>
 			</template>
-			<template v-slot:item.remove="{ item }">
+			
+			<template v-if="role === adminCode" >
+				  <button>Delete</button>
+			</template>
+			<template v-if="role === doctorCode" v-slot:item.remove="{ item }">
 				<v-icon @click="deleteDialog(item)" color="red">
 					mdi-delete
 				</v-icon>
@@ -55,6 +62,7 @@
 import {mapActions, mapState} from "vuex";
 import DeleteDialog from "./DeleteDialog";
 import ModifyVacationRequestDialog from "./ModifyVacationRequestDialog";
+import {ClinicalAdmin, Doctor} from '../../utils/DrawerItems';
 
 export default {
     name: "VacationRequestTable",
@@ -67,6 +75,8 @@ export default {
         dialog: false,
         vacationRequestToDelete: null,
         editVacationRequest: null,
+        adminCode: ClinicalAdmin.code,
+        doctorCode : Doctor.code,
         headers: [
             {text: 'Start date', align: 'start', value: 'startDate'},
             {text: 'End date', align: 'center', value: 'endDate'},
@@ -78,7 +88,8 @@ export default {
     computed: {
         ...mapState('auth', ['user']),
         ...mapState('auth', ['clinic']),
-        ...mapState('clinics/vacationRequest', ['userVacationRequest']),
+        ...mapState('clinics/vacationRequest', ['vacationRequest']),
+        ...mapState('auth', ['role']),
     },
     methods: {
         ...mapActions('clinics/vacationRequest', ['getUserVacationRequestApi']),
@@ -110,6 +121,7 @@ export default {
         this.loading = true;
         console.log(this.user)
         this.getUserVacationRequestApi(this.user.id);
+        console.log("role = " + this.role);
         /*switch (this.user.type) {
             case ClinicalCenterAdmin.code:
                 console.log("user = ClinicalCenterAdmin");
