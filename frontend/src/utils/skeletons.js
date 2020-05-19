@@ -19,6 +19,19 @@ export const emptyClinicAdmin = {
     clinic : null
 };
 
+export const emptyClinicCenterAdmin = {
+    name: '',
+    surname: '',
+    password: '',
+    username: '',
+    city : '',
+    country : '',
+    email : '',
+    personalID : '',
+    address: '',
+    phoneNumber: ''
+};
+
 export const emptyDisease = {
     name: null
 };
