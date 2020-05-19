@@ -102,6 +102,7 @@ export default {
         ...mapActions('clinics/vacationRequest', ['deleteVacationRequestApi']),
         ...mapActions('clinics/vacationRequest', ['approveVacationRequestApi']),
         ...mapActions('clinics/vacationRequest', ['disapproveVacationRequestApi']),
+        ...mapActions('clinics/vacationRequest', ['updateVacationRequestApi']),
         
         deleteDialog(vacationRequestToDelete) {
             this.vacationRequestToDelete = vacationRequestToDelete;

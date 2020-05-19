@@ -56,36 +56,38 @@ public class VacationRequestController {
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
 	
-	@PostMapping(path = "/approve/{id}")
+    @GetMapping(path = "/approve/{id}")
     public ResponseEntity<VacationRequest> approveVacationRequest(@PathVariable("id") String id) {
         System.out.println("approveVacationRequest for user " + id);
 
-        VacationRequest vacationRequest = service.findOne(id);
-        if (vacationRequest == null) {
+        VacationRequest vac = service.findOne(id);
+        if (vac == null) {
             System.out.println("vacationRequest not found");
+            System.out.println(id);
+
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        vacationRequest.setStatus("approved");
-        System.out.println(vacationRequest);
+        vac.setStatus("approved");
+        System.out.println(vac);
         
-        VacationRequest modified = service.addVacationRequest(vacationRequest);
+        VacationRequest modified = service.addVacationRequest(vac);
         
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
-	
-	@PostMapping(path = "/disapprove/{id}")
+
+    @GetMapping(path = "/disapprove/{id}")
     public ResponseEntity<VacationRequest> disapproveVacationRequest(@PathVariable("id") String id) {
         System.out.println("disapproveVacationRequest for user " + id);
 
-        VacationRequest vacationRequest = service.findOne(id);
-        if (vacationRequest == null) {
+        VacationRequest vac = service.findOne(id);
+        if (vac == null) {
             System.out.println("vacationRequest not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        vacationRequest.setStatus("disapproved");
-        System.out.println(vacationRequest);
+        vac.setStatus("disapproved");
+        System.out.println(vac);
         
-        VacationRequest modified = service.addVacationRequest(vacationRequest);
+        VacationRequest modified = service.addVacationRequest(vac);
         
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }

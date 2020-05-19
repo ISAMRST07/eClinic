@@ -78,6 +78,8 @@ export default {
         },
         async updateVacationRequestApi({rootState, commit}, vacationRequest) {
             console.log("updateVacationRequestApi");
+            console.log(vacationRequest);
+
             try {
                 let {data: modified} = await Vue.prototype.$axios.put('/api/vacationRequest', vacationRequest, 
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
@@ -89,7 +91,7 @@ export default {
         async approveVacationRequestApi({rootState, commit}, vacationRequestId) {
             console.log("approveVacationRequestApi = " + vacationRequestId);
             try {
-                let {data: modified} = await Vue.prototype.$axios.post('/api/vacationRequest/approve/' + vacationRequestId, 
+                let {data: modified} = await Vue.prototype.$axios.get('/api/vacationRequest/approve/' + vacationRequestId, 
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log("modified");
                 console.log(modified);
@@ -101,7 +103,7 @@ export default {
         async disapproveVacationRequestApi({rootState, commit}, vacationRequestId) {
             console.log("disapproveVacationRequestApi = " + vacationRequestId);
             try {
-                let {data: modified} = await Vue.prototype.$axios.post('/api/vacationRequest/disapprove/' + vacationRequestId, 
+                let {data: modified} = await Vue.prototype.$axios.get('/api/vacationRequest/disapprove/' + vacationRequestId, 
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateVacationRequest', modified);
             } catch (err) {
