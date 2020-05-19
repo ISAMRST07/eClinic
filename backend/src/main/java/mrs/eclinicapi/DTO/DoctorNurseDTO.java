@@ -30,5 +30,13 @@ public class DoctorNurseDTO {
     String personalID;
     String clinicID;
     List<String> specialties;
+	@Override
+	public String toString() {
+		return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password
+				+ ", name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + ", address=" + address
+				+ ", city=" + city + ", country=" + country + ", personalID=" + personalID + ", clinicID=" + clinicID
+				+ ", specialties=" + specialties + "]";
+	}
 
+    
 }
