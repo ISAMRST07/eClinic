@@ -100,10 +100,11 @@ export default {
                 defaultError(err);
             }
         },
-        async disapproveVacationRequestApi({rootState, commit}, vacationRequestId) {
-            console.log("disapproveVacationRequestApi = " + vacationRequestId);
+        async disapproveVacationRequestApi({rootState, commit}, vacationRequestObj) {
+            console.log("disapproveVacationRequestApi = " + vacationRequestObj.id);
+            console.log(vacationRequestObj.reason);
             try {
-                let {data: modified} = await Vue.prototype.$axios.get('/api/vacationRequest/disapprove/' + vacationRequestId, 
+                let {data: modified} = await Vue.prototype.$axios.post('/api/vacationRequest/disapprove/' + vacationRequestObj.id, vacationRequestObj.reason, 
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateVacationRequest', modified);
             } catch (err) {

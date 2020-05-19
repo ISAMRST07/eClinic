@@ -68,6 +68,7 @@ public class VacationRequestController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         vac.setStatus("approved");
+        vac.setReason("approved");
         System.out.println(vac);
         
         VacationRequest modified = service.addVacationRequest(vac);
@@ -75,16 +76,20 @@ public class VacationRequestController {
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/disapprove/{id}")
-    public ResponseEntity<VacationRequest> disapproveVacationRequest(@PathVariable("id") String id) {
-        System.out.println("disapproveVacationRequest for user " + id);
+    @PostMapping(path = "/disapprove/{id}")
+    public ResponseEntity<VacationRequest> disapproveVacationRequest(@PathVariable("id") String id,
+    																	@RequestBody String reason) {
+        reason = reason.substring(0, reason.length() - 1);	//brise jednako koje se na string dodaje iz nekog razloga
 
+    	System.out.println("disapproveVacationRequest for user " + id);
+        System.out.println("disapproveVacationRequest for reason " + reason);
         VacationRequest vac = service.findOne(id);
         if (vac == null) {
             System.out.println("vacationRequest not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         vac.setStatus("disapproved");
+        vac.setReason(reason);
         System.out.println(vac);
         
         VacationRequest modified = service.addVacationRequest(vac);
