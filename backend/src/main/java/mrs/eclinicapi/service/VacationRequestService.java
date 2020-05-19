@@ -23,7 +23,7 @@ public class VacationRequestService {
     }
 
     public VacationRequest findOne(String id) {
-        return repository.findById(id).orElseGet(null);
+        return repository.findById(id).orElse(null);
     }
 
     public List<VacationRequest> findAll() {

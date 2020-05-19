@@ -23,14 +23,20 @@
 			loading-text="Loading vacation requests..."
 		>
 			<template  v-if="role === adminCode" v-slot:item.approve="{ item }">
-				<v-icon @click="approveVacation(item)" color="amber darken-2">
+				<v-icon  v-if="item.status === 'pending'" @click="approveVacation(item)" color="amber darken-2">
 					mdi-email-check
+				</v-icon>
+				<v-icon  v-else  color="amber darken-2">
+					mdi-email-send-outline
 				</v-icon>
 			</template>
 			
 			<template  v-if="role === adminCode" v-slot:item.disapprove="{ item }">
-				<v-icon @click="disapproveVacation(item)" color="amber darken-2">
+				<v-icon v-if="item.status === 'pending'" @click="disapproveVacationDialog(item)" color="amber darken-2">
 					mdi-email-check
+				</v-icon>
+				<v-icon  v-else  color="amber darken-2">
+					mdi-email-send-outline
 				</v-icon>
 			</template>
 			<template v-if="role === doctorCode" v-slot:item.remove="{ item }">
@@ -49,23 +55,32 @@
 			@close="deleteDialog(null)"
 			@delete="deleteVacationRequest"
 		/>
+		<disapprove-dialog
+			v-model="disapproveDialog"
+			:vacationRequest="vacationRequestToDisapprove"
+			@close="disapproveVacationDialog(null)"
+			@delete="disapproveVacation"
+		/>
 	</div>
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
 import DeleteDialog from "./DeleteDialog";
+import DisapproveDialog from "./DisapproveDialog";
 import {ClinicalAdmin, Doctor} from '../../utils/DrawerItems';
 
 export default {
     name: "VacationRequestTable",
-    components: {DeleteDialog},
+    components: {DeleteDialog, DisapproveDialog},
     data: () => ({
     	search : "",
         loading: false,
         descriptionDialog: false,
         dialog: false,
+        disapproveDialog : false,
         vacationRequestToDelete: null,
+        vacationRequestToDisapprove: null,
         adminCode: ClinicalAdmin.code,
         doctorCode : Doctor.code,
     }),
@@ -102,6 +117,7 @@ export default {
         ...mapActions('clinics/vacationRequest', ['deleteVacationRequestApi']),
         ...mapActions('clinics/vacationRequest', ['approveVacationRequestApi']),
         ...mapActions('clinics/vacationRequest', ['disapproveVacationRequestApi']),
+        ...mapActions('clinics/vacationRequest', ['updateVacationRequestApi']),
         
         deleteDialog(vacationRequestToDelete) {
             this.vacationRequestToDelete = vacationRequestToDelete;
@@ -111,16 +127,26 @@ export default {
             this.deleteVacationRequestApi(this.vacationRequestToDelete);
             this.deleteDialog(null);
         },
+        disapproveVacationDialog(vacationRequestToDisapprove) {
+            this.vacationRequestToDisapprove = vacationRequestToDisapprove;
+            this.disapproveDialog = !this.disapproveDialog;
+        },
+        disapproveVacation(reason){
+        	console.log("disapproveVacation");
+        	console.log("reason = " + reason);
+        	console.log(this.vacationRequestToDisapprove.id);
+        	var vacationRequestObj = {
+        		'id' : this.vacationRequestToDisapprove.id,
+        		'reason' : reason
+        	}
+        	this.disapproveVacationRequestApi(vacationRequestObj);
+            this.disapproveVacationDialog(null);
+        },
         approveVacation(item){
         	console.log("approveVacation");
         	console.log(item.id);
         	this.approveVacationRequestApi(item.id);
         },
-        disapproveVacation(item){
-        	console.log("disapproveVacation");
-        	console.log(item.id);
-        	this.disapproveVacationRequestApi(item.id);
-        }
     },
     created() {
         this.loading = true;

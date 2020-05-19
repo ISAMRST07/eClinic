@@ -44,10 +44,12 @@ public class VacationRequest {
 
 	private String status;
 
+	private String reason;
+	
 	@Override
 	public String toString() {
 		return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", status=" + status + "]";
+				+ ", endDate=" + endDate + ", status=" + status+ ", reason=" + reason + "]";
 	}
 
 
