@@ -4,6 +4,8 @@ export const clinicsPath = '/clinics';
 
 export const clinicAdministratorsPath = '/clinicAdministrators';
 
+export const clinicCenterAdministratorsPath = '/clinicCenterAdministrators';
+
 export const clinicRoomsPath = '/clinicRooms';
 
 export const doctorsPath = '/doctors';

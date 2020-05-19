@@ -1,5 +1,6 @@
 import Clinics from "../pages/Clinics";
 import Home from "../pages/Home";
+import ClinicCenterAdministrators from "../pages/ClinicCenterAdministrators";
 import ClinicAdministrators from "../pages/ClinicAdministrators";
 import ClinicRooms from "../pages/ClinicRooms";
 import Doctor from "../pages/Doctor";
@@ -16,6 +17,7 @@ import DoctorHome from "../pages/DoctorHome";
 import VacationRequest from "../pages/VacationRequest";
 
 import {
+    clinicCenterAdministratorsPath,
     clinicAdministratorsPath,
     clinicDetailsPath,
     clinicRoomsPath,
@@ -42,6 +44,10 @@ const loggedRoutes = [
     {
         path: clinicsPath,
         component: Clinics,
+    },
+    {
+        path: clinicCenterAdministratorsPath,
+        component: ClinicCenterAdministrators,
     },
     {
         path: clinicAdministratorsPath,
