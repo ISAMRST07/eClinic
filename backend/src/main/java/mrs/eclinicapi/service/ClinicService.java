@@ -5,16 +5,15 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Service
@@ -97,15 +96,18 @@ public class ClinicService {
         clinicRepository.delete(clinicToDelete);
     }
 
-    public List<Clinic> searchAll(LocalDate date, InterventionType type) {
-        return clinicRepository.search(date, type);
+
+    public Page<Clinic> search(String searchQuery, LocalDate date, InterventionType type, int pageNumber, int pageSize) {
+        return this.search(searchQuery, date, type, pageNumber, pageSize, null, false);
     }
 
-    public Page<Clinic> search(LocalDate date, InterventionType type, int pageNumber, int pageSize) {
-        return this.search(date, type, pageNumber, pageSize, null, false);
-    }
-
-    public Page<Clinic> search(LocalDate date, InterventionType type, int pageNumber, int pageSize, String sort, boolean desc) {
+    public Page<Clinic> search(String searchQuery,
+                               LocalDate date,
+                               InterventionType type,
+                               int pageNumber,
+                               int pageSize,
+                               String sort,
+                               boolean desc) {
         Pageable p;
         if(sort != null) {
             Sort s;
@@ -113,6 +115,54 @@ public class ClinicService {
             else s = Sort.by(Sort.Direction.ASC, sort);
             p = PageRequest.of(--pageNumber, pageSize, s);
         } else p = PageRequest.of(--pageNumber, pageSize);
-        return this.clinicRepository.search(date, type, p);
+
+
+        return this.someOtherFunction(searchQuery, date, type, p);
+    }
+    public Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p) {
+        List<Clinic> clinics = findAll();
+        Stream<Clinic> filtered = this.filterClinics(clinics, searchQuery, date, type);
+        if(p.getSort().isSorted()) {
+            Sort.Order o = p.getSort().iterator().next();
+            String property = o.getProperty();
+            boolean desc = o.getDirection().isDescending();
+            filtered = filtered
+                    .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
+        }
+        List<Clinic> fullList = filtered.collect(Collectors.toList());
+        if(p.getPageSize() < 1) return new PageImpl<Clinic>(fullList, p, fullList.size());
+        else {
+            int start = (int) p.getOffset();
+            int end = Math.min((start + p.getPageSize()), fullList.size());
+            return new PageImpl<Clinic>(fullList.subList(start, end), p, fullList.size());
+        }
+    }
+
+    public Stream<Clinic> filterClinics(List<Clinic> clinics, String searchQuery, LocalDate date, InterventionType type) {
+        return clinics.stream()
+                .filter(clinic -> clinic.getName().toLowerCase().contains(searchQuery))
+                .filter(clinic -> clinic.getDoctors().stream()
+                        .anyMatch(d -> d.getSpecialties().stream()
+                                .anyMatch(s -> s == type)
+                        )
+                ).filter(clinic -> clinic.getDoctors().stream()
+                .anyMatch(d -> d.getWorkingCalendar().getVacations().stream()
+                        .noneMatch(v -> date.isAfter(v.getStart()) && date.isBefore(v.getEnd()))
+                )
+        );
+    }
+    private int sortFunction(Clinic c1, Clinic c2, String sort, boolean desc) {
+        int sorted = 0;
+        switch(sort) {
+            case "name":
+                sorted = desc ? c1.getName().compareTo(c2.getName()) * -1 : c1.getName().compareTo(c2.getName());
+                break;
+            case "address":
+                sorted = desc ? c1.getAddress().compareTo(c2.getAddress()) * -1 : c1.getAddress().compareTo(c2.getAddress());
+                break;
+            default:
+                sorted = -1;
+        }
+        return sorted;
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 public class DoctorNurseDTO {
 
     String id;
+    String userID;
     String email;
     String password;
     String name;

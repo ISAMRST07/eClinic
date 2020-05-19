@@ -3,7 +3,7 @@
 
         <v-card>
             <clinic-search @searched="searched" @reset="reset"/>
-
+            <v-divider></v-divider>
             <v-data-table
                     :headers="headers"
                     :items="clinics"
@@ -37,6 +37,14 @@
                         mdi-pencil
                     </v-icon>
                 </template>
+                <template v-if="role === patientCode" v-slot:item.schedule="{ item }">
+                    <v-icon
+                            @click="toggleScheduleDialog(item)"
+                            color="lime darken-2"
+                    >
+                        mdi-calendar-check
+                    </v-icon>
+                </template>
                 <template v-slot:no-data>
                     <p>There are no existing clinics</p>
                 </template>
@@ -65,7 +73,7 @@
     import DescriptionDialog from "./DescriptionDialog";
     import DeleteDialog from "./DeleteDialog";
     import ModifyClinicDialog from "./ModifyClinicDialog";
-    import {ClinicalCenterAdmin} from '../../utils/DrawerItems';
+    import {ClinicalCenterAdmin, Patient} from '../../utils/DrawerItems';
     import ClinicSearch from "./ClinicSearch";
 
     export default {
@@ -78,18 +86,27 @@
             dialog: false,
             clinicToDelete: null,
             clinicWithDescription: null,
+            scheduleClinic: null,
+            scheduleDialog: false,
             options: {
                 page: 1,
                 itemsPerPage: 10
             },
             adminCode: ClinicalCenterAdmin.code,
+            patientCode: Patient.code,
             searchRequest: null,
         }),
         computed: {
-            ...mapState('clinics/readClinics', ['clinics']),
             ...mapState('clinics/readClinics', ['length']),
             ...mapState('auth', ['role']),
 
+            clinics() {
+                if (this.itemsPerPage > 0)
+                    return this.$store.state.clinics.readClinics.clinics.slice(0, this.options.itemsPerPage);
+                else
+                    return this.$store.state.clinics.readClinics.clinics;
+
+            },
             editClinic: {
                 get() {
                     return this.$store.state.clinics.addClinic.clinic;
@@ -105,13 +122,17 @@
                     {text: 'Description', value: 'description', sortable: false, align: 'center'},
                     {text: 'Address', value: 'address'}
                 ];
+                let patientHeader = [
+                    {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
+                ];
                 let adminHeaders = [
                     {text: 'Update', value: 'update', sortable: false, align: 'center'},
                     {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
                 ];
                 if (this.role === this.adminCode) {
                     regularHeaders = regularHeaders.concat(adminHeaders);
-                }
+                } else if (this.role === this.patientCode && !!this.searchRequest)
+                    regularHeaders = regularHeaders.concat(patientHeader);
                 return regularHeaders;
             }
         },
@@ -162,8 +183,15 @@
                 this.editClinic = clinic;
                 this.editDialog = true;
             },
+            toggleScheduleDialog(clinic) {
+                this.scheduleClinic = clinic;
+                this.scheduleDialog = true;
+            },
+
+
             searched(payload) {
                 this.searchRequest = payload;
+                this.loading = true;
                 this.search(
                     {
                         pageNumber: this.options.page,
@@ -175,6 +203,13 @@
             },
             reset() {
                 this.searchRequest = null;
+                this.loading = true;
+                this.getClinics({
+                    pageNumber: this.options.page,
+                    pageSize: this.options.itemsPerPage,
+                    sort: this.options.sortBy,
+                    desc: this.options.sortDesc
+                });
             }
 
         },

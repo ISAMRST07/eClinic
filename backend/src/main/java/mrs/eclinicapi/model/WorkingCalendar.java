@@ -1,5 +1,6 @@
 package mrs.eclinicapi.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import mrs.eclinicapi.generator.IdGenerator;
@@ -11,12 +12,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.WeekFields;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
 public class WorkingCalendar {
     @Id
     @Column(length = 50)
@@ -35,4 +39,18 @@ public class WorkingCalendar {
 
     @ElementCollection
     private Set<TimePeriod<LocalDateTime>> busyTimes;
+
+    public WorkingCalendar() {
+        vacations = new HashSet<>();
+        workingSchedule = new HashMap<>();
+        TimePeriod<LocalTime> ninethrufive = new TimePeriod<>();
+        ninethrufive.setStart(LocalTime.of(9, 0));
+        ninethrufive.setEnd(LocalTime.of(17, 0));
+        workingSchedule.put(Weekday.MONDAY, ninethrufive);
+        workingSchedule.put(Weekday.TUESDAY, ninethrufive);
+        workingSchedule.put(Weekday.WEDNESDAY, ninethrufive);
+        workingSchedule.put(Weekday.THURSDAY, ninethrufive);
+        workingSchedule.put(Weekday.FRIDAY, ninethrufive);
+        busyTimes = new HashSet<>();
+    }
 }
