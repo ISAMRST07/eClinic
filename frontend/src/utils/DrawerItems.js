@@ -12,7 +12,7 @@ import {
     interventionPath,
     patientsPath,
     doctorHomePath,
-    vacationRequestPath, clinicCenterAdministratorsPath
+    vacationRequestPath, clinicCenterAdministratorsPath, workingSchedulePath
 } from "./paths";
 
 const doctorsItem = {
@@ -106,7 +106,14 @@ const vacationRequestItem = {
 	icon: 'mdi-home',
 	label: 'Vacation request',
     path: vacationRequestPath,
-}
+};
+
+const workingScheduleItem = {
+    icon: 'mdi-calendar',
+    label: 'Working Schedule',
+    path: workingSchedulePath
+};
+
 
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
@@ -119,7 +126,7 @@ const ClinicalCenterAdmin = {
         clinicAdminsItem,
         clinicRoomsItem,
         patientsItem,
-        unregisteredUsersItem,
+        unregisteredUsersItem
     ],
 };
 
@@ -157,6 +164,7 @@ const Doctor = {
 	name: 'Doctor',
     code: 'doctor',
     items: [
+        workingScheduleItem,
         doctorHomeItem,
         vacationRequestItem
     ]	

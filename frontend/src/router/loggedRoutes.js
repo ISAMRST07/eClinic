@@ -14,6 +14,7 @@ import UserProfileView from "../components/UserProfile/UserProfileView";
 import ClinicDetails from "../pages/ClinicDetails";
 import Patients from "../pages/Patients";
 import DoctorHome from "../pages/DoctorHome";
+import WorkingSchedule from "../pages/WorkingSchedule";
 import VacationRequest from "../pages/VacationRequest";
 
 import {
@@ -33,8 +34,9 @@ import {
     userProfilePath,
     patientsPath,
     doctorHomePath,
-    vacationRequestPath
+    vacationRequestPath, workingSchedulePath
 } from "../utils/paths";
+
 
 const loggedRoutes = [
     {
@@ -109,6 +111,10 @@ const loggedRoutes = [
     {
         path: vacationRequestPath,
         component: VacationRequest
+    },
+    {
+        path: workingSchedulePath,
+        component: WorkingSchedule
     },
 ];
 

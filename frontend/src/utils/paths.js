@@ -31,3 +31,5 @@ export const patientsPath ='/patients'
 export const doctorHomePath ='/doctorHome'
 
 export const vacationRequestPath ='/vacationRequest'
+
+export const workingSchedulePath = '/workingSchedule'
