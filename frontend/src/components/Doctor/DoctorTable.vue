@@ -101,22 +101,7 @@
                 this.deleteDialog(null);
             },
             updateDialog(doctor) {
-                this.$router.push(`/profile/${doctor.user.id}`)
-                // console.log("updateDialog id = ");
-                // console.log(doctor)
-                // this.editDoctor = {
-                //     id: doctor.id,
-                //     email: doctor.user.email,
-                //     name: doctor.user.name,
-                //     surname: doctor.user.surname,
-                //     phone: doctor.user.phoneNumber,
-                //     address: doctor.user.address,
-                //     city: doctor.user.city,
-                //     country: doctor.user.country,
-                //     jmbg: doctor.user.personalID,
-                //     position: doctor.position
-                // };
-                // this.editDialog = true;
+                this.$router.push(`/profile/${doctor.userID}`)
             }
         },
         created() {

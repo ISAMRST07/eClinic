@@ -128,21 +128,17 @@ public class ClinicController {
                                                       @PathVariable String desc) {
         LocalDate date = searchRequest.getDate();
         InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionType());
+        String searchQuery = searchRequest.getSearchQuery();
         if(type == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         PagedResponse response;
-        if(pageSize < 1){
-            List<Clinic> allClinics = service.searchAll(date, type);
-            response = new PagedResponse(allClinics, allClinics.size());
-        } else {
-            Page<Clinic> clinicPage;
-            if(sort.equals("undefined"))
-                clinicPage = service.search(date, type, pageNumber, pageSize);
-            else {
-                clinicPage = service.search(date, type, pageNumber, pageSize, sort, desc.equals("true"));
-            }
-            response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
+        Page<Clinic> clinicPage;
+        if(sort.equals("undefined"))
+            clinicPage = service.search(searchQuery, date, type, pageNumber, pageSize);
+        else {
+            clinicPage = service.search(searchQuery, date, type, pageNumber, pageSize, sort, desc.equals("true"));
         }
+        response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

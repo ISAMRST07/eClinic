@@ -13,22 +13,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ClinicRepository extends JpaRepository<Clinic, String> {
-    @Query("select c from Clinic c " +
-            "join c.doctors as doctor " +
-            "join doctor.specialties as s join doctor.workingCalendar as wc " +
-            "join wc.vacations as vacation " +
-            "where :specialty = s and" +
-            ":date not between vacation.start and vacation.end")
-    Page<Clinic> search(@Param("date") LocalDate date, @Param("specialty") InterventionType type, Pageable pageable);
-
-//    and " +
-//            "(:date not between vacation.start and vacation.end)")
-@Query("select c from Clinic c " +
-        "join c.doctors as doctor " +
-        "join doctor.specialties as s join doctor.workingCalendar as wc " +
-        "join wc.vacations as vacation " +
-        "where :specialty = s and" +
-        ":date not between vacation.start and vacation.end")
-    List<Clinic> search(@Param("date") LocalDate date, @Param("specialty") InterventionType type);
+//    @Query(value = "select distinct c from Clinic c join c.doctors d join d.workingCalendar w left join w.vacations v join d.specialties as s where :specialty = s and (v.start is null or :date not between v.start and v.end)", nativeQuery = true)
+//    Page<Clinic> search(@Param("date") LocalDate date, @Param("specialty") InterventionType type, Pageable pageable);
+//
+////    and " +
+////            "(:date not between vacation.start and vacation.end)")
+//@Query(value = "select distinct c from Clinic c join c.doctors d join d.workingCalendar w left join w.vacations v join d.specialties as s where :specialty = s and (v.start is null or :date not between v.start and v.end)", nativeQuery = true)
+//    List<Clinic> search(@Param("date") LocalDate date, @Param("specialty") InterventionType type);
 }
 

@@ -170,8 +170,7 @@
                 if (this.editDoctor) {
                     this.doctor = this.editDoctor;
                 }
-                this.modifiableDoctor = this.doctor;
-                console.log("thisname = " + this.name);
+                this.modifiableDoctor = emptyDoctor;
             }
         },
         created() {
@@ -180,10 +179,11 @@
             ...mapActions("doctor/doctor", ["addDoctorApi"]),
             ...mapActions("doctor/doctor", ["updateDoctorApi"]),
             submit(fun) {
+                console.log(this.clinic);
                 if (!this.clinic) return;
                 if (this.$refs.form.validate()) {
-                    this.doctor.clinicID = this.clinic.id;
                     this.doctor = JSOG.parse(JSOG.stringify(this.modifiableDoctor));
+                    this.doctor.clinicID = this.clinic.id;
                     this.doctor.specialties = this.doctor.specialties.map(type => type.id);
                     fun(this.doctor);
                     this.close();
@@ -193,11 +193,6 @@
                 console.log("close");
                 this.$emit('input', false);
                 if (this.mode === 'add') this.$refs.form.reset();
-            },
-            resetLayout() {
-                console.log("resetlayout");
-                this.doctor = emptyDoctor;
-                this.$refs.form.reset();
             }
         }
     };

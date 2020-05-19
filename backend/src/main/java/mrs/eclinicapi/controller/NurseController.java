@@ -5,6 +5,7 @@ import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.NurseService;
+import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,9 @@ public class NurseController {
 
     @Autowired
     private ClinicService clinicService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DoctorNurseDTO> addNurse(@RequestBody DoctorNurseDTO nurseDto) {
@@ -110,17 +114,22 @@ public class NurseController {
         if(foundClinic == null) return null;
 
         toAdd.setClinic(foundClinic);
-        User nurseUser = new User(
-                doctorNurseDTO.getEmail(),
-                passwordEncoder.encode(doctorNurseDTO.getPassword()),
-                doctorNurseDTO.getName(),
-                doctorNurseDTO.getSurname(),
-                UserType.doctor,
-                doctorNurseDTO.getPhoneNumber(),
-                doctorNurseDTO.getAddress(),
-                doctorNurseDTO.getCity(),
-                doctorNurseDTO.getCountry(),
-                doctorNurseDTO.getPersonalID());
+        User foundUser = userService.findOne(doctorNurseDTO.getUserID());
+        User nurseUser;
+        if(foundUser == null)
+            nurseUser = new User(
+                    doctorNurseDTO.getEmail(),
+                    passwordEncoder.encode(doctorNurseDTO.getPassword()),
+                    doctorNurseDTO.getName(),
+                    doctorNurseDTO.getSurname(),
+                    UserType.doctor,
+                    doctorNurseDTO.getPhoneNumber(),
+                    doctorNurseDTO.getAddress(),
+                    doctorNurseDTO.getCity(),
+                    doctorNurseDTO.getCountry(),
+                    doctorNurseDTO.getPersonalID());
+        else
+            nurseUser = foundUser;
 
         toAdd.setUser(nurseUser);
         return toAdd;
@@ -129,6 +138,7 @@ public class NurseController {
     private DoctorNurseDTO convertToDTO(Nurse nurse) {
         DoctorNurseDTO doctorNurseDTO = new DoctorNurseDTO(
                 nurse.getId(),
+                nurse.getUser().getId(),
                 nurse.getUser().getEmail(),
                 null,
                 nurse.getUser().getName(),

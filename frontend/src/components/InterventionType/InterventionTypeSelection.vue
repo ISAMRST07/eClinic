@@ -58,15 +58,14 @@
         },
         created() {
            switch (this.user.type) {
-                case ClinicalCenterAdmin.code:
-                	console.log("user = ClinicalCenterAdmin")
-                	this.getAllInterventionTypeApi();
-                    break;
                 case ClinicalAdmin.code:
                    	console.log("user = ClinicalAdmin id = " + this.clinic.id);
                    	this.getClinicInterventionTypeApi(this.clinic.id);
                     break;
                 default:
+                    console.log("user = ClinicalCenterAdmin")
+                    this.getAllInterventionTypeApi();
+                    break;
             }
         }
     }

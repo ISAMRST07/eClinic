@@ -27,7 +27,7 @@ public class MedicalStaff {
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
-    @OneToOne
-    private WorkingCalendar workingCalendar;
+    @OneToOne(cascade = CascadeType.ALL)
+    private WorkingCalendar workingCalendar = new WorkingCalendar();
 
 }

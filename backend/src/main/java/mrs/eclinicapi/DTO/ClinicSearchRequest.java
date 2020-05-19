@@ -20,4 +20,5 @@ import java.time.LocalDateTime;
 public class ClinicSearchRequest {
     private LocalDate date;
     private String interventionType;
+    private String searchQuery;
 }
