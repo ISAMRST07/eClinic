@@ -102,6 +102,7 @@
                     date: this.date,
                     interventionType: this.type.id,
                     searchQuery: this.searchQuery.trim().toLowerCase()});
+                this.$emit('selectedType', this.type);
             },
             reset() {
                 this.$emit('reset');

@@ -33,6 +33,7 @@ public class UserService {
     }
 
     public User findOne(String id) {
+        if (id == null) return null;
         return repository.findById(id).orElse(null);
     }
 

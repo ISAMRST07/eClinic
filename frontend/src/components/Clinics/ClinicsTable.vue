@@ -2,7 +2,7 @@
     <div>
 
         <v-card>
-            <clinic-search @searched="searched" @reset="reset"/>
+            <clinic-search @searched="searched" @selectedType="scheduleType = $event" @reset="reset"/>
             <v-divider></v-divider>
             <v-data-table
                     :headers="headers"
@@ -65,6 +65,13 @@
         <modify-clinic-dialog
                 mode="update"
                 v-model="editDialog"/>
+        <request-dialog
+                v-if="role === patientCode && !!searchRequest"
+                v-model="scheduleDialog"
+                :clinic="scheduleClinic"
+                :date="searchRequest.date"
+                :type="scheduleType"
+        ></request-dialog>
     </div>
 </template>
 
@@ -75,10 +82,11 @@
     import ModifyClinicDialog from "./ModifyClinicDialog";
     import {ClinicalCenterAdmin, Patient} from '../../utils/DrawerItems';
     import ClinicSearch from "./ClinicSearch";
+    import RequestDialog from "./RequestDialog";
 
     export default {
         name: "ClinicsTable",
-        components: {ClinicSearch, ModifyClinicDialog, DeleteDialog, DescriptionDialog},
+        components: {RequestDialog, ClinicSearch, ModifyClinicDialog, DeleteDialog, DescriptionDialog},
         data: () => ({
             loading: false,
             descriptionDialog: false,
@@ -88,6 +96,7 @@
             clinicWithDescription: null,
             scheduleClinic: null,
             scheduleDialog: false,
+            scheduleType: null,
             options: {
                 page: 1,
                 itemsPerPage: 10

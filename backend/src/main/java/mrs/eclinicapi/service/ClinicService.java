@@ -119,7 +119,8 @@ public class ClinicService {
 
         return this.someOtherFunction(searchQuery, date, type, p);
     }
-    public Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p) {
+
+    private Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p) {
         List<Clinic> clinics = findAll();
         Stream<Clinic> filtered = this.filterClinics(clinics, searchQuery, date, type);
         if(p.getSort().isSorted()) {
@@ -134,11 +135,11 @@ public class ClinicService {
         else {
             int start = (int) p.getOffset();
             int end = Math.min((start + p.getPageSize()), fullList.size());
-            return new PageImpl<Clinic>(fullList.subList(start, end), p, fullList.size());
+            return new PageImpl<>(fullList.subList(start, end), p, fullList.size());
         }
     }
 
-    public Stream<Clinic> filterClinics(List<Clinic> clinics, String searchQuery, LocalDate date, InterventionType type) {
+    private Stream<Clinic> filterClinics(List<Clinic> clinics, String searchQuery, LocalDate date, InterventionType type) {
         return clinics.stream()
                 .filter(clinic -> clinic.getName().toLowerCase().contains(searchQuery))
                 .filter(clinic -> clinic.getDoctors().stream()
