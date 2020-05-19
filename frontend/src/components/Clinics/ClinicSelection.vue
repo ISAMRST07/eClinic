@@ -50,8 +50,11 @@
         methods: {
             ...mapActions('clinics/readClinics', ['getClinics']),
         },
-        created() {
-            this.getClinics();
+        mounted() {
+            this.getClinics({
+                pageNumber: 1,
+                pageSize: -1,
+            });
         }
     }
 </script>

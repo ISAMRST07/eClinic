@@ -27,9 +27,11 @@
     }
 
     .fab-br {
-        position: absolute;
+        position: fixed;
         right: 2em;
         bottom: 3em;
         z-index: 11;
+        transition: all .5s linear;
+
     }
 </style>

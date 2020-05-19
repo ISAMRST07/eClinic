@@ -29,6 +29,7 @@
 
     import {mapActions, mapState} from "vuex";
     import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import JSOG from 'jsog';
 
     export default {
         name: "InterventionTypeSelection",

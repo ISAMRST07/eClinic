@@ -100,4 +100,11 @@ export const emptyUser = {
     personalID: '',
 };
 
+export const clinicSearchRequest = {
+    date: null,
+    interventionType: null,
+    pageNumber: null,
+    pageSizer: null
+};
+
 export const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

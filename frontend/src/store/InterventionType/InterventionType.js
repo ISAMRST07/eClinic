@@ -9,7 +9,6 @@ export default {
     },
     mutations: {
         setAllInterventionType(state, interventionType){
-        	console.log("mutations setAllInterventionType interventionType = " + interventionType);
             Vue.set(state, 'interventionType', JSOG.decode(interventionType));
         },
         addInterventionType(state, interventionType) {
@@ -55,7 +54,7 @@ export default {
         },
         async addInterventionTypeApi({rootState, commit}, interventionType) {
             try {
-            	console.log("addInterventionType");            	
+            	console.log("addInterventionType");
                 let {data: added} = await Vue.prototype.$axios.post('/api/interventionType', interventionType,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('addInterventionType', added);
@@ -77,7 +76,7 @@ export default {
         async updateInterventionTypeApi({rootState,commit}, interventionType) {
             console.log("updateInterventionTypeApi");
             try {
-                let {data: modified} = await Vue.prototype.$axios.put('/api/interventionType', interventionType, 
+                let {data: modified} = await Vue.prototype.$axios.put('/api/interventionType', interventionType,
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateInterventionType', modified);
             } catch (err) {

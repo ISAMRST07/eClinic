@@ -4,18 +4,22 @@ import {defaultError} from "../../utils/defaultErrorBehavior";
 export default {
     namespaced: true,
     state: {
-        clinics: []
+        clinics: [],
+        length: 0,
     },
     mutations: {
-        setAllClinics(state, clinics) {
-            Vue.set(state, 'clinics', clinics);
+        setAllClinics(state, pagedResponse) {
+            Vue.set(state, 'clinics', pagedResponse.clinics);
+            state.length = pagedResponse.totalLength;
         },
         addClinic(state, clinic) {
             state.clinics.push(clinic);
+            state.length++;
         },
         deleteClinic(state, clinic) {
             let index = state.clinics.findIndex(c => c.id === clinic.id);
             state.clinics.splice(index, 1);
+            state.length--;
         },
         updateClinic(state, clinic) {
             state.clinics = [
@@ -30,11 +34,14 @@ export default {
         }
     },
     actions: {
-        async getClinics({rootState, commit}) {
+        async getClinics({rootState, commit}, payload) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinic/',
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/clinic/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                commit('setAllClinics', res.data);
+                commit('setAllClinics', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
@@ -48,6 +55,19 @@ export default {
                 defaultError(err);
             }
         },
-
+        async search({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.post(
+                    `/api/clinic/search/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    payload.request,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllClinics', pagedResponse);
+            } catch (err) {
+                console.log(err);
+                defaultError(err);
+            }
+        },
     },
 };

@@ -176,7 +176,7 @@
             ...mapState('auth', ['user']),
             ...mapState('auth', ['clinic']),
 			today() {
-            	return new Date().toISOString().substr(0, 10);
+            	return (new Date()).toISOString().substr(0, 10);
 			},
 			now() {
             	let current = new Date();

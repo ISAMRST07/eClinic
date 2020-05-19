@@ -1,12 +1,18 @@
 package mrs.eclinicapi.service;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,11 +74,45 @@ public class ClinicService {
         clinicRepository.deleteById(id);
     }
 
+    public Page<Clinic> findPaged(int pageNumber, int pageSize) {
+        return this.findPaged(pageNumber, pageSize, null, false);
+    }
+
+    public Page<Clinic> findPaged(int pageNumber, int pageSize, String sort, boolean desc) {
+        Pageable p;
+        if(sort != null) {
+            Sort s;
+            if (desc) s = Sort.by(Sort.Direction.DESC, sort);
+            else s = Sort.by(Sort.Direction.ASC, sort);
+            p = PageRequest.of(--pageNumber, pageSize, s);
+        } else p = PageRequest.of(--pageNumber, pageSize);
+        return clinicRepository.findAll(p);
+    }
+
     public void deleteAll() {
         clinicRepository.deleteAll();
     }
 
     public void deleteOne(Clinic clinicToDelete) {
         clinicRepository.delete(clinicToDelete);
+    }
+
+    public List<Clinic> searchAll(LocalDate date, InterventionType type) {
+        return clinicRepository.search(date, type);
+    }
+
+    public Page<Clinic> search(LocalDate date, InterventionType type, int pageNumber, int pageSize) {
+        return this.search(date, type, pageNumber, pageSize, null, false);
+    }
+
+    public Page<Clinic> search(LocalDate date, InterventionType type, int pageNumber, int pageSize, String sort, boolean desc) {
+        Pageable p;
+        if(sort != null) {
+            Sort s;
+            if (desc) s = Sort.by(Sort.Direction.DESC, sort);
+            else s = Sort.by(Sort.Direction.ASC, sort);
+            p = PageRequest.of(--pageNumber, pageSize, s);
+        } else p = PageRequest.of(--pageNumber, pageSize);
+        return this.clinicRepository.search(date, type, p);
     }
 }

@@ -34,14 +34,14 @@ public class VacationRequest {
 
 	@OneToOne
 	private User user;
-	
+
 	@ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
-	
+
 	private LocalDateTime startDate;
-	
+
 	private LocalDateTime endDate;
-	
+
 	private String status;
 
 	@Override
@@ -49,6 +49,6 @@ public class VacationRequest {
 		return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", status=" + status + "]";
 	}
-	
-	
+
+
 }

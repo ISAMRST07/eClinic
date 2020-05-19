@@ -1,14 +1,20 @@
 package mrs.eclinicapi.controller;
 
+import lombok.AllArgsConstructor;
+import mrs.eclinicapi.DTO.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
+import mrs.eclinicapi.service.InterventionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,6 +26,9 @@ public class ClinicController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private InterventionTypeService interventionTypeService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Clinic> addClinic(@RequestBody Clinic clinic) {
@@ -50,6 +59,30 @@ public class ClinicController {
             System.out.println("getall clinics = " + c);
         }
         return new ResponseEntity<>(clinics, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> getPagedClinics(@PathVariable int pageNumber,
+                                                         @PathVariable int pageSize,
+                                                         @PathVariable String sort,
+                                                         @PathVariable String desc) {
+
+        PagedResponse response;
+        if(pageSize < 1){
+            List<Clinic> allClinics = service.findAll();
+            response = new PagedResponse(allClinics, allClinics.size());
+
+        } else {
+            Page<Clinic> clinicPage;
+            if(sort.equals("undefined"))
+                clinicPage = service.findPaged(pageNumber, pageSize);
+            else {
+                clinicPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @GetMapping(path = "/user/{id}")
@@ -85,6 +118,38 @@ public class ClinicController {
         }
         service.deleteById(id);
         return new ResponseEntity<>("deleted clinic", HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/search/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> searchClinics(@RequestBody ClinicSearchRequest searchRequest,
+                                                      @PathVariable int pageNumber,
+                                                      @PathVariable int pageSize,
+                                                      @PathVariable String sort,
+                                                      @PathVariable String desc) {
+        LocalDate date = searchRequest.getDate();
+        InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionType());
+        if(type == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        PagedResponse response;
+        if(pageSize < 1){
+            List<Clinic> allClinics = service.searchAll(date, type);
+            response = new PagedResponse(allClinics, allClinics.size());
+        } else {
+            Page<Clinic> clinicPage;
+            if(sort.equals("undefined"))
+                clinicPage = service.search(date, type, pageNumber, pageSize);
+            else {
+                clinicPage = service.search(date, type, pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @AllArgsConstructor
+    static class PagedResponse {
+        public List<Clinic> clinics;
+        public long totalLength;
     }
 
 }

@@ -27,7 +27,6 @@ public class Doctor extends MedicalStaff {
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
 
-    //    @JsonIgnoreProperties("doctors")
     @Override
     public Clinic getClinic() {
         return super.getClinic();
@@ -40,6 +39,8 @@ public class Doctor extends MedicalStaff {
             strategy = "mrs.eclinicapi.generator.IdGenerator",
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
+
+
 
     @Override
     public String toString() {
