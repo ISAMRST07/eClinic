@@ -116,7 +116,6 @@ public class AuthenticationController {
     @PutMapping(value = "/changepassword/{id}")
     @PreAuthorize("!hasRole('unregisteredUser')")
     public ResponseEntity<TokenResponse> changePassword(@RequestBody PasswordChanger passwordChanger, @PathVariable String id) {
-
         try {
             User added = userService.changePassword(id, passwordChanger.oldPassword, passwordChanger.newPassword,
                     passwordChanger.personal);
