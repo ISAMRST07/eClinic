@@ -3,6 +3,7 @@ package mrs.eclinicapi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mrs.eclinicapi.DTO.OnDisapproveVacationCompleteEvent;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.VacationRequest;
 import mrs.eclinicapi.service.VacationRequestService;
@@ -24,6 +26,9 @@ import mrs.eclinicapi.service.VacationRequestService;
 @RequestMapping(value = "api/vacationRequest")
 public class VacationRequestController {
 
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+	 
 	@Autowired
     private VacationRequestService service;
 	
@@ -79,8 +84,8 @@ public class VacationRequestController {
     @PostMapping(path = "/disapprove/{id}")
     public ResponseEntity<VacationRequest> disapproveVacationRequest(@PathVariable("id") String id,
     																	@RequestBody String reason) {
-        reason = reason.substring(0, reason.length() - 1);	//brise jednako koje se na string dodaje iz nekog razloga
-
+        reason = reason.substring(0, reason.length() - 1);	//brise = koje se na string dodaje iz nekog razloga
+        reason = reason.replace('+', ' ');
     	System.out.println("disapproveVacationRequest for user " + id);
         System.out.println("disapproveVacationRequest for reason " + reason);
         VacationRequest vac = service.findOne(id);
@@ -93,6 +98,8 @@ public class VacationRequestController {
         System.out.println(vac);
         
         VacationRequest modified = service.addVacationRequest(vac);
+        
+        eventPublisher.publishEvent(new OnDisapproveVacationCompleteEvent(vac.getUser(), reason));
         
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
