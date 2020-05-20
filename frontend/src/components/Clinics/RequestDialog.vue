@@ -8,12 +8,13 @@
         <v-card>
             <v-card-title class="headline">Appointment</v-card-title>
 
-            <v-card-text>
-                Are you sure that you want to make an appointment for {{typeName}}?
-                It will cost you {{typePrice}}, and the clinic where that appointment will
-                be don is {{clinicName}}.
-                <br>
-                Are you sure that you want that to be on {{date | filterDate}}
+            <v-card-text class="subtitle-1">
+                <div>The appointment will be done for {{typeName}}</div>
+                <div>It will cost you ${{typePrice}}.</div>
+                <div>The clinic where that appointment will be done is called
+                    <span class="text--primary text--darken-2">{{clinicName}}</span>.</div>
+                <div class="grey--text text--darken-2">The date of the appointment is {{date | filterDate}}.</div>
+                <div class="text--primary text--darken-2">Are you sure that you want to proceed and search for doctors?</div>
             </v-card-text>
             <v-card-actions>
                 <v-btn
@@ -27,7 +28,7 @@
                 <v-btn
                         color="green darken-1"
                         text
-                        @click="$emit('close')"
+                        @click="accept"
                 >
                     Sure
                 </v-btn>
@@ -61,7 +62,16 @@
             date: null,
             type: null
         },
-        methods: {},
+        methods: {
+            accept() {
+                this.$emit('continued', {
+                    clinicID: this.clinic.id,
+                    interventionType: this.type,
+                    date: this.date
+                });
+                this.$emit('close');
+            }
+        },
         filters:{
             filterDate(date) {
                 if (!date) return 'never';

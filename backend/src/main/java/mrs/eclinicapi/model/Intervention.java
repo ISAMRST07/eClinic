@@ -31,7 +31,7 @@ public class Intervention {
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "I")})
     private String id;
-    private LocalDateTime dateTime;
+    LocalDateTime dateTime;
 
     @ManyToOne
     private ClinicRoom clinicRoom;

@@ -15,11 +15,13 @@ import {
     vacationRequestPath, clinicCenterAdministratorsPath, workingSchedulePath
 } from "./paths";
 
-const doctorsItem = {
-    icon: 'mdi-account-tie',
-    label: 'Doctors',
-    path: doctorsPath
-};
+function doctorsItem(clinicID) {
+    return {
+        icon: 'mdi-account-tie',
+        label: 'Doctors',
+        path: doctorsPath.replace(":clinicID", clinicID)
+    }
+}
 
 const nursesItem = {
     icon: 'mdi-account-tie',
@@ -141,7 +143,7 @@ class ClinicalAdmin {
             interventionItem,
             medicinesItem,
             clinicRoomsItem,
-            doctorsItem,
+            doctorsItem(id),
             nursesItem,
             vacationRequestItem
         ]
@@ -167,6 +169,6 @@ const Doctor = {
         workingScheduleItem,
         doctorHomeItem,
         vacationRequestItem
-    ]	
+    ]
 }
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};

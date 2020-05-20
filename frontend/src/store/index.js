@@ -14,6 +14,7 @@ import UnregisteredUsersModule from "./UnregisteredUsersModules";
 import ProfileModule from "./ProfileModule";
 import PatientsModule from "./PatientsModule";
 import ClinicCenterAdministratorModules from "./ClinicCenterAdministratorModule";
+import AppointmentRequestModule from "./AppointmentRequestModule";
 
 Vue.use(Vuex);
 
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     interventionType : InterventionTypeModule,
     intervention : InterventionModule,
     profile: ProfileModule,
-    patients: PatientsModule
+    patients: PatientsModule,
+    appointmentRequests: AppointmentRequestModule
   }
 })

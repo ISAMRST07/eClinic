@@ -34,4 +34,8 @@
         transition: all .5s linear;
 
     }
+    .down {
+        right: 50%;
+        opacity: 60%;
+    }
 </style>

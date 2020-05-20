@@ -59,8 +59,4 @@
 </script>
 
 <style scoped>
-    .down {
-        right: 50%;
-        opacity: 60%;
-    }
 </style>

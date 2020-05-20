@@ -38,5 +38,5 @@ public class DoctorNurseDTO {
 				+ ", specialties=" + specialties + "]";
 	}
 
-    
+
 }

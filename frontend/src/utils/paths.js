@@ -8,7 +8,7 @@ export const clinicCenterAdministratorsPath = '/clinicCenterAdministrators';
 
 export const clinicRoomsPath = '/clinicRooms';
 
-export const doctorsPath = '/doctors';
+export const doctorsPath = '/doctors/:clinicID';
 
 export const nursesPath = '/nurses';
 
@@ -26,10 +26,10 @@ export const interventionPath = '/intervention';
 
 export const userProfilePath = '/profile/:id';
 
-export const patientsPath ='/patients'
+export const patientsPath ='/patients';
 
-export const doctorHomePath ='/doctorHome'
+export const doctorHomePath ='/doctorHome';
 
-export const vacationRequestPath ='/vacationRequest'
+export const vacationRequestPath ='/vacationRequest';
 
-export const workingSchedulePath = '/workingSchedule'
+export const workingSchedulePath = '/workingSchedule';

@@ -3,6 +3,7 @@ package mrs.eclinicapi.service;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import mrs.eclinicapi.model.*;
+import mrs.eclinicapi.model.enums.Weekday;
 import mrs.eclinicapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -140,6 +141,8 @@ public class ClinicService {
     }
 
     private Stream<Clinic> filterClinics(List<Clinic> clinics, String searchQuery, LocalDate date, InterventionType type) {
+        Weekday weekday = Weekday.values()[date.getDayOfWeek().getValue() - 1];
+
         return clinics.stream()
                 .filter(clinic -> clinic.getName().toLowerCase().contains(searchQuery))
                 .filter(clinic -> clinic.getDoctors().stream()
@@ -149,6 +152,7 @@ public class ClinicService {
                 ).filter(clinic -> clinic.getDoctors().stream()
                 .anyMatch(d -> d.getWorkingCalendar().getVacations().stream()
                         .noneMatch(v -> date.isAfter(v.getStart()) && date.isBefore(v.getEnd()))
+                        && d.getWorkingCalendar().getWorkingSchedule().containsKey(weekday)
                 )
         );
     }

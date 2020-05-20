@@ -3,7 +3,7 @@
             :value="value"
             @input="$emit('input', $event)"
             hint="Choose clinic room"
-            :items="doctor"
+            :items="doctors"
             label="Doctor*"
             persistent-hint
             item-text="user.name"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-   
+
     import {mapActions, mapState} from "vuex";
     import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
@@ -41,7 +41,7 @@
             },
         },
         computed: {
-        	...mapState('doctor/doctor', ['doctor']),
+        	...mapState('doctor/doctor', ['doctors']),
         	...mapState('auth', ['user']),
             ...mapState('auth', ['clinic']),
         },
@@ -54,11 +54,11 @@
            switch (this.user.type) {
                 case ClinicalCenterAdmin.code:
                     console.log("user = ClinicalCenterAdmin")
-                    this.getDoctor();	
+                    this.getDoctor();
                     break;
                 case ClinicalAdmin.code:
                     console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                    this.getClinicDoctor(this.clinic.id);  
+                    this.getClinicDoctor(this.clinic.id);
                     break;
                 default:
            }

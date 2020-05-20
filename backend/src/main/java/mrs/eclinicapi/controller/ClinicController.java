@@ -129,6 +129,7 @@ public class ClinicController {
         LocalDate date = searchRequest.getDate();
         InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionType());
         String searchQuery = searchRequest.getSearchQuery();
+        if(searchQuery == null) searchQuery = "";
         if(type == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         PagedResponse response;

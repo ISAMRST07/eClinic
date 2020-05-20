@@ -1,6 +1,6 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.OnRegistrationCompleteEvent;
+import mrs.eclinicapi.DTO.EmailEvent;
 import mrs.eclinicapi.model.UnregisteredUser;
 import mrs.eclinicapi.service.UnregisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "api/unregisteredusers")
@@ -22,6 +23,7 @@ public class UnregisteredUserController {
 
     @Autowired
     private UnregisteredUserService service;
+
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UnregisteredUser>> getUUsers() {
@@ -36,9 +38,16 @@ public class UnregisteredUserController {
         if (unregisteredUser == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        String appUrl = request.getContextPath();
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(unregisteredUser,
-                request.getLocale(), appUrl));
+        String token = UUID.randomUUID().toString();
+        if (service.tokenExists(unregisteredUser)) {
+            service.deleteToken(unregisteredUser);
+        }
+        service.createVerificationToken(unregisteredUser, token);
+        String confirmationUrl = "http://localhost:8080/confirmRegistration/" + token;
+        String content = unregisteredUser.getUser().getName() + ", verify your account for eClinic" +
+                "\r\n" + confirmationUrl +
+                "\r\n\r\nThis link will be active for only 24 hours.";
+        eventPublisher.publishEvent(new EmailEvent(unregisteredUser, "Confirm registration", content, unregisteredUser.getUser().getEmail()));
         unregisteredUser.setEmailSent(true);
         service.save(unregisteredUser);
         return new ResponseEntity<>(unregisteredUser, HttpStatus.OK);
@@ -49,9 +58,14 @@ public class UnregisteredUserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteRequest(@PathVariable String id) {
         UnregisteredUser found = service.findById(id);
+
         if (found == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        String content = found.getUser().getName() + ", we are sorry to inform you that your" +
+                " registration request has been denied. \r\n\r\nYou can try to send another request.";
+        eventPublisher.publishEvent(new EmailEvent(found, "Registration request denied", content, found.getUser().getEmail()));
+
         service.deleteById(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
 

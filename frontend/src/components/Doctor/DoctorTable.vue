@@ -1,57 +1,51 @@
 <template>
     <div>
-    	<v-card>
-			<v-card-title>
-				Doctors
-				<v-spacer></v-spacer>
-				<v-text-field
-					v-model="search"
-					append-icon="mdi-magnify"
-					label="Search"
-					single-line
-					hide-details
-				></v-text-field>
-			</v-card-title>
-		</v-card>
-        <v-data-table
-                :headers="headers"
-                :items="doctor"
-                :search="search"
-                class="elevation-1"
-                :loading="loading"
-                loading-text="Contacting all the doctors to see if they still work here..."
-        >
-            <template v-slot:item.update="{ item }">
-                <v-icon
-                        @click="updateDialog(item)"
-                        color="amber darken-2"
-                >
-                    mdi-pencil
-                </v-icon>
-            </template>
-            <template v-slot:item.remove="{ item }">
-                <v-icon
-                        @click="deleteDialog(item)"
-                        color="red"
-                >
-                    mdi-delete
-                </v-icon>
-            </template>
 
-            <template v-slot:no-data>
-                <p>There are no doctors</p>
-            </template>
-        </v-data-table>
+        <v-card>
+            <doctor-search
+                    :value="!fromClinic"
+                    :selected-date="scheduleDate"
+                    :selected-type.sync="scheduleType"
+                    @searched="searched"
+                    @reset="reset"/>
+
+            <v-data-table
+                    :headers="headers"
+                    :items="doctors"
+                    class="elevation-1"
+                    :loading="loading"
+                    :options.sync="options"
+                    :server-items-length="length"
+                    loading-text="Contacting all the doctors to see if they still work here..."
+            >
+                <template v-slot:item.update="{ item }">
+                    <v-icon
+                            @click="toProfile(item)"
+                            color="amber darken-2"
+                    >
+                        mdi-pencil
+                    </v-icon>
+                </template>
+                <template v-slot:item.remove="{ item }">
+                    <v-icon
+                            @click="deleteDialog(item)"
+                            color="red"
+                    >
+                        mdi-delete
+                    </v-icon>
+                </template>
+
+                <template v-slot:no-data>
+                    <p>There aren't any doctors here :(</p>
+                </template>
+            </v-data-table>
+        </v-card>
         <delete-dialog
                 v-model="dialog"
                 :doctor="doctorToDelete"
                 @close="deleteDialog(null)"
                 @delete="deleteDoctor"
         />
-        <modify-doctor-dialog
-                mode="update"
-                :edit-doctor="editDoctor"
-                v-model="editDialog"/>
     </div>
 </template>
 
@@ -59,38 +53,67 @@
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyDoctorDialog from "./ModifyDoctorDialog";
-    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
+    import DoctorSearch from "./DoctorSearch";
 
     export default {
         name: "DoctorTable",
-        components: {DeleteDialog, ModifyDoctorDialog},
+        components: {DoctorSearch, DeleteDialog, ModifyDoctorDialog},
         data: () => ({
         	search: "",
             loading: false,
             descriptionDialog: false,
-            editDialog: false,
             dialog: false,
             doctorToDelete: null,
             editDoctor: null,
-            headers: [
-                {text: 'Name', align: 'start', value: 'name'},
-                {text: 'Surname', align: 'center', value: 'surname'},
-                {text: 'Email', align: 'center', value: 'email'},
-                {text: 'Phone number', align: 'center', value: 'phoneNumber'},
-                {text: 'City', align: 'center', value: 'city'},
-                {text: 'Update', value: 'update', sortable: false, align: 'center'},
-                {text: 'Remove', sortable: false, value: 'remove'},
-            ],
+            options: {
+                page: 1,
+                itemsPerPage: 10
+            },
+            adminCode: ClinicalAdmin.code,
+            patientCode: Patient.code,
+            searchRequest: null,
+            fromClinic: false,
+            scheduleType: null,
+            scheduleDate: null,
         }),
         computed: {
-            ...mapState('doctor/doctor', ['doctor']),
-            ...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),
+            ...mapState('doctor/doctor', ['length']),
+
+            ...mapState('auth', ['role']),
+            doctors() {
+                if (this.itemsPerPage > 0)
+                    return this.$store.state.doctor.doctor.doctors.slice(0, this.options.itemsPerPage);
+                else
+                    return this.$store.state.doctor.doctor.doctors;
+            },
+            headers() {
+                let regularHeaders = [
+                    {text: 'Name', align: 'start', value: 'name'},
+                    {text: 'Surname', align: 'center', value: 'surname'},
+                    {text: 'Email', align: 'center', value: 'email'},
+                    {text: 'Phone number', align: 'center', value: 'phoneNumber'},
+                    {text: 'City', align: 'center', value: 'city'}
+                ];
+                let patientHeader = [
+                    {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
+                ];
+                let adminHeaders = [
+                    {text: 'Update', value: 'update', sortable: false, align: 'center'},
+                    {text: 'Remove', value: 'remove', sortable: false, align: 'center'}
+                ];
+                if (this.role === this.adminCode) {
+                    regularHeaders = regularHeaders.concat(adminHeaders);
+                } else if (this.role === this.patientCode && !!this.searchRequest)
+                    regularHeaders = regularHeaders.concat(patientHeader);
+                return regularHeaders;
+            }
         },
         methods: {
             ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['getClinicDoctor']),
+            ...mapActions('doctor/doctor', ['getClinicDoctors']),
             ...mapActions('doctor/doctor', ['deleteDoctorApi']),
+            ...mapActions('doctor/doctor', ['searchApi']),
 
             deleteDialog(doctorToDelete) {
                 this.doctorToDelete = doctorToDelete;
@@ -100,29 +123,84 @@
                 this.deleteDoctorApi(this.doctorToDelete);
                 this.deleteDialog(null);
             },
-            updateDialog(doctor) {
+            toProfile(doctor) {
                 this.$router.push(`/profile/${doctor.userID}`)
+            },
+            populate() {
+                if(!this.searchRequest)
+                    this.getClinicDoctors({
+                        clinicID: this.$route.params.clinicID,
+                        pageNumber: this.options.page,
+                        pageSize: this.options.itemsPerPage,
+                        sort: this.options.sortBy,
+                        desc: this.options.sortDesc
+                    });
+                else
+                    this.searchApi(
+                        {
+                            pageNumber: this.options.page,
+                            pageSize: this.options.itemsPerPage,
+                            sort: this.options.sortBy,
+                            desc: this.options.sortDesc,
+                            request: this.searchRequest
+                        });
+            },
+            searched(payload) {
+                this.searchRequest = payload;
+                this.searchRequest.clinicID = this.$route.params.clinicID;
+                this.loading = true;
+                this.populate();
+            },
+            reset() {
+                this.searchRequest = null;
+                this.loading = true;
+                this.populate();
             }
         },
-        created() {
+        mounted() {
             this.loading = true;
-            console.log(this.user)
-            switch (this.user.type) {
-                case ClinicalCenterAdmin.code:
-                    console.log("user = ClinicalCenterAdmin")
-                    this.getDoctor();	//svi doktori
-                    break;
-                case ClinicalAdmin.code:
-                    console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                    this.getClinicDoctor(this.clinic.id);  //doktori samo za clinic.id
-                    break;
-                default:
-            }
+            if(this.$route.params.payload) {
+                let payload = this.$route.params.payload;
+                this.scheduleType = payload.interventionType;
+                this.scheduleDate = payload.date;
+                this.searchRequest = {
+                    clinicID: payload.clinicID,
+                    interventionTypeID: payload.interventionType.id,
+                    date: payload.date
+                };
+                this.fromClinic = true;
+            } else this.fromClinic = false;
+            this.populate();
+
         },
         watch: {
-            doctor() {
+            doctors() {
                 this.loading = false;
-            }
+                if(this.options.itemsPerPage <= this.length && val.length < this.options.itemsPerPage) {
+                    this.loading = true;
+                    this.populate();
+                }
+            },
+            options(val) {
+                this.loading = true;
+                if(!this.searchRequest)
+                    this.getClinicDoctors({
+                        clinicID: this.$route.params.clinicID,
+                        pageNumber: val.page,
+                        pageSize: val.itemsPerPage,
+                        sort: val.sortBy,
+                        desc: val.sortDesc
+                    });
+                else
+                    this.searchApi(
+                        {
+                            pageNumber: val.page,
+                            pageSize: val.itemsPerPage,
+                            sort: val.sortBy,
+                            desc: val.sortDesc,
+                            request: this.searchRequest
+                        });
+            },
         }
     }
 </script>

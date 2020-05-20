@@ -10,14 +10,14 @@
                     :loading="loading"
                     :options.sync="options"
                     :server-items-length="length"
-
+                    @page-count="pageCount = $event"
                     loading-text="Building all the clinics..."
                     class="elevation-1"
             >
-                <template v-slot:item.description="{ item }">
+                <template v-slot:item.details="{ item }">
                     <v-icon
                             color="success"
-                            @click="toggleClinicDescription(item)"
+                            @click="toDoctorsPage(item)"
                     >mdi-information
                     </v-icon>
                 </template>
@@ -57,11 +57,6 @@
                 @close="deleteDialog(null)"
                 @delete="deleteClinic"
         />
-        <description-dialog
-                v-model="descriptionDialog"
-                :clinic="clinicWithDescription"
-                @close="toggleClinicDescription(null)"
-        />
         <modify-clinic-dialog
                 mode="update"
                 v-model="editDialog"/>
@@ -71,6 +66,8 @@
                 :clinic="scheduleClinic"
                 :date="searchRequest.date"
                 :type="scheduleType"
+                @close="toggleScheduleDialog(null)"
+                @continued="continued"
         ></request-dialog>
     </div>
 </template>
@@ -89,11 +86,9 @@
         components: {RequestDialog, ClinicSearch, ModifyClinicDialog, DeleteDialog, DescriptionDialog},
         data: () => ({
             loading: false,
-            descriptionDialog: false,
             editDialog: false,
             dialog: false,
             clinicToDelete: null,
-            clinicWithDescription: null,
             scheduleClinic: null,
             scheduleDialog: false,
             scheduleType: null,
@@ -104,6 +99,7 @@
             adminCode: ClinicalCenterAdmin.code,
             patientCode: Patient.code,
             searchRequest: null,
+            pageCount: 0,
         }),
         computed: {
             ...mapState('clinics/readClinics', ['length']),
@@ -128,8 +124,9 @@
             headers() {
                 let regularHeaders = [
                     {text: 'Name', align: 'start', value: 'name'},
-                    {text: 'Description', value: 'description', sortable: false, align: 'center'},
-                    {text: 'Address', value: 'address'}
+                    {text: 'Address', value: 'address'},
+                    {text: 'Details', value: 'details', sortable: false, align: 'center'},
+
                 ];
                 let patientHeader = [
                     {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
@@ -146,8 +143,14 @@
             }
         },
         watch: {
-            clinics() {
+            clinics(val) {
                 this.loading = false;
+                if(this.options.itemsPerPage <= this.length
+                    && val.length < this.options.itemsPerPage
+                    && this.options.page < this.pageCount) {
+                    this.loading = true;
+                    this.populate();
+                }
             },
             options(val) {
                 this.loading = true;
@@ -161,20 +164,19 @@
                 else
                     this.search(
                         {
-                            pageNumber: this.options.page,
-                            pageSize: this.options.itemsPerPage,
-                            sort: this.options.sortBy,
-                            desc: this.options.sortDesc,
+                            pageNumber: val.page,
+                            pageSize: val.itemsPerPage,
+                            sort: val.sortBy,
+                            desc: val.sortDesc,
                             request: this.searchRequest
                         });
-
-                console.log(val);
-            }
+            },
         },
         methods: {
             ...mapActions('clinics/readClinics', ['getClinics']),
             ...mapActions('clinics/readClinics', ['deleteClinicApi']),
             ...mapActions('clinics/readClinics', ['search']),
+            ...mapActions('appointmentRequests', ['addRequestApi']),
 
             deleteDialog(clinic) {
                 this.clinicToDelete = clinic;
@@ -184,52 +186,60 @@
                 this.deleteClinicApi(this.clinicToDelete);
                 this.deleteDialog(null);
             },
-            toggleClinicDescription(clinic) {
-                this.clinicWithDescription = clinic;
-                this.descriptionDialog = !this.descriptionDialog;
+            toDoctorsPage(clinic) {
+                this.$router.push(`/doctors/${clinic.id}`)
             },
             updateDialog(clinic) {
                 this.editClinic = clinic;
                 this.editDialog = true;
             },
             toggleScheduleDialog(clinic) {
+                if(this.loading) return;
                 this.scheduleClinic = clinic;
-                this.scheduleDialog = true;
+                this.scheduleDialog = !this.scheduleDialog;
             },
-
-
-            searched(payload) {
-                this.searchRequest = payload;
-                this.loading = true;
-                this.search(
-                    {
+            continued(payload) {
+                this.$router.push({ name: 'doctors', params:
+                        {
+                            clinicID: payload.clinicID,
+                            payload
+                        }
+                });
+            },
+            populate() {
+                if(!this.searchRequest)
+                    this.getClinics({
                         pageNumber: this.options.page,
                         pageSize: this.options.itemsPerPage,
                         sort: this.options.sortBy,
-                        desc: this.options.sortDesc,
-                        request: this.searchRequest
+                        desc: this.options.sortDesc
                     });
+                else
+                    this.search(
+                        {
+                            pageNumber: this.options.page,
+                            pageSize: this.options.itemsPerPage,
+                            sort: this.options.sortBy,
+                            desc: this.options.sortDesc,
+                            request: this.searchRequest
+                        });
+            },
+            searched(payload) {
+                this.searchRequest = payload;
+                this.loading = true;
+                this.populate();
             },
             reset() {
                 this.searchRequest = null;
                 this.loading = true;
-                this.getClinics({
-                    pageNumber: this.options.page,
-                    pageSize: this.options.itemsPerPage,
-                    sort: this.options.sortBy,
-                    desc: this.options.sortDesc
-                });
+                this.populate();
             }
 
         },
         mounted() {
             this.loading = true;
-            this.getClinics({
-                pageNumber: this.options.page,
-                pageSize: this.options.itemsPerPage,
-                sort: this.options.sortBy,
-                desc: this.options.sortDesc
-            });
+            this.populate();
+
         }
     }
 </script>

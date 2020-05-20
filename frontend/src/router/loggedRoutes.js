@@ -62,6 +62,7 @@ const loggedRoutes = [
     },
 
     {
+        name: 'doctors',
         path: doctorsPath,
         component: Doctor,
     },

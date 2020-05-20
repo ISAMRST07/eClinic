@@ -1,6 +1,9 @@
 package mrs.eclinicapi.controller;
 
+import lombok.AllArgsConstructor;
+import mrs.eclinicapi.DTO.ClinicSearchRequest;
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
+import mrs.eclinicapi.DTO.DoctorSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.InterventionType;
@@ -11,12 +14,14 @@ import mrs.eclinicapi.service.DoctorService;
 import mrs.eclinicapi.service.InterventionTypeService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,36 +82,55 @@ public class DoctorController {
         return new ResponseEntity<>("doctor deleted", HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<DoctorNurseDTO>> getAll() {
-        System.out.println("get all doctor ");
-        List<Doctor> doctorList = service.findAll();
-        if (doctorList == null) {
-            System.out.println("doctor not found");
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PagedResponse> getAll(@PathVariable int pageNumber,
+                                                       @PathVariable int pageSize,
+                                                       @PathVariable String sort,
+                                                       @PathVariable String desc) {
+        PagedResponse response;
+        if(pageSize < 1){
+            List<Doctor> allDoctors = service.findAll();
+            response = new PagedResponse(allDoctors.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    allDoctors.size());
+
+        } else {
+            Page<Doctor> doctorPage;
+            if(sort.equals("undefined"))
+                doctorPage = service.findPaged(pageNumber, pageSize);
+            else {
+                doctorPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(doctorPage.getContent().stream()
+                    .map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         }
-        return new ResponseEntity<>(doctorList.stream().map(this::convertToDTO).collect(Collectors.toList()),
-                HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/getDoctorForClinic/{id}")
-    public ResponseEntity<List<DoctorNurseDTO>> getDoctorsForClinic(@PathVariable("id") String id) {
-        System.out.println("get doctors for clinic " + id);
+    @GetMapping(path = "/clinic/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> getDoctorsForClinic(@PathVariable String clinicID,
+                                                                    @PathVariable int pageNumber,
+                                                                    @PathVariable int pageSize,
+                                                                    @PathVariable String sort,
+                                                                    @PathVariable String desc) {
 
-        List<Doctor> doctorList = service.getDoctorsForClinic(id);
-        if (doctorList == null) {
-            System.out.println("doctor not found");
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        PagedResponse response;
+        if(pageSize < 1){
+            List<Doctor> allDoctors = service.findByClinicID(clinicID);
+            response = new PagedResponse(allDoctors.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    allDoctors.size());
+
+        } else {
+            Page<Doctor> doctorPage;
+            if(sort.equals("undefined"))
+                doctorPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize);
+            else {
+                sort = "user." + sort;
+                doctorPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(doctorPage.getContent().stream()
+                    .map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         }
-        System.out.println(doctorList);
-        System.out.println("printing doctor clinic and user objects");
-        for (Doctor d : doctorList) {
-            System.out.println(d.getClinic());
-            System.out.println(d.getUser());
-            System.out.println(d.getSpecialties());
-        }
-        return new ResponseEntity<>(doctorList.stream().map(this::convertToDTO).collect(Collectors.toList()),
-                HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
@@ -120,6 +144,30 @@ public class DoctorController {
         System.out.println("get this doctor = " + doctor);
 
         return new ResponseEntity<>(this.convertToDTO(doctor), HttpStatus.OK);
+    }
+    @PostMapping(path = "/search/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> searchDoctors(@RequestBody DoctorSearchRequest searchRequest,
+                                                       @PathVariable int pageNumber,
+                                                       @PathVariable int pageSize,
+                                                       @PathVariable String sort,
+                                                       @PathVariable String desc) {
+        LocalDate date = searchRequest.getDate();
+        InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionTypeID());
+        String searchQuery = searchRequest.getSearchQuery();
+        if(searchQuery == null) searchQuery = "";
+        if(type == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        PagedResponse response;
+        Page<Doctor> doctorPage;
+        if(sort.equals("undefined"))
+            doctorPage = service.search(searchQuery, searchRequest.getClinicID(), date, type, pageNumber, pageSize);
+        else {
+            sort = "user." + sort;
+            doctorPage = service.search(searchQuery, searchRequest.getClinicID(), date, type, pageNumber, pageSize, sort, desc.equals("true"));
+        }
+        response = new PagedResponse(doctorPage.getContent()
+                .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private Doctor convertToEntity(DoctorNurseDTO doctorNurseDTO) {
@@ -170,5 +218,12 @@ public class DoctorController {
                 doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList())
         );
         return doctorNurseDTO;
+    }
+
+
+    @AllArgsConstructor
+    static class PagedResponse {
+        public List<DoctorNurseDTO> doctors;
+        public long totalLength;
     }
 }

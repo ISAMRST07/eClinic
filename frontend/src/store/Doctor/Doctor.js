@@ -1,61 +1,62 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
-import JSOG from 'jsog'
 
 export default {
     namespaced: true,
     state: {
-        doctor: [],
+        doctors: [],
+        length: 0
     },
     mutations: {
-        setAllDoctor(state, doctor) {
-            Vue.set(state, 'doctor', doctor);
+        setAllDoctor(state, pagedResponse) {
+            Vue.set(state, 'doctors', pagedResponse.doctors);
+            state.length = pagedResponse.totalLength;
         },
         addDoctor(state, doctor) {
-            console.log("mutations addDoctor");
-            console.log(doctor.name);
-
-            state.doctor.push(doctor);
+            state.doctors.push(doctor);
+            state.length++;
         },
         deleteDoctor(state, doctor) {
-            let index = state.doctor.findIndex(c => c.id === doctor.id);
-            state.doctor.splice(index, 1);
+            let index = state.doctors.findIndex(c => c.id === doctor.id);
+            state.doctors.splice(index, 1);
+            state.length--;
         },
         updateDoctor(state, doctor) {
-            console.log("updateDoctor");
-            state.doctor = [
-                ...state.doctor.filter(c => c.id !== doctor.id),
+
+            state.doctors = [
+                ...state.doctors.filter(c => c.id !== doctor.id),
                 doctor
             ]
         }
     },
     actions: {
-        async getDoctor({rootState, commit}) {
+        async getDoctor({rootState, commit}, payload) {
+            if(payload.sort?.length === 0) payload.sort = undefined;
+            if(payload.desc?.length === 0) payload.desc = undefined;
             try {
-                let res = await Vue.prototype.$axios.get('/api/doctor/',
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/doctor/getDoctorForClinic/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                console.log("actions getall doctor = " + res.data);
-                res.data.forEach(item => console.log(item));
-                commit('setAllDoctor', res.data);
+
+                commit('setAllDoctor', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
         },
-        async getClinicDoctor({rootState, commit}, clinicId) {
+        async getClinicDoctors({rootState, commit}, payload) {
             try {
-                console.log("getClinicDoctor = " + clinicId);
-                let res = await Vue.prototype.$axios.get('/api/doctor/getDoctorForClinic/' + clinicId,
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/doctor/clinic/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                console.log("actions getall doctor = " + res.data);
-                res.data.forEach(item => console.log(item));
-                commit('setAllDoctor', res.data);
+                commit('setAllDoctor', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
         },
         async addDoctorApi({rootState, commit}, doctor) {
             try {
-                console.log("adddoctorapi");
                 let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('addDoctor', added);
@@ -65,8 +66,6 @@ export default {
         },
         async deleteDoctorApi({rootState, commit}, doctor) {
             try {
-                console.log("delete doctor = ");
-                console.log(doctor.id);
                 let res = await Vue.prototype.$axios.delete(`/api/doctor/${doctor.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteDoctor', doctor);
@@ -75,11 +74,23 @@ export default {
             }
         },
         async updateDoctorApi({rootState, commit}, doctor) {
-            console.log("updateDoctorApi");
             try {
                 let {data: modified} = await Vue.prototype.$axios.put('/api/doctor', doctor,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateDoctor', modified);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
+        async searchApi({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.post(
+                    `/api/doctor/search/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    payload.request,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllDoctor', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
