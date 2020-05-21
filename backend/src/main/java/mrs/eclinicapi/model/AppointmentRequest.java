@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class AppointmentRequest {
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "AR")})
     private String id;
-    private LocalDate date;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     private InterventionType interventionType;
@@ -35,4 +36,6 @@ public class AppointmentRequest {
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    private Doctor doctor;
 }

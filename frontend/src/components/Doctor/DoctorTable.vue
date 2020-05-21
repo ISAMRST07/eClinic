@@ -26,6 +26,7 @@
                         mdi-pencil
                     </v-icon>
                 </template>
+
                 <template v-slot:item.remove="{ item }">
                     <v-icon
                             @click="deleteDialog(item)"
@@ -35,6 +36,22 @@
                     </v-icon>
                 </template>
 
+                <template v-slot:item.availability="{ item }">
+                    <v-icon
+                            @click="availableDialog(item)"
+                            color="primary darken-2"
+                    >
+                        mdi-calendar
+                    </v-icon>
+                </template>
+                <template v-slot:item.schedule="{ item }">
+                    <v-icon
+                            @click="toggleScheduleDialog(item)"
+                            color="amber darken-2"
+                    >
+                        mdi-clock
+                    </v-icon>
+                </template>
                 <template v-slot:no-data>
                     <p>There aren't any doctors here :(</p>
                 </template>
@@ -46,6 +63,20 @@
                 @close="deleteDialog(null)"
                 @delete="deleteDoctor"
         />
+        <dialog-available
+                :value="dialogAvailable"
+                :date="scheduleDate"
+                :doctor="doctorAvailability"
+                @close="availableDialog(null)"
+        ></dialog-available>
+        <schedule-dialog
+                :value="scheduleDialog"
+                :date="scheduleDate"
+                :doctor="doctorToSchedule"
+                :type="scheduleType"
+                :clinic="scheduleClinic"
+                @close="toggleScheduleDialog(null)"
+        ></schedule-dialog>
     </div>
 </template>
 
@@ -55,17 +86,19 @@
     import ModifyDoctorDialog from "./ModifyDoctorDialog";
     import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
     import DoctorSearch from "./DoctorSearch";
+    import DialogAvailable from "./DialogAvailable";
+    import ScheduleDialog from "./ScheduleDialog";
 
     export default {
         name: "DoctorTable",
-        components: {DoctorSearch, DeleteDialog, ModifyDoctorDialog},
+        components: {ScheduleDialog, DialogAvailable, DoctorSearch, DeleteDialog, ModifyDoctorDialog},
         data: () => ({
         	search: "",
             loading: false,
-            descriptionDialog: false,
             dialog: false,
+            dialogAvailable: false,
             doctorToDelete: null,
-            editDoctor: null,
+            doctorAvailability: null,
             options: {
                 page: 1,
                 itemsPerPage: 10
@@ -76,10 +109,13 @@
             fromClinic: false,
             scheduleType: null,
             scheduleDate: null,
+            scheduleDialog: false,
+            doctorToSchedule: null,
+            scheduleClinic: null,
         }),
         computed: {
             ...mapState('doctor/doctor', ['length']),
-
+            ...mapState('auth', ['token']),
             ...mapState('auth', ['role']),
             doctors() {
                 if (this.itemsPerPage > 0)
@@ -96,6 +132,7 @@
                     {text: 'City', align: 'center', value: 'city'}
                 ];
                 let patientHeader = [
+                    {text: 'Availability', value: 'availability', sortable: false, align: 'center'},
                     {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
                 ];
                 let adminHeaders = [
@@ -119,9 +156,17 @@
                 this.doctorToDelete = doctorToDelete;
                 this.dialog = !this.dialog;
             },
+            availableDialog(doctor) {
+                this.doctorAvailability = doctor;
+                this.dialogAvailable = !this.dialogAvailable;
+            },
             deleteDoctor() {
                 this.deleteDoctorApi(this.doctorToDelete);
                 this.deleteDialog(null);
+            },
+            toggleScheduleDialog(doctor) {
+                this.doctorToSchedule = doctor;
+                this.scheduleDialog = !this.scheduleDialog;
             },
             toProfile(doctor) {
                 this.$router.push(`/profile/${doctor.userID}`)
@@ -146,6 +191,8 @@
                         });
             },
             searched(payload) {
+                this.scheduleDate = payload.date;
+                console.log(this.scheduleDate);
                 this.searchRequest = payload;
                 this.searchRequest.clinicID = this.$route.params.clinicID;
                 this.loading = true;
@@ -155,23 +202,32 @@
                 this.searchRequest = null;
                 this.loading = true;
                 this.populate();
+            },
+            async setup() {
+                try {
+                    let {data: clinic} = await this.$axios.get(`/api/clinic/${this.$route.params.clinicID}`,
+                        {headers: {"Authorization": 'Bearer ' + this.token}});
+                    this.scheduleClinic = clinic;
+                    if (this.$route.params.payload) {
+                        let payload = this.$route.params.payload;
+                        this.scheduleType = payload.interventionType;
+                        this.scheduleDate = payload.date;
+                        this.searchRequest = {
+                            clinicID: payload.clinicID,
+                            interventionTypeID: payload.interventionType.id,
+                            date: payload.date
+                        };
+                        this.fromClinic = true;
+                    } else this.fromClinic = false;
+                    this.populate();
+                } catch(err) {
+                    console.log("SJEBO SI");
+                }
             }
         },
         mounted() {
             this.loading = true;
-            if(this.$route.params.payload) {
-                let payload = this.$route.params.payload;
-                this.scheduleType = payload.interventionType;
-                this.scheduleDate = payload.date;
-                this.searchRequest = {
-                    clinicID: payload.clinicID,
-                    interventionTypeID: payload.interventionType.id,
-                    date: payload.date
-                };
-                this.fromClinic = true;
-            } else this.fromClinic = false;
-            this.populate();
-
+            this.setup();
         },
         watch: {
             doctors() {

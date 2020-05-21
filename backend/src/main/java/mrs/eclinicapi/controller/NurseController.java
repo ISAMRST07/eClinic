@@ -149,6 +149,8 @@ public class NurseController {
                 nurse.getUser().getCountry(),
                 nurse.getUser().getPersonalID(),
                 nurse.getClinic().getId(),
+                null,
+                null,
                 null
         );
         return doctorNurseDTO;

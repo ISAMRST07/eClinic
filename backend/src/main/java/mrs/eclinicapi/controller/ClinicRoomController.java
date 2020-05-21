@@ -92,7 +92,8 @@ public class ClinicRoomController {
         Set<Intervention> pastInterventions = new HashSet<>();
         Set<Intervention> scheduledInterventions = new HashSet<>();
         for (Intervention i : clinicRoom.getInterventions()) {
-            if (i.getDateTime().isBefore(LocalDateTime.now())) pastInterventions.add(i);
+            // TODO PREPRAVKA
+            if (i.getDateTime().getStart().isBefore(LocalDateTime.now())) pastInterventions.add(i);
             else scheduledInterventions.add(i);
         }
         clinicRoomDTO.setPastInterventions(pastInterventions);

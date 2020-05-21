@@ -58,7 +58,6 @@ export default {
             try {
                 let {data: res} = await Vue.prototype.$axios.post('/api/appointment-requests', request,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                // tu ce ic update za prikaz
                 commit('addRequest', res);
             } catch (err) {
                 defaultError(err);

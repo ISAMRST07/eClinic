@@ -3,9 +3,11 @@ package mrs.eclinicapi.controller;
 import mrs.eclinicapi.DTO.AppointmentRequestDTO;
 import mrs.eclinicapi.model.AppointmentRequest;
 import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.AppointmentRequestService;
 import mrs.eclinicapi.service.ClinicService;
+import mrs.eclinicapi.service.DoctorService;
 import mrs.eclinicapi.service.InterventionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -28,6 +30,9 @@ public class AppointmentRequestController {
     ClinicService clinicService;
 
     @Autowired
+    DoctorService doctorService;
+
+    @Autowired
     InterventionTypeService interventionTypeService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,9 +53,10 @@ public class AppointmentRequestController {
     private AppointmentRequestDTO convertToDTO(AppointmentRequest appointmentRequest) {
         return new AppointmentRequestDTO(
                 appointmentRequest.getId(),
-                appointmentRequest.getDate(),
+                appointmentRequest.getDateTime(),
                 appointmentRequest.getInterventionType().getId(),
-                appointmentRequest.getClinic().getId()
+                appointmentRequest.getClinic().getId(),
+                appointmentRequest.getDoctor().getId()
         );
     }
 
@@ -60,12 +66,13 @@ public class AppointmentRequestController {
         InterventionType interventionType =
                 interventionTypeService.findOne(appointmentRequestDTO.getInterventionTypeID());
         if(interventionType == null) return null;
-
+        Doctor doctor = doctorService.findOne(appointmentRequestDTO.getDoctorID());
         AppointmentRequest appointmentRequest = new AppointmentRequest(
                 appointmentRequestDTO.getId(),
-                appointmentRequestDTO.getDate(),
+                appointmentRequestDTO.getDateTime(),
                 interventionType,
-                foundClinic
+                foundClinic,
+                doctor
         );
         return appointmentRequest;
     }

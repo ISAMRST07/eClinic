@@ -73,7 +73,7 @@
             </v-row>
         <v-card outlined v-if="type">
             <div class="subtitle-1">The price for {{type.name}} is ${{type.price}}.</div>
-            <div class="subtitle-1">This appointment start on {{date}}</div>
+            <div class="subtitle-1">This appointment will start on {{date}}</div>
         </v-card>
     </v-container>
 </template>
@@ -117,7 +117,7 @@
                 if(!this.$refs.form.validate()) return;
                 this.$emit('searched', {
                     date: this.date,
-                    interventionType: this.type.id,
+                    interventionTypeID: this.type.id,
                     searchQuery: this.searchQuery.trim().toLowerCase()});
                 this.$emit('update:selectedType', this.type);
             },

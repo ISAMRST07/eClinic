@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,9 +19,8 @@ import java.util.List;
 public class AppointmentRequestDTO {
 
    private String id;
-   private LocalDate date;
-
+   private LocalDateTime dateTime;
    private String interventionTypeID;
    private String clinicID;
-
+   private String doctorID;
 }

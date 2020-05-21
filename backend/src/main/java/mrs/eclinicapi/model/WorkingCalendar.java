@@ -37,9 +37,6 @@ public class WorkingCalendar {
     @ElementCollection
     private Map<Weekday, TimePeriod<LocalTime>> workingSchedule;
 
-    @ElementCollection
-    private Set<TimePeriod<LocalDateTime>> busyTimes;
-
     public WorkingCalendar() {
         vacations = new HashSet<>();
         workingSchedule = new HashMap<>();
@@ -51,6 +48,5 @@ public class WorkingCalendar {
         workingSchedule.put(Weekday.WEDNESDAY, ninethrufive);
         workingSchedule.put(Weekday.THURSDAY, ninethrufive);
         workingSchedule.put(Weekday.FRIDAY, ninethrufive);
-        busyTimes = new HashSet<>();
     }
 }

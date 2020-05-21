@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import mrs.eclinicapi.DTO.ClinicSearchRequest;
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.DTO.DoctorSearchRequest;
-import mrs.eclinicapi.model.Clinic;
-import mrs.eclinicapi.model.Doctor;
-import mrs.eclinicapi.model.InterventionType;
-import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
@@ -215,7 +212,9 @@ public class DoctorController {
                 doctor.getUser().getCountry(),
                 doctor.getUser().getPersonalID(),
                 doctor.getClinic().getId(),
-                doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList())
+                doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList()),
+                doctor.getWorkingCalendar().getWorkingSchedule(),
+                doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList())
         );
         return doctorNurseDTO;
     }

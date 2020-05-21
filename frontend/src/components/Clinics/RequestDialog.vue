@@ -65,6 +65,7 @@
         methods: {
             accept() {
                 this.$emit('continued', {
+                    clinic: this.clinic,
                     clinicID: this.clinic.id,
                     interventionType: this.type,
                     date: this.date
