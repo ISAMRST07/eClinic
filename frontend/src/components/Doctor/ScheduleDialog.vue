@@ -70,7 +70,7 @@
 
 <script>
     import {DayOfTheWeek} from "../../utils/DayOfTheWeek";
-    import {mapActions} from "vuex";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "ScheduleDialog",
@@ -83,6 +83,7 @@
             }
         }),
         computed: {
+            ...mapState('auth', ['user']),
             typeName() {
                 return this.type ? this.type.name : '';
             },
@@ -105,16 +106,23 @@
         },
         methods: {
             ...mapActions('appointmentRequests', ['addRequestApi']),
-            accept() {
+            async accept() {
                 if(!this.validateTime()) return;
                 let date = new Date(this.date);
                 let parsedTime = this.parseShortTime(this.time);
                 date.setHours(parsedTime.hours, parsedTime.minutes);
+
+                let {data: patient} = await this.$axios.get(`/api/patient/user-id=${this.user.id}`,
+                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+
+                let offsetDate = new Date(date);
+                offsetDate.setMinutes(date.getMinutes() - date.getTimezoneOffset());
                 this.addRequestApi({
-                    dateTime: date,
+                    dateTime: offsetDate,
                     interventionTypeID: this.type.id,
                     clinicID: this.clinic.id,
-                    doctorID: this.doctor.id
+                    doctorID: this.doctor.id,
+                    patientID: patient.id
                 });
                 this.$router.push('/clinics');
             },
@@ -131,12 +139,11 @@
                 let selectedTime = this.parseShortTime(this.time);
                 let selectedDateTime = new Date(date);
                 selectedDateTime.setHours(selectedTime.hours, selectedTime.minutes);
-
                 let weekday = DayOfTheWeek[date.getDay()];
                 let timeperiod = this.doctor.workingSchedule[weekday];
                 let start = this.parseTime(timeperiod.start);
                 let startDateTime = new Date(date);
-                startDateTime.setHours(start.hours, start.minutes, start.seconds);
+                startDateTime.setHours(start.hours, parseInt(start.minutes), start.seconds);
                 if(selectedDateTime < startDateTime){
                     this.error.isError = true;
                     this.error.errorMessages = 'This is before the doctor starts workday.';
@@ -144,23 +151,47 @@
                 }
                 let end = this.parseTime(timeperiod.end);
                 let endDateTime = new Date(date);
-                endDateTime.setHours(end.hours, end.minutes, end.seconds);
+                endDateTime.setHours(end.hours, parseInt(end.minutes), end.seconds);
                 if(selectedDateTime > endDateTime){
                     this.error.isError = true;
                     this.error.errorMessages = 'This is after the doctor ends workday.';
                     return false;
                 }
-                for(timeperiod of this.doctor.busyTimes) {
-                    let start = this.parseTime(timeperiod.start);
-                    let startDateTime = new Date(date);
-                    startDateTime.setHours(start.hours, start.minutes, start.seconds);
-                    let end = this.parseTime(timeperiod.end);
-                    let endDateTime = new Date(date);
+                for(let timeperiod of this.doctor.busyTimes) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
                     endDateTime.setHours(end.hours, end.minutes, end.seconds);
+                    let endOfSelected = new Date(selectedDateTime);
+                    endOfSelected.setMinutes(endOfSelected.getMinutes() + 30);
 
-                    if(selectedDateTime => startDateTime && selectedDateTime <= endDateTime){
+                    if(selectedDateTime >= startDateTime && selectedDateTime <= endDateTime){
                         this.error.isError = true;
                         this.error.errorMessages = 'Doctor has an appointment during this time.';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.error.isError = true;
+                        this.error.errorMessages = 'The next intervention is too close to this one.';
+                        return false;
+                    }
+                }
+                let endOfSelected = new Date(selectedDateTime);
+                endOfSelected.setMinutes(endOfSelected.getMinutes() + 30);
+
+                for(let ar of this.doctor.appointmentRequests) {
+                    let time = ar.dateTime;
+                    let startDateTime = new Date(time);
+                    let endDateTime = new Date(startDateTime);
+                    endDateTime.setMinutes(startDateTime.getMinutes() + 30);
+
+                    if(selectedDateTime >= startDateTime && selectedDateTime <= endDateTime){
+                        this.error.isError = true;
+                        this.error.errorMessages = 'There is an appointment request for this time.';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.error.isError = true;
+                        this.error.errorMessages = 'The next appointment is too close to this one.';
                         return false;
                     }
                 }

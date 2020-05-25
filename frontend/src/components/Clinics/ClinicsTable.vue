@@ -125,8 +125,7 @@
                 let regularHeaders = [
                     {text: 'Name', align: 'start', value: 'name'},
                     {text: 'Address', value: 'address'},
-                    {text: 'Details', value: 'details', sortable: false, align: 'center'},
-
+                    {text: 'Doctors', value: 'details', sortable: false, align: 'center'},
                 ];
                 let patientHeader = [
                     {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}

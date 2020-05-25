@@ -33,3 +33,5 @@ export const doctorHomePath ='/doctorHome';
 export const vacationRequestPath ='/vacationRequest';
 
 export const workingSchedulePath = '/workingSchedule';
+
+export const appointmentRequestClinicPath = '/appointmentRequests/clinic=:clinicID';

@@ -32,4 +32,8 @@ public class PatientService {
         this.repository.deleteById(id);
         return p;
     }
+
+    public Patient getByUserId(String userID) {
+        return repository.findPatientByUser_Id(userID);
+    }
 }

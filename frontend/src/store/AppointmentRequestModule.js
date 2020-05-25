@@ -23,12 +23,24 @@ export default {
         }
     },
     actions: {
-        async getRequests({rootState, commit}, payload) {
+        async getRequestsByClinic({rootState, commit}, payload) {
             try {
                 if(payload.sort?.length === 0) payload.sort = undefined;
                 if(payload.desc?.length === 0) payload.desc = undefined;
                 let {data: pagedResponse} = await Vue.prototype.$axios.get(
-                    `/api/appointment-requests/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    `/api/appointment-requests/clinic/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllRequests', pagedResponse);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
+        async getRequestsByPatient({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/appointment-requests/patient/${payload.patientID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('setAllRequests', pagedResponse);
             } catch (err) {

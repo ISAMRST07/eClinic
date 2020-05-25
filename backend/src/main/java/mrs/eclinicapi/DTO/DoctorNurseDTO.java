@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.model.AppointmentRequest;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.enums.Weekday;
@@ -37,6 +38,7 @@ public class DoctorNurseDTO {
     private List<String> specialties;
     private Map<Weekday, TimePeriod<LocalTime>> workingSchedule;
     private List<TimePeriod<LocalDateTime>> busyTimes;
+    private List<AppointmentRequestDTO> appointmentRequests;
     @Override
 	public String toString() {
 		return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password

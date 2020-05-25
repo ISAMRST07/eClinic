@@ -1,6 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
+import mrs.eclinicapi.DTO.AppointmentRequestDTO;
 import mrs.eclinicapi.DTO.ClinicSearchRequest;
 import mrs.eclinicapi.DTO.DoctorNurseDTO;
 import mrs.eclinicapi.DTO.DoctorSearchRequest;
@@ -52,16 +53,6 @@ public class DoctorController {
 
 
         return new ResponseEntity<>(this.convertToDTO(newDoctor), HttpStatus.OK);
-    }
-
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DoctorNurseDTO> updateDoctor(@RequestBody DoctorNurseDTO doctorDto) {
-        Doctor newDoctor = this.convertToEntity(doctorDto);
-        if (newDoctor == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Doctor modified = service.addDoctor(newDoctor);
-        return new ResponseEntity<>(this.convertToDTO(modified), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -214,11 +205,23 @@ public class DoctorController {
                 doctor.getClinic().getId(),
                 doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList()),
                 doctor.getWorkingCalendar().getWorkingSchedule(),
-                doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList())
+                doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
+                doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList())
         );
         return doctorNurseDTO;
     }
 
+    private AppointmentRequestDTO appointmentRequestToDTO(AppointmentRequest appointmentRequest) {
+        return new AppointmentRequestDTO(
+                appointmentRequest.getId(),
+                appointmentRequest.getDateTime(),
+                appointmentRequest.getInterventionType().getId(),
+                appointmentRequest.getClinic().getId(),
+                appointmentRequest.getDoctor().getId(),
+                appointmentRequest.getPatient().getId(),
+                appointmentRequest.getDateOfCreation()
+        );
+    }
 
     @AllArgsConstructor
     static class PagedResponse {

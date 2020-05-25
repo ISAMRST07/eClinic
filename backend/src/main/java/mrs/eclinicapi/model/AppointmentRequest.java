@@ -38,4 +38,9 @@ public class AppointmentRequest {
 
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Doctor doctor;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    private Patient patient;
+
+    private LocalDate dateOfCreation;
 }

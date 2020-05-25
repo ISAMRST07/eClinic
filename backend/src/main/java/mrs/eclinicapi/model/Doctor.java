@@ -27,6 +27,8 @@ public class Doctor extends MedicalStaff {
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Intervention> interventions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    private List<AppointmentRequest> appointmentRequests = new ArrayList<>();
     @Override
     public Clinic getClinic() {
         return super.getClinic();

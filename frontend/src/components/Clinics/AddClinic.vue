@@ -3,7 +3,6 @@
         <modify-clinic-dialog
             v-model="addDialog"/>
         <v-btn
-                v-if="role === adminCode"
                 fab
                 dark
                 large
@@ -26,11 +25,9 @@
         components: {ModifyClinicDialog},
         data: () => ({
             addDialog: false,
-            adminCode: ClinicalCenterAdmin.code,
             scrolledDown: false
         }),
         computed: {
-            ...mapState('auth', ['role']),
             ...mapState('clinics/readClinics', ['clinics']),
         },
         watch: {

@@ -151,6 +151,7 @@ public class NurseController {
                 nurse.getClinic().getId(),
                 null,
                 null,
+                null,
                 null
         );
         return doctorNurseDTO;

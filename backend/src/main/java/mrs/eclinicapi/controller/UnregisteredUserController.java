@@ -47,7 +47,8 @@ public class UnregisteredUserController {
         String content = unregisteredUser.getUser().getName() + ", verify your account for eClinic" +
                 "\r\n" + confirmationUrl +
                 "\r\n\r\nThis link will be active for only 24 hours.";
-        eventPublisher.publishEvent(new EmailEvent(unregisteredUser, "Confirm registration", content, unregisteredUser.getUser().getEmail()));
+        String[] sendTo = {unregisteredUser.getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(unregisteredUser, "Confirm registration", content, sendTo));
         unregisteredUser.setEmailSent(true);
         service.save(unregisteredUser);
         return new ResponseEntity<>(unregisteredUser, HttpStatus.OK);
@@ -64,7 +65,8 @@ public class UnregisteredUserController {
         }
         String content = found.getUser().getName() + ", we are sorry to inform you that your" +
                 " registration request has been denied. \r\n\r\nYou can try to send another request.";
-        eventPublisher.publishEvent(new EmailEvent(found, "Registration request denied", content, found.getUser().getEmail()));
+        String[] sendTo = {found.getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(found, "Registration request denied", content, sendTo));
 
         service.deleteById(id);
         return new ResponseEntity<>(id, HttpStatus.OK);

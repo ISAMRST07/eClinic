@@ -60,4 +60,12 @@ public class PatientController {
 
         }
     }
+
+    @GetMapping(path= "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Patient> getByUserId(@PathVariable String userID) {
+        Patient found = service.getByUserId(userID);
+        if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(found, HttpStatus.OK);
+    }
 }

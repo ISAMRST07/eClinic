@@ -16,6 +16,7 @@ import Patients from "../pages/Patients";
 import DoctorHome from "../pages/DoctorHome";
 import WorkingSchedule from "../pages/WorkingSchedule";
 import VacationRequest from "../pages/VacationRequest";
+import AppointmentRequest from "../pages/AppointmentRequest";
 
 import {
     clinicCenterAdministratorsPath,
@@ -34,7 +35,8 @@ import {
     userProfilePath,
     patientsPath,
     doctorHomePath,
-    vacationRequestPath, workingSchedulePath
+    vacationRequestPath,
+    workingSchedulePath, appointmentRequestClinicPath
 } from "../utils/paths";
 
 
@@ -117,6 +119,10 @@ const loggedRoutes = [
         path: workingSchedulePath,
         component: WorkingSchedule
     },
+    {
+        path: appointmentRequestClinicPath,
+        component: AppointmentRequest
+    }
 ];
 
 export default loggedRoutes;

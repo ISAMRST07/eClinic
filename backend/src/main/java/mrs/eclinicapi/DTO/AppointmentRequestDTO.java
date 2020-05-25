@@ -23,4 +23,10 @@ public class AppointmentRequestDTO {
    private String interventionTypeID;
    private String clinicID;
    private String doctorID;
+   private String patientID;
+   private LocalDate dateOfCreation;
+
+   public static class ConcurrentRequest extends Exception{
+
+   }
 }
