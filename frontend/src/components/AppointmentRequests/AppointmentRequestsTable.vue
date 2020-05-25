@@ -15,7 +15,7 @@
 
                 <template v-slot:item.cancel="{ item }">
                     <v-icon
-                            @click="cancel(item)"
+                            @click="deleteDialog(item)"
                             color="red"
                     >
                         mdi-table-cancel
@@ -24,7 +24,7 @@
 
                 <template v-slot:item.deny="{ item }">
                     <v-icon
-                            @click="deny(item)"
+                            @click="deleteDialog(item)"
                             color="primary darken-2"
                     >
                         mdi-table-cancel
@@ -32,7 +32,7 @@
                 </template>
                 <template v-slot:item.approve="{ item }">
                     <v-icon
-                            @click="approve(item)"
+                            @click="approveDialog(item)"
                             color="amber darken-2"
                     >
                         mdi-check
@@ -44,44 +44,45 @@
             </v-data-table>
         </v-card>
 
+        <delete-dialog
+                :value="dialogDelete"
+                :request="requestToDeny"
+                :mode="`cancel` ? role === patientCode : `delete`"
+                @close="deleteDialog(null)"
+                @delete="deleteRequest"
+        ></delete-dialog>
+        <approve-dialog
+                :value="dialogApprove"
+                :request="requestToApprove"
+                @close="approveDialog(null)"
+        ></approve-dialog>
     </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
-    import ModifyDoctorDialog from "./ModifyDoctorDialog";
     import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
-    import DoctorSearch from "./DoctorSearch";
-    import DialogAvailable from "./DialogAvailable";
-    import ScheduleDialog from "./ScheduleDialog";
+    import ApproveDialog from "./ApproveDialog";
 
     export default {
-        name: "DoctorTable",
-        components: {ScheduleDialog, DialogAvailable, DoctorSearch, DeleteDialog, ModifyDoctorDialog},
+        name: "AppointmentRequestsTable",
+        components: {DeleteDialog, ApproveDialog},
         data: () => ({
-        	search: "",
             loading: false,
-            dialog: false,
-            dialogAvailable: false,
-            doctorToDelete: null,
-            doctorAvailability: null,
+            dialogDelete: false,
+            dialogApprove: false,
+            requestToDeny: null,
             options: {
                 page: 1,
                 itemsPerPage: 10
             },
             adminCode: ClinicalAdmin.code,
             patientCode: Patient.code,
-            searchRequest: null,
-            fromClinic: false,
-            scheduleType: null,
-            scheduleDate: null,
-            scheduleDialog: false,
-            doctorToSchedule: null,
-            scheduleClinic: null,
+            requestToApprove: null,
         }),
         computed: {
-            ...mapState('doctor/doctor', ['length']),
+            ...mapState('appointmentRequests', ['length']),
             ...mapState('auth', ['token']),
             ...mapState('auth', ['role']),
             requests() {
@@ -111,33 +112,32 @@
             }
         },
         methods: {
-            ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['getClinicDoctors']),
-            ...mapActions('doctor/doctor', ['deleteDoctorApi']),
-            ...mapActions('doctor/doctor', ['searchApi']),
+            ...mapActions('appointmentRequests',
+                ['getRequestsByClinic',
+                'getRequestsByPatient',
+                'deleteRequestApi',
+                'approveRequestApi']),
 
-            deleteDialog(doctorToDelete) {
-                this.doctorToDelete = doctorToDelete;
-                this.dialog = !this.dialog;
+            deleteDialog(request) {
+                this.requestToDeny = request;
+                this.dialogDelete = !this.dialogDelete;
             },
-            availableDialog(doctor) {
-                this.doctorAvailability = doctor;
-                this.dialogAvailable = !this.dialogAvailable;
-            },
-            deleteDoctor() {
-                this.deleteDoctorApi(this.doctorToDelete);
+            deleteRequest() {
+                this.deleteRequestApi(this.requestToDeny);
                 this.deleteDialog(null);
             },
-            toggleScheduleDialog(doctor) {
-                this.doctorToSchedule = doctor;
-                this.scheduleDialog = !this.scheduleDialog;
+            approveDialog(request) {
+                this.requestToApprove = request;
+                this.dialogApprove = !this.dialogApprove;
             },
-            toProfile(doctor) {
-                this.$router.push(`/profile/${doctor.userID}`)
+            approveRequest() {
+                this.approveRequestApi(this.requestToApprove);
+                this.approveDialog(null);
             },
+
             populate() {
-                if(!this.searchRequest)
-                    this.getClinicDoctors({
+                if(this.$route.path.startsWith("/appointmentRequests/clinic="))
+                    this.getRequestsByClinic({
                         clinicID: this.$route.params.clinicID,
                         pageNumber: this.options.page,
                         pageSize: this.options.itemsPerPage,
@@ -145,56 +145,24 @@
                         desc: this.options.sortDesc
                     });
                 else
-                    this.searchApi(
+                    this.getRequestsByPatient(
                         {
+                            patientID: this.$route.params.patientID,
                             pageNumber: this.options.page,
                             pageSize: this.options.itemsPerPage,
                             sort: this.options.sortBy,
-                            desc: this.options.sortDesc,
-                            request: this.searchRequest
-                        });
+                            desc: this.options.sortDesc
+                        }
+                    );
             },
-            searched(payload) {
-                this.scheduleDate = payload.date;
-                console.log(this.scheduleDate);
-                this.searchRequest = payload;
-                this.searchRequest.clinicID = this.$route.params.clinicID;
-                this.loading = true;
-                this.populate();
-            },
-            reset() {
-                this.searchRequest = null;
-                this.loading = true;
-                this.populate();
-            },
-            async setup() {
-                try {
-                    let {data: clinic} = await this.$axios.get(`/api/clinic/${this.$route.params.clinicID}`,
-                        {headers: {"Authorization": 'Bearer ' + this.token}});
-                    this.scheduleClinic = clinic;
-                    if (this.$route.params.payload) {
-                        let payload = this.$route.params.payload;
-                        this.scheduleType = payload.interventionType;
-                        this.scheduleDate = payload.date;
-                        this.searchRequest = {
-                            clinicID: payload.clinicID,
-                            interventionTypeID: payload.interventionType.id,
-                            date: payload.date
-                        };
-                        this.fromClinic = true;
-                    } else this.fromClinic = false;
-                    this.populate();
-                } catch(err) {
-                    console.log("SJEBO SI");
-                }
-            }
+
         },
         mounted() {
             this.loading = true;
-            this.setup();
+            this.populate();
         },
         watch: {
-            doctors() {
+            requests(val) {
                 this.loading = false;
                 if(this.options.itemsPerPage <= this.length && val.length < this.options.itemsPerPage) {
                     this.loading = true;
@@ -203,8 +171,8 @@
             },
             options(val) {
                 this.loading = true;
-                if(!this.searchRequest)
-                    this.getClinicDoctors({
+                if(this.$route.path.startsWith("/appointmentRequests/clinic="))
+                    this.getRequestsByClinic({
                         clinicID: this.$route.params.clinicID,
                         pageNumber: val.page,
                         pageSize: val.itemsPerPage,
@@ -212,14 +180,15 @@
                         desc: val.sortDesc
                     });
                 else
-                    this.searchApi(
+                    this.getRequestsByPatient(
                         {
+                            patientID: this.$route.params.patientID,
                             pageNumber: val.page,
                             pageSize: val.itemsPerPage,
                             sort: val.sortBy,
-                            desc: val.sortDesc,
-                            request: this.searchRequest
-                        });
+                            desc: val.sortDesc
+                        }
+                    );
             },
         }
     }

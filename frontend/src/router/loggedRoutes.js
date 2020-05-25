@@ -36,7 +36,10 @@ import {
     patientsPath,
     doctorHomePath,
     vacationRequestPath,
-    workingSchedulePath, appointmentRequestClinicPath
+    workingSchedulePath,
+    appointmentRequestClinicPath,
+    appointmentRequestPatientPath
+
 } from "../utils/paths";
 
 
@@ -121,6 +124,11 @@ const loggedRoutes = [
     },
     {
         path: appointmentRequestClinicPath,
+        component: AppointmentRequest
+    },
+    ,
+    {
+        path: appointmentRequestPatientPath,
         component: AppointmentRequest
     }
 ];

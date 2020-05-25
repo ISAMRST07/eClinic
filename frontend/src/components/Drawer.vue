@@ -54,6 +54,7 @@
         name: "Drawer",
         data: () => ({
             items: Array,
+            patient: null
         }),
         props: {
             mini: {
@@ -62,11 +63,11 @@
             },
         },
         computed: {
-            ...mapState('auth', ['role']),
-            ...mapState('auth', ['clinic']),
+            ...mapState('auth', ['role', 'user', 'clinic']),
 
         },
-        mounted() {
+        async mounted() {
+            if (this.role === Patient.code) await this.getPatient();
             switch (this.role) {
                 case ClinicalCenterAdmin.code:
                     this.items = ClinicalCenterAdmin.items;
@@ -75,13 +76,24 @@
                     this.items = (new ClinicalAdmin(this.clinic.id)).items;
                     break;
                 case Patient.code:
-                    this.items = Patient.items;
+                    this.items = (new Patient(this.patient.id)).items;
                     break;
                 case Doctor.code:
                     this.items = Doctor.items;
                     break;
                 default:
 
+            }
+        },
+        methods: {
+            async getPatient() {
+                try {
+                    let {data: res} = await this.$axios.get(`/api/patient/user-id=${this.user.id}`,
+                        {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                    this.patient = res;
+                } catch (err) {
+                    console.log(err);
+                }
             }
         }
     }
