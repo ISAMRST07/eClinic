@@ -10,7 +10,6 @@
             <v-card-title class="headline">Availability</v-card-title>
 
             <v-calendar
-                    color="primary"
                     type="day"
                     :value="date"
                     :events="events"

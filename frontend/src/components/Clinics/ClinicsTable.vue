@@ -106,7 +106,7 @@
             ...mapState('auth', ['role']),
 
             clinics() {
-                if (this.itemsPerPage > 0)
+                if (this.options.itemsPerPage > 0)
                     return this.$store.state.clinics.readClinics.clinics.slice(0, this.options.itemsPerPage);
                 else
                     return this.$store.state.clinics.readClinics.clinics;

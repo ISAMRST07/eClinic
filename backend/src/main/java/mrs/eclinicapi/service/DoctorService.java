@@ -10,7 +10,9 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.print.Doc;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,18 +93,21 @@ public class DoctorService {
                                String sort,
                                boolean desc) {
         Pageable p;
+        int fakePageSize = pageSize;
+        if (fakePageSize < 1) fakePageSize = 1000;
         if(sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
-            p = PageRequest.of(--pageNumber, pageSize, s);
-        } else p = PageRequest.of(--pageNumber, pageSize);
+            p = PageRequest.of(--pageNumber, fakePageSize, s);
+        } else p = PageRequest.of(--pageNumber, fakePageSize);
 
 
-        return this.someOtherFunction(searchQuery, clinicID, date, type, p);
+
+        return this.someOtherFunction(searchQuery, clinicID, date, type, p, pageSize);
     }
 
-    private Page<Doctor> someOtherFunction(String searchQuery, String clinicID, LocalDate date, InterventionType type, Pageable p) {
+    private Page<Doctor> someOtherFunction(String searchQuery, String clinicID, LocalDate date, InterventionType type, Pageable p, int pageSize) {
         List<Doctor> doctors = findByClinicID(clinicID);
         Stream<Doctor> filtered = this.filterDoctors(doctors, searchQuery, date, type);
         if(p.getSort().isSorted()) {
@@ -113,7 +118,7 @@ public class DoctorService {
                     .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
         }
         List<Doctor> fullList = filtered.collect(Collectors.toList());
-        if(p.getPageSize() < 1) return new PageImpl<Doctor>(fullList, p, fullList.size());
+        if(pageSize < 1) return new PageImpl<Doctor>(fullList, p, fullList.size());
         else {
             int start = (int) p.getOffset();
             int end = Math.min((start + p.getPageSize()), fullList.size());
@@ -162,5 +167,83 @@ public class DoctorService {
         }
         sorted = desc ? sorted * -1 : sorted;
         return sorted;
+    }
+
+    public Page<Doctor> searchByTime(String clinicID,
+                                     LocalDateTime dateTime,
+                                     int pageNumber,
+                                     int pageSize) {
+        return this.searchByTime(clinicID, dateTime, pageNumber, pageSize, null, false);
+    }
+
+    public Page<Doctor> searchByTime(String clinicID,
+                               LocalDateTime dateTime,
+                               int pageNumber,
+                               int pageSize,
+                               String sort,
+                               boolean desc) {
+        Pageable p;
+        int fakePageSize = pageSize;
+        if (fakePageSize < 1) fakePageSize = 1000;
+        if(sort != null) {
+            Sort s;
+            if (desc) s = Sort.by(Sort.Direction.DESC, sort);
+            else s = Sort.by(Sort.Direction.ASC, sort);
+            p = PageRequest.of(--pageNumber, fakePageSize, s);
+        } else p = PageRequest.of(--pageNumber, fakePageSize);
+
+        return this.someOtherNewFunction( clinicID, dateTime, p, pageSize);
+    }
+
+    private Page<Doctor> someOtherNewFunction(String clinicID, LocalDateTime dateTime, Pageable p, int pageSize) {
+        List<Doctor> doctors = findByClinicID(clinicID);
+        Stream<Doctor> filtered = this.filterDoctorsByTime(doctors, dateTime);
+        if(p.getSort().isSorted()) {
+            Sort.Order o = p.getSort().iterator().next();
+            String property = o.getProperty();
+            boolean desc = o.getDirection().isDescending();
+            filtered = filtered
+                    .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
+        }
+        List<Doctor> fullList = filtered.collect(Collectors.toList());
+        if(pageSize < 1) return new PageImpl<Doctor>(fullList, p, fullList.size());
+        else {
+            int start = (int) p.getOffset();
+            int end = Math.min((start + p.getPageSize()), fullList.size());
+            return new PageImpl<>(fullList.subList(start, end), p, fullList.size());
+        }
+    }
+
+    private Stream<Doctor> filterDoctorsByTime(List<Doctor> doctors, LocalDateTime dateTime) {
+        LocalDateTime endTime = dateTime.plusMinutes(30);
+        Weekday weekday = Weekday.values()[dateTime.getDayOfWeek().getValue() - 1];
+        return doctors.stream()
+                .filter(doctor -> doctor.getWorkingCalendar().getVacations()
+                        .stream().noneMatch(v -> dateTime.isAfter(v.getStart().atStartOfDay()) &&
+                                dateTime.isBefore(v.getEnd().atStartOfDay()))
+                        && doctor.getWorkingCalendar().getWorkingSchedule().containsKey(weekday)
+                        && doctor.getAppointmentRequests().stream().noneMatch(request -> {
+                            LocalDateTime currentStartTime = request.getDateTime();
+                            LocalDateTime currentEndTime = currentStartTime.plusMinutes(30);
+
+                            if (dateTime.isAfter(currentStartTime) && dateTime.isBefore(currentEndTime))
+                                return true;
+                            if (endTime.isAfter(currentStartTime) && endTime.isBefore(currentEndTime))
+                                return true;
+
+                            return false;
+                        })
+                        && doctor.getInterventions().stream().noneMatch(intervention -> {
+                            LocalDateTime currentStartTime = intervention.getDateTime().getStart();
+                            LocalDateTime currentEndTime = intervention.getDateTime().getEnd();
+
+                            if (dateTime.isAfter(currentStartTime) && dateTime.isBefore(currentEndTime))
+                                return true;
+                            if (endTime.isAfter(currentStartTime) && endTime.isBefore(currentEndTime))
+                                return true;
+
+                            return false;
+                        })
+                );
     }
 }

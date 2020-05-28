@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import axios from 'axios'
+import DateTimePicker from 'vuetify-datetime-picker';
+
 Vue.config.productionTip = false;
 
 Vue.prototype.$axios = axios;
@@ -15,7 +17,9 @@ Vue.config.warnHandler = function (msg, vm, trace) {
         vm = null;
         trace = null;
     }
-}
+};
+
+Vue.use(DateTimePicker);
 new Vue({
     router,
     store,

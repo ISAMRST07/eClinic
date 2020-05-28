@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.beans.Beans;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,25 +33,62 @@ public class AppointmentRequestService {
 
     public List<AppointmentRequest> findAll() {return repository.findAll();}
 
+    public AppointmentRequest findOne (String id) { return repository.findById(id).orElse(null); }
+
     @Transactional(isolation = Isolation.SERIALIZABLE,
             rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
-    public AppointmentRequest save(AppointmentRequest ar) throws AppointmentRequestDTO.ConcurrentRequest  {
-        LocalDateTime startTime = ar.getDateTime();
-        LocalDateTime endTime = startTime.plusMinutes(30);
+    public AppointmentRequest delete(String id) throws AppointmentRequestDTO.ConcurrentRequest {
+        AppointmentRequest request = repository.findById(id).orElse(null);
+        if (request == null) return null;
+        LocalDate doc = request.getDateOfCreation();
+        Long diff = doc.atStartOfDay().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+        if (diff < 86400000) return null;
+        repository.delete(request);
+        return request;
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
+    public AppointmentRequest modify(String id, AppointmentRequest request) {
+        AppointmentRequest ar = repository.findById(id).orElse(null);
+        if (ar == null) return null;
+        ar.setDoctor(request.getDoctor());
+        ar.setDateTime(request.getDateTime());
 
         List<AppointmentRequest> requests = repository.findAppointmentRequestsByDoctor_Id(ar.getDoctor().getId());
 
+        if (checkRequests(requests, ar))
+            return repository.save(ar);
+        else
+            return null;
+
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE,
+            rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
+    public AppointmentRequest save(AppointmentRequest ar) throws AppointmentRequestDTO.ConcurrentRequest  {
+        List<AppointmentRequest> requests = repository.findAppointmentRequestsByDoctor_Id(ar.getDoctor().getId());
+
+        if (checkRequests(requests, ar))
+            return repository.save(ar);
+        else
+            return null;
+    }
+
+    private boolean checkRequests(List<AppointmentRequest> requests, AppointmentRequest ar) {
+        LocalDateTime startTime = ar.getDateTime();
+        LocalDateTime endTime = startTime.plusMinutes(30);
         for(AppointmentRequest request : requests) {
             LocalDateTime currentStartTime = request.getDateTime();
             LocalDateTime currentEndTime = currentStartTime.plusMinutes(30);
 
-            if (startTime.isAfter(currentStartTime) && startTime.isBefore(currentEndTime))
-                return null;
-            if (endTime.isAfter(currentStartTime) && endTime.isBefore(currentEndTime))
-                return null;
-        }
 
-        return repository.save(ar);
+
+            if (startTime.isAfter(currentStartTime) && startTime.isBefore(currentEndTime))
+                return false;
+            if (endTime.isAfter(currentStartTime) && endTime.isBefore(currentEndTime))
+                return false;
+        }
+        return true;
     }
 
     public Page<AppointmentRequest> findPaged(int pageNumber, int pageSize) {

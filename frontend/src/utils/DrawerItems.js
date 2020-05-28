@@ -100,11 +100,13 @@ const clinicCenterAdminsItem = {
     path: clinicCenterAdministratorsPath
 };
 
-const clinicRoomsItem = {
-    icon: 'mdi-bed-empty',
-    label: 'Clinic Rooms',
-    path: clinicRoomsPath
-};
+function clinicRoomsItem(id) {
+    return {
+        icon: 'mdi-bed-empty',
+        label: 'Clinic Rooms',
+        path: clinicRoomsPath.replace(":clinicID", id)
+    };
+}
 
 const unregisteredUsersItem = {
     icon: 'mdi-account-multiple-check',
@@ -162,7 +164,7 @@ class ClinicalAdmin {
             interventionTypeItem,
             interventionItem,
             medicinesItem,
-            clinicRoomsItem,
+            clinicRoomsItem(id),
             doctorsItem(id),
             nursesItem,
             vacationRequestItem,
@@ -183,7 +185,7 @@ class Patient {
             appointmentRequestPatientItem(patientID)
         ]
     }
-};
+}
 
 const Doctor = {
 	name: 'Doctor',
@@ -193,5 +195,5 @@ const Doctor = {
         doctorHomeItem,
         vacationRequestItem
     ]
-}
+};
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};

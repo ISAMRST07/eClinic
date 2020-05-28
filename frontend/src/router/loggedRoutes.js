@@ -38,7 +38,7 @@ import {
     vacationRequestPath,
     workingSchedulePath,
     appointmentRequestClinicPath,
-    appointmentRequestPatientPath
+    appointmentRequestPatientPath, chooseClinicRoomsPath
 
 } from "../utils/paths";
 
@@ -60,12 +60,14 @@ const loggedRoutes = [
         path: clinicAdministratorsPath,
         component: ClinicAdministrators,
     },
-
     {
         path: clinicRoomsPath,
         component: ClinicRooms,
     },
-
+    {
+        path: chooseClinicRoomsPath,
+        component: ClinicRooms,
+    },
     {
         name: 'doctors',
         path: doctorsPath,
@@ -104,8 +106,7 @@ const loggedRoutes = [
     {
         path: userProfilePath,
         component: UserProfileView
-    }
-    ,
+    },
     {
         path: patientsPath,
         component: Patients
@@ -126,7 +127,6 @@ const loggedRoutes = [
         path: appointmentRequestClinicPath,
         component: AppointmentRequest
     },
-    ,
     {
         path: appointmentRequestPatientPath,
         component: AppointmentRequest

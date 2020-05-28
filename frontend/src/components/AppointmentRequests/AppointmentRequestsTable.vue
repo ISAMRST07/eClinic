@@ -39,7 +39,7 @@
                     </v-icon>
                 </template>
                 <template v-slot:no-data>
-                    <p>There aren't any doctors here :(</p>
+                    <p>There aren't any requests here :(</p>
                 </template>
             </v-data-table>
         </v-card>
@@ -55,6 +55,7 @@
                 :value="dialogApprove"
                 :request="requestToApprove"
                 @close="approveDialog(null)"
+                @approve="approveRequest"
         ></approve-dialog>
     </div>
 </template>
@@ -123,16 +124,19 @@
                 this.dialogDelete = !this.dialogDelete;
             },
             deleteRequest() {
+                let dateNow = new Date();
+                let dateTime = new Date(this.requestToDeny.dateTime);
+                if (dateNow.getTime() - dateTime.getTime() < 86400000) return;
                 this.deleteRequestApi(this.requestToDeny);
                 this.deleteDialog(null);
             },
             approveDialog(request) {
                 this.requestToApprove = request;
                 this.dialogApprove = !this.dialogApprove;
+
             },
             approveRequest() {
-                this.approveRequestApi(this.requestToApprove);
-                this.approveDialog(null);
+                this.$router.push(`/choose-clinic-room/request=${this.requestToApprove.id}/clinic=${this.$route.params.clinicID}`);
             },
 
             populate() {

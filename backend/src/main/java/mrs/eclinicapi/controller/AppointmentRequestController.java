@@ -53,6 +53,13 @@ public class AppointmentRequestController {
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AppointmentRequestDTO> getRequest(@PathVariable String id) {
+        AppointmentRequest appointmentRequest = this.service.findOne(id);
+        if (appointmentRequest == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(this.convertToDTO(appointmentRequest), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/clinic/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PagedResponse> getAllForClinic(
             @PathVariable String clinicID,
@@ -114,7 +121,7 @@ public class AppointmentRequestController {
         LocalDate dateOfCreation = LocalDate.now();
         appointmentRequest.setDateOfCreation(dateOfCreation);
         AppointmentRequest saved = null;
-        for(int attempts = 0; attempts < 3; ++attempts) {
+        for(int attempts = 0; attempts < 3; attempts++) {
             try {
                 saved = service.save(appointmentRequest);
                 break;
@@ -145,6 +152,42 @@ public class AppointmentRequestController {
         timers.get(appointmentRequest.getId()).schedule(new AppointmentTimer(timers, saved), scheduled);
         return new ResponseEntity<>(this.convertToDTO(saved), HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "{id}")
+    ResponseEntity<AppointmentRequest> deleteRequest(@PathVariable String id) {
+        AppointmentRequest request = null;
+        for(int i = 0; i < 3; ++i) {
+            try {
+                request = this.service.delete(id);
+                break;
+            } catch (AppointmentRequestDTO.ConcurrentRequest concurrentRequest) {
+                if (i == 2) return new ResponseEntity<>(HttpStatus.CONFLICT);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        if(request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(request, HttpStatus.OK);
+    }
+
+
+    @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<AppointmentRequest> changeDoctorTime(@PathVariable String id,
+                                                        @RequestBody AppointmentRequestDTO requestDTO) {
+
+        if(!id.equals(requestDTO.getId()))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        AppointmentRequest modified = service.modify(id, this.convertToEntity(requestDTO));
+
+        if(modified == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>(modified, HttpStatus.OK);
+    }
+
 
     private AppointmentRequestDTO convertToDTO(AppointmentRequest appointmentRequest) {
         return new AppointmentRequestDTO(

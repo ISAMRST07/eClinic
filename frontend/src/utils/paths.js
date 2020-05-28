@@ -6,7 +6,9 @@ export const clinicAdministratorsPath = '/clinicAdministrators';
 
 export const clinicCenterAdministratorsPath = '/clinicCenterAdministrators';
 
-export const clinicRoomsPath = '/clinicRooms';
+export const clinicRoomsPath = '/clinic-rooms/clinic=:clinicID';
+
+export const chooseClinicRoomsPath = '/choose-clinic-room/request=:requestID/clinic=:clinicID';
 
 export const doctorsPath = '/doctors/:clinicID';
 

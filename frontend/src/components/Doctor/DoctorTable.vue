@@ -107,7 +107,6 @@
             patientCode: Patient.code,
             searchRequest: null,
             fromClinic: false,
-            scheduleType: null,
             scheduleDate: null,
             scheduleDialog: false,
             doctorToSchedule: null,
@@ -115,10 +114,9 @@
         }),
         computed: {
             ...mapState('doctor/doctor', ['length']),
-            ...mapState('auth', ['token']),
-            ...mapState('auth', ['role']),
+            ...mapState('auth', ['token', 'role']),
             doctors() {
-                if (this.itemsPerPage > 0)
+                if (this.options.itemsPerPage > 0)
                     return this.$store.state.doctor.doctor.doctors.slice(0, this.options.itemsPerPage);
                 else
                     return this.$store.state.doctor.doctor.doctors;
@@ -192,7 +190,6 @@
             },
             searched(payload) {
                 this.scheduleDate = payload.date;
-                console.log(this.scheduleDate);
                 this.searchRequest = payload;
                 this.searchRequest.clinicID = this.$route.params.clinicID;
                 this.loading = true;
@@ -230,7 +227,7 @@
             this.setup();
         },
         watch: {
-            doctors() {
+            doctors(val) {
                 this.loading = false;
                 if(this.options.itemsPerPage <= this.length && val.length < this.options.itemsPerPage) {
                     this.loading = true;

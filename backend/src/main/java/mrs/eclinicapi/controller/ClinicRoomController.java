@@ -1,17 +1,23 @@
 package mrs.eclinicapi.controller;
 
+import lombok.AllArgsConstructor;
 import mrs.eclinicapi.DTO.ClinicRoomDTO;
+import mrs.eclinicapi.DTO.ClinicRoomSearchRequest;
+import mrs.eclinicapi.DTO.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.Intervention;
+import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicRoomService;
 import mrs.eclinicapi.service.ClinicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -42,11 +48,57 @@ public class ClinicRoomController {
         return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ClinicRoomDTO>> getOneClinicRooms(@PathVariable("id") String clinicAdminID) {
-        List<ClinicRoom> clinicRooms = service.findOneClinicRooms(clinicAdminID);
-        List<ClinicRoomDTO> clinicRoomDTOS = clinicRooms.stream().map(this::convertToDTO).collect(Collectors.toList());
-        return new ResponseEntity<>(clinicRoomDTOS, HttpStatus.OK);
+    @GetMapping(path = "/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> getPagedClinics(@PathVariable String clinicID,
+                                                                          @PathVariable int pageNumber,
+                                                                          @PathVariable int pageSize,
+                                                                          @PathVariable String sort,
+                                                                          @PathVariable String desc) {
+
+        PagedResponse response;
+        if(pageSize < 1){
+            List<ClinicRoom> allClinicRooms = service.findByClinic(clinicID);
+            response = new PagedResponse(allClinicRooms.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    allClinicRooms.size());
+
+        } else {
+            Page<ClinicRoom> clinicRoomsPage;
+            if(sort.equals("undefined"))
+                clinicRoomsPage = service.findPagedByClinic(clinicID, pageNumber, pageSize);
+            else {
+                clinicRoomsPage = service.findPagedByClinic(clinicID, pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(clinicRoomsPage.getContent()
+                    .stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    clinicRoomsPage.getTotalElements());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @PostMapping(path = "/search/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> searchClinicRooms(@RequestBody ClinicRoomSearchRequest searchRequest,
+                                                                            @PathVariable String clinicID,
+                                                                            @PathVariable int pageNumber,
+                                                                            @PathVariable int pageSize,
+                                                                            @PathVariable String sort,
+                                                                            @PathVariable String desc) {
+        LocalDateTime dateTime = searchRequest.getDateTime();
+        String roomName = searchRequest.getRoomName();
+        if(roomName == null) roomName = "";
+        String roomID = searchRequest.getRoomID();
+        if(roomID == null) roomID = "";
+
+        PagedResponse response;
+        Page<ClinicRoom> clinicPage;
+        if(sort.equals("undefined"))
+            clinicPage = service.search(clinicID, roomName, roomID, dateTime, pageNumber, pageSize);
+        else {
+            clinicPage = service.search(clinicID, roomName, roomID, dateTime, pageNumber, pageSize, sort, desc.equals("true"));
+        }
+        response = new PagedResponse(clinicPage.getContent()
+                .stream().map(this::convertToDTO).collect(Collectors.toList()), clinicPage.getTotalElements());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,9 +130,7 @@ public class ClinicRoomController {
         clinicRoom.setId(clinicRoomDTO.getId());
         clinicRoom.setName(clinicRoomDTO.getName());
         clinicRoom.setClinic(foundClinic);
-        Set<Intervention> interventionSet = new HashSet<>(clinicRoomDTO.getPastInterventions());
-        interventionSet.addAll(clinicRoomDTO.getScheduledInterventions());
-        clinicRoom.setInterventions(interventionSet);
+        clinicRoom.setInterventions(clinicRoomDTO.getInterventions());
         return clinicRoom;
     }
 
@@ -89,17 +139,14 @@ public class ClinicRoomController {
         clinicRoomDTO.setId(clinicRoom.getId());
         clinicRoomDTO.setName(clinicRoom.getName());
         clinicRoomDTO.setClinicId(clinicRoom.getClinic().getId());
-        Set<Intervention> pastInterventions = new HashSet<>();
-        Set<Intervention> scheduledInterventions = new HashSet<>();
-        for (Intervention i : clinicRoom.getInterventions()) {
-            // TODO PREPRAVKA
-            if (i.getDateTime().getStart().isBefore(LocalDateTime.now())) pastInterventions.add(i);
-            else scheduledInterventions.add(i);
-        }
-        clinicRoomDTO.setPastInterventions(pastInterventions);
-        clinicRoomDTO.setScheduledInterventions(scheduledInterventions);
-        if (scheduledInterventions.size() > 0) clinicRoomDTO.setRemovable(false);
-        else clinicRoomDTO.setRemovable(true);
+
+        clinicRoomDTO.setInterventions(clinicRoom.getInterventions());
         return clinicRoomDTO;
+    }
+
+    @AllArgsConstructor
+    static class PagedResponse {
+        public List<ClinicRoomDTO> clinicRooms;
+        public long totalLength;
     }
 }

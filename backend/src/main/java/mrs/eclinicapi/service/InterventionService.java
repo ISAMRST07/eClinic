@@ -33,42 +33,6 @@ public class InterventionService {
     @Autowired
     private ClinicRepository clinicRepository;
 
-    public Intervention addNewIntervention(InterventionDTO iDTO) {
-    	ClinicRoom clinicRoom = clinicRoomRepository.findById(iDTO.getSelectedClinicRoom()).orElse(null);
-    	Doctor doctor = doctorRepository.findById(iDTO.getSelectedDoctor()).orElse(null);
-    	InterventionType interventionType = interventionTypeRepository.findById(iDTO.getSelectedInterventionType()).orElse(null);
-    	Clinic clinic = clinicRepository.findById(iDTO.getClinic()).orElse(null);
-
-    	Intervention newIntervention = new Intervention();
-    	newIntervention.setClinicRoom(clinicRoom);
-    	newIntervention.setDoctor(doctor);
-    	newIntervention.setInterventionType(interventionType);
-    	newIntervention.setClinic(clinic);
-    	// TODO PREPRAVKA TREBA
-    	newIntervention.setDateTime(new TimePeriod<>(iDTO.getDateTime(), iDTO.getDateTime()));
-    	newIntervention.setDuration(iDTO.getDuration());
-    	newIntervention.setPrice(iDTO.getPrice());
-
-    	return repository.save(newIntervention);
-    }
-
-    public Intervention modify(InterventionDTO iDTO) {
-    	ClinicRoom clinicRoom = clinicRoomRepository.findById(iDTO.getSelectedClinicRoom()).orElse(null);
-    	Doctor doctor = doctorRepository.findById(iDTO.getSelectedDoctor()).orElse(null);
-    	InterventionType interventionType = interventionTypeRepository.findById(iDTO.getSelectedInterventionType()).orElse(null);
-
-    	Intervention modified = this.findOne(iDTO.getId());
-    	modified.setClinicRoom(clinicRoom);
-    	modified.setDoctor(doctor);
-    	modified.setInterventionType(interventionType);
-//    	TODO PREPRAVKA TREBA
-//    	modified.setDateTime(new TimePeriod<>(iDTO.getDateTime(), iDTO.getDateTime()));
-    	modified.setDuration(iDTO.getDuration());
-    	modified.setPrice(iDTO.getPrice());
-
-    	return repository.save(modified);
-    }
-
     public Intervention add(Intervention newIntervention) {
         return repository.save(newIntervention);
     }

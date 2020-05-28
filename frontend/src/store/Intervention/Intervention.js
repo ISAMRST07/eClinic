@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
 import JSOG from 'jsog'
 
-export default { 
+export default {
     namespaced: true,
     state: {
         intervention: [],
@@ -34,18 +34,7 @@ export default {
         }
     },
     actions: {
-    	async getAllInterventionApi({rootState, commit}) {
-            try {
-            	console.log("getAllInterventionApi");
-                let res = await Vue.prototype.$axios.get('/api/intervention/',
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
-                console.log("actions getAllInterventionApi = " + res.data);
-                res.data.forEach(item => console.log(item));
-                commit('setAllIntervention', res.data);
-            } catch (err) {
-                defaultError(err);
-            }
-        },
+
         async getClinicInterventionApi({rootState, commit}, clinic) {
             try {
                 console.log("actions getClinicInterventionApi clinic = " + clinic);
@@ -60,8 +49,8 @@ export default {
         },
         async addInterventionApi({rootState, commit}, intervention) {
             try {
-            	console.log("addInterventionApi");    
-            	console.log(intervention);            	
+            	console.log("addInterventionApi");
+            	console.log(intervention);
                 let {data: added} = await Vue.prototype.$axios.post('/api/intervention', intervention,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
             	console.log("addInterventionApi added");
@@ -85,12 +74,22 @@ export default {
         async updateInterventionApi({rootState,commit}, intervention) {
             try {
                 console.log("updateInterventionApi");
-            	let {data: modified} = await Vue.prototype.$axios.put('/api/intervention', intervention, 
+            	let {data: modified} = await Vue.prototype.$axios.put('/api/intervention', intervention,
                 		{headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateIntervention', modified);
             } catch (err) {
                 defaultError(err);
             }
         },
+        async addRequestedIntervention({rootState, commit}, payload) {
+            try {
+                let {requestID, clinicRoomID} = payload;
+                let {data: added} = await Vue.prototype.$axios.post(`/api/intervention/approve/${requestID}/${clinicRoomID}`,
+                    null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('addIntervention', added);
+            } catch (e) {
+                defaultError(e);
+            }
+        }
     },
 };

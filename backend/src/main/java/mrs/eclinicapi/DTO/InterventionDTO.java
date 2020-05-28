@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.ClinicRoom;
 import mrs.eclinicapi.model.InterventionType;
+import mrs.eclinicapi.model.TimePeriod;
+import org.apache.tomcat.jni.Local;
 
 @Getter
 @Setter
@@ -23,19 +25,17 @@ import mrs.eclinicapi.model.InterventionType;
 public class InterventionDTO {
 
 	String id;
-	LocalDateTime dateTime;
-	String selectedClinicRoom;    
-	String selectedDoctor;
-	String selectedInterventionType; 
-	String clinic;
-	double duration;
+	TimePeriod<LocalDateTime> dateTime;
+	String clinicRoomID;
+	String doctorID;
+	String interventionTypeID;
+	String patientID;
+	String clinicID;
 	double price;
-    
+
 	@Override
 	public String toString() {
-		return "InterventionDTO [id=" + id + ", dateTime=" + dateTime + ", selectedClinicRoom=" + selectedClinicRoom
-				+ ", selectedDoctor=" + selectedDoctor + ", selectedInterventionType=" + selectedInterventionType
-				+ ", clinic=" + clinic + ", duration=" + duration + ", price=" + price + "]";
+		return "InterventionDTO";
 	}
-	
+
 }

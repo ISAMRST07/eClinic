@@ -1,17 +1,21 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.ClinicAdministrator;
-import mrs.eclinicapi.model.ClinicRoom;
-import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.*;
+import mrs.eclinicapi.model.enums.Weekday;
 import mrs.eclinicapi.repository.ClinicAdministratorRepository;
 import mrs.eclinicapi.repository.ClinicRoomRepository;
 import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ClinicRoomService {
@@ -37,29 +41,24 @@ public class ClinicRoomService {
         return repository.findAll();
     }
 
-    public List<ClinicRoom> findOneClinicRooms(String clinicAdminID) {
-        List<ClinicRoom> clinicRooms = repository.findAll();
-        List<ClinicRoom> oneClinicRooms = new ArrayList<>();
-        Optional<User> user = userRepository.findById(clinicAdminID);
-        if (!user.isPresent()) {
-            return oneClinicRooms;
-        }
-        Optional<ClinicAdministrator> cAdmin = clinicAdministratorRepository.findClinicAdministratorByUser(user.get());
-        System.out.println("ADMINEEEE");
-        System.out.println(clinicAdminID);
-        System.out.println(cAdmin.isPresent());
-        if (!cAdmin.isPresent()) {
-            return oneClinicRooms;
-        }
-        for (ClinicRoom cRoom : clinicRooms) {
-            if (cAdmin.get().getClinic().getId().equals(cRoom.getClinic().getId())) {
-                oneClinicRooms.add(cRoom);
-            }
-        }
-        return oneClinicRooms;
+    public List<ClinicRoom> findByClinic(String clinicID){
+        return repository.findAllByClinic_Id(clinicID);
     }
 
-    ;
+    public Page<ClinicRoom> findPagedByClinic(String clinicID, int pageNumber, int pageSize) {
+        return this.findPagedByClinic(clinicID, pageNumber, pageSize, null, false);
+    }
+
+    public Page<ClinicRoom> findPagedByClinic(String clinicID, int pageNumber, int pageSize, String sort, boolean desc) {
+        Pageable p;
+        if(sort != null) {
+            Sort s;
+            if (desc) s = Sort.by(Sort.Direction.DESC, sort);
+            else s = Sort.by(Sort.Direction.ASC, sort);
+            p = PageRequest.of(--pageNumber, pageSize, s);
+        } else p = PageRequest.of(--pageNumber, pageSize);
+        return repository.findAllByClinic_Id(clinicID, p);
+    }
 
     public void deleteById(String id) {
         repository.deleteById(id);
@@ -68,5 +67,82 @@ public class ClinicRoomService {
     public ClinicRoom modifyRoom(ClinicRoom clinicRoom) {
         if (this.findOne(clinicRoom.getId()) == null) return null;
         return repository.save(clinicRoom);
+    }
+
+    public Page<ClinicRoom> search(String clinicID, String clinicRoomName, String clinicRoomID, LocalDateTime dateTime, int pageNumber, int pageSize) {
+        return this.search(clinicID, clinicRoomName, clinicRoomID, dateTime, pageNumber, pageSize, null, false);
+    }
+
+    public Page<ClinicRoom> search(String clinicID,
+                               String clinicRoomName,
+                               String clinicRoomID,
+                               LocalDateTime dateTime,
+                               int pageNumber,
+                               int pageSize,
+                               String sort,
+                               boolean desc) {
+        Pageable p;
+        int fakePageSize = pageSize;
+        if (fakePageSize < 1) fakePageSize = 1000;
+        if(sort != null) {
+            Sort s;
+            if (desc) s = Sort.by(Sort.Direction.DESC, sort);
+            else s = Sort.by(Sort.Direction.ASC, sort);
+            p = PageRequest.of(--pageNumber, fakePageSize, s);
+        } else p = PageRequest.of(--pageNumber, fakePageSize);
+
+
+
+        return this.someOtherFunction(clinicID, clinicRoomName, clinicRoomID, dateTime, p, pageSize);
+    }
+
+    private Page<ClinicRoom> someOtherFunction(String clinicID,
+                                               String clinicRoomName,
+                                               String clinicRoomID,
+                                               LocalDateTime dateTime,
+                                               Pageable p,
+                                               int pageSize) {
+        List<ClinicRoom> clinicRooms = findByClinic(clinicID);
+        Stream<ClinicRoom> filtered = this.filterClinicRooms(clinicRooms, clinicRoomName, clinicRoomID, dateTime);
+        if(p.getSort().isSorted()) {
+            Sort.Order o = p.getSort().iterator().next();
+            String property = o.getProperty();
+            boolean desc = o.getDirection().isDescending();
+            filtered = filtered
+                    .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
+        }
+        List<ClinicRoom> fullList = filtered.collect(Collectors.toList());
+        if(pageSize < 1) return new PageImpl<ClinicRoom>(fullList, p, fullList.size());
+        else {
+            int start = (int) p.getOffset();
+            int end = Math.min((start + p.getPageSize()), fullList.size());
+            return new PageImpl<>(fullList.subList(start, end), p, fullList.size());
+        }
+    }
+
+    private Stream<ClinicRoom> filterClinicRooms(List<ClinicRoom> clinicRooms, String roomName, String roomID, LocalDateTime dateTime) {
+        LocalDateTime interventionEnd = dateTime.plusMinutes(30);
+        return clinicRooms.stream()
+                .filter(room -> room.getName().toLowerCase().contains(roomName.toLowerCase()) &&
+                        room.getId().toLowerCase().contains(roomID.toLowerCase()))
+                .filter(room -> room.getInterventions().stream().noneMatch(it ->
+                        it.getDateTime().getStart().isBefore(dateTime) && it.getDateTime().getEnd().isAfter(dateTime) ||
+                        it.getDateTime().getStart().isBefore(interventionEnd)
+                                && it.getDateTime().getEnd().isAfter(interventionEnd)));
+    }
+    private int sortFunction(ClinicRoom c1, ClinicRoom c2, String sort, boolean desc) {
+        int sorted = 0;
+        switch(sort) {
+            case "id":
+                sorted = c1.getId().compareTo(c2.getId());
+                break;
+            case "name":
+                sorted = c1.getName().compareTo(c2.getName());
+                break;
+            default:
+                sorted = -1;
+        }
+        sorted = desc ? sorted * -1 : sorted;
+        return sorted;
     }
 }
