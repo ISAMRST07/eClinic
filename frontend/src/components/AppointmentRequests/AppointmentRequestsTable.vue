@@ -47,7 +47,7 @@
         <delete-dialog
                 :value="dialogDelete"
                 :request="requestToDeny"
-                :mode="`cancel` ? role === patientCode : `delete`"
+                :mode="role === patientCode ? `cancel` : `delete`"
                 @close="deleteDialog(null)"
                 @delete="deleteRequest"
         ></delete-dialog>
@@ -107,7 +107,7 @@
                 ];
                 if (this.role === this.adminCode) {
                     regularHeaders = regularHeaders.concat(adminHeaders);
-                } else if (this.role === this.patientCode && !!this.searchRequest)
+                } else if (this.role === this.patientCode)
                     regularHeaders = regularHeaders.concat(patientHeader);
                 return regularHeaders;
             }
@@ -126,7 +126,7 @@
             deleteRequest() {
                 let dateNow = new Date();
                 let dateTime = new Date(this.requestToDeny.dateTime);
-                if (dateNow.getTime() - dateTime.getTime() < 86400000) return;
+                if (dateTime.getTime() - dateNow.getTime()< 86400000) return;
                 this.deleteRequestApi(this.requestToDeny);
                 this.deleteDialog(null);
             },
