@@ -55,6 +55,19 @@ export default {
                 defaultError(err);
             }
         },
+        async getDoctorsForTime({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.post(
+                    `/api/doctor/clinic/time/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    payload.time,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllDoctor', pagedResponse);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async addDoctorApi({rootState, commit}, doctor) {
             try {
                 let {data: added} = await Vue.prototype.$axios.post('/api/doctor', doctor,

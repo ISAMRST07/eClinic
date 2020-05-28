@@ -6,22 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mrs.eclinicapi.model.Intervention;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
-public class ClinicRoomDTO {
-    private String id;
-    private String name;
-    private String clinicId;
-    private Set<Intervention> interventions;
-    private boolean removable = true;
-
+public class ClinicRoomSearchRequest {
+   private LocalDateTime dateTime;
+   private String roomName;
+   private String roomID;
 }

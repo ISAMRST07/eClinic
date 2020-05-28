@@ -6,11 +6,11 @@
             max-width="290"
     >
         <v-card>
-            <v-card-title class="headline">{{ mode === 'cancel' ? `Cancellation` : 'Deletion'}}</v-card-title>
+            <v-card-title class="headline">Schedule</v-card-title>
 
             <v-card-text>
-                Are you sure that you want to {{ mode === 'cancel' ? `cancel` : 'deny' }} request with ID
-                <span class="text--primary">{{ deleteName }}</span>?
+                Are you sure that you want to schedule <span class="text--primary">{{ roomName }}</span>?
+                It will be scheduled for date {{ date }}.
             </v-card-text>
 
             <v-card-actions>
@@ -28,7 +28,7 @@
                 <v-btn
                         color="green darken-1"
                         text
-                        @click="$emit('delete')"
+                        @click="$emit('schedule')"
                 >
                     Yes
                 </v-btn>
@@ -40,11 +40,14 @@
 <script>
 
     export default {
-        name: "DeleteDialog",
-        props: ['value', 'mode', 'request'],
+        name: "ScheduleDialog",
+        props: ['room', 'request', 'value'],
         computed: {
-            deleteName() {
-                return this.request ? this.request.id : '';
+            roomName() {
+                return this.room ? this.room.name : '';
+            },
+            date() {
+                return this.request ? this.request.dateTime : '';
             }
         }
 

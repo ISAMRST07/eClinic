@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,10 +97,10 @@ public class DoctorController {
 
     @GetMapping(path = "/clinic/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> getDoctorsForClinic(@PathVariable String clinicID,
-                                                                    @PathVariable int pageNumber,
-                                                                    @PathVariable int pageSize,
-                                                                    @PathVariable String sort,
-                                                                    @PathVariable String desc) {
+                                                             @PathVariable int pageNumber,
+                                                             @PathVariable int pageSize,
+                                                             @PathVariable String sort,
+                                                             @PathVariable String desc) {
 
         PagedResponse response;
         if(pageSize < 1){
@@ -157,7 +158,25 @@ public class DoctorController {
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @PostMapping(path = "/clinic/time/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> searchByTime(@RequestBody LocalDateTime dateTime,
+                                                       @PathVariable String clinicID,
+                                                       @PathVariable int pageNumber,
+                                                       @PathVariable int pageSize,
+                                                       @PathVariable String sort,
+                                                       @PathVariable String desc) {
+        PagedResponse response;
+        Page<Doctor> doctorPage;
+        if(sort.equals("undefined"))
+            doctorPage = service.searchByTime(clinicID, dateTime, pageNumber, pageSize);
+        else {
+            sort = "user." + sort;
+            doctorPage = service.searchByTime(clinicID, dateTime, pageNumber, pageSize, sort, desc.equals("true"));
+        }
+        response = new PagedResponse(doctorPage.getContent()
+                .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     private Doctor convertToEntity(DoctorNurseDTO doctorNurseDTO) {
         Doctor toAdd = new Doctor();
         Clinic foundClinic = clinicService.findOne(doctorNurseDTO.getClinicID());

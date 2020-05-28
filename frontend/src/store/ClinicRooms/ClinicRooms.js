@@ -5,17 +5,21 @@ export default {
     namespaced: true,
     state: {
         clinicRooms: [],
+        length: 0
     },
     mutations: {
-        setAllClinicRooms(state, clinicRooms) {
-            Vue.set(state, 'clinicRooms', clinicRooms);
+        setAllClinicRooms(state, pagedResponse) {
+            Vue.set(state, 'clinicRooms', pagedResponse.clinicRooms);
+            state.length = pagedResponse.totalLength;
         },
         addClinicRoom(state, clinicRoom) {
             state.clinicRooms.push(clinicRoom);
+            state.length++;
         },
         deleteClinicRoom(state, clinicRoom) {
             let index = state.clinicRooms.findIndex(c => c.id === clinicRoom.id);
             state.clinicRooms.splice(index, 1);
+            state.length--;
         },
         updateClinicRoom(state, clinicRoom) {
             state.clinicRooms = [
@@ -25,23 +29,14 @@ export default {
         }
     },
     actions: {
-        async getClinicRooms({rootState, commit}) {
+        async getClinicRooms({rootState, commit}, payload) {
             try {
-                let res = await Vue.prototype.$axios.get('/api/clinicroom',
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/clinicroom/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                commit('setAllClinicRooms', res.data);
-            } catch (err) {
-                defaultError(err);
-            }
-        },
-        async getOneClinicRooms({rootState, commit}, user) {
-            try {
-                console.log("get clinicrooms for user = " + user.id);
-                let res = await Vue.prototype.$axios.get(`/api/clinicroom/${user.id}`,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                console.log("array items");
-                res.data.forEach(item => console.log(item));
-                commit('setAllClinicRooms', res.data);
+                commit('setAllClinicRooms', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
@@ -75,5 +70,18 @@ export default {
                 defaultError(err);
             }
         },
+        async searchApi({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.post(
+                    `/api/clinicroom/search/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    payload.request,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllClinicRooms', pagedResponse);
+            } catch (err) {
+                defaultError(err);
+            }
+        }
     },
 };

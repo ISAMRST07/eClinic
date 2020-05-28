@@ -35,6 +35,9 @@ public class Patient {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
+    @OneToMany
+    private List<Intervention> interventions;
+
     @OneToOne(cascade = CascadeType.ALL)
     public MedicalRecord medicalRecord;
 

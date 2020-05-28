@@ -110,18 +110,21 @@ public class ClinicService {
                                String sort,
                                boolean desc) {
         Pageable p;
+        int fakePageSize = pageSize;
+        if (fakePageSize < 1) fakePageSize = 1000;
         if(sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
-            p = PageRequest.of(--pageNumber, pageSize, s);
-        } else p = PageRequest.of(--pageNumber, pageSize);
+            p = PageRequest.of(--pageNumber, fakePageSize, s);
+        } else p = PageRequest.of(--pageNumber, fakePageSize);
 
 
-        return this.someOtherFunction(searchQuery, date, type, p);
+
+        return this.someOtherFunction(searchQuery, date, type, p, pageSize);
     }
 
-    private Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p) {
+    private Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p, int pageSize) {
         List<Clinic> clinics = findAll();
         Stream<Clinic> filtered = this.filterClinics(clinics, searchQuery, date, type);
         if(p.getSort().isSorted()) {
@@ -132,7 +135,7 @@ public class ClinicService {
                     .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
         }
         List<Clinic> fullList = filtered.collect(Collectors.toList());
-        if(p.getPageSize() < 1) return new PageImpl<Clinic>(fullList, p, fullList.size());
+        if(pageSize < 1) return new PageImpl<Clinic>(fullList, p, fullList.size());
         else {
             int start = (int) p.getOffset();
             int end = Math.min((start + p.getPageSize()), fullList.size());

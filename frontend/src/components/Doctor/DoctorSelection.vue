@@ -37,31 +37,40 @@
             value: null,
             disabled: {
                 type: Boolean,
-                value: false,
+                default: false,
             },
+            clinicID: {
+                type: String
+            },
+            dateTime: null
         },
         computed: {
         	...mapState('doctor/doctor', ['doctors']),
         	...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),
         },
         methods: {
-            ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['getClinicDoctor']),
+            ...mapActions('doctor/doctor', ['getClinicDoctors', 'getDoctorsForTime']),
         },
-        created() {
-           console.log("doctorselection created");
-           switch (this.user.type) {
-                case ClinicalCenterAdmin.code:
-                    console.log("user = ClinicalCenterAdmin")
-                    this.getDoctor();
-                    break;
-                case ClinicalAdmin.code:
-                    console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                    this.getClinicDoctor(this.clinic.id);
-                    break;
-                default:
-           }
+        mounted() {
+            if (this.dateTime) {
+                this.getDoctorsForTime(
+                    {
+                        clinicID: this.clinicID,
+                        pageNumber: 1,
+                        pageSize: -1,
+                        sort: [],
+                        desc: [],
+                        time: this.dateTime
+                    });
+            } else {
+                this.getClinicDoctors({
+                    clinicID: this.clinicID,
+                    pageNumber: 1,
+                    pageSize: -1,
+                    sort: [],
+                    desc: []
+                });
+            }
         }
     }
 </script>

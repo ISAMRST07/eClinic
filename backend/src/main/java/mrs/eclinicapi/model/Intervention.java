@@ -33,7 +33,7 @@ public class Intervention {
     private String id;
 
     @Embedded
-    TimePeriod<LocalDateTime> dateTime;
+    TimePeriod<LocalDateTime> dateTime = new TimePeriod<>();
 
     @ManyToOne
     private ClinicRoom clinicRoom;
@@ -47,13 +47,23 @@ public class Intervention {
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
-    @OneToOne
+    @ManyToOne
     private InterventionType interventionType;
 
     @OneToOne
     private Visit visit;
 
     private double price;
+
+    public Intervention(AppointmentRequest ar, ClinicRoom cr) {
+        this.setPatient(ar.getPatient());
+        this.setDoctor(ar.getDoctor());
+        this.setClinic(ar.getClinic());
+        this.setClinicRoom(cr);
+        this.setInterventionType(ar.getInterventionType());
+        this.dateTime.setStart(ar.getDateTime());
+        this.dateTime.setEnd(ar.getDateTime().plusMinutes(30));
+    }
 
 	@Override
 	public String toString() {
