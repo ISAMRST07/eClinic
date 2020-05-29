@@ -128,10 +128,8 @@ export default {
 	created() {
 		console.log(this.user);
 		if (this.user.lastPasswordResetDate == null && this.user.type != 'clinicCentarAdministrator') {
-			console.log("lastPasswordResetDate = null");
 			this.dialog = true;
 		} else {
-			console.log("lastPasswordResetDate != null = " + this.user.lastPasswordResetDate);
 			this.dialog = false;
 		}
 	}
