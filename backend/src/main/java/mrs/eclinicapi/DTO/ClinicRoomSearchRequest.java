@@ -19,4 +19,5 @@ public class ClinicRoomSearchRequest {
    private LocalDateTime dateTime;
    private String roomName;
    private String roomID;
+   private int duration;
 }

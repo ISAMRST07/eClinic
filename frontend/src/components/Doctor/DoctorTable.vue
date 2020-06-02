@@ -93,7 +93,6 @@
         name: "DoctorTable",
         components: {ScheduleDialog, DialogAvailable, DoctorSearch, DeleteDialog, ModifyDoctorDialog},
         data: () => ({
-        	search: "",
             loading: false,
             dialog: false,
             dialogAvailable: false,

@@ -6,9 +6,10 @@
             :items="doctors"
             label="Doctor*"
             persistent-hint
-            item-text="user.name"
-            item-value="user.name"
+            item-text="name"
             :rules="rules"
+            :disabled="disabled"
+            :loading="loading"
             return-object
             prepend-icon="mdi-hospital-building"
     >
@@ -32,6 +33,7 @@
         name: "DoctorSelection",
         data: () => ({
             rules: [v => !!v || 'Doctor required'],
+            loading: false
         }),
         props: {
             value: null,
@@ -39,38 +41,137 @@
                 type: Boolean,
                 default: false,
             },
-            clinicID: {
+            clinicId: {
                 type: String
             },
-            dateTime: null
+            duration: {
+                type: Number,
+                default: 30
+            },
+            dateTime: null,
+            typeId: null
         },
         computed: {
         	...mapState('doctor/doctor', ['doctors']),
         	...mapState('auth', ['user']),
         },
-        methods: {
-            ...mapActions('doctor/doctor', ['getClinicDoctors', 'getDoctorsForTime']),
-        },
-        mounted() {
-            if (this.dateTime) {
-                this.getDoctorsForTime(
-                    {
-                        clinicID: this.clinicID,
+        watch: {
+            doctors() {
+                this.loading = false;
+            },
+            dateTime(val) {
+                this.loading = true;
+                if (val && this.duration && this.typeId) {
+                    let offsetDate = new Date(val);
+                    offsetDate.setMinutes(val.getMinutes() - val.getTimezoneOffset());
+                    this.getDoctorsForTimeType(
+                        {
+                            clinicID: this.clinicId,
+                            typeID: this.typeId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            duration: this.duration,
+                            time: offsetDate
+                        });
+                } else {
+
+                    this.getClinicDoctors({
+                        clinicID: this.clinicId,
                         pageNumber: 1,
                         pageSize: -1,
                         sort: [],
-                        desc: [],
-                        time: this.dateTime
+                        desc: []
                     });
-            } else {
-                this.getClinicDoctors({
-                    clinicID: this.clinicID,
-                    pageNumber: 1,
-                    pageSize: -1,
-                    sort: [],
-                    desc: []
-                });
+                }
+            },
+            typeId(val) {
+                this.loading = true;
+                if (this.dateTime && this.duration && val) {
+                    let offsetDate = new Date(this.dateTime);
+                    offsetDate.setMinutes(this.dateTime.getMinutes() - this.dateTime.getTimezoneOffset());
+                    this.getDoctorsForTimeType(
+                        {
+                            clinicID: this.clinicId,
+                            typeID: val,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            duration: this.duration,
+                            time: offsetDate
+                        });
+                } else {
+                    this.getClinicDoctors({
+                        clinicID: this.clinicId,
+                        pageNumber: 1,
+                        pageSize: -1,
+                        sort: [],
+                        desc: []
+                    });
+                }
+            },
+            duration(val) {
+                this.loading = true;
+                if (this.dateTime && val && this.typeId) {
+                    let offsetDate = new Date(this.dateTime);
+                    offsetDate.setMinutes(this.dateTime.getMinutes() - this.dateTime.getTimezoneOffset());
+                    this.getDoctorsForTimeType(
+                        {
+                            clinicID: this.clinicId,
+                            typeID: this.typeId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            duration: val,
+                            time: offsetDate
+                        });
+                } else {
+                    this.getClinicDoctors({
+                        clinicID: this.clinicId,
+                        pageNumber: 1,
+                        pageSize: -1,
+                        sort: [],
+                        desc: []
+                    });
+                }
             }
+
+
+        },
+        methods: {
+            ...mapActions('doctor/doctor', ['getClinicDoctors', 'getDoctorsForTimeType']),
+            populate() {
+                if (this.dateTime && this.typeId) {
+                    let offsetDate = new Date(this.dateTime);
+                    offsetDate.setMinutes(this.dateTime.getMinutes() - this.dateTime.getTimezoneOffset());
+                    this.getDoctorsForTimeType(
+                        {
+                            clinicID: this.clinicId,
+                            typeID: this.typeId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            duration: this.duration,
+                            time: offsetDate
+                        });
+                } else {
+                    this.getClinicDoctors({
+                        clinicID: this.clinicId,
+                        pageNumber: 1,
+                        pageSize: -1,
+                        sort: [],
+                        desc: []
+                    });
+                }
+            }
+        },
+        mounted() {
+            this.loading = true;
+            this.populate();
         }
     }
 </script>

@@ -186,16 +186,16 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="3" order-md="1">
-                    <v-card link hover @click="$router.push('/interventions')">
+                    <v-card link hover @click="$router.push(`/oc-appointments/clinic=${$route.params.id}`)">
                         <div class="d-flex flex-no-wrap justify-space-between align-center">
-                            <v-avatar v-if="adminClinic && adminClinic.interventions" tile size="125">
-                                <span v-if="adminClinic.interventions.length < 100"
+                            <v-avatar v-if="adminClinic && adminClinic.oneClicks" tile size="125">
+                                <span v-if="adminClinic.oneClicks.length < 100"
                                              class="display-4 grey--text text--darken-2">
-                                    {{ adminClinic.interventions.length }}
+                                    {{ adminClinic.oneClicks.length }}
                                 </span>
-                                <span v-else-if="adminClinic.interventions.length < 1000"
+                                <span v-else-if="adminClinic.oneClicks.length < 1000"
                                       class="display-4 grey--text text--darken-2">
-                                    {{ adminClinic.interventions.length }}
+                                    {{ adminClinic.oneClicks.length }}
                                 </span>
                                 <v-icon v-else x-large>
                                     mdi-infinity
@@ -207,7 +207,7 @@
                                 </v-icon>
                                 <v-card-title
                                         class="headline text-center pa-1"
-                                >Schedule</v-card-title>
+                                >1Clicks</v-card-title>
                             </div>
                         </div>
                     </v-card>
@@ -226,22 +226,17 @@
     import {mapActions, mapState} from "vuex";
     import MapView from "../Clinics/MapView";
     import ModifyClinicDialog from "../Clinics/ModifyClinicDialog";
+    import {emptyClinic} from "../../utils/skeletons";
 
     export default {
         name: "ClinicDetailsComponent",
         components: {ModifyClinicDialog, MapView},
         data: () => ({
             modifyDialog: false,
+            adminClinic: emptyClinic
         }),
         computed: {
-            adminClinic: {
-                get() {
-                    return this.$store.state.clinics.adminClinic.adminClinic;
-                },
-                set(val) {
-                    this.$store.commit('clinics/adminClinic/updateClinic', val);
-                }
-            },
+            ...mapState('auth', ['token']),
             editClinic: {
                 get() {
                     return this.$store.state.clinics.addClinic.clinic;
@@ -251,10 +246,8 @@
                 }
             },
         },
-        watch: {
-        },
+
         methods: {
-            ...mapActions('clinics/adminClinic', ['getAdminClinicApi']),
             modified(clinic) {
                 this.adminClinic = clinic;
             },
@@ -263,8 +256,10 @@
                 this.editClinic = this.adminClinic;
             }
         },
-        created() {
-            this.getAdminClinicApi(this.$route.params.id);
+        async mounted() {
+            let {data: clinic} = await this.$axios.get('/api/clinic/' + this.$route.params.id,
+                {headers: {"Authorization": 'Bearer ' + this.token}});
+            this.adminClinic = clinic;
         }
     };
 

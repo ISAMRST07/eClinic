@@ -47,19 +47,6 @@ export default {
                 defaultError(err);
             }
         },
-        async addInterventionApi({rootState, commit}, intervention) {
-            try {
-            	console.log("addInterventionApi");
-            	console.log(intervention);
-                let {data: added} = await Vue.prototype.$axios.post('/api/intervention', intervention,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
-            	console.log("addInterventionApi added");
-            	console.log(added)
-                commit('addIntervention', added);
-            } catch (err) {
-                defaultError(err);
-            }
-        },
         async deleteInterventionApi({rootState, commit}, intervention) {
             try {
             	console.log("delete intervention = ");
@@ -85,6 +72,17 @@ export default {
             try {
                 let {requestID, clinicRoomID} = payload;
                 let {data: added} = await Vue.prototype.$axios.post(`/api/intervention/approve/${requestID}/${clinicRoomID}`,
+                    null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('addIntervention', added);
+            } catch (e) {
+                defaultError(e);
+            }
+        },
+        async scheduleOneClickIntervention({rootState, commit}, oneClick) {
+            try {
+                let {id} = oneClick;
+                let userID = rootState.auth.user.id;
+                let {data: added} = await Vue.prototype.$axios.post(`/api/intervention/one-click/${id}/${userID}`,
                     null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('addIntervention', added);
             } catch (e) {

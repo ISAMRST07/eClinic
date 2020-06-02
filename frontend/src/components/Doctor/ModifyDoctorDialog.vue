@@ -17,6 +17,7 @@
                             <v-col cols="12">
                                 <intervention-type-selection
                                         v-model="modifiableDoctor.specialties"
+                                        :clinic-id="$route.params.clinicID"
                                         multiple
                                 ></intervention-type-selection>
                             </v-col>

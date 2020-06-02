@@ -135,9 +135,7 @@
             }
         },
         methods: {
-            ...mapMutations('clinics/addClinic', ['updateClinic']),
-            ...mapActions('clinics/addClinic', ['saveClinic']),
-            ...mapActions('clinics/addClinic', ['modifyClinicApi']),
+            ...mapMutations('clinics/addClinic', ['updateClinic', 'saveClinic','modifyClinicApi']),
 
             setAddress(event) {
                 if (!event) this.address = null;

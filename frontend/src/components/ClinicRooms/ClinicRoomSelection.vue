@@ -5,9 +5,11 @@
             hint="Choose clinic room"
             :items="clinicRooms"
             label="Clinic room*"
+            :disabled="disabled"
             persistent-hint
             item-text="name"
             item-value="name"
+            :loading="loading"
             :rules="rules"
             return-object
             prepend-icon="mdi-hospital-building"
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-   
+
     import {mapActions, mapState} from "vuex";
     import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
 
@@ -32,35 +34,112 @@
         name: "ClinicRoomSelection",
         data: () => ({
             rules: [v => !!v || 'Clinic room is required'],
+            loading: false
         }),
         props: {
             value: null,
             disabled: {
                 type: Boolean,
-                value: false,
+                default: false,
             },
+            clinicId: {
+                type: String,
+                default: '',
+            },
+            duration: {
+                type: Number,
+                default: 30
+            },
+            dateTime: null,
         },
         computed: {
             ...mapState('clinicRooms/clinicRooms', ['clinicRooms']),
             ...mapState('auth', ['user']),
         },
-        methods: {
-            ...mapActions('clinicRooms/clinicRooms', ['getClinicRooms']),
-            ...mapActions('clinicRooms/clinicRooms', ['getOneClinicRooms']),
-        },
-        created() {
-           console.log("clinicroomselection created");
-           switch (this.user.type) {
-                case ClinicalCenterAdmin.code:
-                	console.log("ClinicalCenterAdmin type");
-                    this.getClinicRooms();
-                    break;
-                case ClinicalAdmin.code:
-                	console.log("ClinicalAdmin type");
-                    this.getOneClinicRooms(this.user);
-                    break;
-                default:
+        watch: {
+            clinicRooms() {
+                this.loading = false;
+            },
+            dateTime(val) {
+                if(val) {
+                    this.loading = true;
+                    let offsetDate = new Date(val);
+                    offsetDate.setMinutes(val.getMinutes() - val.getTimezoneOffset());
+                    this.searchApi(
+                        {
+                            clinicID: this.clinicId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            request: {
+                                dateTime: offsetDate,
+                                roomName: '',
+                                roomID: '',
+                                duration: this.duration
+                            }
+                        }
+                    );
+                }
+            },
+            duration(val) {
+                if(val) {
+                    this.loading = true;
+                    let offsetDate = new Date(this.dateTime);
+                    offsetDate.setMinutes(this.dateTime.getMinutes() - this.dateTime.getTimezoneOffset());
+                    this.searchApi(
+                        {
+                            clinicID: this.clinicId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            request: {
+                                dateTime: offsetDate,
+                                roomName: '',
+                                roomID: '',
+                                duration: val
+                            }
+                        }
+                    );
+                }
             }
+        },
+        methods: {
+            ...mapActions('clinicRooms/clinicRooms', ['getClinicRooms', 'searchApi']),
+            populate() {
+                this.loading = true;
+                if (!this.dateTime) {
+                    this.getClinicRooms({
+                        clinicID: this.clinicId,
+                        pageNumber: 1,
+                        pageSize: -1,
+                        sort: [],
+                        desc: []
+                    });
+                } else {
+                    let offsetDate = new Date(this.dateTime);
+                    offsetDate.setMinutes(this.dateTime.getMinutes() - this.dateTime.getTimezoneOffset());
+                    this.searchApi(
+                        {
+                            clinicID: this.$route.params.clinicId,
+                            pageNumber: 1,
+                            pageSize: -1,
+                            sort: [],
+                            desc: [],
+                            request: {
+                                dateTime: offsetDate,
+                                roomName: '',
+                                roomID: '',
+                                duration: this.duration
+                            }
+                        }
+                    );
+                }
+            }
+        },
+        mounted() {
+            this.populate();
         }
     }
 </script>

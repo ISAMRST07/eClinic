@@ -16,7 +16,8 @@ import {
     clinicCenterAdministratorsPath,
     workingSchedulePath,
     appointmentRequestClinicPath,
-    appointmentRequestPatientPath
+    appointmentRequestPatientPath,
+    oneClickAppointmentPath
 } from "./paths";
 import {functionalThemeClasses} from "vuetify/lib/mixins/themeable";
 
@@ -25,6 +26,14 @@ function doctorsItem(clinicID) {
         icon: 'mdi-account-tie',
         label: 'Doctors',
         path: doctorsPath.replace(":clinicID", clinicID)
+    }
+}
+
+function oneClickAppointmentItem(clinicID) {
+    return {
+        icon: 'mdi-calendar-export',
+        label: 'One click appointments',
+        path: oneClickAppointmentPath.replace(":clinicID", clinicID)
     }
 }
 
@@ -168,7 +177,8 @@ class ClinicalAdmin {
             doctorsItem(id),
             nursesItem,
             vacationRequestItem,
-            appointmentRequestClinicItem(id)
+            appointmentRequestClinicItem(id),
+            oneClickAppointmentItem(id)
         ]
     }
 }
@@ -182,7 +192,8 @@ class Patient {
             homeItem,
             clinicsItem,
             interventionTypeItem,
-            appointmentRequestPatientItem(patientID)
+            appointmentRequestPatientItem(patientID),
+            oneClickAppointmentItem()
         ]
     }
 }

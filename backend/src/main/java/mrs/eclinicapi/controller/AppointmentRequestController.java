@@ -141,7 +141,9 @@ public class AppointmentRequestController {
                 .stream().map(ca -> ca.getUser().getEmail()).toArray(String[]::new);
 
         String content = "There is a new appointment request that should be reviewed. Submitted by "
-                + appointmentRequest.getPatient().getUser().getEmail();
+                + appointmentRequest.getPatient().getUser().getEmail()
+                + "\r\n\r\nhttp://localhost:8080/choose-clinic-room/request=:" +
+                saved.getId() + "/clinic=" + saved.getClinic().getId();
 
         eventPublisher.publishEvent(new EmailEvent(appointmentRequest,
                 "Review appointment request", content, sendTo));

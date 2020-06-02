@@ -52,7 +52,10 @@
                                 </v-menu>
                             </v-col>
                             <v-col cols="12" sm="4" md="3">
-                                <intervention-type-selection v-model="type"></intervention-type-selection>
+                                <intervention-type-selection
+                                        v-model="type"
+                                        :clinic-id="$route.params.clinicID"
+                                ></intervention-type-selection>
                             </v-col>
 
                             <v-col cols="6" sm="2" lg="1" class="text-center">

@@ -65,6 +65,15 @@ public class Intervention {
         this.dateTime.setEnd(ar.getDateTime().plusMinutes(30));
     }
 
+    public Intervention(OneClickAppointment ap, Patient p) {
+        this.setPatient(p);
+        this.setDoctor(ap.getDoctor());
+        this.setDateTime(ap.getDateTime());
+        this.setInterventionType(ap.getInterventionType());
+        this.setClinicRoom(ap.getClinicRoom());
+        this.setClinic(ap.getClinic());
+    }
+
 	@Override
 	public String toString() {
 		return "Intervention [id=" + id + ", dateTime=" + dateTime + ", interventionType=" + interventionType

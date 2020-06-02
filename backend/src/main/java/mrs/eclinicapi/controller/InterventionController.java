@@ -1,6 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.DTO.AppointmentRequestDTO;
+import mrs.eclinicapi.DTO.EmailEvent;
 import mrs.eclinicapi.DTO.InterventionDTO;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.service.*;
@@ -8,6 +9,7 @@ import mrs.eclinicapi.service.*;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +29,19 @@ import javax.persistence.criteria.CriteriaBuilder;
 public class InterventionController {
 
     @Autowired
+    ApplicationEventPublisher eventPublisher;
+
+    @Autowired
     private InterventionService service;
 
     @Autowired
     private AppointmentRequestService requestService;
+
+    @Autowired
+    private OneClickAppointmentService oneClickAppointmentService;
+
+    @Autowired
+    private PatientService patientService;
 
     @Autowired
     ClinicRoomService clinicRoomService;
@@ -43,17 +54,6 @@ public class InterventionController {
 
     @Autowired
     DoctorService doctorService;
-
-    @Autowired
-    PatientService patientService;
-
-//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Intervention> addIntervention(@RequestBody InterventionDTO iDTO) {
-//    	System.out.println("addIntervention dto = " + iDTO);
-//
-//    	Intervention added = service.addNewIntervention(iDTO);
-//        return new ResponseEntity<>(added, HttpStatus.OK);
-//    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Intervention>> getAllIntervention() {
@@ -70,6 +70,32 @@ public class InterventionController {
         return new ResponseEntity<>(it, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/one-click/{oneClickID}/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<InterventionDTO> scheduleOneClick(@PathVariable String oneClickID,
+                                                            @PathVariable String userID) {
+        OneClickAppointment appointment = oneClickAppointmentService.findByID(oneClickID);
+
+        if (appointment == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        oneClickAppointmentService.delete(appointment.getId());
+
+        Patient pat = patientService.getByUserId(userID);
+        if(pat == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Intervention toAdd = new Intervention(appointment, pat);
+        Intervention added = service.add(toAdd);
+
+        String content = "An intervention for the date " + added.getDateTime().getStart() + " has been added." +
+                "\r\nYou have an option to refuse coming, via this link: " +
+                "\r\nnekilinkcebit.";
+        String[] sendToPatient = {added.getPatient().getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(added.getPatient().getUser(), "Appointment scheduled", content, sendToPatient));
+
+        content = "An intervention for the date " + added.getDateTime().getStart() + " has been added.";
+
+        String[] sendToDoctor = {added.getPatient().getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(added.getDoctor().getUser(), "Appointment scheduled", content, sendToDoctor));
+        return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
+    }
+
     @PostMapping(path = "/approve/{requestID}/{roomID}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionDTO> approve(@PathVariable String requestID,
                                                 @PathVariable String roomID) {
@@ -84,22 +110,20 @@ public class InterventionController {
         }
         Intervention toAdd = new Intervention(request, room);
         Intervention added = service.add(toAdd);
+        String content = "An intervention for the date " + added.getDateTime().getStart() + " has been added." +
+                "\r\nYou have an option to refuse coming, via this link: " +
+                "\r\nnekilinkcebit.";
+        String[] sendToPatient = {added.getPatient().getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(added.getPatient().getUser(), "Appointment scheduled", content, sendToPatient));
+
+        content = "An intervention for the date " + added.getDateTime().getStart() + " has been added.";
+
+        String[] sendToDoctor = {added.getPatient().getUser().getEmail()};
+        eventPublisher.publishEvent(new EmailEvent(added.getDoctor().getUser(), "Appointment scheduled", content, sendToDoctor));
+
+
         return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
-
-//    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Intervention> modifyIntervention(@RequestBody InterventionDTO iDTO) {
-//    	System.out.println("modifyIntervention iDTO = " + iDTO);
-//
-//
-//
-//    	Intervention modified = service.modify(iDTO);
-//        if (modified == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    	System.out.println("modifyIntervention modified = " + modified);
-//        return new ResponseEntity<>(modified, HttpStatus.OK);
-//    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteIntervention(@PathVariable("id") String id) {

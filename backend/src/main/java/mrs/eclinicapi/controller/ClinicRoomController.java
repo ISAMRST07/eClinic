@@ -88,13 +88,13 @@ public class ClinicRoomController {
         if(roomName == null) roomName = "";
         String roomID = searchRequest.getRoomID();
         if(roomID == null) roomID = "";
-
+        int duration = searchRequest.getDuration();
         PagedResponse response;
         Page<ClinicRoom> clinicPage;
         if(sort.equals("undefined"))
-            clinicPage = service.search(clinicID, roomName, roomID, dateTime, pageNumber, pageSize);
+            clinicPage = service.search(clinicID, roomName, roomID, dateTime, duration, pageNumber, pageSize);
         else {
-            clinicPage = service.search(clinicID, roomName, roomID, dateTime, pageNumber, pageSize, sort, desc.equals("true"));
+            clinicPage = service.search(clinicID, roomName, roomID, dateTime, duration, pageNumber, pageSize, sort, desc.equals("true"));
         }
         response = new PagedResponse(clinicPage.getContent()
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), clinicPage.getTotalElements());

@@ -170,14 +170,18 @@ public class DoctorService {
     }
 
     public Page<Doctor> searchByTime(String clinicID,
+                                     String typeID,
                                      LocalDateTime dateTime,
+                                     int duration,
                                      int pageNumber,
                                      int pageSize) {
-        return this.searchByTime(clinicID, dateTime, pageNumber, pageSize, null, false);
+        return this.searchByTime(clinicID, typeID, dateTime, duration, pageNumber, pageSize, null, false);
     }
 
     public Page<Doctor> searchByTime(String clinicID,
+                               String typeID,
                                LocalDateTime dateTime,
+                               int duration,
                                int pageNumber,
                                int pageSize,
                                String sort,
@@ -192,12 +196,12 @@ public class DoctorService {
             p = PageRequest.of(--pageNumber, fakePageSize, s);
         } else p = PageRequest.of(--pageNumber, fakePageSize);
 
-        return this.someOtherNewFunction( clinicID, dateTime, p, pageSize);
+        return this.someOtherNewFunction(clinicID, typeID, dateTime, duration, p, pageSize);
     }
 
-    private Page<Doctor> someOtherNewFunction(String clinicID, LocalDateTime dateTime, Pageable p, int pageSize) {
+    private Page<Doctor> someOtherNewFunction(String clinicID, String typeID, LocalDateTime dateTime, int duration, Pageable p, int pageSize) {
         List<Doctor> doctors = findByClinicID(clinicID);
-        Stream<Doctor> filtered = this.filterDoctorsByTime(doctors, dateTime);
+        Stream<Doctor> filtered = this.filterDoctorsByTime(doctors, typeID, dateTime, duration);
         if(p.getSort().isSorted()) {
             Sort.Order o = p.getSort().iterator().next();
             String property = o.getProperty();
@@ -214,14 +218,19 @@ public class DoctorService {
         }
     }
 
-    private Stream<Doctor> filterDoctorsByTime(List<Doctor> doctors, LocalDateTime dateTime) {
-        LocalDateTime endTime = dateTime.plusMinutes(30);
+    private Stream<Doctor> filterDoctorsByTime(List<Doctor> doctors, String typeID, LocalDateTime dateTime, int duration) {
+        LocalDateTime endTime = dateTime.plusMinutes(duration);
         Weekday weekday = Weekday.values()[dateTime.getDayOfWeek().getValue() - 1];
         return doctors.stream()
+                .filter(doctor -> doctor.getSpecialties().stream().anyMatch(type -> type.getId().equals(typeID)))
                 .filter(doctor -> doctor.getWorkingCalendar().getVacations()
-                        .stream().noneMatch(v -> dateTime.isAfter(v.getStart().atStartOfDay()) &&
-                                dateTime.isBefore(v.getEnd().atStartOfDay()))
+                        .stream().noneMatch(v -> dateTime.isAfter(v.getStart().atStartOfDay())
+                                && dateTime.isBefore(v.getEnd().atStartOfDay()))
                         && doctor.getWorkingCalendar().getWorkingSchedule().containsKey(weekday)
+                        && dateTime.toLocalTime().isAfter(doctor.getWorkingCalendar().getWorkingSchedule().get(weekday).getStart())
+                        && dateTime.toLocalTime().isBefore(doctor.getWorkingCalendar().getWorkingSchedule().get(weekday).getEnd())
+                        && endTime.toLocalTime().isAfter(doctor.getWorkingCalendar().getWorkingSchedule().get(weekday).getStart())
+                        && endTime.toLocalTime().isBefore(doctor.getWorkingCalendar().getWorkingSchedule().get(weekday).getEnd())
                         && doctor.getAppointmentRequests().stream().noneMatch(request -> {
                             LocalDateTime currentStartTime = request.getDateTime();
                             LocalDateTime currentEndTime = currentStartTime.plusMinutes(30);

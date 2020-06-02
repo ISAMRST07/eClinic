@@ -14,8 +14,9 @@
             </v-card-text>
             <doctor-selection
                     v-model="doctor"
-                    :clinic-i-d="clinicID"
+                    :clinic-id="clinicID"
                     :date-time="new Date(date)"
+                    :type-id="request.interventionTypeID"
             ></doctor-selection>
             <v-card-actions>
                 <v-spacer></v-spacer>

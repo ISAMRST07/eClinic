@@ -158,9 +158,11 @@ public class DoctorController {
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @PostMapping(path = "/clinic/time/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
+    @PostMapping(path = "/clinic/time/{clinicID}/{typeID}/{duration}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> searchByTime(@RequestBody LocalDateTime dateTime,
                                                        @PathVariable String clinicID,
+                                                       @PathVariable String typeID,
+                                                       @PathVariable int duration,
                                                        @PathVariable int pageNumber,
                                                        @PathVariable int pageSize,
                                                        @PathVariable String sort,
@@ -168,10 +170,10 @@ public class DoctorController {
         PagedResponse response;
         Page<Doctor> doctorPage;
         if(sort.equals("undefined"))
-            doctorPage = service.searchByTime(clinicID, dateTime, pageNumber, pageSize);
+            doctorPage = service.searchByTime(clinicID, typeID, dateTime, duration, pageNumber, pageSize);
         else {
             sort = "user." + sort;
-            doctorPage = service.searchByTime(clinicID, dateTime, pageNumber, pageSize, sort, desc.equals("true"));
+            doctorPage = service.searchByTime(clinicID, typeID, dateTime, duration, pageNumber, pageSize, sort, desc.equals("true"));
         }
         response = new PagedResponse(doctorPage.getContent()
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());

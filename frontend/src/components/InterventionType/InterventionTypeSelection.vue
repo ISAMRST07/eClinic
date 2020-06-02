@@ -10,6 +10,7 @@
             item-value="name"
             :rules="rules"
             return-object
+            :loading="loading"
             prepend-icon="mdi-hospital-building"
             :multiple="multiple"
             :chips="multiple"
@@ -35,6 +36,7 @@
         name: "InterventionTypeSelection",
         data: () => ({
             rules: [v => !!v || 'Intervention type is required'],
+            loading: false,
         }),
         props: {
             value: null,
@@ -45,27 +47,30 @@
             multiple: {
                 type: Boolean,
                 value: false
+            },
+            clinicId: {
+                type: String,
+                value: ''
             }
         },
         computed: {
             ...mapState('interventionType/interventionType', ['interventionType']),
-            ...mapState('auth', ['user']),
-            ...mapState('auth', ['clinic']),
+        },
+        watch: {
+            interventionType(val) {
+                this.loading = false;
+            }
         },
         methods: {
             ...mapActions('interventionType/interventionType', ['getAllInterventionTypeApi']),
             ...mapActions('interventionType/interventionType', ['getClinicInterventionTypeApi']),
         },
-        created() {
-           switch (this.user.type) {
-                case ClinicalAdmin.code:
-                   	console.log("user = ClinicalAdmin id = " + this.clinic.id);
-                   	this.getClinicInterventionTypeApi(this.clinic.id);
-                    break;
-                default:
-                    console.log("user = ClinicalCenterAdmin")
-                    this.getAllInterventionTypeApi();
-                    break;
+        mounted() {
+            this.loading = true;
+            if (this.clinicId) {
+                this.getClinicInterventionTypeApi(this.clinicId);
+            } else {
+                this.getAllInterventionTypeApi();
             }
         }
     }

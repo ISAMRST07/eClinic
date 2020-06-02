@@ -74,6 +74,8 @@ export default {
             try {
                 if(payload.sort?.length === 0) payload.sort = undefined;
                 if(payload.desc?.length === 0) payload.desc = undefined;
+                if(!payload.request.duration) payload.request.duration = 30;
+
                 let {data: pagedResponse} = await Vue.prototype.$axios.post(
                     `/api/clinicroom/search/${payload.clinicID}/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     payload.request,

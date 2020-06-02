@@ -69,14 +69,15 @@ public class ClinicRoomService {
         return repository.save(clinicRoom);
     }
 
-    public Page<ClinicRoom> search(String clinicID, String clinicRoomName, String clinicRoomID, LocalDateTime dateTime, int pageNumber, int pageSize) {
-        return this.search(clinicID, clinicRoomName, clinicRoomID, dateTime, pageNumber, pageSize, null, false);
+    public Page<ClinicRoom> search(String clinicID, String clinicRoomName, String clinicRoomID, LocalDateTime dateTime, int duration, int pageNumber, int pageSize) {
+        return this.search(clinicID, clinicRoomName, clinicRoomID, dateTime, duration, pageNumber, pageSize, null, false);
     }
 
     public Page<ClinicRoom> search(String clinicID,
                                String clinicRoomName,
                                String clinicRoomID,
                                LocalDateTime dateTime,
+                               int duration,
                                int pageNumber,
                                int pageSize,
                                String sort,
@@ -93,17 +94,18 @@ public class ClinicRoomService {
 
 
 
-        return this.someOtherFunction(clinicID, clinicRoomName, clinicRoomID, dateTime, p, pageSize);
+        return this.someOtherFunction(clinicID, clinicRoomName, clinicRoomID, dateTime, duration, p, pageSize);
     }
 
     private Page<ClinicRoom> someOtherFunction(String clinicID,
                                                String clinicRoomName,
                                                String clinicRoomID,
                                                LocalDateTime dateTime,
+                                               int duration,
                                                Pageable p,
                                                int pageSize) {
         List<ClinicRoom> clinicRooms = findByClinic(clinicID);
-        Stream<ClinicRoom> filtered = this.filterClinicRooms(clinicRooms, clinicRoomName, clinicRoomID, dateTime);
+        Stream<ClinicRoom> filtered = this.filterClinicRooms(clinicRooms, clinicRoomName, clinicRoomID, dateTime, duration);
         if(p.getSort().isSorted()) {
             Sort.Order o = p.getSort().iterator().next();
             String property = o.getProperty();
@@ -120,8 +122,8 @@ public class ClinicRoomService {
         }
     }
 
-    private Stream<ClinicRoom> filterClinicRooms(List<ClinicRoom> clinicRooms, String roomName, String roomID, LocalDateTime dateTime) {
-        LocalDateTime interventionEnd = dateTime.plusMinutes(30);
+    private Stream<ClinicRoom> filterClinicRooms(List<ClinicRoom> clinicRooms, String roomName, String roomID, LocalDateTime dateTime, int duration) {
+        LocalDateTime interventionEnd = dateTime.plusMinutes(duration);
         return clinicRooms.stream()
                 .filter(room -> room.getName().toLowerCase().contains(roomName.toLowerCase()) &&
                         room.getId().toLowerCase().contains(roomID.toLowerCase()))

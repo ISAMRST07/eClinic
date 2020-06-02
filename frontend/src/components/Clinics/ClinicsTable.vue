@@ -17,7 +17,7 @@
                 <template v-slot:item.details="{ item }">
                     <v-icon
                             color="success"
-                            @click="toDoctorsPage(item)"
+                            @click="toDetailsPage(item)"
                     >mdi-information
                     </v-icon>
                 </template>
@@ -125,7 +125,7 @@
                 let regularHeaders = [
                     {text: 'Name', align: 'start', value: 'name'},
                     {text: 'Address', value: 'address'},
-                    {text: 'Doctors', value: 'details', sortable: false, align: 'center'},
+                    {text: 'Details', value: 'details', sortable: false, align: 'center'},
                 ];
                 let patientHeader = [
                     {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
@@ -185,8 +185,8 @@
                 this.deleteClinicApi(this.clinicToDelete);
                 this.deleteDialog(null);
             },
-            toDoctorsPage(clinic) {
-                this.$router.push(`/doctors/${clinic.id}`)
+            toDetailsPage(clinic) {
+                this.$router.push(`/clinic/${clinic.id}`)
             },
             updateDialog(clinic) {
                 this.editClinic = clinic;

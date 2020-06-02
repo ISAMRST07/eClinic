@@ -60,6 +60,10 @@ public class Clinic {
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AppointmentRequest> appointmentRequests = new HashSet<>();
+
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<OneClickAppointment> oneClicks = new HashSet<>();
+
     @ManyToMany
     private List<Patient> patients;
 

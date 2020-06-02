@@ -102,6 +102,7 @@
     import {DayOfTheWeek} from "../../utils/DayOfTheWeek";
     import ChangeDoctor from "./ChangeDoctor";
     import ClinicRoomAvailable from "./ClinicRoomAvailable";
+    import JSOG from "jsog";
 
     export default {
         name: "ClinicRoomsTable",
@@ -235,7 +236,7 @@
             async scheduleRoom() {
                 let correct = true;
                 if (new Date(this.selectedDateTime).getTime() !== new Date(this.appointmentRequest.dateTime).getTime()){
-                    correct = await this.checkDoctor();
+                    correct = await this.check();
                     if(correct) {
                         this.appointmentRequest.doctorID = this.selectedDoctorID;
                         this.appointmentRequest.dateTime = this.selectedDateTime;
@@ -289,7 +290,7 @@
                 this.loading = true;
                 this.populate();
             },
-            async checkDoctor() {
+            async check() {
                 let {data: doctor} = await this.$axios.get(`/api/doctor/${this.appointmentRequest.doctorID}`,
                     {headers: {"Authorization": 'Bearer ' + this.token}});
 
@@ -351,6 +352,21 @@
                     if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
                         this.doctorError.isError = true;
                         this.doctorError.errorMessages = 'The next appointment is too close to this one.';
+                        return false;
+                    }
+                }
+                for(let intervention of JSOG.decode(this.roomToSchedule.interventions)) {
+
+                    let startDateTime = new Date(intervention.dateTime.start);
+                    let endDateTime = new Date(intervention.dateTime.end);
+                    if(this.selectedDateTime >= startDateTime && this.selectedDateTime <= endDateTime){
+                        this.doctorError.isError = true;
+                        this.doctorError.errorMessages = 'Clinic room not available during this time';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.doctorError.isError = true;
+                        this.doctorError.errorMessages = 'Clinic room not available during this time';
                         return false;
                     }
                 }

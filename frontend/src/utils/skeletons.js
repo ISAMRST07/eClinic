@@ -83,14 +83,22 @@ export const emptyInterventionType = {
 };
 
 export const emptyIntervention = {
-	id : '',
-	dateTime: null,
+    id : '',
+    dateTime: null,
     selectedClinicRoom: null,
     selectedDoctor: null,
     selectedInterventionType: '',
-	clinic : '',
+    clinic : '',
     duration: 0,
     price: 0
+};
+
+export const emptyOneClick = {
+    dateTime: null,
+    clinicRoomID: null,
+    doctorID: null,
+    typeID: null,
+    clinicID : null,
 };
 
 export const emptyVacationRequest = {
