@@ -157,7 +157,6 @@ const ClinicalCenterAdmin = {
         clinicsItem,
         medicinesItem,
         clinicAdminsItem,
-        clinicRoomsItem,
         patientsItem,
         unregisteredUsersItem
     ],

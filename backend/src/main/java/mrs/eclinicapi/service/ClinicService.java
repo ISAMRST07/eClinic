@@ -1,7 +1,6 @@
 package mrs.eclinicapi.service;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.Weekday;
 import mrs.eclinicapi.repository.*;
