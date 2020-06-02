@@ -1,3 +1,12 @@
 language: java
 jdk: oraclejdk8
 dist: trusty
+addons:
+  sonarcloud:
+    organization: "isamrst07"
+    token:
+      secure: "EJeGxvfimJ0HKBngzGyOVBtUWKIO0tDXCRtRl9IotfuH2KplDydjsLn1qKBU+CjJknTiTrptImxY9WGsKh9TWG8rsUfWWSc33GGxuAeFN5SDPtcRT+tRdV9fgOre8fjjH2/z1RODckX6xSkOSXzCX0z6JZUDjC7m1cyiBainu9id1yMqCDUEfiwQvOz8KLqUUVWGA+CcOTHZWglq2Tf56RwKBkRjJvc3aGtJJ2j+dpb60tFQ5oxk5iTgoMBLKpgfKMcv4psihwKSE91QTpLuTVKxuytPjSkPNZ23B8ba6IaDEry5OmKP9RKh1HWnOJ1o3PFLT9gF71sfE42maymaRjrg/FaCqoHArihV2g8a2RDf7I8zSPlJh9LwY/DRZ67ypjwto3i6DR+bZME2JFcFE4T9PYeCE8WQrOcyneirD7YwVN+17IhsQuqocrrUgRs0AXxAg/WcnbbNq9Cb+keWZCPXIyz7nFOe98y0WgDc4qdsfUmWoAMMzIOlUitbFhzgcQvVAxT/CKbUX0tOWo1whV3pTPmkgvM/Bcj44VMpdAsOFhAAMvsk39X0Ie0mM8PPn1QnMXmSw5BF/lL2zW1sx8B0yrvrkFVLWzowrAgt8nTQZ9CcWOf84bDkKSX35WcSMWv22TNxT2T0fuwJl5vmia/KFW8SgyR1GRbHdt0ySYw="
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=ISAMRST07_MRSISA2020_T07
