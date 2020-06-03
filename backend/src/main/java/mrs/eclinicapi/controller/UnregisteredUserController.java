@@ -1,5 +1,6 @@
 package mrs.eclinicapi.controller;
 
+import mrs.eclinicapi.EClinicApiApplication;
 import mrs.eclinicapi.dto.EmailEvent;
 import mrs.eclinicapi.model.UnregisteredUser;
 import mrs.eclinicapi.service.UnregisteredUserService;
@@ -43,7 +44,12 @@ public class UnregisteredUserController {
             service.deleteToken(unregisteredUser);
         }
         service.createVerificationToken(unregisteredUser, token);
-        String confirmationUrl = "http://localhost:8080/confirmRegistration/" + token;
+        String url = EClinicApiApplication.appUrl;
+
+        if(url.contains("local")) {
+            url += ":" + request.getServerPort();
+        }
+        String confirmationUrl = url + "/confirmRegistration/" + token;
         String content = unregisteredUser.getUser().getName() + ", verify your account for eClinic" +
                 "\r\n" + confirmationUrl +
                 "\r\n\r\nThis link will be active for only 24 hours.";

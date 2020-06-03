@@ -2,6 +2,7 @@ package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mrs.eclinicapi.EClinicApiApplication;
 import mrs.eclinicapi.dto.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.InterventionType;
@@ -68,11 +69,7 @@ public class ClinicController {
     public ResponseEntity<PagedResponse> getPagedClinics(@PathVariable int pageNumber,
                                                          @PathVariable int pageSize,
                                                          @PathVariable String sort,
-                                                         @PathVariable String desc,
-                                                         HttpServletRequest request) {
-        log.info("URL123");
-        log.info(request.getLocalAddr());
-        log.info(request.getLocalName());
+                                                         @PathVariable String desc) {
         PagedResponse response;
         if (pageSize < 1) {
             List<Clinic> allClinics = service.findAll();

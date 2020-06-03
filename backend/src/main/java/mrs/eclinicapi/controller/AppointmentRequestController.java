@@ -3,6 +3,7 @@ package mrs.eclinicapi.controller;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import mrs.eclinicapi.EClinicApiApplication;
 import mrs.eclinicapi.dto.AppointmentRequestDTO;
 import mrs.eclinicapi.dto.EmailEvent;
 import mrs.eclinicapi.model.*;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -112,14 +114,15 @@ public class AppointmentRequestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AppointmentRequestDTO> save(@RequestBody AppointmentRequestDTO appointmentRequestDTO) {
+    public ResponseEntity<AppointmentRequestDTO> save(@RequestBody AppointmentRequestDTO appointmentRequestDTO,
+                                                      HttpServletRequest httpServletRequest) {
         AppointmentRequest appointmentRequest = this.convertToEntity(appointmentRequestDTO);
         if (appointmentRequest == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         LocalDate dateOfCreation = LocalDate.now();
         appointmentRequest.setDateOfCreation(dateOfCreation);
-        AppointmentRequest saved = null;
+        AppointmentRequest saved;
         for (int attempts = 0; ; attempts++) {
             try {
                 saved = service.save(appointmentRequest);
@@ -139,9 +142,14 @@ public class AppointmentRequestController {
         String[] sendTo = appointmentRequest.getClinic().getClinicAdministrator()
                 .stream().map(ca -> ca.getUser().getEmail()).toArray(String[]::new);
 
+        String url = EClinicApiApplication.appUrl;
+
+        if(url.contains("local")) {
+            url += ":" + httpServletRequest.getServerPort();
+        }
         String content = "There is a new appointment request that should be reviewed. Submitted by "
                 + appointmentRequest.getPatient().getUser().getEmail()
-                + "\r\n\r\nhttp://localhost:8080/choose-clinic-room/request=:" +
+                + "\r\n\r\n" + url + "/choose-clinic-room/request=:" +
                 saved.getId() + "/clinic=" + saved.getClinic().getId();
 
         eventPublisher.publishEvent(new EmailEvent(appointmentRequest,
@@ -156,8 +164,8 @@ public class AppointmentRequestController {
 
     @DeleteMapping(path = "{id}")
     public ResponseEntity<AppointmentRequest> deleteRequest(@PathVariable String id) {
-        AppointmentRequest request = null;
-        for (int i = 0; i < 3; ++i) {
+        AppointmentRequest request;
+        for (int i = 0; ; ++i) {
             try {
                 request = this.service.delete(id);
                 break;
