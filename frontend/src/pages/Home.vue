@@ -127,7 +127,7 @@ export default {
 	},
 	created() {
 		console.log(this.user);
-		if (this.user.lastPasswordResetDate == null && this.user.type != 'clinicCentarAdministrator') {
+		if (this.user.lastPasswordResetDate == null) {
 			this.dialog = true;
 		} else {
 			this.dialog = false;
