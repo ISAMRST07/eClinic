@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EClinicApiApplication {
 
-    public static String appUrl = "https://e-clinic-isamrs.herokuapp.com/"; // za deployment
+    public static String appUrl = "https://e-clinic-isamrs.herokuapp.com"; // za deployment
 //    public static String appUrl = "http://localhost"; // za development
 
 
