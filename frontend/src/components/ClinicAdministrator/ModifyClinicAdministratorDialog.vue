@@ -87,7 +87,7 @@
                                         <v-text-field
                                                 label="Phone number*"
                                                 required
-                                                :rules="[rules.required, rules.email]"
+                                                :rules="[rules.required]"
                                                 v-model="phoneNumber"
                                         ></v-text-field>
                                     </v-col>
