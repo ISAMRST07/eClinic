@@ -108,11 +108,6 @@ public class AuthenticationController {
         return new ResponseEntity<>(user.getName(), HttpStatus.OK);
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    String noHandlerFound(NoHandlerFoundException ex) {
-        return "classpath:index.html";
-    }
-
     @PutMapping(value = "/changepassword/{id}")
     @PreAuthorize("!hasRole('unregisteredUser')")
     public ResponseEntity<TokenResponse> changePassword(@RequestBody PasswordChanger passwordChanger, @PathVariable String id) {

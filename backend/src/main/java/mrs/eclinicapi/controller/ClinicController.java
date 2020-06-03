@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -65,8 +66,10 @@ public class ClinicController {
     public ResponseEntity<PagedResponse> getPagedClinics(@PathVariable int pageNumber,
                                                          @PathVariable int pageSize,
                                                          @PathVariable String sort,
-                                                         @PathVariable String desc) {
-
+                                                         @PathVariable String desc,
+                                                         HttpServletRequest request) {
+        System.out.println(request.getLocalAddr());
+        System.out.println(request.getLocalName());
         PagedResponse response;
         if (pageSize < 1) {
             List<Clinic> allClinics = service.findAll();
