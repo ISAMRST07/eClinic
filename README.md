@@ -1,19 +1,32 @@
 # eClinic
+[![Build Status](https://travis-ci.com/ISAMRST07/MRSISA2020_T07.svg?branch=databaseDev)](https://travis-ci.com/ISAMRST07/MRSISA2020_T07)
+## Technologies used
 
-## Pokretanje
+* MySQL
+* Spring boot
+* Vue.js
 
-Moguće je pokrenuti na dva načina.
+There are two possible ways of running the application
 
-### Bez Maven builda
+### Without the maven build
 
-**Napomena:** Obrisati sve iz *backend/src/main/resources* foldera.
+**Warning:** Delete every file from *backend/src/main/resources* folder.
 
-Prvo se pokrene backend, a onda frontend. 
+Start backend and the frontend.
 
-*Sve se pokreće na lokaciji frontenda, odnosno localhost:3000*.
+*The application should be available at the default frontend url: http://localhost:8080*.
 
-### Kad se builduje Maven
+### Installation using Maven
 
-Nakon buildovanja mavena, može se pokrenuti samo backend aplikacija.
+The recommended way of installaation is by running:
 
-***To be continued...***
+```
+mvn clean install
+mvn --projects backend spring-boot:run
+```
+
+## Team members
+
+* [Gegić Haris](https://github.com/gegic "gegic")
+* [Mujo Alen](https://github.com/alen1010 "alen1010")
+* [Manojlović Damjan](https://github.com/Damjan032 "Damjan032")
