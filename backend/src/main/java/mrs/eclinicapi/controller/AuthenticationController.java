@@ -1,8 +1,8 @@
 package mrs.eclinicapi.controller;
 
 
-import mrs.eclinicapi.DTO.AuthenticationRequest;
-import mrs.eclinicapi.DTO.TokenResponse;
+import mrs.eclinicapi.dto.AuthenticationRequest;
+import mrs.eclinicapi.dto.TokenResponse;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.security.TokenUtils;

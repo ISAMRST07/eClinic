@@ -47,22 +47,27 @@ public class UnregisteredUserService {
         VerificationToken token = new VerificationToken(tokenString, user);
         return tokenRepository.save(token);
     }
+
     @Transactional
     public boolean tokenExists(UnregisteredUser user) {
         return tokenRepository.existsVerificationTokenByUser(user);
     }
+
     @Transactional
     public void deleteToken(UnregisteredUser user) {
         tokenRepository.deleteVerificationTokenByUser(user);
     }
+
     @Transactional
     public VerificationToken findToken(String token) {
         return tokenRepository.findVerificationTokenByToken(token);
     }
+
     @Transactional
     public UnregisteredUser save(UnregisteredUser u) {
         return repository.save(u);
     }
+
     @Transactional
     public void deleteTokenById(String id) {
         tokenRepository.deleteById(id);

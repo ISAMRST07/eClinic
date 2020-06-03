@@ -1,10 +1,7 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.ClinicAdministratorDto;
-import mrs.eclinicapi.DTO.ClinicCenterAdministratorDTO;
-import mrs.eclinicapi.model.ClinicAdministrator;
+import mrs.eclinicapi.dto.ClinicCenterAdministratorDTO;
 import mrs.eclinicapi.model.ClinicalCentarAdministrator;
-import mrs.eclinicapi.service.ClinicAdministratorService;
 import mrs.eclinicapi.service.ClinicalCenterAdministratorService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

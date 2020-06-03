@@ -32,6 +32,8 @@ public class VerificationToken {
 
     @OneToOne(fetch = FetchType.LAZY)
     private UnregisteredUser user;
+    private LocalDateTime expiryDate;
+
 
     public VerificationToken(final String token, UnregisteredUser user) {
         super();
@@ -39,9 +41,6 @@ public class VerificationToken {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
-
-
-    private LocalDateTime expiryDate;
 
     private LocalDateTime calculateExpiryDate(int expiryTimeInDays) {
         return LocalDateTime.now().plusDays(expiryTimeInDays);

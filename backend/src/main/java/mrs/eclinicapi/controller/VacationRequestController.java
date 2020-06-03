@@ -1,38 +1,29 @@
 package mrs.eclinicapi.controller;
 
-import java.util.List;
-
+import mrs.eclinicapi.dto.OnDisapproveVacationCompleteEvent;
+import mrs.eclinicapi.model.VacationRequest;
+import mrs.eclinicapi.service.VacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import mrs.eclinicapi.DTO.OnDisapproveVacationCompleteEvent;
-import mrs.eclinicapi.model.Doctor;
-import mrs.eclinicapi.model.VacationRequest;
-import mrs.eclinicapi.service.VacationRequestService;
+import java.util.List;
 
 
 @RestController
 @RequestMapping(value = "api/vacationRequest")
 public class VacationRequestController {
 
-	@Autowired
-	ApplicationEventPublisher eventPublisher;
-	 
-	@Autowired
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
+    @Autowired
     private VacationRequestService service;
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VacationRequest>> getAllVacationRequest() {
         List<VacationRequest> vacationRequest = service.findAll();
         if (vacationRequest == null) {
@@ -43,8 +34,8 @@ public class VacationRequestController {
         }
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
-	
-	@RequestMapping(path = "/user/{id}")
+
+    @RequestMapping(path = "/user/{id}")
     public ResponseEntity<List<VacationRequest>> getVacationRequestForUser(@PathVariable("id") String id) {
         System.out.println("get vacationRequest for user " + id);
 
@@ -60,7 +51,7 @@ public class VacationRequestController {
         }
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
-	
+
     @GetMapping(path = "/approve/{id}")
     public ResponseEntity<VacationRequest> approveVacationRequest(@PathVariable("id") String id) {
         System.out.println("approveVacationRequest for user " + id);
@@ -75,18 +66,18 @@ public class VacationRequestController {
         vac.setStatus("approved");
         vac.setReason("approved");
         System.out.println(vac);
-        
+
         VacationRequest modified = service.addVacationRequest(vac);
-        
+
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
     @PostMapping(path = "/disapprove/{id}")
     public ResponseEntity<VacationRequest> disapproveVacationRequest(@PathVariable("id") String id,
-    																	@RequestBody String reason) {
-        reason = reason.substring(0, reason.length() - 1);	//brise = koje se na string dodaje iz nekog razloga
+                                                                     @RequestBody String reason) {
+        reason = reason.substring(0, reason.length() - 1);    //brise = koje se na string dodaje iz nekog razloga
         reason = reason.replace('+', ' ');
-    	System.out.println("disapproveVacationRequest for user " + id);
+        System.out.println("disapproveVacationRequest for user " + id);
         System.out.println("disapproveVacationRequest for reason " + reason);
         VacationRequest vac = service.findOne(id);
         if (vac == null) {
@@ -96,15 +87,15 @@ public class VacationRequestController {
         vac.setStatus("disapproved");
         vac.setReason(reason);
         System.out.println(vac);
-        
+
         VacationRequest modified = service.addVacationRequest(vac);
-        
+
         eventPublisher.publishEvent(new OnDisapproveVacationCompleteEvent(vac.getUser(), reason));
-        
+
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
-	
-	@RequestMapping(path = "/{id}")
+
+    @RequestMapping(path = "/{id}")
     public ResponseEntity<List<VacationRequest>> getVacationRequestForClinic(@PathVariable("id") String id) {
         System.out.println("get vacationRequest for clinic " + id);
 
@@ -120,28 +111,28 @@ public class VacationRequestController {
         }
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
-	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VacationRequest> addVacationRequest(@RequestBody VacationRequest vacationRequest) {
-		System.out.println("addVacationRequest = " + vacationRequest);
-		VacationRequest newVacation = service.addVacationRequest(vacationRequest);
+        System.out.println("addVacationRequest = " + vacationRequest);
+        VacationRequest newVacation = service.addVacationRequest(vacationRequest);
         if (newVacation == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
         System.out.println("newVacation = " + newVacation);
         return new ResponseEntity<>(newVacation, HttpStatus.OK);
     }
-	
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<VacationRequest> modifyVacationRequest(@RequestBody VacationRequest vacationRequest) {
-		VacationRequest modified = service.modifyVacationRequest(vacationRequest);
-	    if (modified == null) {
-	    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	    return new ResponseEntity<>(modified, HttpStatus.OK);
-	}
-	
-	@DeleteMapping(path = "/{id}")
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VacationRequest> modifyVacationRequest(@RequestBody VacationRequest vacationRequest) {
+        VacationRequest modified = service.modifyVacationRequest(vacationRequest);
+        if (modified == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(modified, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteVacationRequest(@PathVariable("id") String id) {
-		VacationRequest vacationRequest = service.findOne(id);
+        VacationRequest vacationRequest = service.findOne(id);
         if (vacationRequest == null) {
             return new ResponseEntity<>("vacationRequest not found", HttpStatus.NOT_FOUND);
         }

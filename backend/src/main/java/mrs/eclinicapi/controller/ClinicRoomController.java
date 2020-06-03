@@ -1,13 +1,10 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.DTO.ClinicRoomDTO;
-import mrs.eclinicapi.DTO.ClinicRoomSearchRequest;
-import mrs.eclinicapi.DTO.ClinicSearchRequest;
+import mrs.eclinicapi.dto.ClinicRoomDTO;
+import mrs.eclinicapi.dto.ClinicRoomSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRoom;
-import mrs.eclinicapi.model.Intervention;
-import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicRoomService;
 import mrs.eclinicapi.service.ClinicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,20 +44,20 @@ public class ClinicRoomController {
 
     @GetMapping(path = "/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> getPagedClinics(@PathVariable String clinicID,
-                                                                          @PathVariable int pageNumber,
-                                                                          @PathVariable int pageSize,
-                                                                          @PathVariable String sort,
-                                                                          @PathVariable String desc) {
+                                                         @PathVariable int pageNumber,
+                                                         @PathVariable int pageSize,
+                                                         @PathVariable String sort,
+                                                         @PathVariable String desc) {
 
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<ClinicRoom> allClinicRooms = service.findByClinic(clinicID);
             response = new PagedResponse(allClinicRooms.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     allClinicRooms.size());
 
         } else {
             Page<ClinicRoom> clinicRoomsPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 clinicRoomsPage = service.findPagedByClinic(clinicID, pageNumber, pageSize);
             else {
                 clinicRoomsPage = service.findPagedByClinic(clinicID, pageNumber, pageSize, sort, desc.equals("true"));
@@ -78,20 +72,20 @@ public class ClinicRoomController {
 
     @PostMapping(path = "/search/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> searchClinicRooms(@RequestBody ClinicRoomSearchRequest searchRequest,
-                                                                            @PathVariable String clinicID,
-                                                                            @PathVariable int pageNumber,
-                                                                            @PathVariable int pageSize,
-                                                                            @PathVariable String sort,
-                                                                            @PathVariable String desc) {
+                                                           @PathVariable String clinicID,
+                                                           @PathVariable int pageNumber,
+                                                           @PathVariable int pageSize,
+                                                           @PathVariable String sort,
+                                                           @PathVariable String desc) {
         LocalDateTime dateTime = searchRequest.getDateTime();
         String roomName = searchRequest.getRoomName();
-        if(roomName == null) roomName = "";
+        if (roomName == null) roomName = "";
         String roomID = searchRequest.getRoomID();
-        if(roomID == null) roomID = "";
+        if (roomID == null) roomID = "";
         int duration = searchRequest.getDuration();
         PagedResponse response;
         Page<ClinicRoom> clinicPage;
-        if(sort.equals("undefined"))
+        if (sort.equals("undefined"))
             clinicPage = service.search(clinicID, roomName, roomID, dateTime, duration, pageNumber, pageSize);
         else {
             clinicPage = service.search(clinicID, roomName, roomID, dateTime, duration, pageNumber, pageSize, sort, desc.equals("true"));

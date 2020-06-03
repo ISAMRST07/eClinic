@@ -1,6 +1,6 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.ClinicAdministratorDto;
+import mrs.eclinicapi.dto.ClinicAdministratorDto;
 import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.service.ClinicAdministratorService;
 import mrs.eclinicapi.service.UserService;

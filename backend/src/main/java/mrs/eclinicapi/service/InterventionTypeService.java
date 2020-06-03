@@ -2,13 +2,11 @@ package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.repository.InterventionTypeRepository;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Service

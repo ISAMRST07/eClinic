@@ -22,9 +22,13 @@ public class PatientService {
         return this.repository.save(p);
     }
 
-    public List<Patient> getPatients() { return this.repository.findAll(); }
+    public List<Patient> getPatients() {
+        return this.repository.findAll();
+    }
 
-    public Patient getPatientById(String id) { return this.repository.findById(id).orElse(null); }
+    public Patient getPatientById(String id) {
+        return this.repository.findById(id).orElse(null);
+    }
 
     @Transactional
     public Patient deletePatient(String id) throws Exception {

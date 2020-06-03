@@ -52,7 +52,7 @@ public class UserService {
     @Transactional
     public User updateUser(String id, User u) {
         User toModify = repository.findById(id).orElse(null);
-        if(toModify == null) return null;
+        if (toModify == null) return null;
         toModify.setAddress(u.getAddress());
         toModify.setCity(u.getCity());
         toModify.setCountry(u.getCountry());
@@ -71,7 +71,7 @@ public class UserService {
         found.setPassword(passwordEncoder.encode(newPassword));
 
         User saved = repository.save(found);
-        if(personal) {
+        if (personal) {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(saved.getEmail(),
                             newPassword));

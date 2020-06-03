@@ -1,4 +1,4 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,15 +17,15 @@ import java.util.List;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class AppointmentRequestDTO {
 
-   private String id;
-   private LocalDateTime dateTime;
-   private String interventionTypeID;
-   private String clinicID;
-   private String doctorID;
-   private String patientID;
-   private LocalDate dateOfCreation;
+    private String id;
+    private LocalDateTime dateTime;
+    private String interventionTypeID;
+    private String clinicID;
+    private String doctorID;
+    private String patientID;
+    private LocalDate dateOfCreation;
 
-   public static class ConcurrentRequest extends Exception{
+    public static class ConcurrentRequest extends Exception {
 
-   }
+    }
 }

@@ -1,7 +1,9 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.DoctorNurseDTO;
-import mrs.eclinicapi.model.*;
+import mrs.eclinicapi.dto.DoctorNurseDTO;
+import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.Nurse;
+import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.NurseService;
@@ -10,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,12 +113,12 @@ public class NurseController {
     private Nurse convertToEntity(DoctorNurseDTO doctorNurseDTO) {
         Nurse toAdd = new Nurse();
         Clinic foundClinic = clinicService.findOne(doctorNurseDTO.getClinicID());
-        if(foundClinic == null) return null;
+        if (foundClinic == null) return null;
 
         toAdd.setClinic(foundClinic);
         User foundUser = userService.findOne(doctorNurseDTO.getUserID());
         User nurseUser;
-        if(foundUser == null)
+        if (foundUser == null)
             nurseUser = new User(
                     doctorNurseDTO.getEmail(),
                     passwordEncoder.encode(doctorNurseDTO.getPassword()),
@@ -136,7 +138,7 @@ public class NurseController {
     }
 
     private DoctorNurseDTO convertToDTO(Nurse nurse) {
-        DoctorNurseDTO doctorNurseDTO = new DoctorNurseDTO(
+        return new DoctorNurseDTO(
                 nurse.getId(),
                 nurse.getUser().getId(),
                 nurse.getUser().getEmail(),
@@ -154,7 +156,6 @@ public class NurseController {
                 null,
                 null
         );
-        return doctorNurseDTO;
     }
 
 

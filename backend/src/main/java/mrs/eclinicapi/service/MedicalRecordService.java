@@ -15,5 +15,7 @@ public class MedicalRecordService {
         this.repository = repository;
     }
 
-    public MedicalRecord save(MedicalRecord medicalRecord) { return this.repository.save(medicalRecord); }
+    public MedicalRecord save(MedicalRecord medicalRecord) {
+        return this.repository.save(medicalRecord);
+    }
 }

@@ -1,4 +1,4 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

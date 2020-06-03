@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EClinicApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EClinicApiApplication.class, args);
+        SpringApplication.run(EClinicApiApplication.class);
     }
 }

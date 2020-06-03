@@ -1,4 +1,4 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mrs.eclinicapi.model.AppointmentRequest;
-import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.enums.Weekday;
 
@@ -39,14 +37,14 @@ public class DoctorNurseDTO {
     private Map<Weekday, TimePeriod<LocalTime>> workingSchedule;
     private List<TimePeriod<LocalDateTime>> busyTimes;
     private List<AppointmentRequestDTO> appointmentRequests;
-    @Override
-	public String toString() {
-		return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password
-				+ ", name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + ", address=" + address
-				+ ", city=" + city + ", country=" + country + ", personalID=" + personalID + ", clinicID=" + clinicID
-				+ ", specialties=" + specialties + "]";
-	}
 
+    @Override
+    public String toString() {
+        return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password
+                + ", name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + ", address=" + address
+                + ", city=" + city + ", country=" + country + ", personalID=" + personalID + ", clinicID=" + clinicID
+                + ", specialties=" + specialties + "]";
+    }
 
 
 }

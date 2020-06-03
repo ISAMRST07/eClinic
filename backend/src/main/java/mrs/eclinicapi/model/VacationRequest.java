@@ -1,8 +1,5 @@
 package mrs.eclinicapi.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
@@ -13,7 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,8 +20,8 @@ import java.util.List;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class VacationRequest {
 
-	@Id
-    @Column(length=50)
+    @Id
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vr_seq")
     @GenericGenerator(name = "vr_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -32,25 +29,25 @@ public class VacationRequest {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "VR")})
     private String id;
 
-	@OneToOne
-	private User user;
+    @OneToOne
+    private User user;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
-	private LocalDateTime startDate;
+    private LocalDateTime startDate;
 
-	private LocalDateTime endDate;
+    private LocalDateTime endDate;
 
-	private String status;
+    private String status;
 
-	private String reason;
-	
-	@Override
-	public String toString() {
-		return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", status=" + status+ ", reason=" + reason + "]";
-	}
+    private String reason;
+
+    @Override
+    public String toString() {
+        return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
+                + ", endDate=" + endDate + ", status=" + status + ", reason=" + reason + "]";
+    }
 
 
 }

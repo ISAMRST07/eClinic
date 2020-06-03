@@ -1,10 +1,9 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.DTO.AppointmentRequestDTO;
-import mrs.eclinicapi.DTO.ClinicSearchRequest;
-import mrs.eclinicapi.DTO.DoctorNurseDTO;
-import mrs.eclinicapi.DTO.DoctorSearchRequest;
+import mrs.eclinicapi.dto.AppointmentRequestDTO;
+import mrs.eclinicapi.dto.DoctorNurseDTO;
+import mrs.eclinicapi.dto.DoctorSearchRequest;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
@@ -16,8 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,18 +72,18 @@ public class DoctorController {
 
     @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PagedResponse> getAll(@PathVariable int pageNumber,
-                                                       @PathVariable int pageSize,
-                                                       @PathVariable String sort,
-                                                       @PathVariable String desc) {
+                                                @PathVariable int pageSize,
+                                                @PathVariable String sort,
+                                                @PathVariable String desc) {
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<Doctor> allDoctors = service.findAll();
             response = new PagedResponse(allDoctors.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     allDoctors.size());
 
         } else {
             Page<Doctor> doctorPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 doctorPage = service.findPaged(pageNumber, pageSize);
             else {
                 doctorPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
@@ -103,14 +102,14 @@ public class DoctorController {
                                                              @PathVariable String desc) {
 
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<Doctor> allDoctors = service.findByClinicID(clinicID);
             response = new PagedResponse(allDoctors.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     allDoctors.size());
 
         } else {
             Page<Doctor> doctorPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 doctorPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize);
             else {
                 sort = "user." + sort;
@@ -134,6 +133,7 @@ public class DoctorController {
 
         return new ResponseEntity<>(this.convertToDTO(doctor), HttpStatus.OK);
     }
+
     @PostMapping(path = "/search/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> searchDoctors(@RequestBody DoctorSearchRequest searchRequest,
                                                        @PathVariable int pageNumber,
@@ -143,12 +143,12 @@ public class DoctorController {
         LocalDate date = searchRequest.getDate();
         InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionTypeID());
         String searchQuery = searchRequest.getSearchQuery();
-        if(searchQuery == null) searchQuery = "";
-        if(type == null)
+        if (searchQuery == null) searchQuery = "";
+        if (type == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         PagedResponse response;
         Page<Doctor> doctorPage;
-        if(sort.equals("undefined"))
+        if (sort.equals("undefined"))
             doctorPage = service.search(searchQuery, searchRequest.getClinicID(), date, type, pageNumber, pageSize);
         else {
             sort = "user." + sort;
@@ -158,18 +158,19 @@ public class DoctorController {
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping(path = "/clinic/time/{clinicID}/{typeID}/{duration}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> searchByTime(@RequestBody LocalDateTime dateTime,
-                                                       @PathVariable String clinicID,
-                                                       @PathVariable String typeID,
-                                                       @PathVariable int duration,
-                                                       @PathVariable int pageNumber,
-                                                       @PathVariable int pageSize,
-                                                       @PathVariable String sort,
-                                                       @PathVariable String desc) {
+                                                      @PathVariable String clinicID,
+                                                      @PathVariable String typeID,
+                                                      @PathVariable int duration,
+                                                      @PathVariable int pageNumber,
+                                                      @PathVariable int pageSize,
+                                                      @PathVariable String sort,
+                                                      @PathVariable String desc) {
         PagedResponse response;
         Page<Doctor> doctorPage;
-        if(sort.equals("undefined"))
+        if (sort.equals("undefined"))
             doctorPage = service.searchByTime(clinicID, typeID, dateTime, duration, pageNumber, pageSize);
         else {
             sort = "user." + sort;
@@ -179,15 +180,16 @@ public class DoctorController {
                 .stream().map(this::convertToDTO).collect(Collectors.toList()), doctorPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     private Doctor convertToEntity(DoctorNurseDTO doctorNurseDTO) {
         Doctor toAdd = new Doctor();
         Clinic foundClinic = clinicService.findOne(doctorNurseDTO.getClinicID());
-        if(foundClinic == null) return null;
+        if (foundClinic == null) return null;
 
         toAdd.setClinic(foundClinic);
         User foundUser = userService.findOne(doctorNurseDTO.getUserID());
         User doctorUser;
-        if(foundUser == null)
+        if (foundUser == null)
             doctorUser = new User(
                     doctorNurseDTO.getEmail(),
                     passwordEncoder.encode(doctorNurseDTO.getPassword()),
@@ -205,13 +207,13 @@ public class DoctorController {
         toAdd.setUser(doctorUser);
 
         List<InterventionType> interventionTypes = interventionTypeService.findMany(doctorNurseDTO.getSpecialties());
-        if(interventionTypes == null) return null;
+        if (interventionTypes == null) return null;
         toAdd.setSpecialties(interventionTypes);
         return toAdd;
     }
 
     private DoctorNurseDTO convertToDTO(Doctor doctor) {
-        DoctorNurseDTO doctorNurseDTO = new DoctorNurseDTO(
+        return new DoctorNurseDTO(
                 doctor.getId(),
                 doctor.getUser().getId(),
                 doctor.getUser().getEmail(),
@@ -229,7 +231,6 @@ public class DoctorController {
                 doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
                 doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList())
         );
-        return doctorNurseDTO;
     }
 
     private AppointmentRequestDTO appointmentRequestToDTO(AppointmentRequest appointmentRequest) {

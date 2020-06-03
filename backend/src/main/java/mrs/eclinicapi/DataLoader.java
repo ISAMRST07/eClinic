@@ -22,7 +22,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     public void run(ApplicationArguments args) {
-        if (repository.findAll().size() > 0) return;
+        if (!repository.findAll().isEmpty()) return;
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         User ccadmin = new User
                 (

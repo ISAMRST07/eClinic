@@ -1,7 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.DTO.ClinicSearchRequest;
+import mrs.eclinicapi.dto.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicService;
@@ -68,13 +68,13 @@ public class ClinicController {
                                                          @PathVariable String desc) {
 
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<Clinic> allClinics = service.findAll();
             response = new PagedResponse(allClinics, allClinics.size());
 
         } else {
             Page<Clinic> clinicPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 clinicPage = service.findPaged(pageNumber, pageSize);
             else {
                 clinicPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
@@ -122,19 +122,19 @@ public class ClinicController {
 
     @PostMapping(path = "/search/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> searchClinics(@RequestBody ClinicSearchRequest searchRequest,
-                                                      @PathVariable int pageNumber,
-                                                      @PathVariable int pageSize,
-                                                      @PathVariable String sort,
-                                                      @PathVariable String desc) {
+                                                       @PathVariable int pageNumber,
+                                                       @PathVariable int pageSize,
+                                                       @PathVariable String sort,
+                                                       @PathVariable String desc) {
         LocalDate date = searchRequest.getDate();
         InterventionType type = interventionTypeService.findOne(searchRequest.getInterventionType());
         String searchQuery = searchRequest.getSearchQuery();
-        if(searchQuery == null) searchQuery = "";
-        if(type == null)
+        if (searchQuery == null) searchQuery = "";
+        if (type == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         PagedResponse response;
         Page<Clinic> clinicPage;
-        if(sort.equals("undefined"))
+        if (sort.equals("undefined"))
             clinicPage = service.search(searchQuery, date, type, pageNumber, pageSize);
         else {
             clinicPage = service.search(searchQuery, date, type, pageNumber, pageSize, sort, desc.equals("true"));

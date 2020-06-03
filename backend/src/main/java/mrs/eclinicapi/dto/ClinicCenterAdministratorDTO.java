@@ -1,18 +1,17 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.model.ClinicalCentarAdministrator;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-public class ClinicCenterAdministratorDTO extends UserDTO{
+public class ClinicCenterAdministratorDTO extends UserDTO {
 
     public ClinicCenterAdministratorDTO(ClinicalCentarAdministrator clinicalCentarAdministrator) {
         super();

@@ -37,6 +37,8 @@ public class MedicalRecord {
     @OneToMany
     private List<Visit> visits;
 
-    public Patient getPatient() { return this.patient; }
+    public Patient getPatient() {
+        return this.patient;
+    }
 
 }

@@ -19,6 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class Patient {
+    @OneToOne(cascade = CascadeType.ALL)
+    public MedicalRecord medicalRecord;
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pt_seq")
@@ -28,18 +30,12 @@ public class Patient {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "PT")})
 
     private String id;
-
     @ManyToMany
     private List<Clinic> clinic;
-
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
-
     @OneToMany
     private List<Intervention> interventions;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    public MedicalRecord medicalRecord;
 
 
 }

@@ -1,11 +1,9 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import mrs.eclinicapi.model.User;
 import org.springframework.context.ApplicationEvent;
-
-import java.util.Locale;
 
 @Getter
 @Setter

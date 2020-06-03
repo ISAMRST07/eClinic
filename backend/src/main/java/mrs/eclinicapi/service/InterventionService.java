@@ -1,18 +1,12 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.DTO.InterventionDTO;
-import mrs.eclinicapi.model.*;
-import mrs.eclinicapi.repository.ClinicRepository;
-import mrs.eclinicapi.repository.ClinicRoomRepository;
-import mrs.eclinicapi.repository.DoctorRepository;
-import mrs.eclinicapi.repository.InterventionRepository;
-import mrs.eclinicapi.repository.InterventionTypeRepository;
-
-import java.util.List;
-
+import mrs.eclinicapi.model.Intervention;
+import mrs.eclinicapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -49,8 +43,8 @@ public class InterventionService {
         repository.deleteById(id);
     }
 
-    public List<Intervention> getClinicIntervention(String clinicId){
-    	return repository.getClinicIntervention(clinicId);
+    public List<Intervention> getClinicIntervention(String clinicId) {
+        return repository.getClinicIntervention(clinicId);
     }
 
 }

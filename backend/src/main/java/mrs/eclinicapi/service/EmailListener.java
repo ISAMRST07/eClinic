@@ -1,6 +1,6 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.DTO.EmailEvent;
+import mrs.eclinicapi.dto.EmailEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
@@ -32,7 +32,9 @@ public class EmailListener implements
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(event.getAddress());
-        email.setFrom(env.getProperty("spring.mail.username"));
+        String mail = env.getProperty("spring.mail.username");
+        if(mail == null) return;
+        email.setFrom(mail);
         email.setSubject(event.getSubject());
         email.setText(event.getContent());
 //        email.setText();

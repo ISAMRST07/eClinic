@@ -21,6 +21,9 @@ import javax.persistence.*;
 public class ClinicAdministrator {
 
 
+    //    @JsonIgnoreProperties("clinicAdministrator")
+    @ManyToOne
+    public Clinic clinic;
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ca_seq")
@@ -29,12 +32,7 @@ public class ClinicAdministrator {
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "CA")})
     private String id;
-
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
-
-    //    @JsonIgnoreProperties("clinicAdministrator")
-    @ManyToOne
-    public Clinic clinic;
 
 }

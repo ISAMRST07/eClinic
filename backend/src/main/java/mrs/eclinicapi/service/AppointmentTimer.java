@@ -2,7 +2,6 @@ package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.model.AppointmentRequest;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;

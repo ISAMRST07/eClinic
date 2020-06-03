@@ -1,7 +1,6 @@
 package mrs.eclinicapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +22,9 @@ import java.time.LocalDateTime;
 
 public class Intervention {
 
+
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "i_seq")
     @GenericGenerator(name = "i_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
@@ -74,10 +74,10 @@ public class Intervention {
         this.setClinic(ap.getClinic());
     }
 
-	@Override
-	public String toString() {
-		return "Intervention [id=" + id + ", dateTime=" + dateTime + ", interventionType=" + interventionType
-				+ ", price=" + price + "]";
-	}
+    @Override
+    public String toString() {
+        return "Intervention [id=" + id + ", dateTime=" + dateTime + ", interventionType=" + interventionType
+                + ", price=" + price + "]";
+    }
 
 }

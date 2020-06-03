@@ -1,4 +1,4 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 public class MedicalStaffDTO extends UserDTO {
 

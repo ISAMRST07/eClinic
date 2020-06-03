@@ -61,8 +61,7 @@ public class ClinicService {
         Optional<Nurse> nurse = nurseRepository.findNurseByUser(user.get());
         if (clinicAdministrator.isPresent()) return clinicAdministrator.get().getClinic();
         if (doctor.isPresent()) return doctor.get().getClinic();
-        if (nurse.isPresent()) return nurse.get().getClinic();
-        return null;
+        return nurse.map(MedicalStaff::getClinic).orElse(null);
     }
 
     public List<Clinic> findAll() {
@@ -79,7 +78,7 @@ public class ClinicService {
 
     public Page<Clinic> findPaged(int pageNumber, int pageSize, String sort, boolean desc) {
         Pageable p;
-        if(sort != null) {
+        if (sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
@@ -111,13 +110,12 @@ public class ClinicService {
         Pageable p;
         int fakePageSize = pageSize;
         if (fakePageSize < 1) fakePageSize = 1000;
-        if(sort != null) {
+        if (sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
             p = PageRequest.of(--pageNumber, fakePageSize, s);
         } else p = PageRequest.of(--pageNumber, fakePageSize);
-
 
 
         return this.someOtherFunction(searchQuery, date, type, p, pageSize);
@@ -126,7 +124,7 @@ public class ClinicService {
     private Page<Clinic> someOtherFunction(String searchQuery, LocalDate date, InterventionType type, Pageable p, int pageSize) {
         List<Clinic> clinics = findAll();
         Stream<Clinic> filtered = this.filterClinics(clinics, searchQuery, date, type);
-        if(p.getSort().isSorted()) {
+        if (p.getSort().isSorted()) {
             Sort.Order o = p.getSort().iterator().next();
             String property = o.getProperty();
             boolean desc = o.getDirection().isDescending();
@@ -134,7 +132,7 @@ public class ClinicService {
                     .sorted((c1, c2) -> this.sortFunction(c1, c2, property, desc));
         }
         List<Clinic> fullList = filtered.collect(Collectors.toList());
-        if(pageSize < 1) return new PageImpl<Clinic>(fullList, p, fullList.size());
+        if (pageSize < 1) return new PageImpl<>(fullList, p, fullList.size());
         else {
             int start = (int) p.getOffset();
             int end = Math.min((start + p.getPageSize()), fullList.size());
@@ -152,15 +150,16 @@ public class ClinicService {
                                 .anyMatch(s -> s == type)
                         )
                 ).filter(clinic -> clinic.getDoctors().stream()
-                .anyMatch(d -> d.getWorkingCalendar().getVacations().stream()
-                        .noneMatch(v -> date.isAfter(v.getStart()) && date.isBefore(v.getEnd()))
-                        && d.getWorkingCalendar().getWorkingSchedule().containsKey(weekday)
-                )
-        );
+                        .anyMatch(d -> d.getWorkingCalendar().getVacations().stream()
+                                .noneMatch(v -> date.isAfter(v.getStart()) && date.isBefore(v.getEnd()))
+                                && d.getWorkingCalendar().getWorkingSchedule().containsKey(weekday)
+                        )
+                );
     }
+
     private int sortFunction(Clinic c1, Clinic c2, String sort, boolean desc) {
-        int sorted = 0;
-        switch(sort) {
+        int sorted;
+        switch (sort) {
             case "name":
                 sorted = desc ? c1.getName().compareTo(c2.getName()) * -1 : c1.getName().compareTo(c2.getName());
                 break;

@@ -1,22 +1,21 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.DTO.AppointmentRequestDTO;
-import mrs.eclinicapi.DTO.DoctorNurseDTO;
-import mrs.eclinicapi.DTO.EmailEvent;
+import lombok.Getter;
+import lombok.Setter;
+import mrs.eclinicapi.dto.AppointmentRequestDTO;
+import mrs.eclinicapi.dto.EmailEvent;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,14 +67,14 @@ public class AppointmentRequestController {
             @PathVariable String sort,
             @PathVariable String desc) {
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<AppointmentRequest> requests = service.findByClinicID(clinicID);
             response = new PagedResponse(requests.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     requests.size());
 
         } else {
             Page<AppointmentRequest> appointmentRequestPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 appointmentRequestPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize);
             else {
                 appointmentRequestPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize, sort, desc.equals("true"));
@@ -94,14 +93,14 @@ public class AppointmentRequestController {
             @PathVariable String sort,
             @PathVariable String desc) {
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<AppointmentRequest> requests = service.findByPatientID(patientID);
             response = new PagedResponse(requests.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     requests.size());
 
         } else {
             Page<AppointmentRequest> appointmentRequestPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 appointmentRequestPage = service.findByPatientIDPaged(patientID, pageNumber, pageSize);
             else {
                 appointmentRequestPage = service.findByPatientIDPaged(patientID, pageNumber, pageSize, sort, desc.equals("true"));
@@ -121,7 +120,7 @@ public class AppointmentRequestController {
         LocalDate dateOfCreation = LocalDate.now();
         appointmentRequest.setDateOfCreation(dateOfCreation);
         AppointmentRequest saved = null;
-        for(int attempts = 0; attempts < 3; attempts++) {
+        for (int attempts = 0; ; attempts++) {
             try {
                 saved = service.save(appointmentRequest);
                 break;
@@ -156,9 +155,9 @@ public class AppointmentRequestController {
     }
 
     @DeleteMapping(path = "{id}")
-    ResponseEntity<AppointmentRequest> deleteRequest(@PathVariable String id) {
+    public ResponseEntity<AppointmentRequest> deleteRequest(@PathVariable String id) {
         AppointmentRequest request = null;
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             try {
                 request = this.service.delete(id);
                 break;
@@ -171,22 +170,22 @@ public class AppointmentRequestController {
                 }
             }
         }
-        if(request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(request, HttpStatus.OK);
     }
 
 
     @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<AppointmentRequest> changeDoctorTime(@PathVariable String id,
-                                                        @RequestBody AppointmentRequestDTO requestDTO) {
+    public ResponseEntity<AppointmentRequest> changeDoctorTime(@PathVariable String id,
+                                                               @RequestBody AppointmentRequestDTO requestDTO) {
 
-        if(!id.equals(requestDTO.getId()))
+        if (!id.equals(requestDTO.getId()))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         AppointmentRequest modified = service.modify(id, this.convertToEntity(requestDTO));
 
-        if(modified == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (modified == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
@@ -205,15 +204,15 @@ public class AppointmentRequestController {
 
     private AppointmentRequest convertToEntity(AppointmentRequestDTO appointmentRequestDTO) {
         Clinic foundClinic = clinicService.findOne(appointmentRequestDTO.getClinicID());
-        if(foundClinic == null) return null;
+        if (foundClinic == null) return null;
         InterventionType interventionType =
                 interventionTypeService.findOne(appointmentRequestDTO.getInterventionTypeID());
-        if(interventionType == null) return null;
+        if (interventionType == null) return null;
         Doctor doctor = doctorService.findOne(appointmentRequestDTO.getDoctorID());
         if (doctor == null) return null;
         Patient patient = patientService.getPatientById(appointmentRequestDTO.getPatientID());
         if (patient == null) return null;
-        AppointmentRequest appointmentRequest = new AppointmentRequest(
+        return new AppointmentRequest(
                 appointmentRequestDTO.getId(),
                 appointmentRequestDTO.getDateTime(),
                 interventionType,
@@ -222,12 +221,13 @@ public class AppointmentRequestController {
                 patient,
                 null
         );
-        return appointmentRequest;
     }
 
     @AllArgsConstructor
+    @Getter
+    @Setter
     static class PagedResponse {
-        public List<AppointmentRequestDTO> requests;
-        public long totalLength;
+        private List<AppointmentRequestDTO> requests;
+        private long totalLength;
     }
 }

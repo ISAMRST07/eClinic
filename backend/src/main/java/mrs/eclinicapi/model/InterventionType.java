@@ -19,25 +19,25 @@ import javax.persistence.*;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class InterventionType {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "it_seq")
     @GenericGenerator(name = "it_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "IT")})
     private String id;
-    
+
     private String name;
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
-    
+
     private double price;
 
-	@Override
-	public String toString() {
-		return "InterventionType [id=" + id + ", name=" + name + ", price=" + price + "]";
-	}
-    
-    
+    @Override
+    public String toString() {
+        return "InterventionType [id=" + id + ", name=" + name + ", price=" + price + "]";
+    }
+
+
 }

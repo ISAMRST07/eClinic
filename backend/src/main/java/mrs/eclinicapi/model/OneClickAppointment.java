@@ -20,8 +20,9 @@ import java.time.LocalDateTime;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class OneClickAppointment {
 
+
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oca_seq")
     @GenericGenerator(name = "oca_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

@@ -1,8 +1,6 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.OneClickAppointment;
-import mrs.eclinicapi.repository.AppointmentRequestRepository;
 import mrs.eclinicapi.repository.OneClickAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +27,7 @@ public class OneClickAppointmentService {
 
     public OneClickAppointment delete(String id) {
         OneClickAppointment appointment = repository.findById(id).orElse(null);
-        if(appointment == null) return null;
+        if (appointment == null) return null;
         repository.delete(appointment);
         return appointment;
     }
@@ -61,7 +59,7 @@ public class OneClickAppointmentService {
     public Page<OneClickAppointment> findByClinicIDPaged(String clinicID, int pageNumber, int pageSize, String sort, boolean desc) {
         Pageable p;
         sort = modifySort(sort);
-        if(sort != null) {
+        if (sort != null) {
             String[] sorts = sort.split(";");
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sorts);

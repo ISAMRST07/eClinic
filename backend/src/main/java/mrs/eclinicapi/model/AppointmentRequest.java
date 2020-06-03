@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class AppointmentRequest {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ar_seq")
     @GenericGenerator(name = "ar_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

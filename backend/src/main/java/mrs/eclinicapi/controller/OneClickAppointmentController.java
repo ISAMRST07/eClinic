@@ -1,8 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.DTO.DoctorNurseDTO;
-import mrs.eclinicapi.DTO.OneClickAppointmentDTO;
+import mrs.eclinicapi.dto.OneClickAppointmentDTO;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +19,15 @@ import java.util.stream.Collectors;
 public class OneClickAppointmentController {
 
     @Autowired
-    private OneClickAppointmentService service;
-
-    @Autowired
     ClinicRoomService clinicRoomService;
-
     @Autowired
     ClinicService clinicService;
-
     @Autowired
     InterventionTypeService interventionTypeService;
-
     @Autowired
     DoctorService doctorService;
+    @Autowired
+    private OneClickAppointmentService service;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OneClickAppointmentDTO> save(@RequestBody OneClickAppointmentDTO oneClickAppointmentDTO) {
@@ -42,20 +37,20 @@ public class OneClickAppointmentController {
 
     @GetMapping(path = "/clinic/{clinicID}/{pageNumber}/{pageSize}/{sort}/{desc}")
     public ResponseEntity<PagedResponse> getAllForClinic(@PathVariable String clinicID,
-                                                                          @PathVariable int pageNumber,
-                                                                          @PathVariable int pageSize,
-                                                                          @PathVariable String sort,
-                                                                          @PathVariable String desc) {
+                                                         @PathVariable int pageNumber,
+                                                         @PathVariable int pageSize,
+                                                         @PathVariable String sort,
+                                                         @PathVariable String desc) {
 
         PagedResponse response;
-        if(pageSize < 1){
+        if (pageSize < 1) {
             List<OneClickAppointment> oneClickAppointments = service.findByClinicID(clinicID);
             response = new PagedResponse(oneClickAppointments.stream().map(this::convertToDTO).collect(Collectors.toList()),
                     oneClickAppointments.size());
 
         } else {
             Page<OneClickAppointment> oneClickAppointmentPage;
-            if(sort.equals("undefined"))
+            if (sort.equals("undefined"))
                 oneClickAppointmentPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize);
             else {
                 oneClickAppointmentPage = service.findByClinicIDPaged(clinicID, pageNumber, pageSize, sort, desc.equals("true"));
@@ -100,10 +95,10 @@ public class OneClickAppointmentController {
 
     private OneClickAppointment convertToEntity(OneClickAppointmentDTO oneClickAppointmentDTO) {
         Clinic foundClinic = clinicService.findOne(oneClickAppointmentDTO.getClinicID());
-        if(foundClinic == null) return null;
+        if (foundClinic == null) return null;
         InterventionType interventionType =
                 interventionTypeService.findOne(oneClickAppointmentDTO.getTypeID());
-        if(interventionType == null) return null;
+        if (interventionType == null) return null;
         Doctor doctor = doctorService.findOne(oneClickAppointmentDTO.getDoctorID());
         if (doctor == null) return null;
         ClinicRoom room = clinicRoomService.findOne(oneClickAppointmentDTO.getClinicRoomID());

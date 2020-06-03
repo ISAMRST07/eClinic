@@ -1,10 +1,8 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.DTO.AppointmentRequestDTO;
+import mrs.eclinicapi.dto.AppointmentRequestDTO;
 import mrs.eclinicapi.model.AppointmentRequest;
-import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.repository.AppointmentRequestRepository;
-import mrs.eclinicapi.repository.CodebookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,11 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Beans;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,9 +27,13 @@ public class AppointmentRequestService {
         this.repository = repository;
     }
 
-    public List<AppointmentRequest> findAll() {return repository.findAll();}
+    public List<AppointmentRequest> findAll() {
+        return repository.findAll();
+    }
 
-    public AppointmentRequest findOne (String id) { return repository.findById(id).orElse(null); }
+    public AppointmentRequest findOne(String id) {
+        return repository.findById(id).orElse(null);
+    }
 
     @Transactional(isolation = Isolation.SERIALIZABLE,
             rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
@@ -41,7 +41,7 @@ public class AppointmentRequestService {
         AppointmentRequest request = repository.findById(id).orElse(null);
         if (request == null) return null;
         LocalDate doc = request.getDateOfCreation();
-        Long diff = doc.atStartOfDay().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+        long diff = doc.atStartOfDay().until(LocalDateTime.now(), ChronoUnit.MILLIS);
         if (diff < 86400000) return null;
         repository.delete(request);
         return request;
@@ -65,7 +65,7 @@ public class AppointmentRequestService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE,
             rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
-    public AppointmentRequest save(AppointmentRequest ar) throws AppointmentRequestDTO.ConcurrentRequest  {
+    public AppointmentRequest save(AppointmentRequest ar) throws AppointmentRequestDTO.ConcurrentRequest {
         List<AppointmentRequest> requests = repository.findAppointmentRequestsByDoctor_Id(ar.getDoctor().getId());
 
         if (checkRequests(requests, ar))
@@ -77,10 +77,9 @@ public class AppointmentRequestService {
     private boolean checkRequests(List<AppointmentRequest> requests, AppointmentRequest ar) {
         LocalDateTime startTime = ar.getDateTime();
         LocalDateTime endTime = startTime.plusMinutes(30);
-        for(AppointmentRequest request : requests) {
+        for (AppointmentRequest request : requests) {
             LocalDateTime currentStartTime = request.getDateTime();
             LocalDateTime currentEndTime = currentStartTime.plusMinutes(30);
-
 
 
             if (startTime.isAfter(currentStartTime) && startTime.isBefore(currentEndTime))
@@ -97,7 +96,7 @@ public class AppointmentRequestService {
 
     public Page<AppointmentRequest> findPaged(int pageNumber, int pageSize, String sort, boolean desc) {
         Pageable p;
-        if(sort != null) {
+        if (sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
@@ -116,7 +115,7 @@ public class AppointmentRequestService {
 
     public Page<AppointmentRequest> findByClinicIDPaged(String clinicID, int pageNumber, int pageSize, String sort, boolean desc) {
         Pageable p;
-        if(sort != null) {
+        if (sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);
@@ -135,7 +134,7 @@ public class AppointmentRequestService {
 
     public Page<AppointmentRequest> findByPatientIDPaged(String patientID, int pageNumber, int pageSize, String sort, boolean desc) {
         Pageable p;
-        if(sort != null) {
+        if (sort != null) {
             Sort s;
             if (desc) s = Sort.by(Sort.Direction.DESC, sort);
             else s = Sort.by(Sort.Direction.ASC, sort);

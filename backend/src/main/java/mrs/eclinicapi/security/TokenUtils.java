@@ -10,35 +10,29 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 // Utility klasa za rad sa JSON Web Tokenima
 @Component
 public class TokenUtils {
 
-    // Izdavac tokena
-    @Value("eclicinc")
-    private String APP_NAME;
-
-    // Tajna koju samo backend aplikacija treba da zna kako bi mogla da generise i proveri JWT https://jwt.io/
-    @Value("nekatajna")
-    public String SECRET;
-
-    // Period vazenja
-    @Value("-1")
-    private int EXPIRES_IN;
-
-    // Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent
-    @Value("Authorization")
-    private String AUTH_HEADER;
-
     // Moguce je generisati JWT za razlicite klijente (npr. web i mobilni klijenti nece imati isto trajanje JWT, JWT za mobilne klijente ce trajati duze jer se mozda aplikacija redje koristi na taj nacin)
     private static final String AUDIENCE_UNKNOWN = "unknown";
     private static final String AUDIENCE_WEB = "web";
     private static final String AUDIENCE_MOBILE = "mobile";
     private static final String AUDIENCE_TABLET = "tablet";
-
+    // Tajna koju samo backend aplikacija treba da zna kako bi mogla da generise i proveri JWT https://jwt.io/
+    @Value("nekatajna")
+    public String SECRET;
+    // Izdavac tokena
+    @Value("eclicinc")
+    private String APP_NAME;
+    // Period vazenja
+    @Value("-1")
+    private int EXPIRES_IN;
+    // Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent
+    @Value("Authorization")
+    private String AUTH_HEADER;
     // Algoritam za potpisivanje JWT
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
@@ -48,9 +42,6 @@ public class TokenUtils {
 
     // Funkcija za generisanje JWT token
     public String generateToken(String username, Timestamp date) {
-        Date dateIssued;
-        if (date == null) dateIssued = new Date();
-        else dateIssued = new Date(date.getTime());
 
         return Jwts.builder()
                 .setIssuer(APP_NAME)

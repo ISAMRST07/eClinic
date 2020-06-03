@@ -1,10 +1,8 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.MedicalRecord;
 import mrs.eclinicapi.model.Patient;
 import mrs.eclinicapi.service.MedicalRecordService;
-import mrs.eclinicapi.service.MedicineService;
 import mrs.eclinicapi.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +21,7 @@ public class PatientController {
 
     @Autowired
     private MedicalRecordService medicalRecordService;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Patient>> getPatients() {
 
@@ -51,7 +50,7 @@ public class PatientController {
     }
 
     @DeleteMapping(path = "{id}")
-    public  ResponseEntity<Patient> deletePatient(@PathVariable String id) {
+    public ResponseEntity<Patient> deletePatient(@PathVariable String id) {
         try {
             Patient p = service.deletePatient(id);
             return new ResponseEntity<>(p, HttpStatus.OK);
@@ -61,7 +60,7 @@ public class PatientController {
         }
     }
 
-    @GetMapping(path= "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Patient> getByUserId(@PathVariable String userID) {
         Patient found = service.getByUserId(userID);
         if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,6 +1,6 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.DTO.ClinicAdministratorDto;
+import mrs.eclinicapi.dto.ClinicAdministratorDto;
 import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.repository.ClinicAdministratorRepository;
@@ -38,7 +38,7 @@ public class ClinicAdministratorService {
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
 
 
-        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator), 0);
+        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator));
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class ClinicAdministratorService {
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setId(clinicAdministratorDto.getId());
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());
-        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator), 0);
+        return new ClinicAdministratorDto(clinicAdminRepository.save(clinicAdministrator));
     }
 
     public List<ClinicAdministratorDto> findAll() {
@@ -58,14 +58,14 @@ public class ClinicAdministratorService {
 
         List<ClinicAdministratorDto> clinicAdministratorsDto = new ArrayList<>();
         for (ClinicAdministrator c : clinicAdministrators) {
-            ClinicAdministratorDto cdto = new ClinicAdministratorDto(c, 0);
+            ClinicAdministratorDto cdto = new ClinicAdministratorDto(c);
             clinicAdministratorsDto.add(cdto);
         }
         return clinicAdministratorsDto;
     }
 
     public ClinicAdministrator findById(String id) {
-        return clinicAdminRepository.findById(id).orElseGet(null);
+        return clinicAdminRepository.findById(id).orElse(null);
     }
 
     @Transactional

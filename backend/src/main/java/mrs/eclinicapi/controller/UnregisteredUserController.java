@@ -1,6 +1,6 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.DTO.EmailEvent;
+import mrs.eclinicapi.dto.EmailEvent;
 import mrs.eclinicapi.model.UnregisteredUser;
 import mrs.eclinicapi.service.UnregisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;

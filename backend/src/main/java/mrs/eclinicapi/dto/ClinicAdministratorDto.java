@@ -1,4 +1,4 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
@@ -15,7 +15,7 @@ import mrs.eclinicapi.model.ClinicAdministrator;
 public class ClinicAdministratorDto extends UserDTO {
 
 
-    public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator, int i) {
+    public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator) {
         super();
         this.id = clinicAdministrator.getId();
         this.password = clinicAdministrator.getUser().getPassword();

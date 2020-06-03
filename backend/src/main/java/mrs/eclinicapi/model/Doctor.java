@@ -29,11 +29,6 @@ public class Doctor extends MedicalStaff {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<AppointmentRequest> appointmentRequests = new ArrayList<>();
-    @Override
-    public Clinic getClinic() {
-        return super.getClinic();
-    }
-
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "d_seq")
@@ -42,7 +37,10 @@ public class Doctor extends MedicalStaff {
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
 
-
+    @Override
+    public Clinic getClinic() {
+        return super.getClinic();
+    }
 
     @Override
     public String toString() {

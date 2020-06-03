@@ -1,9 +1,10 @@
-package mrs.eclinicapi.DTO;
+package mrs.eclinicapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.enums.UserType;
@@ -12,7 +13,7 @@ import mrs.eclinicapi.model.enums.UserType;
 @Setter
 @AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
+@NoArgsConstructor
 public class UserDTO {
     protected String id;
     protected String password;
@@ -28,6 +29,4 @@ public class UserDTO {
     protected String personalID;
     protected String phoneNumber;
 
-    public UserDTO() {
-    }
 }

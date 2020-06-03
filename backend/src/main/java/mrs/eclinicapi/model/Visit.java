@@ -20,7 +20,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class Visit {
     @Id
-    @Column(length=50)
+    @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "v_seq")
     @GenericGenerator(name = "v_seq",
             strategy = "mrs.eclinicapi.generator.IdGenerator",

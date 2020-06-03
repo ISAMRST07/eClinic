@@ -1,8 +1,6 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.DTO.ClinicAdministratorDto;
-import mrs.eclinicapi.DTO.ClinicCenterAdministratorDTO;
-import mrs.eclinicapi.model.ClinicAdministrator;
+import mrs.eclinicapi.dto.ClinicCenterAdministratorDTO;
 import mrs.eclinicapi.model.ClinicalCentarAdministrator;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.repository.ClinicalCentarAdministratorRepository;
@@ -47,13 +45,12 @@ public class ClinicalCenterAdministratorService {
     }
 
     public ClinicalCentarAdministrator findById(String id) {
-        return clinicalCentarAdministratorRepository.findById(id).orElseGet(null);
+        return clinicalCentarAdministratorRepository.findById(id).orElse(null);
     }
 
     public void deleteById(String id) {
         clinicalCentarAdministratorRepository.deleteById(id);
     }
-
 
 
     public List<ClinicCenterAdministratorDTO> findAll() {
