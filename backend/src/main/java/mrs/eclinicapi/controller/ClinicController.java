@@ -1,6 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mrs.eclinicapi.dto.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.InterventionType;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/clinic")
+@Slf4j
 public class ClinicController {
 
     @Autowired
@@ -68,8 +70,9 @@ public class ClinicController {
                                                          @PathVariable String sort,
                                                          @PathVariable String desc,
                                                          HttpServletRequest request) {
-        System.out.println(request.getLocalAddr());
-        System.out.println(request.getLocalName());
+        log.info("URL123");
+        log.info(request.getLocalAddr());
+        log.info(request.getLocalName());
         PagedResponse response;
         if (pageSize < 1) {
             List<Clinic> allClinics = service.findAll();
