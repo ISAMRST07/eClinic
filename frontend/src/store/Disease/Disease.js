@@ -35,6 +35,8 @@ export default {
         },
         async addDiseaseApi({rootState, commit}, disease) {
             try {
+            	console.log("diseaseadd");
+            	console.log(disease);
                 let {data: added} = await Vue.prototype.$axios.post('/api/disease', disease, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 console.log(disease.name);
                 commit('addDisease', added);
@@ -51,8 +53,9 @@ export default {
             }
         },
         async updateDiseaseApi({rootState, commit}, disease) {
-            console.log(disease);
             try {
+            	console.log("updateDiseaseApi");
+            	console.log(disease);
                 let {data: modified} = await Vue.prototype.$axios.put('/api/disease', disease, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateDisease', modified);
             } catch (err) {

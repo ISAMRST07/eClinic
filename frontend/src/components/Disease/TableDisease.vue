@@ -2,7 +2,7 @@
     <div>
         <v-data-table
                 :headers="headers"
-                :items="diagnoses"
+                :items="diseases"
                 class="elevation-1"
                 :loading="loading"
                 loading-text="Reading all the known diagnoses..."
@@ -41,15 +41,15 @@
                 <p>There are no existing diagnosis</p>
             </template>
         </v-data-table>
-        <delete-diagnosis
+        <delete-disease
                 v-model="dialog"
                 :diagnosis="diseaseToDelete"
                 @close="deleteDialog(null)"
                 @delete="deleteDisease"
         />
-        <modify-diagnosis
+        <modify-disease
                 mode="update"
-                :edit-diagnosis="editDisease"
+                :edit-disease="editDisease"
                 v-model="editDialog"/>
     </div>
 </template>
@@ -79,11 +79,11 @@
             ],
         }),
         computed: {
-            ...mapState('diagnosis/diagnosis', ['diagnoses']),
+            ...mapState('disease/disease', ['diseases']),
         },
         methods: {
-            ...mapActions('diagnosis/diagnosis', ['getDiseases']),
-            ...mapActions('diagnosis/diagnosis', ['deleteDiseaseApi']),
+            ...mapActions('disease/disease', ['getDiseases']),
+            ...mapActions('disease/disease', ['deleteDiseaseApi']),
 
             deleteDialog(diagnosis) {
                 this.diseaseToDelete = diagnosis;
@@ -94,17 +94,20 @@
                 this.deleteDialog(null);
             },
             updateDialog(diagnosis) {
+            	console.log("updateDialog = ");
+            	console.log(diagnosis);
                 this.editDisease = diagnosis;
                 this.editDialog = true;
             }
 
         },
         created() {
+            console.log("getDiseases");
             this.loading = true;
             this.getDiseases();
         },
         watch: {
-            diagnoses() {
+            diseases() {
                 this.loading = false;
             }
         }

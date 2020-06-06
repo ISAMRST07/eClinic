@@ -33,6 +33,7 @@ export const emptyClinicCenterAdmin = {
 };
 
 export const emptyDisease = {
+	id: "",
     name: null
 };
 

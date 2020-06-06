@@ -45,6 +45,7 @@
         components: {},
         data: () => ({
             name: null,
+            id: "",
             diagnosis: emptyDisease,
             nameRules: [v => !!v || 'Name is required.']
         }),
@@ -62,15 +63,17 @@
                     this.diagnosis = this.editDisease;
                 }
                 this.name = this.diagnosis.name;
+                this.id = this.diagnosis.id;
             }
         },
         methods: {
-            ...mapActions('diagnosis/diagnosis', ['addDiseaseApi']),
-            ...mapActions('diagnosis/diagnosis', ['updateDiseaseApi']),
+            ...mapActions('disease/disease', ['addDiseaseApi']),
+            ...mapActions('disease/disease', ['updateDiseaseApi']),
 
             submit(fun) {
                 if (this.$refs.form.validate()) {
                     this.diagnosis.name = this.name;
+					this.diagnosis.id = this.id;            
                     fun(this.diagnosis);
                     this.close();
                 }

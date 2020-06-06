@@ -18,7 +18,8 @@ import {
     appointmentRequestClinicPath,
     appointmentRequestPatientPath,
     oneClickAppointmentPath,
-    visitPath
+    visitPath,
+    diseasePath
 } from "./paths";
 import {functionalThemeClasses} from "vuetify/lib/mixins/themeable";
 
@@ -98,6 +99,12 @@ const medicinesItem = {
     path: medicinesPath
 };
 
+const diseaseItem = {
+    icon: 'mdi-pill',
+    label: 'Diagnosis',
+    path: diseasePath
+};
+
 const clinicAdminsItem = {
     icon: 'mdi-account-tie',
     label: 'Clinic Administrators',
@@ -162,6 +169,7 @@ const ClinicalCenterAdmin = {
         homeItem,
         clinicCenterAdminsItem,
         clinicsItem,
+        diseaseItem,
         medicinesItem,
         clinicAdminsItem,
         patientsItem,

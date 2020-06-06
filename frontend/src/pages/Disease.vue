@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
-        <table-diagnosis></table-diagnosis>
-        <add-diagnosis></add-diagnosis>
+        <table-disease></table-disease>
+        <add-disease></add-disease>
     </v-container>
 </template>
 
