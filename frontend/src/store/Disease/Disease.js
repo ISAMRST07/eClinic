@@ -26,6 +26,7 @@ export default {
     actions: {
         async getDiseases({rootState, commit}) {
             try {
+            	console.log("getDiseases apicall");
                 let res = await Vue.prototype.$axios.get('/api/disease', {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('setAllDiseases', res.data);
             } catch (err) {

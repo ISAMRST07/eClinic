@@ -17,7 +17,8 @@ import {
     workingSchedulePath,
     appointmentRequestClinicPath,
     appointmentRequestPatientPath,
-    oneClickAppointmentPath
+    oneClickAppointmentPath,
+    visitPath
 } from "./paths";
 import {functionalThemeClasses} from "vuetify/lib/mixins/themeable";
 
@@ -135,6 +136,12 @@ const doctorHomeItem = {
     path: doctorHomePath,
 };
 
+const visitItem = {
+	icon: 'mdi-home',
+	label: 'Visit',
+	path: visitPath,	
+}
+
 const vacationRequestItem = {
 	icon: 'mdi-home',
 	label: 'Vacation request',
@@ -203,6 +210,7 @@ const Doctor = {
     items: [
         workingScheduleItem,
         doctorHomeItem,
+        visitItem,
         vacationRequestItem
     ]
 };

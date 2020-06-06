@@ -17,6 +17,8 @@ import DoctorHome from "../pages/DoctorHome";
 import WorkingSchedule from "../pages/WorkingSchedule";
 import VacationRequest from "../pages/VacationRequest";
 import AppointmentRequest from "../pages/AppointmentRequest";
+import OneClickAppointments from "../pages/OneClickAppointments";
+import Visit from "../pages/Visit";
 
 import {
     clinicCenterAdministratorsPath,
@@ -38,11 +40,11 @@ import {
     vacationRequestPath,
     workingSchedulePath,
     appointmentRequestClinicPath,
-    appointmentRequestPatientPath, chooseClinicRoomsPath, oneClickAppointmentPath
-
+    appointmentRequestPatientPath, 
+    chooseClinicRoomsPath,
+    oneClickAppointmentPath,
+    visitPath
 } from "../utils/paths";
-import OneClickAppointments from "../pages/OneClickAppointments";
-
 
 const loggedRoutes = [
     {
@@ -134,6 +136,10 @@ const loggedRoutes = [
     {
         path: appointmentRequestPatientPath,
         component: AppointmentRequest
+    },
+    {
+        path: visitPath,
+        component: Visit
     }
 ];
 
