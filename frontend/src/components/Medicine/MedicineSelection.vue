@@ -6,7 +6,8 @@
             :items="medicines"
             label="Medicines*"
             persistent-hint
-            item-text="name"            
+            item-text="name"       
+            item-value="name"        
             :rules="rules"
             return-object
             :loading="loading"
@@ -37,13 +38,9 @@
         }),
         props: {
             value: null,
-            disabled: {
-                type: Boolean,
-                value: false
-            },
             multiple: {
                 type: Boolean,
-                value: false
+                value: true
             }
         },
         computed: {
