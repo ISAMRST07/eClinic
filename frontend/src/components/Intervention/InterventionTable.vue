@@ -162,8 +162,12 @@ export default {
         		"doctorId" : this.interventionToRate.doctor.id,
         		"doctorRating" : doctorRating,        		
         	}
-            this.rateClinicInterventionApi(payload);
-            this.rateDialog(null);
+        	if(clinicRating == 0 || doctorRating == 0){
+        		console.log("clinic/doctor rating == 0");
+        	}else{
+        		this.rateClinicInterventionApi(payload);
+        	}
+        	this.rateDialog(null);
         },
     },
     created() {
