@@ -126,6 +126,7 @@
                     {text: 'Name', align: 'start', value: 'name'},
                     {text: 'Address', value: 'address'},
                     {text: 'Details', value: 'details', sortable: false, align: 'center'},
+                    {text: 'Rating', value: 'rating'},                    
                 ];
                 let patientHeader = [
                     {text: 'Schedule', value: 'schedule', sortable: false, align: 'center'}
