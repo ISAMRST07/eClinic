@@ -1,11 +1,13 @@
 package mrs.eclinicapi.service;
 
+import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.Patient;
 import mrs.eclinicapi.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +30,21 @@ public class PatientService {
 
     public Patient getPatientById(String id) {
         return this.repository.findById(id).orElse(null);
+    }
+
+    public List<Patient> getByClinicId(String clinicID) {
+        List<Patient> patients = this.repository.findAll();
+        ArrayList<Patient> patientsToSend = new ArrayList<>();
+        for (Patient p: patients) {
+            for (Clinic c: p.getClinic()) {
+                if(c.getId().equalsIgnoreCase(clinicID)) {
+                    patientsToSend.add(p);
+                    break;
+                }
+            }
+        }
+        return patientsToSend;
+
     }
 
     @Transactional
