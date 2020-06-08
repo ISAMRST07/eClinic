@@ -33,9 +33,9 @@ public class PatientController {
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
-    @GetMapping(path = "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Patient>> getByClinicId(@PathVariable String userID) {
-        List<Patient> found = service.getByClinicId(userID);
+    @GetMapping(path = "/clinic/{clinicId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Patient>> getByClinicId(@PathVariable String clinicId) {
+        List<Patient> found = service.getByClinicId(clinicId);
         if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(found, HttpStatus.OK);
