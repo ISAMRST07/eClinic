@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service
 public class PatientService {
 
@@ -47,7 +48,6 @@ public class PatientService {
 
     }
 
-    @Transactional
     public Patient deletePatient(String id) throws Exception {
         Patient p = this.repository.findById(id).orElseThrow(Exception::new);
         this.repository.deleteById(id);
