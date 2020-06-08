@@ -35,9 +35,12 @@ public class PatientService {
 
     public List<Patient> getByClinicId(String clinicID) {
         List<Patient> patients = this.repository.findAll();
+        System.out.println("Duzina " + patients.size());
         ArrayList<Patient> patientsToSend = new ArrayList<>();
         for (Patient p: patients) {
+            System.out.println(p.getClinic().size());
             for (Clinic c: p.getClinic()) {
+                System.out.println(c.getId());
                 if(c.getId().equalsIgnoreCase(clinicID)) {
                     patientsToSend.add(p);
                     break;

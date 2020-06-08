@@ -35,6 +35,7 @@ public class PatientController {
 
     @GetMapping(path = "/clinic/{clinicId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Patient>> getByClinicId(@PathVariable String clinicId) {
+        System.out.println("USA SAM ODJE " + clinicId);
         List<Patient> found = service.getByClinicId(clinicId);
         if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

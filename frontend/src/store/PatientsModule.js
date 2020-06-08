@@ -31,6 +31,15 @@ export default {
                 defaultError(err);
             }
         },
+        async getPatientsByClinic({rootState, commit}, clinic) {
+            try {
+                let res = await Vue.prototype.$axios.get(`/api/patient/clinic/${clinic.id}`,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllPatients', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async createRecord({rootState, commit}, user) {
             try {
                 let res = await Vue.prototype.$axios.put(`/api/patient/create-record/${user.id}`, null,

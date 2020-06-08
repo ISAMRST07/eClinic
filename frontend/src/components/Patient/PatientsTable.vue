@@ -19,7 +19,7 @@
                 </v-toolbar>
             </template>
 
-            <template v-if="role !== adminCode" v-slot:item.remove="{ item }">
+            <template v-if="role !== adminCode " v-slot:item.remove="{ item }">
                 <v-icon
                         @click="deleteDialog(item)"
                         color="red"
@@ -100,7 +100,7 @@
         }),
         computed: {
             ...mapState('patients', ['patients']),
-            ...mapState('auth', ['role']),
+            ...mapState('auth', ['role', 'clinic']),
         },
         watch: {
             patients() {
@@ -109,7 +109,7 @@
             }
         },
         methods: {
-            ...mapActions('patients', ['getPatients']),
+            ...mapActions('patients', ['getPatients', 'getPatientsByClinic']),
             ...mapActions('patients', ['createRecord']),
 
             deleteDialog(patient) {
@@ -128,7 +128,16 @@
         },
         created() {
             this.loading = true;
-            this.getPatients();
+            console.log("ULOGA")
+            console.log(this.role)
+            console.log(this.clinic.id)
+            if(this.role=== "doctor" || this.role=== "nurse"){
+                console.log("opa micko");
+                this.getPatientsByClinic(this.clinic);
+            }
+            else{
+                this.getPatients();
+            }
         }
 
     }

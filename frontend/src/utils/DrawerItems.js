@@ -227,7 +227,18 @@ const Doctor = {
         workingScheduleItem,
         doctorHomeItem,
         visitItem,
+        vacationRequestItem,
+        patientsItem
+    ]
+};
+
+const Nurse = {
+    name: 'Nurse',
+    code: 'nurse',
+    items: [
+        workingScheduleItem,
+        visitItem,
         vacationRequestItem
     ]
 };
-export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};
+export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor, Nurse};
