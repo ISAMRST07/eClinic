@@ -63,7 +63,7 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="4" order-md="1">
-                    <v-card link hover @click="$router.push('/doctors')">
+                    <v-card link hover @click="$router.push('/doctors/'+adminClinic.id)">
                         <div class="d-flex flex-no-wrap justify-space-between align-center">
                             <v-avatar v-if="adminClinic && adminClinic.doctors" tile size="125">
                                 <span class="display-4 grey--text text--darken-2">
@@ -104,7 +104,7 @@
             </v-row>
             <v-row>
                 <v-col cols="12" md="3" order-md="1">
-                    <v-card link hover @click="$router.push('/clinicRooms')">
+                    <v-card link hover @click="$router.push('/clinic-rooms/clinic='+adminClinic.id)">
                         <div class="d-flex flex-no-wrap justify-space-between align-center">
                             <v-avatar v-if="adminClinic && adminClinic.clinicRoom" tile size="125">
                                 <span v-if="adminClinic.clinicRoom.length < 100"
@@ -212,6 +212,34 @@
                         </div>
                     </v-card>
                 </v-col>
+                
+                <v-col cols="12" md="3" order-md="1">
+                    <v-card >
+                        <div class="d-flex flex-no-wrap justify-space-between align-center">
+                            <v-avatar v-if="adminClinic && adminClinic.oneClicks" tile size="125">
+                                <span v-if="adminClinic.oneClicks.length < 100"
+                                             class="display-4 grey--text text--darken-2">
+                                    {{ calculateRating() }}
+                                </span>
+                                <span v-else-if="adminClinic.oneClicks.length < 1000"
+                                      class="display-4 grey--text text--darken-2">
+                                    {{ calculateRating() }}
+                                </span>
+                                <v-icon v-else x-large>
+                                    mdi-infinity
+                                </v-icon>
+                            </v-avatar>
+                            <div class="text-center pa-3">
+                                <v-icon x-large>
+                                    mdi-star
+                                </v-icon>
+                                <v-card-title
+                                        class="headline text-center pa-1"
+                                >Rating</v-card-title>
+                            </div>
+                        </div>
+                    </v-card>
+                </v-col>
             </v-row>
         </v-container>
         <modify-clinic-dialog
@@ -254,12 +282,22 @@
             openModificationDialog() {
                 this.modifyDialog = true;
                 this.editClinic = this.adminClinic;
+            },
+            calculateRating(){
+            	console.log("calculateRating");
+            	console.log(this.adminClinic);
+            	const sum = this.adminClinic.rating.reduce((a, b) => a + b, 0);
+				const avg = (sum / this.adminClinic.rating.length) || 0;
+            	console.log(avg.toFixed(1));
+            	return avg.toFixed(1);
             }
         },
         async mounted() {
             let {data: clinic} = await this.$axios.get('/api/clinic/' + this.$route.params.id,
                 {headers: {"Authorization": 'Bearer ' + this.token}});
             this.adminClinic = clinic;
+            console.log("adminClinic = ");
+            console.log(this.adminClinic);
         }
     };
 
