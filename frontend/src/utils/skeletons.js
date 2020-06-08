@@ -111,6 +111,16 @@ export const emptyVacationRequest = {
     status: ''
 };
 
+export const emptyMedicalRecord = {
+    height: 0,
+    weight: 0,
+    bloodType: '',
+    allergies: [],
+    diagnoses: [],
+    medicines: [],
+    visits: []
+}
+
 export const emptyUser = {
     email: '',
     name: '',

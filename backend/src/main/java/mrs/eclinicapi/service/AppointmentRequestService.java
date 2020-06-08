@@ -40,11 +40,17 @@ public class AppointmentRequestService {
     public AppointmentRequest delete(String id) throws AppointmentRequestDTO.ConcurrentRequest {
         AppointmentRequest request = repository.findById(id).orElse(null);
         if (request == null) return null;
-        LocalDate doc = request.getDateOfCreation();
-        long diff = doc.atStartOfDay().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+        LocalDateTime doc = request.getDateTime();
+        long diff = LocalDateTime.now().until(doc, ChronoUnit.MILLIS);
         if (diff < 86400000) return null;
         repository.delete(request);
         return request;
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE,
+            rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
+    public void delete(AppointmentRequest request) throws AppointmentRequestDTO.ConcurrentRequest {
+        repository.delete(request);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)

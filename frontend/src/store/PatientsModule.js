@@ -5,14 +5,17 @@ export default {
     namespaced: true,
     state: {
         patients: [],
+        length: 0
     },
     mutations: {
-        setAllPatients(state, patients) {
-            Vue.set(state, 'patients', patients);
+        setAllPatients(state, pagedResponse) {
+            Vue.set(state, 'patients', pagedResponse.patients);
+            state.length = pagedResponse.totalLength;
         },
         deletePatient(state, patient) {
             let index = state.patients.findIndex(c => c.id === patient.id);
             state.patients.splice(index, 1);
+            state.length--;
         },
         updatePatient(state, patient) {
             state.patients = [
@@ -22,29 +25,15 @@ export default {
         }
     },
     actions: {
-        async getPatients({rootState, commit}) {
+        async getPatients({rootState, commit}, payload) {
+            if(payload.sort?.length === 0) payload.sort = undefined;
+            if(payload.desc?.length === 0) payload.desc = undefined;
             try {
-                let res = await Vue.prototype.$axios.get('/api/patient',
+                let {data: pagedResponse} = await Vue.prototype.$axios.get(
+                    `/api/patient/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                commit('setAllPatients', res.data);
-            } catch (err) {
-                defaultError(err);
-            }
-        },
-        async getPatientsByClinic({rootState, commit}, clinic) {
-            try {
-                let res = await Vue.prototype.$axios.get(`/api/patient/clinic/${clinic.id}`,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                commit('setAllPatients', res.data);
-            } catch (err) {
-                defaultError(err);
-            }
-        },
-        async createRecord({rootState, commit}, user) {
-            try {
-                let res = await Vue.prototype.$axios.put(`/api/patient/create-record/${user.id}`, null,
-                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
-                commit('updatePatient', res.data);
+
+                commit('setAllPatients', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }
@@ -54,6 +43,19 @@ export default {
                 let res = await Vue.prototype.$axios.delete(`/api/patient/${patient.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deletePatient', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
+        async searchApi({rootState, commit}, payload) {
+            try {
+                if(payload.sort?.length === 0) payload.sort = undefined;
+                if(payload.desc?.length === 0) payload.desc = undefined;
+                let {data: pagedResponse} = await Vue.prototype.$axios.post(
+                    `/api/patient/search/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    payload.request,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                commit('setAllPatients', pagedResponse);
             } catch (err) {
                 defaultError(err);
             }

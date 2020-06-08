@@ -1,16 +1,25 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.model.MedicalRecord;
-import mrs.eclinicapi.model.Patient;
+import lombok.AllArgsConstructor;
+import mrs.eclinicapi.dto.DoctorSearchRequest;
+import mrs.eclinicapi.dto.MedicalRecordDTO;
+import mrs.eclinicapi.dto.PatientDTO;
+import mrs.eclinicapi.dto.PatientSearchRequest;
+import mrs.eclinicapi.model.*;
+import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.MedicalRecordService;
 import mrs.eclinicapi.service.PatientService;
+import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/patient")
@@ -20,7 +29,7 @@ public class PatientController {
     private PatientService service;
 
     @Autowired
-    private MedicalRecordService medicalRecordService;
+    private UserService userService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Patient>> getPatients() {
@@ -33,36 +42,107 @@ public class PatientController {
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/clinic/{clinicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Patient>> getByClinicId(@PathVariable String clinicId) {
-        System.out.println("USA SAM ODJE " + clinicId);
-        List<Patient> found = service.getByClinicId(clinicId);
-        if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(found, HttpStatus.OK);
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDTO> getPatient(@PathVariable String id) {
+        Patient p = service.getPatientById(id);
+        if (p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(this.convertToDto(p), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/create-record/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Patient> createMedicalRecord(@PathVariable String id) {
-        Patient found = service.getPatientById(id);
+    @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> getPagedPatients(@PathVariable int pageNumber,
+                                                          @PathVariable int pageSize,
+                                                          @PathVariable String sort,
+                                                          @PathVariable String desc) {
+        PagedResponse response;
+        if (pageSize < 1) {
+            List<Patient> allPatients = service.getPatients();
+            response = new PagedResponse(allPatients.stream().map(this::convertToDto).collect(Collectors.toList()),
+                    allPatients.size());
+
+        } else {
+            Page<Patient> patientPage;
+            if (sort.equals("undefined"))
+                patientPage = service.findPaged(pageNumber, pageSize);
+            else {
+                patientPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
+            }
+            response = new PagedResponse(
+                    patientPage.getContent().stream().map(this::convertToDto).collect(Collectors.toList()),
+                    patientPage.getTotalElements());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/search/{pageNumber}/{pageSize}/{sort}/{desc}")
+    public ResponseEntity<PagedResponse> searchPatients(@RequestBody PatientSearchRequest searchRequest,
+                                                        @PathVariable int pageNumber,
+                                                        @PathVariable int pageSize,
+                                                        @PathVariable String sort,
+                                                        @PathVariable String desc) {
+        String firstName = searchRequest.getFirstName();
+        String lastName = searchRequest.getLastName();
+        String personalID = searchRequest.getPersonalID();
+        if (firstName == null) firstName = "";
+        if (lastName == null) lastName = "";
+        if (personalID == null) personalID = "";
+
+        PagedResponse response;
+        Page<Patient> patientPage;
+        if (sort.equals("undefined"))
+            patientPage = service.search(firstName, lastName, personalID, pageNumber, pageSize);
+        else {
+            sort = "user." + sort;
+            patientPage = service.search(firstName, lastName, personalID, pageNumber, pageSize, sort, desc.equals("true"));
+        }
+        response = new PagedResponse(patientPage.getContent()
+                .stream().map(this::convertToDto).collect(Collectors.toList()), patientPage.getTotalElements());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/medical-record/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MedicalRecordDTO> getMedicalRecord(@PathVariable String userID) {
+        Patient found = service.getByUserId(userID);
+        if (found == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        MedicalRecord medicalRecord = found.getMedicalRecord();
+        if (medicalRecord == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(
+                medicalRecord.getHeight(),
+                medicalRecord.getWeight(),
+                medicalRecord.getBloodType(),
+                medicalRecord.getAllergies(),
+                medicalRecord.getMedicines(),
+                medicalRecord.getDiagnoses(),
+                medicalRecord.getVisits()
+        );
+        return new ResponseEntity<>(medicalRecordDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/medical-record/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDTO> createMedicalRecord(@PathVariable String id, @RequestBody MedicalRecordDTO medicalRecordDTO) {
+        Patient found = service.getByUserId(id);
         if (found == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         MedicalRecord newMedicalRecord = new MedicalRecord();
 
+        newMedicalRecord.setHeight(medicalRecordDTO.getHeight());
+        newMedicalRecord.setWeight(medicalRecordDTO.getWeight());
+        newMedicalRecord.setBloodType(medicalRecordDTO.getBloodType());
+        newMedicalRecord.setAllergies(medicalRecordDTO.getAllergies());
         found.setMedicalRecord(newMedicalRecord);
 
         Patient newPatient = service.addPatient(found);
 
-        return new ResponseEntity<>(newPatient, HttpStatus.OK);
-
+        return new ResponseEntity<>(this.convertToDto(newPatient), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "{id}")
-    public ResponseEntity<Patient> deletePatient(@PathVariable String id) {
+    public ResponseEntity<PatientDTO> deletePatient(@PathVariable String id) {
         try {
             Patient p = service.deletePatient(id);
-            return new ResponseEntity<>(p, HttpStatus.OK);
+            return new ResponseEntity<>(this.convertToDto(p), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -70,10 +150,48 @@ public class PatientController {
     }
 
     @GetMapping(path = "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Patient> getByUserId(@PathVariable String userID) {
+    public ResponseEntity<PatientDTO> getByUserId(@PathVariable String userID) {
         Patient found = service.getByUserId(userID);
         if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(found, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDto(found), HttpStatus.OK);
+    }
+
+    private PatientDTO convertToDto(Patient patient) {
+        return new PatientDTO(
+                patient.getId(),
+                patient.getUser().getId(),
+                patient.getUser().getEmail(),
+                patient.getUser().getName(),
+                patient.getUser().getSurname(),
+                patient.getUser().getPhoneNumber(),
+                patient.getUser().getAddress(),
+                patient.getUser().getCity(),
+                patient.getUser().getCountry(),
+                patient.getUser().getPersonalID(),
+                patient.getClinics(),
+                patient.getInterventions(),
+                patient.getRequests(),
+                patient.getMedicalRecord()
+        );
+    }
+
+    private Patient convertToEntity(PatientDTO patientDTO) {
+        User user = userService.findOne(patientDTO.getId()); //moze ovako jer se ne modifikuje
+        if(user == null) return null;
+        return new Patient(
+                patientDTO.getMedicalRecord(),
+                patientDTO.getId(),
+                patientDTO.getClinics(),
+                user,
+                patientDTO.getInterventions(),
+                patientDTO.getRequests()
+        );
+    }
+
+    @AllArgsConstructor
+    static class PagedResponse {
+        public List<PatientDTO> patients;
+        public long totalLength;
     }
 }

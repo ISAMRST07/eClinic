@@ -145,10 +145,13 @@
             }
         },
         methods: {
-            ...mapActions('doctor/doctor', ['getDoctor']),
-            ...mapActions('doctor/doctor', ['getClinicDoctors']),
-            ...mapActions('doctor/doctor', ['deleteDoctorApi']),
-            ...mapActions('doctor/doctor', ['searchApi']),
+            ...mapActions('doctor/doctor',
+                [
+                    'getDoctor',
+                    'getClinicDoctors',
+                    'deleteDoctorApi',
+                    'searchApi'
+                ]),
 
             deleteDialog(doctorToDelete) {
                 this.doctorToDelete = doctorToDelete;

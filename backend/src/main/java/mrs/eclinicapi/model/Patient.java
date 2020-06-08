@@ -31,11 +31,13 @@ public class Patient {
 
     private String id;
     @ManyToMany
-    private List<Clinic> clinic;
+    private List<Clinic> clinics;
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
     @OneToMany
     private List<Intervention> interventions;
+    @OneToMany
+    private List<AppointmentRequest> requests;
 
 
 }

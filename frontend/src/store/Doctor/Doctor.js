@@ -37,7 +37,7 @@ export default {
             if(payload.desc?.length === 0) payload.desc = undefined;
             try {
                 let {data: pagedResponse} = await Vue.prototype.$axios.get(
-                    `/api/doctor//${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
+                    `/api/doctor/${payload.pageNumber}/${payload.pageSize}/${payload.sort}/${payload.desc}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
 
                 commit('setAllDoctor', pagedResponse);

@@ -31,6 +31,4 @@ public class Prescription {
     @ManyToOne
     private Medicine medicine;
 
-    private Long quantity;
-
 }

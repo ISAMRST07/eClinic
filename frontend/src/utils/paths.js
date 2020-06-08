@@ -42,7 +42,9 @@ export const appointmentRequestPatientPath = '/appointmentRequests/patient=:pati
 
 export const oneClickAppointmentPath = '/oc-appointments/clinic=:clinicID';
 
-export const visitPath ='/visit';
+export const visitPath ='/visit/:id';
+
+export const medicalRecordPath ='/medical-record/:id';
 
 export const historyPath ='/history';
 

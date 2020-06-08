@@ -38,6 +38,10 @@ public class DoctorService {
         repository.deleteById(id);
     }
 
+    public Doctor findByUserID(String userID) {
+        return repository.findDoctorByUser_Id(userID).orElse(null);
+
+    }
 
     public Page<Doctor> findPaged(int pageNumber, int pageSize) {
         return this.findPaged(pageNumber, pageSize, null, false);
