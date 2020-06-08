@@ -238,8 +238,6 @@ const Nurse = {
     code: 'nurse',
     items: [
         workingScheduleItem,
-        visitItem,
-        vacationRequestItem
         vacationRequestItem,
         patientsItem
     ]
