@@ -48,9 +48,7 @@ public class AuthenticationController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
-                                                                   HttpServletResponse response) {
-
+    public ResponseEntity<TokenResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));

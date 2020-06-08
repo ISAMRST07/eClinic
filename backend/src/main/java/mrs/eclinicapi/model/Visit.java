@@ -11,12 +11,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class Visit {
     @Id
@@ -29,17 +30,15 @@ public class Visit {
     private String id;
 
     private String anamnesis;
-
-    @ManyToOne
-    private MedicalRecord medicalRecord;
-
+    private String usageMethod;
     @OneToOne
     private Intervention intervention;
 
     @ManyToMany
-    private List<Diagnosis> diagnoses;
+    private Set<Diagnosis> diagnoses;
 
     @ManyToMany
-    private List<Prescription> prescriptions;
+    private Set<Medicine> medicines;
+
 
 }

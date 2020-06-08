@@ -38,7 +38,7 @@ export default {
         async getClinicInterventionApi({rootState, commit}, clinic) {
             try {
                 console.log("actions getClinicInterventionApi clinic = " + clinic);
-                let res = await Vue.prototype.$axios.get('/api/intervention/' + clinic,
+                let res = await Vue.prototype.$axios.get('/api/intervention/clinic/' + clinic,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 console.log("actions getClinicInterventionApi = " + res.data);
                 res.data.forEach(item => console.log(item));

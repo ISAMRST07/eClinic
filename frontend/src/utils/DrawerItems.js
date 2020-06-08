@@ -18,16 +18,23 @@ import {
     appointmentRequestClinicPath,
     appointmentRequestPatientPath,
     oneClickAppointmentPath,
-    visitPath,
-    diseasePath
+    diseasePath,
+    medicalRecordPath
 } from "./paths";
-import {functionalThemeClasses} from "vuetify/lib/mixins/themeable";
 
 function doctorsItem(clinicID) {
     return {
         icon: 'mdi-account-tie',
         label: 'Doctors',
         path: doctorsPath.replace(":clinicID", clinicID)
+    }
+}
+
+function medicalRecordItem(patientID) {
+    return {
+        icon: 'mdi-view-list',
+        label: 'Doctors',
+        path: medicalRecordPath.replace(":id", patientID)
     }
 }
 
@@ -143,12 +150,6 @@ const doctorHomeItem = {
     path: doctorHomePath,
 };
 
-const visitItem = {
-	icon: 'mdi-home',
-	label: 'Visit',
-	path: visitPath,	
-}
-
 const vacationRequestItem = {
 	icon: 'mdi-home',
 	label: 'Vacation request',
@@ -201,13 +202,13 @@ class ClinicalAdmin {
 class Patient {
     static name = 'Patient';
     static code = 'Patient';
-    constructor(patientID) {
+    constructor(patientID, userID) {
         this.items = [
             homeItem,
             clinicsItem,
             interventionTypeItem,
             appointmentRequestPatientItem(patientID),
-            oneClickAppointmentItem()
+            medicalRecordItem(userID)
         ]
     }
 }
@@ -218,8 +219,8 @@ const Doctor = {
     items: [
         workingScheduleItem,
         doctorHomeItem,
-        visitItem,
-        vacationRequestItem
+        vacationRequestItem,
+        patientsItem
     ]
 };
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor};

@@ -40,11 +40,13 @@ import {
     vacationRequestPath,
     workingSchedulePath,
     appointmentRequestClinicPath,
-    appointmentRequestPatientPath, 
+    appointmentRequestPatientPath,
     chooseClinicRoomsPath,
     oneClickAppointmentPath,
-    visitPath
+    visitPath,
+    medicalRecordPath
 } from "../utils/paths";
+import MedicalRecordView from "../components/Patient/MedicalRecordView";
 
 const loggedRoutes = [
     {
@@ -62,6 +64,10 @@ const loggedRoutes = [
     {
         path: clinicAdministratorsPath,
         component: ClinicAdministrators,
+    },
+    {
+        path: medicalRecordPath,
+        component: MedicalRecordView
     },
     {
         path: clinicRoomsPath,

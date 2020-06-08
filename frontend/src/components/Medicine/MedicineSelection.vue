@@ -4,11 +4,10 @@
             @input="$emit('input', $event)"
             hint="Choose medicines"
             :items="medicines"
-            label="Medicines*"
+            label="Medicines"
             persistent-hint
-            item-text="name"       
-            item-value="name"        
-            :rules="rules"
+            item-text="name"
+            item-value="name"
             return-object
             :loading="loading"
             :multiple="multiple"
@@ -33,7 +32,6 @@
     export default {
         name: "MedicineSelection",
         data: () => ({
-            rules: [v => !!v || 'Medicine is required'],
             loading: false,
         }),
         props: {

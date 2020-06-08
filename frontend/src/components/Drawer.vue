@@ -76,7 +76,7 @@
                     this.items = (new ClinicalAdmin(this.clinic.id)).items;
                     break;
                 case Patient.code:
-                    this.items = (new Patient(this.patient.id)).items;
+                    this.items = (new Patient(this.patient.id, this.user.id)).items;
                     break;
                 case Doctor.code:
                     this.items = Doctor.items;

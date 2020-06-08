@@ -31,17 +31,27 @@
             <v-row>
                 <v-col cols="12" sm="6" md="8">
                     <v-card outlined min-height="370">
-                        <v-card-title>
-                            <span class="headline">Personal info</span>
-                        </v-card-title>
-                        <v-card-subtitle>
-                            <span class="subtitle-1">Here's what we know about you.</span>
-                        </v-card-subtitle>
+                        <v-row align="center" no-gutters>
+                            <v-col cols="9">
+                                <v-card-title>
+                                    <span class="headline">Personal info</span>
+                                </v-card-title>
+                                <v-card-subtitle>
+                                    <span class="subtitle-1">Here's what we know about you.</span>
+                                </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="3" v-if="outsideAccess && medicalRecordAllowed">
+                                <v-btn @click="medicalRecord" outlined color="primary">
+                                    Medical record
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                         <v-list two-line>
                             <profile-info-item
                                     :content="`${profile.name} ${profile.surname}`"
                                     subtitle="Name"
                                     @click="nameDialog = true"
+                                    :disabled="outsideAccess"
                             ></profile-info-item>
                             <profile-info-item
                                     :content="profile.personalID"
@@ -52,11 +62,13 @@
                                     :content="`${profile.address}, ${profile.city}, ${profile.country}`"
                                     subtitle="Address, city and country"
                                     @click="addressDialog = true"
+                                    :disabled="outsideAccess"
                             ></profile-info-item>
                             <profile-info-item
                                     :content="profile.phoneNumber"
                                     subtitle="Phone number"
                                     @click="phoneNumberDialog = true"
+                                    :disabled="outsideAccess"
                             ></profile-info-item>
 
                         </v-list>
@@ -88,7 +100,7 @@
                                     disabled
                             ></profile-info-item>
                             <v-divider></v-divider>
-                            <v-list-item link @click="passwordDialog = true">
+                            <v-list-item :disabled="outsideAccess" link @click="passwordDialog = true">
                                 <v-list-item-content>
                                     <v-list-item-title>
                                         ••••••••
@@ -98,11 +110,15 @@
                                     </v-list-item-subtitle>
                                 </v-list-item-content>
                                 <v-list-item-action>
-                                    <v-icon>
+                                    <v-icon v-if="outsideAccess">
+                                        mdi-lock
+                                    </v-icon>
+                                    <v-icon v-else>
                                         mdi-chevron-right
                                     </v-icon>
                                 </v-list-item-action>
                             </v-list-item>
+
                             <profile-info-item
                                     :content="lastChanged"
                                     subtitle="Last time the password was changed"
@@ -122,6 +138,20 @@
                 @passwordChange="passwordChanged"
                 :personal="profile.id === $store.state.auth.user.id"
         ></password-dialog>
+        <v-scale-transition>
+            <v-card class="upcoming-card" v-show="upcomingIntervention">
+                <v-card-title>There is an upcoming intervention</v-card-title>
+                <v-card-text>
+                    There is an upcoming intervention with this patient {{upcomingDifference}}.
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="$router.push(`/visit/${upcomingIntervention.id}`)">
+                        Start
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-scale-transition>
     </div>
 </template>
 
@@ -131,7 +161,7 @@
     import NameDialog from "./NameDialog";
     import AddressDialog from "./AddressDialog";
     import PhoneNumberDialog from "./PhoneNumberDialog";
-    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, ClinicalCenterAdmin, Doctor, Patient} from "../../utils/DrawerItems";
     import store from '../../store/index'
     import PasswordDialog from "./PasswordDialog";
 
@@ -142,10 +172,14 @@
             nameDialog: false,
             addressDialog: false,
             phoneNumberDialog: false,
-            passwordDialog: false
+            passwordDialog: false,
+            outsideAccess: false,
+            upcomingIntervention: false,
+            medicalRecordAllowed: false,
         }),
         computed: {
             ...mapState('profile', ['profile']),
+            ...mapState('auth', ['user', 'role', 'token']),
             avatarInitials() {
                 if (!this.profile) return '';
                 let firstName = this.profile.name;
@@ -168,7 +202,6 @@
                 else return `${minutes} minutes ago`;
             },
             greetingMessages() {
-                // da napravimo neku glupost od koda ovde, i ja malo da se poigram....
 
                 return this.$store.state.auth.user.id === this.$route.params.id ? {
                     welcome: `Welcome, ${this.profile.name} ${this.profile.surname}`,
@@ -177,19 +210,77 @@
                     welcome: `You're viewing the profile of user ${this.profile.name} ${this.profile.surname}`,
                     subtitle: `Don't do anything mean. After all, this is eClinic.`
                 };
+            },
+            upcomingDifference() {
+                if(!this.upcomingIntervention) return '';
+
+                let now = new Date();
+                let difference = new Date(this.upcomingIntervention.dateTime.start) - now;
+                let diffMins = Math.round(((difference % 86400000) % 3600000) / 60000); // minutes
+                console.log(this.upcomingIntervention.dateTime.start);
+                if (diffMins > 0) return `in ${diffMins} minutes`;
+                else return `right now`;
+            }
+
+        },
+        watch: {
+            async '$route.params.id'(){
+                await this.populate();
+                await this.checkIntervention();
             }
         },
-        created() {
-            this.getProfileApi(this.$route.params.id);
+        async mounted() {
+            await this.populate();
+            await this.checkIntervention();
         },
         methods: {
-            ...mapActions('profile', ['getProfileApi']),
-            ...mapActions('profile', ['updateProfileApi']),
+            ...mapActions('profile', ['getProfileApi', 'updateProfileApi']),
             updateProfile(profile) {
                 this.updateProfileApi(profile);
             },
             passwordChanged() {
                 this.getProfileApi(this.$route.params.id);
+            },
+            medicalRecord() {
+                this.$router.push(`/medical-record/${this.profile.id}`);
+            },
+            async populate() {
+                try {
+                    await this.getProfileApi(this.$route.params.id);
+                    if(this.profile.type === Patient.code && this.role === Doctor.code) {
+                        this.outsideAccess = true;
+
+                    } else {
+                        this.outsideAccess = false;
+                    }
+                } catch (e) {
+                    this.$router.push('/');
+                }
+            },
+            async checkIntervention() {
+                console.log(this.profile);
+                try {
+                    let {data: res} = await this.$axios.get(`/api/intervention/upcoming/${this.user.id}/${this.profile.id}`,
+                        {headers: {"Authorization": 'Bearer ' + this.token} });
+                    this.upcomingIntervention = res;
+                    if(res) {
+                        this.medicalRecordAllowed = true;
+                        return;
+                    }
+                    let {data: exists} = await this.$axios.get(`/api/intervention/${this.user.id}/${this.patientID}`,
+                        {headers: {"Authorization": 'Bearer ' + this.token} });
+
+                    if(exists) {
+                        this.medicalRecordAllowed = true;
+                        return;
+                    }
+                    this.medicalRecordAllowed = false;
+                } catch(e) {
+                    console.log(e);
+                    this.medicalRecordAllowed = false;
+
+                    console.log("There aren't any upcoming interventions.")
+                }
             }
 
         },
@@ -197,8 +288,8 @@
             let loggedUser = store.state.auth.user;
             let id = to.params.id;
             let role = store.state.auth.role;
-            console.log(to)
-            if (role !== ClinicalCenterAdmin.code && role !== ClinicalAdmin.code && loggedUser.id !== id) {
+            console.log(to);
+            if (role !== ClinicalCenterAdmin.code && role !== ClinicalAdmin.code && role !== Doctor.code && loggedUser.id !== id) {
                 next('/')
             }
             next();
@@ -207,5 +298,9 @@
 </script>
 
 <style scoped>
-
+    .upcoming-card {
+        position: fixed;
+        bottom: 3em;
+        right: 3em;
+    }
 </style>

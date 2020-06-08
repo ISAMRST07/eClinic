@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional
@@ -45,6 +47,22 @@ public class InterventionService {
 
     public List<Intervention> getClinicIntervention(String clinicId) {
         return repository.getClinicIntervention(clinicId);
+    }
+
+    public Intervention findUpcoming(String doctorID, String patientID) {
+        List<Intervention> interventions = repository.findInterventionsByDoctor_IdAndPatient_Id(doctorID, patientID);
+        if(interventions.isEmpty()) return null;
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fifteen = now.plusMinutes(20);
+        return interventions.stream().filter(in -> (in.getDateTime().getStart().isAfter(now)
+                && in.getDateTime().getStart().isBefore(fifteen))
+                || (in.getDateTime().getStart().isBefore(now) && in.getDateTime().getEnd().isAfter(now))
+                && in.getVisit() == null).findFirst().orElse(null);
+    }
+
+    public boolean pastIntervention(String doctorID, String patientID) {
+        List<Intervention> interventions = repository.findInterventionsByDoctor_IdAndPatient_Id(doctorID, patientID);
+        return interventions.stream().anyMatch(in -> in.getVisit() != null);
     }
 
 }
