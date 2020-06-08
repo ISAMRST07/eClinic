@@ -104,6 +104,8 @@
 
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
         name: "WorkingCalendar",
         data: () => ({
@@ -125,6 +127,8 @@
             names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
         }),
         computed: {
+            ...mapState('patients', ['patients']),
+            ...mapState('auth', ['role', 'user']),
             title() {
                 const {start, end} = this
                 if (!start || !end) {
@@ -196,27 +200,75 @@
                 nativeEvent.stopPropagation()
             },
             updateRange({start, end}) {
+
                 const events = []
 
                 const min = new Date(`${start.date}T00:00:00`)
                 const max = new Date(`${end.date}T23:59:59`)
                 const days = (max.getTime() - min.getTime()) / 86400000
                 const eventCount = this.rnd(days, days + 20)
-
-                for (let i = 0; i < 1; i++) {
+                console.log("KALENDAR");
+                console.log(start)
+                //appointmentrequest
+                let appoinmentReqSize = 1
+                for (let i = 0; i < appoinmentReqSize; i++) {
+                    //OVO SAMO ZA TESTIRANJE, KAD SE UCITAJU PODACI IZ BAZE BRISE SE
                     const allDay = this.rnd(0, 3) === 0
                     const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-                    console.log(firstTimestamp)
+                    const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+                    const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+                    const second = new Date(first.getTime() + secondTimestamp)
+                    let appoinmentStart = this.formatDate(first, !allDay); //Ovde dodati podatak kad pocinje (iz baze) FORMAT YYYY-MM-DD hh:mm
+                    let appoinmentEnd =  this.formatDate(second, !allDay); //Ovde dodati podatak kad se zavrsava (iz baze) FORMAT YYYY-MM-DD hh:mm
+                    //----------------------------------------------------------------
+                    if ( !this.isBetweenTwoDates(start.date, end.date, appoinmentStart)){
+                        if ( this.isBetweenTwoDates(start.date, end.date, appoinmentEnd)){
+                            appoinmentStart = start.date;
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+
+                    if ( !this.isBetweenTwoDates(start.date, end.date, appoinmentEnd))
+                        appoinmentEnd = end.date;
+                    events.push({
+                        details: "appointmentrequest",
+                        name: "appointmentrequest",
+                        start: appoinmentStart,
+                        end: appoinmentEnd,
+                        color: this.colors[1],
+                    })
+                }
+                //interventions lista intervenicja iz baze
+                let interventions = 1
+                for (let i = 0; i < interventions; i++) {
+                    //OVO SAMO ZA TESTIRANJE, KAD SE UCITAJU PODACI IZ BAZE BRISE SE
+                    const allDay = this.rnd(0, 3) === 0
+                    const firstTimestamp = this.rnd(min.getTime(), max.getTime())
                     const first = new Date(firstTimestamp - (firstTimestamp % 900000))
                     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
                     const second = new Date(first.getTime() + secondTimestamp)
 
+                    let interventionStart = this.formatDate(first, !allDay); //Ovde dodati podatak kad pocinje (iz baze) FORMAT YYYY-MM-DD hh:mm
+                    let interventionEnd =  this.formatDate(second, !allDay); //Ovde dodati podatak kad se zavrsava (iz baze) FORMAT YYYY-MM-DD hh:mm
+                    //----------------------------------------------------------------
+                    if ( !this.isBetweenTwoDates(start.date, end.date, interventionStart)){
+                        if ( this.isBetweenTwoDates(start.date, end.date, interventionEnd)){
+                            interventionStart = start.date;
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+                    if ( !this.isBetweenTwoDates(start.date, end.date, interventionEnd))
+                        interventionEnd = end.date;
                     events.push({
-                        details: "CAO SVIMA",
-                        name: "HCI",
-                        start: this.formatDate(first, !allDay),
-                        end: this.formatDate(second, !allDay),
-                        color: this.colors[this.rnd(0, this.colors.length - 1)],
+                        details: " intervention",
+                        name: " intervention",
+                        start: interventionStart,
+                        end: interventionEnd,
+                        color: this.colors[2],
                     })
                 }
 
@@ -232,13 +284,44 @@
             rnd(a, b) {
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
+            isBetweenTwoDates(fromD, toD, checkD){
+                let fromDSplit = fromD.split('-')
+                fromD = fromDSplit[0]+""+fromDSplit[1]+""+fromDSplit[2]+"0000";
+                let toDSplit = toD.split('-')
+                toD = toDSplit[0]+""+toDSplit[1]+""+toDSplit[2]+"2359";
+                let checkDateTime = checkD.split(' ');
+                let checkDateSplit = checkDateTime[0].split('-')
+                let checkTimeSplit = checkDateTime[1].split(':')
+
+
+                if(parseInt(checkDateSplit[1])<10){
+                    checkDateSplit[1] = '0'+checkDateSplit[1];
+                }
+                if(parseInt(checkDateSplit[2])<10){
+                    checkDateSplit[2] = '0'+checkDateSplit[2];
+                }
+
+
+                if(parseInt(checkTimeSplit[0])<10){
+                    checkTimeSplit[0] = '0'+checkTimeSplit[0];
+                }
+                if(parseInt(checkTimeSplit[1])<10){
+                    checkTimeSplit[1] = '0'+checkTimeSplit[1];
+                }
+                checkD = checkDateSplit[0]+""+checkDateSplit[1]+""+checkDateSplit[2]+""+checkTimeSplit[0]+""+checkTimeSplit[1];
+               //  console.log(fromD)
+               //  //console.log(new Date(fromD))
+               //  console.log(toD)
+               //  //console.log(new Date(toD))
+               //  console.log(checkD)
+               // console.log(parseInt(checkD) >= parseInt(fromD) && parseInt(checkD)<= parseInt(toD))
+                return true;
+             //   return new Date(checkD) >= new Date(fromD) && new Date(checkD) <= new Date(toD);
+            },
             formatDate(a, withTime) {
-                console.log(withTime
-                    ? `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
-                    : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`);
                 return withTime
                     ? `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
-                    : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`
+                    : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
             },
         },
     }
