@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -229,10 +230,24 @@ public class DoctorController {
                 doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList()),
                 doctor.getWorkingCalendar().getWorkingSchedule(),
                 doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
-                doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList())
-        );
+                doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList()),
+                getAvg(doctor.getRating())
+        		);
     }
 
+    private double getAvg(ArrayList<Integer> list) {
+    	System.out.println("getAvg list = " + list);
+    	if(list.size() == 0) {
+    		return 0;
+    	}
+    	double sum = 0;
+    	for(int i : list) {
+    		sum += i;
+    	}
+    	double avg =  Math.round(sum/list.size() * 10.0) / 10.0;
+    	System.out.println("avg = " + avg);
+    	return avg;
+    }
     private AppointmentRequestDTO appointmentRequestToDTO(AppointmentRequest appointmentRequest) {
         return new AppointmentRequestDTO(
                 appointmentRequest.getId(),

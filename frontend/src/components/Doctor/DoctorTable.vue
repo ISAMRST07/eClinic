@@ -126,7 +126,8 @@
                     {text: 'Surname', align: 'center', value: 'surname'},
                     {text: 'Email', align: 'center', value: 'email'},
                     {text: 'Phone number', align: 'center', value: 'phoneNumber'},
-                    {text: 'City', align: 'center', value: 'city'}
+                    {text: 'City', align: 'center', value: 'city'},
+                    {text: 'Rating', align: 'center', value: 'avgRating'}                   
                 ];
                 let patientHeader = [
                     {text: 'Availability', value: 'availability', sortable: false, align: 'center'},

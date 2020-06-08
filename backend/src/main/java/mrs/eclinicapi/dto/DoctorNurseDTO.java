@@ -37,13 +37,14 @@ public class DoctorNurseDTO {
     private Map<Weekday, TimePeriod<LocalTime>> workingSchedule;
     private List<TimePeriod<LocalDateTime>> busyTimes;
     private List<AppointmentRequestDTO> appointmentRequests;
-
+    private double avgRating;
+    
     @Override
     public String toString() {
         return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password
                 + ", name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + ", address=" + address
                 + ", city=" + city + ", country=" + country + ", personalID=" + personalID + ", clinicID=" + clinicID
-                + ", specialties=" + specialties + "]";
+                + ", specialties=" + specialties + ", rating = " + avgRating + "]";
     }
 
 

@@ -9,6 +9,8 @@ export default {
     },
     mutations: {
         setAllDoctor(state, pagedResponse) {
+        	console.log("setAllDoctor = ");
+        	console.log(pagedResponse.doctors);
             Vue.set(state, 'doctors', pagedResponse.doctors);
             state.length = pagedResponse.totalLength;
         },
@@ -45,6 +47,7 @@ export default {
         },
         async getClinicDoctors({rootState, commit}, payload) {
             try {
+            	console.log("getClinicDoctorsApi");
                 if(payload.sort?.length === 0) payload.sort = undefined;
                 if(payload.desc?.length === 0) payload.desc = undefined;
                 let {data: pagedResponse} = await Vue.prototype.$axios.get(
