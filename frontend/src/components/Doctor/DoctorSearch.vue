@@ -2,7 +2,7 @@
     <v-container fluid class="ma-2">
             <v-row align="center">
                 <v-col cols="12" md="1">
-                    <span class="headline">Doctors</span>
+                    <span class="headline">Doctor</span>
                 </v-col>
                 <v-col cols="12" md="11" v-if="role === patientCode && value">
                     <v-form ref="form" @submit.prevent="search">
