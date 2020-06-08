@@ -10,6 +10,8 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,11 +72,14 @@ public class Clinic {
     @ManyToOne
     private ClinicalCentarAdministrator admin;
 
+    private ArrayList<Integer> rating = new ArrayList<>();
+    
     @Override
     public String toString() {
         return "Clinic{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", rating='" + rating + '\'' +
                 '}';
     }
 }

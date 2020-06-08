@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,6 +53,16 @@ public class InterventionController {
         return new ResponseEntity<>(it, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/patient/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Intervention>> getPatientIntervention(@PathVariable("id") String patientId) {
+        System.out.println("getPatientIntervention patientId = " + patientId);
+        Patient patient = patientService.getByUserId(patientId);
+        if (patient == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<Intervention> it = service.getPatientIntervention(patient.getId());
+        System.out.println("getPatientIntervention it = " + it);
+        return new ResponseEntity<>(it, HttpStatus.OK);
+    }
+    
     @PostMapping(path = "/one-click/{oneClickID}/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionDTO> scheduleOneClick(@PathVariable String oneClickID,
                                                             @PathVariable String userID) {
@@ -77,7 +88,46 @@ public class InterventionController {
         eventPublisher.publishEvent(new EmailEvent(added.getDoctor().getUser(), "Appointment scheduled", content, sendToDoctor));
         return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
+    @PostMapping(path = "/rate/{clinicId}/{clinicRating}/{doctorId}/{doctorRating}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> rate(@PathVariable String clinicId,
+    									@PathVariable String clinicRating,
+    									@PathVariable String doctorId,
+                                        @PathVariable String doctorRating) {
+    	System.out.println("clinicId = " + clinicId);
+    	System.out.println("clinicRating = " + clinicRating);
+    	System.out.println("doctorId = " + doctorId);
+    	System.out.println("doctorRating = " + doctorRating);
+    	Clinic clinic = clinicService.findOne(clinicId);
+    	Doctor doctor = doctorService.findOne(doctorId);
+    	
+    	System.out.println("clinic befotr= " + clinic);
+    	System.out.println("doctor befotr= " + doctor);
+    	
+    	if(clinic.getRating() == null) {
+    		ArrayList<Integer> i = new ArrayList<>();
+    		i.add(Integer.parseInt(clinicRating));
+    		clinic.setRating(i);
+    	}else {
+        	clinic.getRating().add(Integer.parseInt(clinicRating));    		
+    	}
+    	
+    	if(doctor.getRating() == null) {
+    		ArrayList<Integer> i = new ArrayList<>();
+    		i.add(Integer.parseInt(doctorRating));
+    		doctor.setRating(i);
+    	}else {
+        	doctor.getRating().add(Integer.parseInt(doctorRating));	
+    	}
+    	
+    	System.out.println("clinic after= " + clinic);
+    	System.out.println("doctor after= " + doctor);
 
+    	clinicService.addClinic(clinic);
+    	doctorService.addDoctor(doctor);
+    	
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
     @PostMapping(path = "/approve/{requestID}/{roomID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionDTO> approve(@PathVariable String requestID,
                                                    @PathVariable String roomID) {

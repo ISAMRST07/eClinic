@@ -44,3 +44,5 @@ export const oneClickAppointmentPath = '/oc-appointments/clinic=:clinicID';
 
 export const visitPath ='/visit';
 
+export const historyPath ='/history';
+

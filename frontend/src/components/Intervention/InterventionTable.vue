@@ -32,7 +32,12 @@
 					mdi-delete
 				</v-icon>
 			</template>
-
+			<template v-slot:item.rate="{ item }">
+				<v-icon @click="rateDialog(item)" color="red">
+					mdi-pencil
+				</v-icon>
+			</template>
+			
 			<template v-slot:no-data>
 				<p>There are no interventions</p>
 			</template>
@@ -42,6 +47,12 @@
 			:intervention="interventionToDelete"
 			@close="deleteDialog(null)"
 			@delete="deleteIntervention"
+		/>
+		<rate-dialog
+			v-model="rateDialogShow"
+			:intervention="interventionToRate"
+			@closeRate="rateDialog(null)"
+			@rate="rateIntervention"
 		/>
 		<modify-intervention-dialog
 			mode="update"
@@ -55,40 +66,62 @@
 import {mapActions, mapState} from "vuex";
 import DeleteDialog from "./DeleteDialog";
 import ModifyInterventionDialog from "./ModifyInterventionDialog";
-import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
+import RateDialog from "./RateDialog";
+import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
 
 export default {
     name: "InterventionTable",
-    components: {DeleteDialog, ModifyInterventionDialog},
+    components: {DeleteDialog, ModifyInterventionDialog, RateDialog},
     data: () => ({
     	search : "",
         loading: false,
         descriptionDialog: false,
         editDialog: false,
         dialog: false,
+        rateDialogShow: false,
         interventionToDelete: null,
+        interventionToRate: null,    
         editIntervention: null,
-        headers: [
-            {text: 'Date and time', align: 'start', value: 'dateTime'},
-            {text: 'Doctor name', align: 'center', value: 'doctor.user.name'},
-            {text: 'Clinic room', align: 'center', value: 'clinicRoom.name'},
-            {text: 'Intervention type', align: 'center', value: 'interventionType.name'},
-            {text: 'Intervention price (in $)', align: 'center', value: 'interventionType.price'},
-            {text: 'Duration (in minutes)', align: 'center', value: 'duration'},
-            {text: 'Price (in $)', align: 'center', value: 'price'},
-            {text: 'Update', value: 'update', sortable: false, align: 'center'},
-            {text: 'Remove', sortable: false, value: 'remove'},
-        ],
     }),
     computed: {
         ...mapState('intervention/intervention', ['intervention']),
+        ...mapState('auth', ['role']),      
         ...mapState('auth', ['user']),
         ...mapState('auth', ['clinic']),
+    	headers() {
+                let regularHeaders = [
+                    {text: 'Date and time', align: 'start', value: 'dateTime'},
+		            {text: 'Doctor name', align: 'center', value: 'doctor.user.name'},
+		            {text: 'Clinic room', align: 'center', value: 'clinicRoom.name'},
+		            {text: 'Intervention type', align: 'center', value: 'interventionType.name'},
+		            {text: 'Intervention price (in $)', align: 'center', value: 'interventionType.price'},
+		            {text: 'Duration (in minutes)', align: 'center', value: 'duration'},
+		            {text: 'Price (in $)', align: 'center', value: 'price'},
+		            {text: 'Update', value: 'update', sortable: false, align: 'center'},
+		            {text: 'Remove', sortable: false, value: 'remove'},
+                ];
+                let patientHeaders = [
+                   	{text: 'Date and time', align: 'start', value: 'dateTime'},
+		            {text: 'Clinic', align: 'center', value: 'clinic.name'},
+		            {text: 'Doctor name', align: 'center', value: 'doctor.user.name'},
+		            {text: 'Intervention type', align: 'center', value: 'interventionType.name'},
+		            {text: 'Intervention price (in $)', align: 'center', value: 'interventionType.price'},
+		            {text: 'Price (in $)', align: 'center', value: 'price'},
+		            {text: 'Rate', value: 'rate', sortable: false, align: 'center'},	           
+		        ];
+                if (this.role !== Patient.code){
+                	return regularHeaders;
+                }else{
+                	return patientHeaders;              
+                }
+        },
     },
     methods: {
         ...mapActions('intervention/intervention', ['getClinicInterventionApi']),
         ...mapActions('intervention/intervention', ['getAllInterventionApi']),
         ...mapActions('intervention/intervention', ['deleteInterventionApi']),
+        ...mapActions('intervention/intervention', ['getPatientInterventionApi']),
+        ...mapActions('intervention/intervention', ['rateClinicInterventionApi']),
 
         deleteDialog(interventionToDelete) {
             this.interventionToDelete = interventionToDelete;
@@ -111,7 +144,27 @@ export default {
                 price : intervention.price,
             };
             this.editDialog = true;
-        }
+        },
+        rateDialog(intervention) {
+            console.log("rateDialog intervention = ");
+			console.log(intervention); 
+			this.interventionToRate = intervention;
+            this.rateDialogShow = !this.rateDialogShow;        
+        },
+        rateIntervention(clinicRating, doctorRating) {
+        	console.log("rate intervention yes");
+        	console.log(this.interventionToRate);
+        	console.log(clinicRating);
+        	console.log(doctorRating);
+        	let payload = {
+        		"clinicId" : this.interventionToRate.clinic.id,
+        		"clinicRating" : clinicRating,
+        		"doctorId" : this.interventionToRate.doctor.id,
+        		"doctorRating" : doctorRating,        		
+        	}
+            this.rateClinicInterventionApi(payload);
+            this.rateDialog(null);
+        },
     },
     created() {
         this.loading = true;
@@ -125,6 +178,10 @@ export default {
                 console.log("callapi");
                 this.getClinicInterventionApi(this.clinic.id);
                 break;
+            case Patient.code:
+				console.log("user == patient");
+				this.getPatientInterventionApi(this.user.id);
+            	break;
             default:
         }
     },

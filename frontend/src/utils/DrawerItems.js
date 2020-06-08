@@ -19,7 +19,8 @@ import {
     appointmentRequestPatientPath,
     oneClickAppointmentPath,
     visitPath,
-    diseasePath
+    diseasePath,
+    historyPath
 } from "./paths";
 import {functionalThemeClasses} from "vuetify/lib/mixins/themeable";
 
@@ -131,6 +132,12 @@ const unregisteredUsersItem = {
     path: unregisteredUsersPath,
 };
 
+const historyItem = {
+	icon: 'mdi-home',
+    label: 'History',
+    path: historyPath,
+};
+
 const patientsItem = {
     icon: 'mdi-account-heart',
     label: 'Patients',
@@ -207,7 +214,8 @@ class Patient {
             clinicsItem,
             interventionTypeItem,
             appointmentRequestPatientItem(patientID),
-            oneClickAppointmentItem()
+            oneClickAppointmentItem(),
+            historyItem
         ]
     }
 }

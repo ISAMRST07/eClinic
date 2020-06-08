@@ -47,4 +47,7 @@ public class InterventionService {
         return repository.getClinicIntervention(clinicId);
     }
 
+    public List<Intervention> getPatientIntervention(String patientId) {
+        return repository.getPatientIntervention(patientId);
+    }
 }

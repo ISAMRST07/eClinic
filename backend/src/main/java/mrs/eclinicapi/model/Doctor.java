@@ -37,6 +37,8 @@ public class Doctor extends MedicalStaff {
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
 
+    private ArrayList<Integer> rating = new ArrayList<>();
+
     @Override
     public Clinic getClinic() {
         return super.getClinic();
@@ -46,6 +48,7 @@ public class Doctor extends MedicalStaff {
     public String toString() {
         return "Doctor{" +
                 "id='" + id + '\'' +
+                ", rating='" + rating + '\'' +
                 '}';
     }
 }

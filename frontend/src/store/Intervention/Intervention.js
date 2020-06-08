@@ -47,6 +47,18 @@ export default {
                 defaultError(err);
             }
         },
+        async getPatientInterventionApi({rootState, commit}, patientId) {
+            try {
+                console.log("actions getPatientInterventionApi patientId = " + patientId);
+                let res = await Vue.prototype.$axios.get('/api/intervention/patient/' + patientId,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("actions getPatientInterventionApi = " + res.data);
+                res.data.forEach(item => console.log(item));
+                commit('setAllIntervention', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
         async deleteInterventionApi({rootState, commit}, intervention) {
             try {
             	console.log("delete intervention = ");
@@ -88,6 +100,18 @@ export default {
             } catch (e) {
                 defaultError(e);
             }
-        }
+        },
+        async rateClinicInterventionApi({rootState, commit}, payload) {
+            try {
+                let {clinicId, clinicRating, doctorId, doctorRating} = payload;
+                console.log("rateClinicInterventionApi");
+                console.log(payload);
+                let {data: added} = await Vue.prototype.$axios.post(`/api/intervention/rate/${clinicId}/${clinicRating}/${doctorId}/${doctorRating}`,
+                    null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+                //commit('addIntervention', added);
+            } catch (e) {
+                defaultError(e);
+            }
+        },
     },
 };
