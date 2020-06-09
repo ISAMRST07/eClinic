@@ -3,6 +3,7 @@
 		<v-card>
 			<v-card-title>
 				Ongoing intervention for {{patient.name}} {{patient.surname}}
+				<v-icon @click="$router.push(`/profile/${patient.userID}`)">mdi-account-outline</v-icon>
 			</v-card-title>
 			<v-card-text>
 				<v-container>

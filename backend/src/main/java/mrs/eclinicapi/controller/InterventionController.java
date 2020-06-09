@@ -74,17 +74,26 @@ public class InterventionController {
         System.out.println("getPatientIntervention it = " + it);
         return new ResponseEntity<>(it.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
-    @GetMapping(path = "/upcoming/{doctorID}/{patientUserID}")
-    public ResponseEntity<InterventionDTO> upcomingIntervention(@PathVariable String doctorID,
-                                                                @PathVariable String patientUserID) {
-        Patient p = patientService.getByUserId(patientUserID);
-        if(p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping(path = "/ongoing/{doctorID}")
+    public ResponseEntity<InterventionDTO> ongoingIntervention(@PathVariable String doctorID) {
 
         Doctor d = doctorService.findByUserID(doctorID);
         if(d == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Intervention upcoming = service.findUpcoming(d.getId(), p.getId());
-        if(upcoming == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(this.convertToDTO(upcoming), HttpStatus.OK);
+        Intervention ongoing = service.findOngoing(d.getId());
+        if(ongoing == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(this.convertToDTO(ongoing), HttpStatus.OK);
+    }
+    @GetMapping(path = "/upcoming/{doctorID}/{patientUserID}")
+        public ResponseEntity<InterventionDTO> upcomingIntervention(@PathVariable String doctorID,
+                @PathVariable String patientUserID) {
+            Patient p = patientService.getByUserId(patientUserID);
+            if(p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+            Doctor d = doctorService.findByUserID(doctorID);
+            if(d == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Intervention upcoming = service.findUpcoming(d.getId(), p.getId());
+            if(upcoming == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(this.convertToDTO(upcoming), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{doctorID}/{patientUserID")
