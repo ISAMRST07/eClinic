@@ -44,7 +44,7 @@ public class UnregisteredUserController {
             service.deleteToken(unregisteredUser);
         }
         service.createVerificationToken(unregisteredUser, token);
-        String url = EClinicApiApplication.getAppUrl();
+        String url = EClinicApiApplication.APP_URL;
 
         if(url.contains("local")) {
             url += ":" + request.getServerPort();

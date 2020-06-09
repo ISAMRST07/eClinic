@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Null;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -38,11 +37,6 @@ public class TokenUtils {
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     public String generateToken(String username) {
-        return this.generateToken(username, null);
-    }
-
-    // Funkcija za generisanje JWT token
-    public String generateToken(String username, Timestamp date) {
 
         return Jwts.builder()
                 .setIssuer(APP_NAME)

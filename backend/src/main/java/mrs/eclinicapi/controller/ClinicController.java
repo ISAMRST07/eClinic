@@ -1,6 +1,8 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import mrs.eclinicapi.dto.ClinicDTO;
 import mrs.eclinicapi.dto.ClinicSearchRequest;
@@ -149,9 +151,11 @@ public class ClinicController {
     }
 
     @AllArgsConstructor
+    @Getter
+    @Setter
     static class PagedResponse {
-        public List<ClinicDTO> clinics;
-        public long totalLength;
+        private List<ClinicDTO> clinics;
+        private long totalLength;
     }
 
 

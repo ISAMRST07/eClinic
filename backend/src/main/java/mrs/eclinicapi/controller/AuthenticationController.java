@@ -3,6 +3,7 @@ package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.AuthenticationRequest;
 import mrs.eclinicapi.dto.TokenResponse;
+import mrs.eclinicapi.dto.UnregisteredUserDTO;
 import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.security.TokenUtils;
@@ -71,15 +72,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UnregisteredUser> addUser(@RequestBody UnregisteredUser userRequest) {
-
+    public ResponseEntity<UnregisteredUserDTO> addUser(@RequestBody UnregisteredUserDTO userRequestDTO) {
+        UnregisteredUser userRequest = this.convertUnregisteredToEntity(userRequestDTO);
         User existUser = (User) userDetailsService.loadUserByUsername(userRequest.getUser().getEmail());
         if (existUser != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         UnregisteredUser user = this.unregisteredUserService.addUnregisteredUser(userRequest);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(this.convertUnregisteredToDTO(user), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/confirmRegistration/{token}")
@@ -110,7 +111,7 @@ public class AuthenticationController {
         try {
             User added = userService.changePassword(id, passwordChanger.oldPassword, passwordChanger.newPassword,
                     passwordChanger.personal);
-            String jwt = tokenUtils.generateToken(added.getUsername(), added.getLastPasswordResetDate());
+            String jwt = tokenUtils.generateToken(added.getUsername());
             Clinic clinic = clinicService.findByUser(added.getId());
 
             return ResponseEntity.ok(new TokenResponse(jwt, added, clinic));
@@ -127,6 +128,26 @@ public class AuthenticationController {
         public String oldPassword;
         public String newPassword;
         public boolean personal;
+    }
+
+    public UnregisteredUser convertUnregisteredToEntity(UnregisteredUserDTO unregisteredUserDTO) {
+        UnregisteredUser uuser;
+        if(unregisteredUserDTO.getId() == null) {
+            uuser = new UnregisteredUser();
+        } else {
+            uuser = unregisteredUserService.findById(unregisteredUserDTO.getId());
+        }
+        uuser.setUser(unregisteredUserDTO.getUser());
+        uuser.setEmailSent(unregisteredUserDTO.isEmailSent());
+        return uuser;
+    }
+
+    public UnregisteredUserDTO convertUnregisteredToDTO(UnregisteredUser unregisteredUser) {
+        return new UnregisteredUserDTO(
+                unregisteredUser.getId(),
+                unregisteredUser.getUser(),
+                unregisteredUser.isEmailSent()
+        );
     }
 
 }

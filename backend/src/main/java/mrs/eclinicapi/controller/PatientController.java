@@ -1,12 +1,13 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import mrs.eclinicapi.dto.MedicalRecordDTO;
 import mrs.eclinicapi.dto.PatientDTO;
 import mrs.eclinicapi.dto.PatientSearchRequest;
 import mrs.eclinicapi.model.MedicalRecord;
 import mrs.eclinicapi.model.Patient;
-import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.service.PatientService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,24 +198,11 @@ public class PatientController {
         );
     }
 
-    private Patient convertToEntity(PatientDTO patientDTO) {
-        User user = userService.findOne(patientDTO.getId()); //moze ovako jer se ne modifikuje
-        if(user == null) return null;
-        return new Patient(
-                patientDTO.getMedicalRecord(),
-                patientDTO.getId(),
-                patientDTO.getClinics(),
-                user,
-                patientDTO.getInterventions(),
-                patientDTO.getRequests(),
-                patientDTO.getDoctorRatings(),
-                patientDTO.getClinicRatings()
-        );
-    }
-
     @AllArgsConstructor
+    @Getter
+    @Setter
     static class PagedResponse {
-        public List<PatientDTO> patients;
-        public long totalLength;
+        private List<PatientDTO> patients;
+        private long totalLength;
     }
 }

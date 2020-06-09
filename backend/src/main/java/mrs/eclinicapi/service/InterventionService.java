@@ -67,7 +67,6 @@ public class InterventionService {
         List<Intervention> interventions = repository.findInterventionsByDoctor_Id(doctorID);
         if(interventions.isEmpty()) return null;
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime fifteen = now.plusMinutes(20);
         return interventions.stream().filter(in -> in.getDateTime().getStart().isBefore(now)
                 && in.getDateTime().getEnd().isAfter(now)
                 && in.getVisit() == null).findFirst().orElse(null);

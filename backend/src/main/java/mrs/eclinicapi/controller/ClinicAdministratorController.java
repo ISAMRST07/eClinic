@@ -1,7 +1,6 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.ClinicAdministratorDto;
-import mrs.eclinicapi.model.ClinicAdministrator;
 import mrs.eclinicapi.service.ClinicAdministratorService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +29,6 @@ public class ClinicAdministratorController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteClinicAdministrator(@PathVariable("id") String id) {
-        ClinicAdministrator clinicAdministrator = service.findById(id);
-
-//        if (clinicAdministrator == null) {
-//            return new ResponseEntity<>("clinicAdministrator not found", HttpStatus.NOT_FOUND);
-//        }
         service.deleteById(id);
         return new ResponseEntity<>("deleted clinicAdministrator", HttpStatus.OK);
     }

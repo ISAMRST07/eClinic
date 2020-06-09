@@ -39,11 +39,11 @@ public class VerificationToken {
         super();
         this.user = user;
         this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
-    private LocalDateTime calculateExpiryDate(int expiryTimeInDays) {
-        return LocalDateTime.now().plusDays(expiryTimeInDays);
+    private LocalDateTime calculateExpiryDate() {
+        return LocalDateTime.now().plusDays(VerificationToken.EXPIRATION);
     }
 
 }
