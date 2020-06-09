@@ -1,15 +1,11 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.Diagnosis;
 import mrs.eclinicapi.model.DoctorRating;
-import mrs.eclinicapi.repository.DiagnosisRepository;
 import mrs.eclinicapi.repository.DoctorRatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Transactional
 @Service

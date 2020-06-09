@@ -1,14 +1,11 @@
 package mrs.eclinicapi.controller;
 
-import com.sun.javaws.progress.PreloaderPostEventListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mrs.eclinicapi.EClinicApiApplication;
 import mrs.eclinicapi.dto.ClinicDTO;
 import mrs.eclinicapi.dto.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRating;
-import mrs.eclinicapi.model.DoctorRating;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
@@ -20,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;

@@ -1,10 +1,7 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.Clinic;
 import mrs.eclinicapi.model.ClinicRating;
-import mrs.eclinicapi.model.DoctorRating;
 import mrs.eclinicapi.repository.ClinicRatingRepository;
-import mrs.eclinicapi.repository.DoctorRatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

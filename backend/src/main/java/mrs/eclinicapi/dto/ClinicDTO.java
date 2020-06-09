@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.*;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

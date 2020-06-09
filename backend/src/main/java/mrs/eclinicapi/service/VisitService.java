@@ -1,7 +1,6 @@
 package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.model.Visit;
-import mrs.eclinicapi.repository.CodebookRepository;
 import mrs.eclinicapi.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

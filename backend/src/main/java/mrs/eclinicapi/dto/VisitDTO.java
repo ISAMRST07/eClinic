@@ -9,7 +9,6 @@ import lombok.Setter;
 import mrs.eclinicapi.model.Diagnosis;
 import mrs.eclinicapi.model.Medicine;
 
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor

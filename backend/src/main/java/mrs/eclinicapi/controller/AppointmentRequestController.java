@@ -142,7 +142,7 @@ public class AppointmentRequestController {
         String[] sendTo = appointmentRequest.getClinic().getClinicAdministrator()
                 .stream().map(ca -> ca.getUser().getEmail()).toArray(String[]::new);
 
-        String url = EClinicApiApplication.appUrl;
+        String url = EClinicApiApplication.getAppUrl();
 
         if(url.contains("local")) {
             url += ":" + httpServletRequest.getServerPort();

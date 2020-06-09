@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.*;
 
-import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.Set;
 

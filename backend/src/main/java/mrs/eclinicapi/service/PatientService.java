@@ -1,17 +1,12 @@
 package mrs.eclinicapi.service;
 
-import mrs.eclinicapi.model.Doctor;
-import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.model.Patient;
-import mrs.eclinicapi.model.enums.Weekday;
 import mrs.eclinicapi.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

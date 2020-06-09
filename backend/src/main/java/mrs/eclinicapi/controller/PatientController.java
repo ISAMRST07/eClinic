@@ -1,13 +1,12 @@
 package mrs.eclinicapi.controller;
 
 import lombok.AllArgsConstructor;
-import mrs.eclinicapi.dto.DoctorSearchRequest;
 import mrs.eclinicapi.dto.MedicalRecordDTO;
 import mrs.eclinicapi.dto.PatientDTO;
 import mrs.eclinicapi.dto.PatientSearchRequest;
-import mrs.eclinicapi.model.*;
-import mrs.eclinicapi.service.ClinicService;
-import mrs.eclinicapi.service.MedicalRecordService;
+import mrs.eclinicapi.model.MedicalRecord;
+import mrs.eclinicapi.model.Patient;
+import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.service.PatientService;
 import mrs.eclinicapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 

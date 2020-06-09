@@ -10,12 +10,10 @@ import mrs.eclinicapi.model.OneClickAppointment;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.enums.Weekday;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Getter
 @Setter

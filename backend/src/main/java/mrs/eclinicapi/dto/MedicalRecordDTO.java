@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.Diagnosis;
-import mrs.eclinicapi.model.Intervention;
 import mrs.eclinicapi.model.Medicine;
 import mrs.eclinicapi.model.Visit;
 
