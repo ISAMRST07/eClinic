@@ -1,6 +1,8 @@
 package mrs.eclinicapi.controller;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import lombok.Getter;
+import lombok.Setter;
 import mrs.eclinicapi.dto.AppointmentRequestDTO;
 import mrs.eclinicapi.dto.EmailEvent;
 import mrs.eclinicapi.dto.InterventionDTO;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/intervention")
@@ -42,6 +45,10 @@ public class InterventionController {
     private OneClickAppointmentService oneClickAppointmentService;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private ClinicRatingService clinicRatingService;
+    @Autowired
+    private DoctorRatingService doctorRatingService;
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionDTO> getIntervention(@PathVariable String id) {
@@ -59,13 +66,13 @@ public class InterventionController {
     }
 
     @GetMapping(path = "/patient/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Intervention>> getPatientIntervention(@PathVariable("id") String patientId) {
+    public ResponseEntity<List<InterventionDTO>> getPatientIntervention(@PathVariable("id") String patientId) {
         System.out.println("getPatientIntervention patientId = " + patientId);
         Patient patient = patientService.getByUserId(patientId);
         if (patient == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         List<Intervention> it = service.getPatientIntervention(patient.getId());
         System.out.println("getPatientIntervention it = " + it);
-        return new ResponseEntity<>(it, HttpStatus.OK);
+        return new ResponseEntity<>(it.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
     @GetMapping(path = "/upcoming/{doctorID}/{patientUserID}")
     public ResponseEntity<InterventionDTO> upcomingIntervention(@PathVariable String doctorID,
@@ -140,42 +147,61 @@ public class InterventionController {
         eventPublisher.publishEvent(new EmailEvent(added.getDoctor().getUser(), "Appointment scheduled", content, sendToDoctor));
         return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
-    @PostMapping(path = "/rate/{clinicId}/{clinicRating}/{doctorId}/{doctorRating}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> rate(@PathVariable String clinicId,
-    									@PathVariable String clinicRating,
-    									@PathVariable String doctorId,
-                                        @PathVariable String doctorRating) {
-    	System.out.println("clinicId = " + clinicId);
-    	System.out.println("clinicRating = " + clinicRating);
-    	System.out.println("doctorId = " + doctorId);
-    	System.out.println("doctorRating = " + doctorRating);
+
+    @GetMapping(path = "/rating/{patientUserId}/{clinicId}/{doctorId}")
+    public ResponseEntity<Rating> getRating(@PathVariable String patientUserId,
+                                            @PathVariable String clinicId,
+                                            @PathVariable String doctorId) {
+        Clinic clinic = clinicService.findOne(clinicId);
+        if (clinic == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Patient p = patientService.getByUserId(patientUserId);
+        if (p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Doctor doctor = doctorService.findOne(doctorId);
+        if (doctor == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        DoctorRating dr = doctorRatingService.get(doctor.getId(), p.getId());
+        ClinicRating cr = clinicRatingService.get(clinic.getId(), p.getId());
+        int crating = cr == null ? 0 : cr.getRating();
+        int drating = dr == null ? 0 : dr.getRating();
+        Rating r = new Rating();
+        r.setClinicRating(crating);
+        r.setDoctorRating(drating);
+        return new ResponseEntity<>(r, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/rate/{patientUserId}/{clinicId}/{clinicRating}/{doctorId}/{doctorRating}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> rate(@PathVariable String patientUserId,
+                                       @PathVariable String clinicId,
+                                       @PathVariable int clinicRating,
+                                       @PathVariable String doctorId,
+                                       @PathVariable int doctorRating) {
     	Clinic clinic = clinicService.findOne(clinicId);
-    	Doctor doctor = doctorService.findOne(doctorId);
+    	if (clinic == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	Patient p = patientService.getByUserId(patientUserId);
+        if (p == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    	System.out.println("clinic befotr= " + clinic);
-    	System.out.println("doctor befotr= " + doctor);
+        Doctor doctor = doctorService.findOne(doctorId);
+        if (doctor == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    	if(clinic.getRating() == null) {
-    		ArrayList<Integer> i = new ArrayList<>();
-    		i.add(Integer.parseInt(clinicRating));
-    		clinic.setRating(i);
-    	}else {
-        	clinic.getRating().add(Integer.parseInt(clinicRating));
-    	}
-
-    	if(doctor.getRating() == null) {
-    		ArrayList<Integer> i = new ArrayList<>();
-    		i.add(Integer.parseInt(doctorRating));
-    		doctor.setRating(i);
-    	}else {
-        	doctor.getRating().add(Integer.parseInt(doctorRating));
-    	}
-
-    	System.out.println("clinic after= " + clinic);
-    	System.out.println("doctor after= " + doctor);
-
-    	clinicService.addClinic(clinic);
-    	doctorService.addDoctor(doctor);
+        if(clinicRating > 0) {
+    	    ClinicRating cr = clinicRatingService.get(clinic.getId(), p.getId());
+    	    if (cr == null) {
+                cr = new ClinicRating();
+                cr.setClinic(clinic);
+                cr.setPatient(p);
+            }
+    	    cr.setRating(clinicRating);
+    	    clinicRatingService.save(cr);
+        }
+    	if(doctorRating > 0) {
+    	    DoctorRating dr = doctorRatingService.get(doctor.getId(), p.getId());
+    	    if (dr == null) {
+    	        dr = new DoctorRating();
+    	        dr.setDoctor(doctor);
+    	        dr.setPatient(p);
+            }
+    	    dr.setRating(doctorRating);
+    	    doctorRatingService.save(dr);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -193,6 +219,9 @@ public class InterventionController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         Intervention toAdd = new Intervention(request, room);
+        Clinic c = toAdd.getClinic();
+        c.addPatient(toAdd.getPatient());
+        clinicService.addClinic(c);
         Intervention added = service.add(toAdd);
         String content = "An intervention for the date " + added.getDateTime().getStart() + " has been added." +
                 "\r\nYou have an option to refuse coming, via this link: " +
@@ -202,7 +231,7 @@ public class InterventionController {
 
         content = "An intervention for the date " + added.getDateTime().getStart() + " has been added.";
 
-        String[] sendToDoctor = {added.getPatient().getUser().getEmail()};
+        String[] sendToDoctor = {added.getDoctor().getUser().getEmail()};
         eventPublisher.publishEvent(new EmailEvent(added.getDoctor().getUser(), "Appointment scheduled", content, sendToDoctor));
 
 
@@ -227,10 +256,15 @@ public class InterventionController {
                 intervention.getId(),
                 intervention.getDateTime(),
                 intervention.getClinicRoom().getId(),
+                intervention.getClinicRoom().getName(),
                 intervention.getDoctor().getId(),
+                intervention.getDoctor().getUser().getName(),
                 intervention.getInterventionType().getId(),
+                intervention.getInterventionType().getName(),
+                intervention.getInterventionType().getPrice(),
                 intervention.getPatient().getId(),
                 intervention.getClinic().getId(),
+                intervention.getClinic().getName(),
                 intervention.getPrice()
         );
     }
@@ -259,5 +293,10 @@ public class InterventionController {
                 interventionDTO.getPrice()
         );
     }
-
+    @Getter
+    @Setter
+    static class Rating {
+        private int doctorRating;
+        private int clinicRating;
+    }
 }

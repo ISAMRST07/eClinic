@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -69,6 +70,16 @@ public class DoctorController {
 
         service.deleteById(id);
         return new ResponseEntity<>("doctor deleted", HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<DoctorNurseDTO> getDoctorByUserId(@PathVariable String id) {
+
+        Doctor doctor = service.findByUserID(id);
+        if (doctor == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(this.convertToDTO(doctor), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -230,23 +241,24 @@ public class DoctorController {
                 doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList()),
                 doctor.getWorkingCalendar().getWorkingSchedule(),
                 doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
+                doctor.getWorkingCalendar().getVacations().stream()
+                        .map(oc -> new TimePeriod<>(oc.getStart().atStartOfDay(), oc.getEnd().atStartOfDay()))
+                        .collect(Collectors.toList()),
                 doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList()),
+                doctor.getOneClickAppointments(),
                 getAvg(doctor.getRating())
-        		);
+        );
     }
 
-    private double getAvg(ArrayList<Integer> list) {
-    	System.out.println("getAvg list = " + list);
-    	if(list.size() == 0) {
+    private double getAvg(Set<DoctorRating> ratings) {
+    	if(ratings == null || ratings.isEmpty()) {
     		return 0;
     	}
     	double sum = 0;
-    	for(int i : list) {
-    		sum += i;
-    	}
-    	double avg =  Math.round(sum/list.size() * 10.0) / 10.0;
-    	System.out.println("avg = " + avg);
-    	return avg;
+        for (DoctorRating dr : ratings) {
+            sum += dr.getRating();
+        }
+        return Math.round(sum/ratings.size() * 10.0) / 10.0;
     }
     private AppointmentRequestDTO appointmentRequestToDTO(AppointmentRequest appointmentRequest) {
         return new AppointmentRequestDTO(

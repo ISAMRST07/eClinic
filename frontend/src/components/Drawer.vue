@@ -79,7 +79,7 @@
                     this.items = (new Patient(this.patient.id, this.user.id)).items;
                     break;
                 case Doctor.code:
-                    this.items = Doctor.items;
+                    this.items = (new Doctor()).items;
                     break;
                 default:
 
@@ -88,7 +88,7 @@
         methods: {
             async getPatient() {
                 try {
-                    let {data: res} = await this.$axios.get(`/api/patient/user-id=${this.user.id}`,
+                    let {data: res} = await this.$axios.get(`/api/patient/user/${this.user.id}`,
                         {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
                     this.patient = res;
                 } catch (err) {

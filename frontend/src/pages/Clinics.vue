@@ -11,8 +11,8 @@
     import AddClinic from "../components/Clinics/AddClinic";
     import ClinicsTable from "../components/Clinics/ClinicsTable";
     import {mapState} from "vuex";
-    import {ClinicalCenterAdmin} from "../utils/DrawerItems";
-
+    import {ClinicalCenterAdmin, Patient} from "../utils/DrawerItems";
+    import store from '../store/index'
     export default {
         name: "Clinics",
         components: {ClinicsTable, AddClinic},
@@ -21,6 +21,16 @@
         }),
         computed: {
             ...mapState('auth', ['role']),
+        },
+        beforeRouteEnter(to, from, next) {
+            switch(store.state.auth.role) {
+                case ClinicalCenterAdmin.code:
+                case Patient.code:
+                    next();
+                    break;
+                default:
+                    next('/');
+            }
         }
     }
 </script>

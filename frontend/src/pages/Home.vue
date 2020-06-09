@@ -1,9 +1,10 @@
 <template>
-	<v-row justify="center">
+	<v-container>
+		<doctor-home-component v-if="role === doctorCode"></doctor-home-component>
 		<v-dialog v-model="dialog" persistent max-width="600px">
 			<v-card>
 				<v-card-title>
-					<span class="headline">You must update yout password</span>
+					<span class="headline">You must update your password</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
@@ -12,11 +13,11 @@
 								<v-text-field
 									v-model="currentPassword"
 									label="Current password*"
-									:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-									:type="showPassword ? 'text' : 'password'"
+									:append-icon="showCurrent ? 'mdi-eye' : 'mdi-eye-off'"
+									:type="showCurrent ? 'text' : 'password'"
 									:error="oldPasswordError.isError"
 									:error-messages="oldPasswordError.errorMessage"
-									@click:append="showPassword = !showPassword"
+									@click:append="showCurrent = !showCurrent"
 									:rules="[rules.required]"
 									outlined
 									required
@@ -59,20 +60,25 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
-	</v-row>
+	</v-container>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
+import DoctorHomeComponent from "../components/DoctorHome/DoctorHomeComponent";
+import {Doctor} from "../utils/DrawerItems";
 
 export default {
 	name: "Home",
+	components: {DoctorHomeComponent},
 	data: () => ({
 		dialog: false,
 		password: "",
 		repeatedPassword: "",
 		currentPassword: "",
 		showRepeated: false,
+		showPassword: false,
+		showCurrent: false,
 		oldPasswordError: {
 			isError: false,
 			errorMessage: ""
@@ -80,7 +86,8 @@ export default {
 		rules: {
 			required: v => !!v || "Required!",
 			min8: v => (!!v && v.length >= 8) || "At least 8 characters"
-		}
+		},
+		doctorCode: Doctor.code
 	}),
 	computed: {
 		...mapState("auth", ["user"]),
@@ -104,7 +111,6 @@ export default {
 		},
 		async changePassword() {
 			try {
-				console.log("put changepassword");
 				let { data: res } = await this.$axios.put(
 					`/api/auth/changepassword/${this.user.id}`,
 					{
@@ -125,13 +131,8 @@ export default {
 			}
 		}
 	},
-	created() {
-		console.log(this.user);
-		if (this.user.lastPasswordResetDate == null) {
-			this.dialog = true;
-		} else {
-			this.dialog = false;
-		}
+	mounted() {
+		this.dialog = this.user.lastPasswordResetDate == null;
 	}
 };
 </script>

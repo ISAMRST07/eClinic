@@ -25,7 +25,7 @@ public class ClinicalCenterAdministratorService {
 
     public ClinicCenterAdministratorDTO addClinicCenterAdministrator(ClinicCenterAdministratorDTO clinicCenterAdministratorDTO) {
         User newUser = new User(clinicCenterAdministratorDTO);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setFirstPassword(passwordEncoder.encode(newUser.getPassword()));
         ClinicalCentarAdministrator clinicalCentarAdministrator = new ClinicalCentarAdministrator();
         clinicalCentarAdministrator.setUser(newUser);
 

@@ -7,7 +7,7 @@
                         <v-card-title>
                             Info
                             <v-spacer></v-spacer>
-                            <v-btn v-if="editable" text small color="red">Edit</v-btn>
+                            <v-btn v-if="editable" @click="toggleEditDialog" text small color="red">Edit</v-btn>
                         </v-card-title>
                         <v-divider></v-divider>
                         <v-list>
@@ -113,19 +113,29 @@
             </v-row>
         </v-container>
         <span v-else>You aren't allowed to visit this page.</span>
+        <modify-medical-record
+                v-model="editDialog"
+                mode="edit"
+                :patient="patient"
+        ></modify-medical-record>
     </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex";
-    import {Doctor} from "../../utils/DrawerItems";
+    import {Patient, Doctor} from "../../utils/DrawerItems";
+    import ModifyMedicalRecord from "./ModifyMedicalRecord";
+    import store from "../../store";
 
     export default {
         name: "MedicalRecordView",
+        components: {ModifyMedicalRecord},
         data: () => ({
+            editDialog: false,
             allowed: true,
             editable: false,
             patientID: null,
+            patient: null,
             visitHeaders: [
                 {text: 'Start', align: 'start', value: 'intervention.dateTime.start'},
                 {text: 'Anamnesis', align: 'start', value: 'anamnesis'},
@@ -138,7 +148,10 @@
             ...mapState('auth', ['user', 'role', 'token'])
         },
         methods: {
-            ...mapActions('medicalRecord', ['getMedicalRecordApi'])
+            ...mapActions('medicalRecord', ['getMedicalRecordApi']),
+            toggleEditDialog() {
+                this.editDialog = !this.editDialog;
+            }
         },
         created() {
         },
@@ -155,6 +168,11 @@
                     return;
                 }
 
+                let {data: patient} = await this.$axios.get(`/api/patient/user/${this.patientID}`,
+                    {headers: {"Authorization": 'Bearer ' + this.token} });
+
+                this.patient = patient;
+
                 let {data: upcoming} = await this.$axios.get(`/api/intervention/upcoming/${this.user.id}/${this.patientID}`,
                     {headers: {"Authorization": 'Bearer ' + this.token} });
                 if(upcoming) {
@@ -168,10 +186,16 @@
                     this.allowed = true;
                     return;
                 }
+
                 this.allowed = false;
             } catch(e) {
                 this.allowed = false;
             }
+        },
+        beforeRouteEnter(to, from, next) {
+            if(store.state.auth.role === Doctor.code) next();
+            else if (store.state.auth.role === Patient.code && store.state.auth.user.id === to.params.id) next();
+            else next('/');
         }
     }
 </script>

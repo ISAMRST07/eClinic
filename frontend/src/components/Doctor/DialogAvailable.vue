@@ -15,11 +15,7 @@
                     :events="events"
             >
 
-                <template v-slot:day-body="{ time }">
-                    <template>
 
-                    </template>
-                </template>
             </v-calendar>
 
             <v-card-actions>
@@ -65,7 +61,7 @@
                 let timeperiod = this.doctor.workingSchedule[weekday];
                 let start = this.parseTime(timeperiod.start);
                 let startDateTime = new Date(date);
-                startDateTime.setHours(start.hours, parseInt(start.minutes), start.seconds)
+                startDateTime.setHours(start.hours, parseInt(start.minutes), start.seconds);
                 let end = this.parseTime(timeperiod.end);
                 let endDateTime = new Date(date);
                 endDateTime.setHours(end.hours, parseInt(end.minutes), end.seconds);
@@ -80,6 +76,16 @@
                     color: 'gray'
                 });
                 for(let timeperiod of this.doctor.busyTimes) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    events.push({
+                        start: this.formatDate(startDateTime),
+                        end: this.formatDate(endDateTime),
+                        name: 'Intervention',
+                        color: 'primary'
+                    });
+                }
+                for(let timeperiod of this.doctor.oneClickAppointments) {
                     let startDateTime = new Date(timeperiod.start);
                     let endDateTime = new Date(timeperiod.end);
                     events.push({

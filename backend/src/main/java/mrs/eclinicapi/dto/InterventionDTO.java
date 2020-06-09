@@ -20,10 +20,15 @@ public class InterventionDTO {
     String id;
     TimePeriod<LocalDateTime> dateTime;
     String clinicRoomID;
+    String clinicRoomName;
     String doctorID;
+    String doctorName;
     String interventionTypeID;
+    String interventionTypeName;
+    double interventionTypePrice;
     String patientID;
     String clinicID;
+    String clinicName;
     double price;
 
     @Override

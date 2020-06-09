@@ -16,7 +16,7 @@
 		      color="green"
 		      large
 		    ></v-rating>
-		    
+
 		    <v-card-text>
 		       Rate doctor {{ doctorName }}:
             </v-card-text>
@@ -41,7 +41,7 @@
                 <v-btn
                         color="green darken-1"
                         text
-                        @click="$emit('rate', ratingClinic, ratingDoctor)"
+                        @click="$emit('rate', {ratingClinic, ratingDoctor})"
                 >
                     Yes
                 </v-btn>
@@ -59,17 +59,25 @@
 	      ratingClinic: 0,
 	      ratingDoctor: 0,
 	    }),
+        watch: {
+            async value(val) {
+                if(!val) return;
+                let {data: rating} = await this.$axios.get(`/api/intervention/rating/${this.$store.state.auth.user.id}/${this.intervention.clinicID}/${this.intervention.doctorID}`,
+                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token} });
+                this.ratingClinic = rating.clinicRating;
+                this.ratingDoctor = rating.doctorRating;
+            }
+        },
         computed: {
         	clinicName() {
-                return this.intervention ? this.intervention.clinic.name : '';
+                return this.intervention ? this.intervention.clinicName : '';
             },
             doctorName() {
-                return this.intervention ? this.intervention.doctor.name : '';
+                return this.intervention ? this.intervention.doctorName : '';
             },
         },
-        created() {
-        	console.log("created = ");
-        	console.log(this.intervention);
+        async mounted() {
+
         }
 
     }

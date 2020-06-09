@@ -13,11 +13,11 @@
 				></v-text-field>
 			</v-card-title>
 		</v-card>
-		
+
 		<v-data-table
 			:headers="headers"
 			:items="intervention"
-			:search="search"   
+			:search="search"
 			class="elevation-1"
 			:loading="loading"
 			loading-text="Loading interventions..."
@@ -37,7 +37,7 @@
 					mdi-pencil
 				</v-icon>
 			</template>
-			
+
 			<template v-slot:no-data>
 				<p>There are no interventions</p>
 			</template>
@@ -80,39 +80,39 @@ export default {
         dialog: false,
         rateDialogShow: false,
         interventionToDelete: null,
-        interventionToRate: null,    
+        interventionToRate: null,
         editIntervention: null,
     }),
     computed: {
         ...mapState('intervention/intervention', ['intervention']),
-        ...mapState('auth', ['role']),      
+        ...mapState('auth', ['role']),
         ...mapState('auth', ['user']),
         ...mapState('auth', ['clinic']),
     	headers() {
                 let regularHeaders = [
-                    {text: 'Date and time', align: 'start', value: 'dateTime'},
-		            {text: 'Doctor name', align: 'center', value: 'doctor.user.name'},
-		            {text: 'Clinic room', align: 'center', value: 'clinicRoom.name'},
-		            {text: 'Intervention type', align: 'center', value: 'interventionType.name'},
-		            {text: 'Intervention price (in $)', align: 'center', value: 'interventionType.price'},
-		            {text: 'Duration (in minutes)', align: 'center', value: 'duration'},
-		            {text: 'Price (in $)', align: 'center', value: 'price'},
+                    {text: 'Date and time', align: 'start', value: 'dateTime.start'},
+		            {text: 'Doctor name', align: 'center', value: 'doctorName'},
+		            {text: 'Clinic room', align: 'center', value: 'clinicRoomName'},
+		            {text: 'Intervention type', align: 'center', value: 'interventionTypeName'},
+					{text: 'Clinic', align: 'center', value: 'clinicName'},
+					{text: 'Intervention price (in $)', align: 'center', value: 'interventionTypePrice'},
 		            {text: 'Update', value: 'update', sortable: false, align: 'center'},
 		            {text: 'Remove', sortable: false, value: 'remove'},
                 ];
                 let patientHeaders = [
-                   	{text: 'Date and time', align: 'start', value: 'dateTime'},
-		            {text: 'Clinic', align: 'center', value: 'clinic.name'},
-		            {text: 'Doctor name', align: 'center', value: 'doctor.user.name'},
-		            {text: 'Intervention type', align: 'center', value: 'interventionType.name'},
-		            {text: 'Intervention price (in $)', align: 'center', value: 'interventionType.price'},
+					{text: 'Date and time', align: 'start', value: 'dateTime.start'},
+					{text: 'Doctor name', align: 'center', value: 'doctorName'},
+					{text: 'Clinic room', align: 'center', value: 'clinicRoomName'},
+					{text: 'Intervention type', align: 'center', value: 'interventionTypeName'},
+					{text: 'Clinic', align: 'center', value: 'clinicName'},
+					{text: 'Intervention price (in $)', align: 'center', value: 'interventionTypePrice'},
 		            {text: 'Price (in $)', align: 'center', value: 'price'},
-		            {text: 'Rate', value: 'rate', sortable: false, align: 'center'},	           
+		            {text: 'Rate', value: 'rate', sortable: false, align: 'center'},
 		        ];
                 if (this.role !== Patient.code){
                 	return regularHeaders;
                 }else{
-                	return patientHeaders;              
+                	return patientHeaders;
                 }
         },
     },
@@ -146,33 +146,23 @@ export default {
             this.editDialog = true;
         },
         rateDialog(intervention) {
-            console.log("rateDialog intervention = ");
-			console.log(intervention); 
 			this.interventionToRate = intervention;
-            this.rateDialogShow = !this.rateDialogShow;        
+            this.rateDialogShow = !this.rateDialogShow;
         },
-        rateIntervention(clinicRating, doctorRating) {
-        	console.log("rate intervention yes");
-        	console.log(this.interventionToRate);
-        	console.log(clinicRating);
-        	console.log(doctorRating);
+        rateIntervention(rating) {
         	let payload = {
-        		"clinicId" : this.interventionToRate.clinic.id,
-        		"clinicRating" : clinicRating,
-        		"doctorId" : this.interventionToRate.doctor.id,
-        		"doctorRating" : doctorRating,        		
-        	}
-        	if(clinicRating == 0 || doctorRating == 0){
-        		console.log("clinic/doctor rating == 0");
-        	}else{
-        		this.rateClinicInterventionApi(payload);
-        	}
+        		userId: this.user.id,
+        		clinicId : this.interventionToRate.clinicID,
+        		clinicRating : rating.ratingClinic,
+        		doctorId : this.interventionToRate.doctorID,
+        		doctorRating : rating.ratingDoctor,
+        	};
+			this.rateClinicInterventionApi(payload);
         	this.rateDialog(null);
         },
     },
     created() {
         this.loading = true;
-        console.log(this.user)
         switch (this.user.type) {
             case ClinicalCenterAdmin.code:
                 console.log("user = ClinicalCenterAdmin");

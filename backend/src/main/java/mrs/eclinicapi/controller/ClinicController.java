@@ -1,10 +1,14 @@
 package mrs.eclinicapi.controller;
 
+import com.sun.javaws.progress.PreloaderPostEventListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mrs.eclinicapi.EClinicApiApplication;
+import mrs.eclinicapi.dto.ClinicDTO;
 import mrs.eclinicapi.dto.ClinicSearchRequest;
 import mrs.eclinicapi.model.Clinic;
+import mrs.eclinicapi.model.ClinicRating;
+import mrs.eclinicapi.model.DoctorRating;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.DoctorService;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/clinic")
@@ -35,24 +41,24 @@ public class ClinicController {
     private InterventionTypeService interventionTypeService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Clinic> addClinic(@RequestBody Clinic clinic) {
-        Clinic newClinic = service.addClinic(clinic);
+    public ResponseEntity<ClinicDTO> addClinic(@RequestBody ClinicDTO clinic) {
+        Clinic newClinic = service.addClinic(this.convertToEntity(clinic));
         if (newClinic == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
         System.out.println("newClinic = " + clinic);
-        return new ResponseEntity<>(newClinic, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(newClinic), HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Clinic> modifyClinic(@RequestBody Clinic clinic) {
-        Clinic modified = service.modifyClinic(clinic);
+    public ResponseEntity<ClinicDTO> modifyClinic(@RequestBody ClinicDTO clinic) {
+        Clinic modified = service.modifyClinic(this.convertToEntity(clinic));
         if (modified == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(modified, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(modified), HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Clinic>> getAllClinic() {
+    public ResponseEntity<List<ClinicDTO>> getAllClinic() {
 
         List<Clinic> clinics = service.findAll();
 
@@ -62,7 +68,7 @@ public class ClinicController {
         for (Clinic c : clinics) {
             System.out.println("getall clinics = " + c);
         }
-        return new ResponseEntity<>(clinics, HttpStatus.OK);
+        return new ResponseEntity<>(clinics.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{pageNumber}/{pageSize}/{sort}/{desc}")
@@ -73,7 +79,8 @@ public class ClinicController {
         PagedResponse response;
         if (pageSize < 1) {
             List<Clinic> allClinics = service.findAll();
-            response = new PagedResponse(allClinics, allClinics.size());
+            response = new PagedResponse(allClinics.stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    allClinics.size());
 
         } else {
             Page<Clinic> clinicPage;
@@ -82,26 +89,27 @@ public class ClinicController {
             else {
                 clinicPage = service.findPaged(pageNumber, pageSize, sort, desc.equals("true"));
             }
-            response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
+            response = new PagedResponse(clinicPage.getContent().stream().map(this::convertToDTO).collect(Collectors.toList()),
+                    clinicPage.getTotalElements());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @GetMapping(path = "/user/{id}")
-    public ResponseEntity<Clinic> getClinicByUserID(@PathVariable("id") String userID) {
+    public ResponseEntity<ClinicDTO> getClinicByUserID(@PathVariable("id") String userID) {
         System.out.println("SAD CU DA TE NADJEM");
         Clinic clinic = service.findByUser(userID);
 
         if (clinic == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(clinic, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(clinic), HttpStatus.OK);
     }
 
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Clinic> getOneClinic(@PathVariable("id") String id) {
+    public ResponseEntity<ClinicDTO> getOneClinic(@PathVariable("id") String id) {
         System.out.println("getOneClinic id = " + id);
 
         Clinic clinic = service.findOne(id);
@@ -110,7 +118,7 @@ public class ClinicController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         System.out.println("get one  clinics = " + clinic);
-        return new ResponseEntity<>(clinic, HttpStatus.OK);
+        return new ResponseEntity<>(this.convertToDTO(clinic), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -142,14 +150,46 @@ public class ClinicController {
         else {
             clinicPage = service.search(searchQuery, date, type, pageNumber, pageSize, sort, desc.equals("true"));
         }
-        response = new PagedResponse(clinicPage.getContent(), clinicPage.getTotalElements());
+        response = new PagedResponse(clinicPage.getContent().stream().map(this::convertToDTO).collect(Collectors.toList()),
+                clinicPage.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @AllArgsConstructor
     static class PagedResponse {
-        public List<Clinic> clinics;
+        public List<ClinicDTO> clinics;
         public long totalLength;
+    }
+
+
+    public ClinicDTO convertToDTO(Clinic c) {
+        return new ClinicDTO(
+                c.getId(), c.getName(), c.getDescription(), c.getAddress(), c.getCoordinates(),
+                c.getClinicAdministrator(), c.getClinicRoom(), c.getDoctors(), c.getNurses(), c.getInterventions(),
+                c.getVacationRequests(), c.getInterventionTypes(), c.getAppointmentRequests(), c.getOneClicks(),
+                c.getPatients(), c.getAdmin(), getAvg(c.getRating())
+        );
+    }
+
+    public Clinic convertToEntity(ClinicDTO clinicDTO) {
+        Clinic found = service.findOne(clinicDTO.getId());
+        if (found == null) found = new Clinic();
+        found.setName(clinicDTO.getName());
+        found.setDescription(clinicDTO.getDescription());
+        found.setAddress(clinicDTO.getAddress());
+        found.setCoordinates(clinicDTO.getCoordinates());
+        return found;
+    }
+
+    private double getAvg(Set<ClinicRating> ratings) {
+        if(ratings == null || ratings.isEmpty()) {
+            return 0;
+        }
+        double sum = 0;
+        for (ClinicRating cr : ratings) {
+            sum += cr.getRating();
+        }
+        return Math.round(sum/ratings.size() * 10.0) / 10.0;
     }
 
 }

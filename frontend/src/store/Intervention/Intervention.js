@@ -63,7 +63,7 @@ export default {
             try {
             	console.log("delete intervention = ");
             	console.log(intervention.id);
-                let res = await Vue.prototype.$axios.delete(`/api/intervention/${intervention.id}`,
+                await Vue.prototype.$axios.delete(`/api/intervention/${intervention.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteIntervention', intervention);
             } catch (err) {
@@ -103,10 +103,10 @@ export default {
         },
         async rateClinicInterventionApi({rootState, commit}, payload) {
             try {
-                let {clinicId, clinicRating, doctorId, doctorRating} = payload;
+                let {userId, clinicId, clinicRating, doctorId, doctorRating} = payload;
                 console.log("rateClinicInterventionApi");
                 console.log(payload);
-                let {data: added} = await Vue.prototype.$axios.post(`/api/intervention/rate/${clinicId}/${clinicRating}/${doctorId}/${doctorRating}`,
+                await Vue.prototype.$axios.post(`/api/intervention/rate/${userId}/${clinicId}/${clinicRating}/${doctorId}/${doctorRating}`,
                     null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 //commit('addIntervention', added);
             } catch (e) {

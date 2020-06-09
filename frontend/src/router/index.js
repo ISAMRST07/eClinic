@@ -56,7 +56,10 @@ router.beforeEach((to, from, next) => {
   if (!requiresLogin && !onlyGuest) {
     next();
   } else if (requiresLogin && !onlyGuest) {
-    if (isLogged) next();
+    if (isLogged)
+    {
+      next();
+    }
     else next('/auth/');
   } else if (!requiresLogin && onlyGuest) {
     if (isLogged) next('/');

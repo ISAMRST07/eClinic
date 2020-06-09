@@ -82,7 +82,7 @@
 
 <script>
 	import {mapActions, mapState} from "vuex";
-	import {emptyIntervention, emptyOneClick} from "../../utils/skeletons";
+	import {emptyOneClick} from "../../utils/skeletons";
 	import ClinicRoomSelection from "../ClinicRooms/ClinicRoomSelection";
 	import DoctorSelection from "../Doctor/DoctorSelection";
 	import InterventionTypeSelection from "../InterventionType/InterventionTypeSelection";
@@ -201,6 +201,22 @@
 					return false;
 				}
 				for(let timeperiod of doctor.busyTimes) {
+					let startDateTime = new Date(timeperiod.start);
+					let endDateTime = new Date(timeperiod.end);
+					endDateTime.setHours(end.hours, end.minutes, end.seconds);
+
+					if(this.selectedDateTime >= startDateTime && this.selectedDateTime <= endDateTime){
+						this.doctorError.isError = true;
+						this.doctorError.errorMessages = 'Doctor has an appointment during this time.';
+						return false;
+					}
+					if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+						this.doctorError.isError = true;
+						this.doctorError.errorMessages = 'The next intervention is too close to this one.';
+						return false;
+					}
+				}
+				for(let timeperiod of doctor.oneClickAppointments) {
 					let startDateTime = new Date(timeperiod.start);
 					let endDateTime = new Date(timeperiod.end);
 					endDateTime.setHours(end.hours, end.minutes, end.seconds);

@@ -8,6 +8,8 @@ import mrs.eclinicapi.model.*;
 
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,4 +29,6 @@ public class PatientDTO {
     private List<Intervention> interventions;
     private List<AppointmentRequest> requests;
     private MedicalRecord medicalRecord;
+    private Set<DoctorRating> doctorRatings;
+    private Set<ClinicRating> clinicRatings;
 }

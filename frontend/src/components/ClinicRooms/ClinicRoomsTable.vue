@@ -96,7 +96,7 @@
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
     import ModifyClinicRoomDialog from "./ModifyClinicRoomDialog";
-    import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, Patient} from "../../utils/DrawerItems";
     import ClinicRoomSearch from "./ClinicRoomSearch";
     import ScheduleDialog from "./ScheduleDialog";
     import {DayOfTheWeek} from "../../utils/DayOfTheWeek";
@@ -318,6 +318,24 @@
                     return false;
                 }
                 for(let timeperiod of doctor.busyTimes) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    endDateTime.setHours(end.hours, end.minutes, end.seconds);
+                    let endOfSelected = new Date(this.selectedDateTime);
+                    endOfSelected.setMinutes(endOfSelected.getMinutes() + 30);
+
+                    if(this.selectedDateTime >= startDateTime && this.selectedDateTime <= endDateTime){
+                        this.doctorError.isError = true;
+                        this.doctorError.errorMessages = 'Doctor has an appointment during this time.';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.doctorError.isError = true;
+                        this.doctorError.errorMessages = 'The next intervention is too close to this one.';
+                        return false;
+                    }
+                }
+                for(let timeperiod of doctor.oneClickAppointments) {
                     let startDateTime = new Date(timeperiod.start);
                     let endDateTime = new Date(timeperiod.end);
                     endDateTime.setHours(end.hours, end.minutes, end.seconds);

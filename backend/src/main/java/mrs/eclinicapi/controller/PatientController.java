@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -138,6 +139,27 @@ public class PatientController {
         return new ResponseEntity<>(this.convertToDto(newPatient), HttpStatus.OK);
     }
 
+    @PutMapping(path = "/medical-record/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDTO> updateMedicalRecord(@PathVariable String id, @RequestBody MedicalRecordDTO medicalRecordDTO) {
+        Patient found = service.getByUserId(id);
+        if (found == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        MedicalRecord mr = found.getMedicalRecord();
+        if(mr == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
+        mr.setHeight(medicalRecordDTO.getHeight());
+        mr.setWeight(medicalRecordDTO.getWeight());
+        mr.setBloodType(medicalRecordDTO.getBloodType());
+        mr.setAllergies(medicalRecordDTO.getAllergies());
+        found.setMedicalRecord(mr);
+
+        Patient newPatient = service.addPatient(found);
+
+        return new ResponseEntity<>(this.convertToDto(newPatient), HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "{id}")
     public ResponseEntity<PatientDTO> deletePatient(@PathVariable String id) {
         try {
@@ -149,7 +171,7 @@ public class PatientController {
         }
     }
 
-    @GetMapping(path = "user-id={userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PatientDTO> getByUserId(@PathVariable String userID) {
         Patient found = service.getByUserId(userID);
         if (found == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -172,7 +194,9 @@ public class PatientController {
                 patient.getClinics(),
                 patient.getInterventions(),
                 patient.getRequests(),
-                patient.getMedicalRecord()
+                patient.getMedicalRecord(),
+                patient.getDoctorRatings(),
+                patient.getClinicRatings()
         );
     }
 
@@ -185,7 +209,9 @@ public class PatientController {
                 patientDTO.getClinics(),
                 user,
                 patientDTO.getInterventions(),
-                patientDTO.getRequests()
+                patientDTO.getRequests(),
+                patientDTO.getDoctorRatings(),
+                patientDTO.getClinicRatings()
         );
     }
 

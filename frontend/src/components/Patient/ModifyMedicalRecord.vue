@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    import {mapActions, mapMutations, mapState} from "vuex";
+    import {mapMutations, mapState} from "vuex";
     import {emptyMedicine} from "../../utils/skeletons";
 
     export default {
@@ -107,13 +107,23 @@
         },
         watch: {
             value() {
-
+                if(!this.patient) return;
+                this.height = this.patient.medicalRecord.height;
+                this.weight = this.patient.medicalRecord.weight;
+                this.bloodType = this.patient.medicalRecord.bloodType;
+                this.allergies = this.patient.medicalRecord.allergies;
             }
         },
         methods: {
             ...mapMutations('patients', ['updatePatient']),
             async saveMedicalRecord(record) {
                 let {data: patient} = await this.$axios.post(`/api/patient/medical-record/${this.patient.userID}`,
+                    record,
+                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                this.updatePatient(patient);
+            },
+            async updateMedicalRecord(record) {
+                let {data: patient} = await this.$axios.put(`/api/patient/medical-record/${this.patient.userID}`,
                     record,
                     {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
                 this.updatePatient(patient);

@@ -1,5 +1,7 @@
 package mrs.eclinicapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIdentityInfo(generator = JSOGGenerator.class)
 public class VisitDTO {
     private String anamnesis;
     private String usageMethod;

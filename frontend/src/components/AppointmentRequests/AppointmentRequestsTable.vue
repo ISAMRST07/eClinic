@@ -63,7 +63,7 @@
 <script>
     import {mapActions, mapState} from "vuex";
     import DeleteDialog from "./DeleteDialog";
-    import {ClinicalAdmin, ClinicalCenterAdmin, Patient} from "../../utils/DrawerItems";
+    import {ClinicalAdmin, Patient} from "../../utils/DrawerItems";
     import ApproveDialog from "./ApproveDialog";
 
     export default {
@@ -194,7 +194,8 @@
                         }
                     );
             },
-        }
+        },
+
     }
 </script>
 

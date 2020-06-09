@@ -11,14 +11,12 @@ import {
     interventionTypePath,
     interventionPath,
     patientsPath,
-    doctorHomePath,
     vacationRequestPath,
     clinicCenterAdministratorsPath,
     workingSchedulePath,
     appointmentRequestClinicPath,
     appointmentRequestPatientPath,
     oneClickAppointmentPath,
-    visitPath,
     diseasePath,
     historyPath,
     medicalRecordPath
@@ -35,7 +33,7 @@ function doctorsItem(clinicID) {
 function medicalRecordItem(patientID) {
     return {
         icon: 'mdi-view-list',
-        label: 'Doctors',
+        label: 'Medical record',
         path: medicalRecordPath.replace(":id", patientID)
     }
 }
@@ -152,11 +150,6 @@ const patientsItem = {
     path: patientsPath,
 };
 
-const doctorHomeItem = {
-    icon: 'mdi-home',
-    label: 'Doctor Home',
-    path: doctorHomePath,
-};
 
 const vacationRequestItem = {
 	icon: 'mdi-home',
@@ -222,21 +215,24 @@ class Patient {
     }
 }
 
-const Doctor = {
-	name: 'Doctor',
-    code: 'doctor',
-    items: [
-        workingScheduleItem,
-        doctorHomeItem,
-        vacationRequestItem,
-        patientsItem
-    ]
-};
+class Doctor {
+	static name = 'Doctor';
+    static code = 'doctor';
+    constructor() {
+        this.items = [
+            homeItem,
+            workingScheduleItem,
+            vacationRequestItem,
+            patientsItem
+        ]
+    }
+}
 
 const Nurse = {
     name: 'Nurse',
     code: 'nurse',
     items: [
+        homeItem,
         workingScheduleItem,
         vacationRequestItem,
         patientsItem

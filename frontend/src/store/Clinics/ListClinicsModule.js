@@ -10,13 +10,7 @@ export default {
     mutations: {
         setAllClinics(state, pagedResponse) {
         	console.log("setAllClinics = ");
-        	console.log(pagedResponse.clinics);  
-        	pagedResponse.clinics.forEach(function(clinic) {
-        		//ovde racunam prosek ocena
-        		const sum = clinic.rating.reduce((a, b) => a + b, 0);
-        	    const avg = (sum / clinic.rating.length) || 0;
-            	clinic.rating = avg.toFixed(1);
-        	});
+        	console.log(pagedResponse.clinics);
             Vue.set(state, 'clinics', pagedResponse.clinics);
             state.length = pagedResponse.totalLength;
         },
@@ -56,7 +50,7 @@ export default {
         },
         async deleteClinicApi({rootState, commit}, clinic) {
             try {
-                let res = await Vue.prototype.$axios.delete(`/api/clinic/${clinic.id}`,
+                await Vue.prototype.$axios.delete(`/api/clinic/${clinic.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('deleteClinic', clinic);
             } catch (err) {

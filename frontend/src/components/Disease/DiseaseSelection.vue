@@ -26,7 +26,7 @@
 
 <script>
 
-    import {mapActions, mapState} from "vuex";
+    import {mapActions} from "vuex";
     import JSOG from 'jsog';
 
     export default {
@@ -42,10 +42,13 @@
             }
         },
         computed: {
-            ...mapState('disease/disease', ['diseases']),
+
+            diseases(){
+                return JSOG.decode(this.$store.state.disease.disease.diseases);
+            }
         },
         watch: {
-            diseases(val) {
+            diseases() {
                 this.loading = false;
             }
         },

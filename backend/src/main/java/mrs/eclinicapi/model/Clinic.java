@@ -67,13 +67,18 @@ public class Clinic {
     private Set<OneClickAppointment> oneClicks = new HashSet<>();
 
     @ManyToMany
-    private List<Patient> patients;
+    private Set<Patient> patients;
 
     @ManyToOne
     private ClinicalCentarAdministrator admin;
 
-    private ArrayList<Integer> rating = new ArrayList<>();
-    
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ClinicRating> rating;
+
+    public void addPatient(Patient p) {
+        if(patients == null) patients = new HashSet<>();
+        patients.add(p);
+    }
     @Override
     public String toString() {
         return "Clinic{" +

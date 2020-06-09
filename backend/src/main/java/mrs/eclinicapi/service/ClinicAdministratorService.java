@@ -25,14 +25,9 @@ public class ClinicAdministratorService {
 
     @Transactional
     public ClinicAdministratorDto addClinicAdministraor(ClinicAdministratorDto clinicAdministratorDto) {
-//        if(this.clinicAdminRepository.findByUsername(clinicAdministratorDto.getUsername())==null){
-//            System.out.println("Sokole postoji ovaj");
-//        }
-//        else{
-//            System.out.println("Sokole ne postoji ovaj");
-//        }
+
         User newUser = new User(clinicAdministratorDto);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setFirstPassword(passwordEncoder.encode(newUser.getPassword()));
         ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
         clinicAdministrator.setUser(newUser);
         clinicAdministrator.setClinic(clinicAdministratorDto.getClinic());

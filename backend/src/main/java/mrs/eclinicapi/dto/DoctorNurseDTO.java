@@ -6,13 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mrs.eclinicapi.model.OneClickAppointment;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.enums.Weekday;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,9 +39,11 @@ public class DoctorNurseDTO {
     private List<String> specialties;
     private Map<Weekday, TimePeriod<LocalTime>> workingSchedule;
     private List<TimePeriod<LocalDateTime>> busyTimes;
+    private List<TimePeriod<LocalDateTime>> vacations;
     private List<AppointmentRequestDTO> appointmentRequests;
+    private List<OneClickAppointment> oneClickAppointments;
     private double avgRating;
-    
+
     @Override
     public String toString() {
         return "DoctorNurseDTO [id=" + id + ", userID=" + userID + ", email=" + email + ", password=" + password

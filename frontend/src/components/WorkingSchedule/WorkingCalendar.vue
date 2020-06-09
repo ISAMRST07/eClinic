@@ -117,6 +117,7 @@
                 day: 'Day',
                 '4day': '4 Days',
             },
+            doctor: null,
             start: null,
             end: null,
             selectedEvent: {},
@@ -130,30 +131,30 @@
             ...mapState('patients', ['patients']),
             ...mapState('auth', ['role', 'user']),
             title() {
-                const {start, end} = this
+                const {start, end} = this;
                 if (!start || !end) {
                     return ''
                 }
 
-                const startMonth = this.monthFormatter(start)
-                const endMonth = this.monthFormatter(end)
-                const suffixMonth = startMonth === endMonth ? '' : endMonth
+                const startMonth = this.monthFormatter(start);
+                const endMonth = this.monthFormatter(end);
+                const suffixMonth = startMonth === endMonth ? '' : endMonth;
 
-                const startYear = start.year
-                const endYear = end.year
-                const suffixYear = startYear === endYear ? '' : endYear
+                const startYear = start.year;
+                const endYear = end.year;
+                const suffixYear = startYear === endYear ? '' : endYear;
 
-                const startDay = start.day + this.nth(start.day)
-                const endDay = end.day + this.nth(end.day)
+                const startDay = start.day + this.nth(start.day);
+                const endDay = end.day + this.nth(end.day);
 
                 switch (this.type) {
                     case 'month':
-                        return `${startMonth} ${startYear}`
+                        return `${startMonth} ${startYear}`;
                     case 'week':
                     case '4day':
-                        return `${startMonth} ${startDay} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`
+                        return `${startMonth} ${startDay} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`;
                     case 'day':
-                        return `${startMonth} ${startDay} ${startYear}`
+                        return `${startMonth} ${startDay} ${startYear}`;
                 }
                 return ''
             },
@@ -163,36 +164,49 @@
                 })
             },
         },
-        mounted() {
+        watch: {
+            doctor() {
+                this.updateRange({start: this.start, end: this.end});
+            }
+        },
+        async mounted() {
+            try {
+                let {data: doctor} = await this.$axios.get(`/api/doctor/user/${this.$store.state.auth.user.id}`,
+                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                this.doctor = doctor;
+            } catch(err) {
+                console.log(err);
+            }
             this.$refs.calendar.checkChange()
+
         },
         methods: {
             viewDay({date}) {
-                this.focus = date
-                this.type = 'day'
+                this.focus = date;
+                this.type = 'day';
             },
             getEventColor(event) {
                 return event.color
             },
             setToday() {
-                this.focus = this.today
+                this.focus = this.today;
             },
             prev() {
-                this.$refs.calendar.prev()
+                this.$refs.calendar.prev();
             },
             next() {
-                this.$refs.calendar.next()
+                this.$refs.calendar.next();
             },
             showEvent({nativeEvent, event}) {
                 const open = () => {
-                    this.selectedEvent = event
-                    this.selectedElement = nativeEvent.target
-                    setTimeout(() => this.selectedOpen = true, 10)
-                }
+                    this.selectedEvent = event;
+                    this.selectedElement = nativeEvent.target;
+                    setTimeout(() => this.selectedOpen = true, 10);
+                };
 
                 if (this.selectedOpen) {
-                    this.selectedOpen = false
-                    setTimeout(open, 10)
+                    this.selectedOpen = false;
+                    setTimeout(open, 10);
                 } else {
                     open()
                 }
@@ -200,81 +214,57 @@
                 nativeEvent.stopPropagation()
             },
             updateRange({start, end}) {
-
-                const events = []
-
-                const min = new Date(`${start.date}T00:00:00`)
-                const max = new Date(`${end.date}T23:59:59`)
-                const days = (max.getTime() - min.getTime()) / 86400000
-                const eventCount = this.rnd(days, days + 20)
-                console.log("KALENDAR");
-                console.log(start)
-                //appointmentrequest
-                let appoinmentReqSize = 1
-                for (let i = 0; i < appoinmentReqSize; i++) {
-                    //OVO SAMO ZA TESTIRANJE, KAD SE UCITAJU PODACI IZ BAZE BRISE SE
-                    const allDay = this.rnd(0, 3) === 0
-                    const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-                    const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-                    const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-                    const second = new Date(first.getTime() + secondTimestamp)
-                    let appoinmentStart = this.formatDate(first, !allDay); //Ovde dodati podatak kad pocinje (iz baze) FORMAT YYYY-MM-DD hh:mm
-                    let appoinmentEnd =  this.formatDate(second, !allDay); //Ovde dodati podatak kad se zavrsava (iz baze) FORMAT YYYY-MM-DD hh:mm
-                    //----------------------------------------------------------------
-                    if ( !this.isBetweenTwoDates(start.date, end.date, appoinmentStart)){
-                        if ( this.isBetweenTwoDates(start.date, end.date, appoinmentEnd)){
-                            appoinmentStart = start.date;
-                        }
-                        else{
-                            continue;
-                        }
-                    }
-
-                    if ( !this.isBetweenTwoDates(start.date, end.date, appoinmentEnd))
-                        appoinmentEnd = end.date;
+                if(!this.doctor) return;
+                const events = [];
+                for(let timeperiod of this.doctor.busyTimes) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
                     events.push({
-                        details: "appointmentrequest",
-                        name: "appointmentrequest",
-                        start: appoinmentStart,
-                        end: appoinmentEnd,
-                        color: this.colors[1],
-                    })
-                }
-                //interventions lista intervenicja iz baze
-                let interventions = 1
-                for (let i = 0; i < interventions; i++) {
-                    //OVO SAMO ZA TESTIRANJE, KAD SE UCITAJU PODACI IZ BAZE BRISE SE
-                    const allDay = this.rnd(0, 3) === 0
-                    const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-                    const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-                    const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-                    const second = new Date(first.getTime() + secondTimestamp)
-
-                    let interventionStart = this.formatDate(first, !allDay); //Ovde dodati podatak kad pocinje (iz baze) FORMAT YYYY-MM-DD hh:mm
-                    let interventionEnd =  this.formatDate(second, !allDay); //Ovde dodati podatak kad se zavrsava (iz baze) FORMAT YYYY-MM-DD hh:mm
-                    //----------------------------------------------------------------
-                    if ( !this.isBetweenTwoDates(start.date, end.date, interventionStart)){
-                        if ( this.isBetweenTwoDates(start.date, end.date, interventionEnd)){
-                            interventionStart = start.date;
-                        }
-                        else{
-                            continue;
-                        }
-                    }
-                    if ( !this.isBetweenTwoDates(start.date, end.date, interventionEnd))
-                        interventionEnd = end.date;
-                    events.push({
-                        details: " intervention",
-                        name: " intervention",
-                        start: interventionStart,
-                        end: interventionEnd,
-                        color: this.colors[2],
-                    })
+                        start: this.formatDate(startDateTime),
+                        end: this.formatDate(endDateTime),
+                        name: 'Intervention',
+                        color: 'primary'
+                    });
                 }
 
-                this.start = start
-                this.end = end
-                this.events = events
+                for(let timeperiod of this.doctor.vacations) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    events.push({
+                        start: this.formatDate(startDateTime),
+                        end: this.formatDate(endDateTime),
+                        name: 'Vacation',
+                        color: 'gray'
+                    });
+                }
+
+                for(let timeperiod of this.doctor.oneClickAppointments) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    events.push({
+                        start: this.formatDate(startDateTime),
+                        end: this.formatDate(endDateTime),
+                        name: 'Intervention',
+                        color: 'primary'
+                    });
+                }
+                for(let ar of this.doctor.appointmentRequests) {
+                    let time = ar.dateTime;
+                    let startDateTime = new Date(time);
+                    let endDateTime = new Date(startDateTime);
+                    endDateTime.setMinutes(startDateTime.getMinutes() + 30);
+
+                    events.push({
+                        start: this.formatDate(startDateTime),
+                        end: this.formatDate(endDateTime),
+                        name: 'Request',
+                        color: 'orange'
+                    });
+                }
+
+                this.start = start;
+                this.end = end;
+                this.events = events;
             },
             nth(d) {
                 return d > 3 && d < 21
@@ -285,13 +275,13 @@
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
             isBetweenTwoDates(fromD, toD, checkD){
-                let fromDSplit = fromD.split('-')
+                let fromDSplit = fromD.split('-');
                 fromD = fromDSplit[0]+""+fromDSplit[1]+""+fromDSplit[2]+"0000";
-                let toDSplit = toD.split('-')
+                let toDSplit = toD.split('-');
                 toD = toDSplit[0]+""+toDSplit[1]+""+toDSplit[2]+"2359";
                 let checkDateTime = checkD.split(' ');
-                let checkDateSplit = checkDateTime[0].split('-')
-                let checkTimeSplit = checkDateTime[1].split(':')
+                let checkDateSplit = checkDateTime[0].split('-');
+                let checkTimeSplit = checkDateTime[1].split(':');
 
 
                 if(parseInt(checkDateSplit[1])<10){

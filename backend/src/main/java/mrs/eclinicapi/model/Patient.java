@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,6 +39,8 @@ public class Patient {
     private List<Intervention> interventions;
     @OneToMany
     private List<AppointmentRequest> requests;
-
-
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<DoctorRating> doctorRatings;
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ClinicRating> clinicRatings;
 }

@@ -50,7 +50,7 @@ public class InterventionService {
     }
 
     public List<Intervention> getPatientIntervention(String patientId) {
-        return repository.getPatientIntervention(patientId);
+        return repository.findInterventionsByPatient_IdAndVisitNotNull(patientId);
     }
 
     public Intervention findUpcoming(String doctorID, String patientID) {

@@ -195,6 +195,44 @@
                         return false;
                     }
                 }
+
+                for(let timeperiod of this.doctor.vacations) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    endDateTime.setHours(end.hours, end.minutes, end.seconds);
+                    let endOfSelected = new Date(selectedDateTime);
+                    endOfSelected.setMinutes(endOfSelected.getMinutes() + 30);
+
+                    if(selectedDateTime >= startDateTime && selectedDateTime <= endDateTime){
+                        this.error.isError = true;
+                        this.error.errorMessages = 'Doctor is on vacation during this time.';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.error.isError = true;
+                        this.error.errorMessages = 'Doctor will be on vacation during this time..';
+                        return false;
+                    }
+                }
+
+                for(let timeperiod of this.doctor.oneClickAppointments) {
+                    let startDateTime = new Date(timeperiod.start);
+                    let endDateTime = new Date(timeperiod.end);
+                    endDateTime.setHours(end.hours, end.minutes, end.seconds);
+                    let endOfSelected = new Date(selectedDateTime);
+                    endOfSelected.setMinutes(endOfSelected.getMinutes() + 30);
+
+                    if(selectedDateTime >= startDateTime && selectedDateTime <= endDateTime){
+                        this.error.isError = true;
+                        this.error.errorMessages = 'Doctor has an appointment during this time.';
+                        return false;
+                    }
+                    if(endOfSelected >= startDateTime && endOfSelected <= endDateTime) {
+                        this.error.isError = true;
+                        this.error.errorMessages = 'The next intervention is too close to this one.';
+                        return false;
+                    }
+                }
                 return true;
             },
             parseTime(time) {

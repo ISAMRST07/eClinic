@@ -11,7 +11,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +31,8 @@ public class Doctor extends MedicalStaff {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<AppointmentRequest> appointmentRequests = new ArrayList<>();
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    private List<OneClickAppointment> oneClickAppointments = new ArrayList<>();
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "d_seq")
@@ -37,7 +41,8 @@ public class Doctor extends MedicalStaff {
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
 
-    private ArrayList<Integer> rating = new ArrayList<>();
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<DoctorRating> rating = new HashSet<>();
 
     @Override
     public Clinic getClinic() {

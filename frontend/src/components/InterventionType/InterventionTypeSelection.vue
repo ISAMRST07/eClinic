@@ -29,8 +29,6 @@
 <script>
 
     import {mapActions, mapState} from "vuex";
-    import {ClinicalAdmin, ClinicalCenterAdmin} from "../../utils/DrawerItems";
-    import JSOG from 'jsog';
 
     export default {
         name: "InterventionTypeSelection",
@@ -55,9 +53,10 @@
         },
         computed: {
             ...mapState('interventionType/interventionType', ['interventionType']),
+
         },
         watch: {
-            interventionType(val) {
+            interventionType() {
                 this.loading = false;
             }
         },

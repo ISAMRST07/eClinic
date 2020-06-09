@@ -123,6 +123,10 @@ public class User implements UserDetails {
         this.personalID = personalID;
     }
 
+    public void setFirstPassword(String password) {
+        this.password = password;
+    }
+
     public void setPassword(String password) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         this.setLastPasswordResetDate(now);
