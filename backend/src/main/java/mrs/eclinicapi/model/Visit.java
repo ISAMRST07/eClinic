@@ -31,6 +31,7 @@ public class Visit {
 
     private String anamnesis;
     private String usageMethod;
+    private boolean certified;
     @OneToOne
     private Intervention intervention;
 
