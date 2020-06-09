@@ -44,7 +44,7 @@ public class ClinicController {
     public ResponseEntity<ClinicDTO> addClinic(@RequestBody ClinicDTO clinic) {
         Clinic newClinic = service.addClinic(this.convertToEntity(clinic));
         if (newClinic == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
-        System.out.println("newClinic = " + clinic);
+
         return new ResponseEntity<>(this.convertToDTO(newClinic), HttpStatus.OK);
     }
 
@@ -64,9 +64,6 @@ public class ClinicController {
 
         if (clinics == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        for (Clinic c : clinics) {
-            System.out.println("getall clinics = " + c);
         }
         return new ResponseEntity<>(clinics.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -98,7 +95,7 @@ public class ClinicController {
 
     @GetMapping(path = "/user/{id}")
     public ResponseEntity<ClinicDTO> getClinicByUserID(@PathVariable("id") String userID) {
-        System.out.println("SAD CU DA TE NADJEM");
+
         Clinic clinic = service.findByUser(userID);
 
         if (clinic == null) {
@@ -110,14 +107,14 @@ public class ClinicController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ClinicDTO> getOneClinic(@PathVariable("id") String id) {
-        System.out.println("getOneClinic id = " + id);
+
 
         Clinic clinic = service.findOne(id);
-        System.out.println("returned to controller = " + clinic);
+
         if (clinic == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        System.out.println("get one  clinics = " + clinic);
+
         return new ResponseEntity<>(this.convertToDTO(clinic), HttpStatus.OK);
     }
 

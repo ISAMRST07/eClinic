@@ -59,19 +59,19 @@ public class InterventionController {
 
     @GetMapping(path = "/clinic/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Intervention>> getClinicIntervention(@PathVariable("id") String clinicId) {
-        System.out.println("getClinicIntervention clinicId = " + clinicId);
+
         List<Intervention> it = service.getClinicIntervention(clinicId);
-        System.out.println("getClinicInterventionType it = " + it);
+
         return new ResponseEntity<>(it, HttpStatus.OK);
     }
 
     @GetMapping(path = "/patient/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<InterventionDTO>> getPatientIntervention(@PathVariable("id") String patientId) {
-        System.out.println("getPatientIntervention patientId = " + patientId);
+
         Patient patient = patientService.getByUserId(patientId);
         if (patient == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         List<Intervention> it = service.getPatientIntervention(patient.getId());
-        System.out.println("getPatientIntervention it = " + it);
+
         return new ResponseEntity<>(it.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
     @GetMapping(path = "/ongoing/{doctorID}")
@@ -249,9 +249,9 @@ public class InterventionController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteIntervention(@PathVariable("id") String id) {
-        System.out.println("deleteIntervention id = " + id);
+
         Intervention it = service.findOne(id);
-        System.out.println("deleteIntervention it = " + it);
+
         if (it == null) {
             return new ResponseEntity<>("Interventionnot found", HttpStatus.NOT_FOUND);
         }

@@ -19,7 +19,7 @@ public class AppointmentTimer extends TimerTask {
 
     @Override
     public void run() {
-        System.out.println("Executing appointment timer task");
+
 
         timers.remove(appointmentRequest.getId());
         cancel();

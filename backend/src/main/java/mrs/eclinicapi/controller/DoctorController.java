@@ -59,14 +59,14 @@ public class DoctorController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") String id) {
-        System.out.println("delete doctor " + id);
+
 
         Doctor doctor = service.findOne(id);
         if (doctor == null) {
-            System.out.println("doctor not found");
+
             return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
         }
-        System.out.println("delete this doctor = " + doctor);
+
 
         service.deleteById(id);
         return new ResponseEntity<>("doctor deleted", HttpStatus.OK);
@@ -135,13 +135,13 @@ public class DoctorController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<DoctorNurseDTO> getDoctor(@PathVariable("id") String id) {
-        System.out.println("get doctor " + id);
+
         Doctor doctor = service.findOne(id);
         if (doctor == null) {
-            System.out.println("doctor not found");
+
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        System.out.println("get this doctor = " + doctor);
+
 
         return new ResponseEntity<>(this.convertToDTO(doctor), HttpStatus.OK);
     }

@@ -24,7 +24,7 @@ public class UserController {
                         @RequestParam int type) {
         User newUser = new User(email, password, name, UserType.fromInteger(type));
         service.addUser(newUser);
-        System.out.println("newUser = " + newUser);
+
         return newUser;
     }
 
@@ -36,7 +36,7 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        System.out.println("found user with id = " + id + " " + user);
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -48,9 +48,6 @@ public class UserController {
         if (users == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        for (User u : users) {
-            System.out.println("getall user = " + u);
-        }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -60,7 +57,7 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
         }
-        System.out.println("foudn user with id = " + id + " " + id);
+
         service.deleteById(id);
         return new ResponseEntity<>("deleted user", HttpStatus.OK);
     }

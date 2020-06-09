@@ -32,7 +32,7 @@ public class NurseService {
     }
 
     public List<Nurse> getNurseForClinic(String id) {
-        System.out.println("getNurseForClinic service");
+
         return repository.getNurseForClinic(id);
     }
 }

@@ -28,10 +28,10 @@ public class DisapproveVacationListener implements
     }
 
     private void confirmDisapproveVacation(OnDisapproveVacationCompleteEvent event) {
-        System.out.println("confirmDisapproveVacation");
+
         User user = event.getUser();
-        System.out.println("user = " + user);
-        System.out.println("reason = " + event.getReason());
+
+
 
         String recipientAddress = user.getEmail();
         String subject = "Vacation request declined";

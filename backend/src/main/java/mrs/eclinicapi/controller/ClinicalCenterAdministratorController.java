@@ -23,7 +23,7 @@ public class ClinicalCenterAdministratorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ClinicCenterAdministratorDTO addClinicCenterAdministrator(@RequestBody ClinicCenterAdministratorDTO clinicCenterAdministratorDTO) {
-        System.out.println(clinicCenterAdministratorDTO);
+
         return service.addClinicCenterAdministrator(clinicCenterAdministratorDTO);
 
     }
@@ -31,7 +31,7 @@ public class ClinicalCenterAdministratorController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteClinicCenterAdministrator(@PathVariable("id") String id) {
         ClinicalCentarAdministrator clinicalCentarAdministrator = service.findById(id);
-        System.out.println(clinicalCentarAdministrator);
+
 //        if (clinicAdministrator == null) {
 //            return new ResponseEntity<>("clinicAdministrator not found", HttpStatus.NOT_FOUND);
 //        }

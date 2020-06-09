@@ -52,10 +52,10 @@ public class ClinicService {
     public Clinic findByUser(String userID) {
         Optional<User> user = userRepository.findById(userID);
         if (!user.isPresent()) {
-            System.out.println("NE IDEEEE");
+
             return null;
         }
-        System.out.println("DAKHE IDEEEE");
+
         Optional<ClinicAdministrator> clinicAdministrator = clinicAdministratorRepository.findClinicAdministratorByUser(user.get());
         Optional<Doctor> doctor = doctorRepository.findDoctorByUser(user.get());
         Optional<Nurse> nurse = nurseRepository.findNurseByUser(user.get());

@@ -39,7 +39,7 @@ public class NurseController {
         Nurse newNurse = this.convertToEntity(nurseDto);
         Nurse added = service.addNurse(newNurse);
 
-        System.out.println("newDoctor added = " + newNurse);
+
 
         return new ResponseEntity<>(this.convertToDTO(added), HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class NurseController {
         Nurse toModify = this.convertToEntity(nurseDto);
 
         Nurse modified = service.addNurse(toModify);
-        System.out.println("new nurse modified = " + modified);
+
         if (modified == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -58,14 +58,14 @@ public class NurseController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteNurse(@PathVariable("id") String id) {
-        System.out.println("delete nurse " + id);
+
 
         Nurse nurse = service.findOne(id);
         if (nurse == null) {
-            System.out.println("nurse not found");
+
             return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
         }
-        System.out.println("delete this nurse = " + nurse);
+
 
         service.deleteById(id);
         return new ResponseEntity<>("nurse deleted", HttpStatus.OK);
@@ -73,10 +73,10 @@ public class NurseController {
 
     @GetMapping
     public ResponseEntity<List<DoctorNurseDTO>> getAll() {
-        System.out.println("get all nurse ");
+
         List<Nurse> nurseList = service.findAll();
         if (nurseList == null) {
-            System.out.println("nurse not found");
+
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(nurseList.stream().map(this::convertToDTO).collect(Collectors.toList()),
@@ -85,27 +85,27 @@ public class NurseController {
 
     @GetMapping(path = "/getNurseForClinic/{id}")
     public ResponseEntity<List<DoctorNurseDTO>> getNurseForClinic(@PathVariable("id") String id) {
-        System.out.println("get nurse for clinic " + id);
+
 
         List<Nurse> nurseList = service.getNurseForClinic(id);
         if (nurseList == null) {
-            System.out.println("nurse not found");
+
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        System.out.println(nurseList);
+
         return new ResponseEntity<>(nurseList.stream().map(this::convertToDTO).collect(Collectors.toList()),
                 HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<DoctorNurseDTO> getNurse(@PathVariable("id") String id) {
-        System.out.println("get nurse " + id);
+
         Nurse nurse = service.findOne(id);
         if (nurse == null) {
-            System.out.println("nurse not found");
+
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        System.out.println("get this nurse = " + nurse);
+
 
         return new ResponseEntity<>(this.convertToDTO(nurse), HttpStatus.OK);
     }
