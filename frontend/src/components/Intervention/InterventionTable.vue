@@ -12,7 +12,6 @@
 					hide-details
 				></v-text-field>
 			</v-card-title>
-		</v-card>
 
 		<v-data-table
 			:headers="headers"
@@ -42,6 +41,8 @@
 				<p>There are no interventions</p>
 			</template>
 		</v-data-table>
+		</v-card>
+
 		<delete-dialog
 			v-model="dialog"
 			:intervention="interventionToDelete"

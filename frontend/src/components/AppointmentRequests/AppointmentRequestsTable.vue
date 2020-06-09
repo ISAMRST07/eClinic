@@ -2,7 +2,9 @@
     <div>
 
         <v-card>
-
+            <v-card-title>
+                Appointment requests
+            </v-card-title>
             <v-data-table
                     :headers="headers"
                     :items="requests"

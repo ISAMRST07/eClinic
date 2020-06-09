@@ -30,11 +30,11 @@ function doctorsItem(clinicID) {
     }
 }
 
-function medicalRecordItem(patientID) {
+function medicalRecordItem(userID) {
     return {
         icon: 'mdi-view-list',
         label: 'Medical record',
-        path: medicalRecordPath.replace(":id", patientID)
+        path: medicalRecordPath.replace(":id", userID)
     }
 }
 
@@ -139,7 +139,7 @@ const unregisteredUsersItem = {
 };
 
 const historyItem = {
-	icon: 'mdi-home',
+	icon: 'mdi-history',
     label: 'History',
     path: historyPath,
 };

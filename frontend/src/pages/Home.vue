@@ -1,6 +1,7 @@
 <template>
 	<v-container>
 		<doctor-home-component v-if="role === doctorCode"></doctor-home-component>
+		<patient-home v-else-if="role === patientCode"></patient-home>
 		<v-dialog v-model="dialog" persistent max-width="600px">
 			<v-card>
 				<v-card-title>
@@ -66,11 +67,13 @@
 <script>
 import { mapState } from "vuex";
 import DoctorHomeComponent from "../components/DoctorHome/DoctorHomeComponent";
-import {Doctor} from "../utils/DrawerItems";
-
+import {ClinicalAdmin, Doctor, Patient} from "../utils/DrawerItems";
+import ClinicDetailsComponent from "../components/ClinicDetails/ClinicDetailsComponent";
+import store from '../store/index'
+import PatientHome from "../components/PatientHome/PatientHome";
 export default {
 	name: "Home",
-	components: {DoctorHomeComponent},
+	components: {PatientHome, ClinicDetailsComponent, DoctorHomeComponent},
 	data: () => ({
 		dialog: false,
 		password: "",
@@ -87,7 +90,9 @@ export default {
 			required: v => !!v || "Required!",
 			min8: v => (!!v && v.length >= 8) || "At least 8 characters"
 		},
-		doctorCode: Doctor.code
+		doctorCode: Doctor.code,
+		patientCode: Patient.code,
+		clinicAdminCode: ClinicalAdmin.code
 	}),
 	computed: {
 		...mapState("auth", ["user"]),
@@ -133,6 +138,11 @@ export default {
 	},
 	mounted() {
 		this.dialog = this.user.lastPasswordResetDate == null;
+	},
+	beforeRouteEnter(to, from, next) {
+		if(store.state.auth.role === ClinicalAdmin.code)
+			next(`/clinic/${store.state.auth.clinic.id}`);
+		else next();
 	}
 };
 </script>
