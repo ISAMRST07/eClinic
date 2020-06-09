@@ -32,45 +32,6 @@ public class Codebook {
     @ManyToOne
     private ClinicalCentarAdministrator admin;
 
-//    @OneToMany(mappedBy = "codebook")
-//    private List<Medicine> medicine;
-//
-//    public Collection<Medicine> getMedicine() {
-//        if (medicine == null)
-//            medicine = new ArrayList<>();
-//        return medicine;
-//    }
-//
-//    public java.util.Iterator<Medicine> getIteratorMedicine() {
-//        if (medicine == null)
-//            medicine = new ArrayList<>();
-//        return medicine.iterator();
-//    }
-//
-//    public void setMedicine(java.util.Collection<Medicine> newMedicine) {
-//        removeAllMedicine();
-//        for (Medicine value : newMedicine) addMedicine(value);
-//    }
-//
-//    public void addMedicine(Medicine newMedicine) {
-//        if (newMedicine == null)
-//            return;
-//        if (this.medicine == null)
-//            this.medicine = new ArrayList<>();
-//        if (!this.medicine.contains(newMedicine))
-//            this.medicine.add(newMedicine);
-//    }
-//
-//    public void removeMedicine(Medicine oldMedicine) {
-//        if (oldMedicine == null)
-//            return;
-//        if (this.medicine != null)
-//            this.medicine.remove(oldMedicine);
-//    }
-//
-//    public void removeAllMedicine() {
-//        if (medicine != null)
-//            medicine.clear();
-//    }
+
 
 }

@@ -34,10 +34,6 @@ public class Medicine {
     private String manufacturer;
 
 
-//    @ManyToOne
-//    private Codebook codebook;
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

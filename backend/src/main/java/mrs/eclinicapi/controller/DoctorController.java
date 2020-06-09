@@ -50,7 +50,6 @@ public class DoctorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         service.addDoctor(newDoctor);
-        //userService.addUser(newUser);
 
 
         return new ResponseEntity<>(this.convertToDTO(newDoctor), HttpStatus.OK);

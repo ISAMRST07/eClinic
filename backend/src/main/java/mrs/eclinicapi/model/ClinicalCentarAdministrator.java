@@ -45,44 +45,4 @@ public class ClinicalCentarAdministrator {
      * */
 
 
-//
-//    public Collection<Clinic> getClinics() {
-//        if (clinics == null)
-//            clinics = new ArrayList<Clinic>();
-//        return clinics;
-//    }
-//
-//    public java.util.Iterator getIteratorClinicAdministrator() {
-//        if (clinics == null)
-//            clinics = new ArrayList<Clinic>();
-//        return clinics.iterator();
-//    }
-//
-//    public void setClinics(java.util.Collection<ClinicAdministrator> newClinicAdministrator) {
-//        removeAllClinicAdministrator();
-//        for (java.util.Iterator iter = newClinicAdministrator.iterator(); iter.hasNext(); )
-//            addClinicAdministrator((Clinic) iter.next());
-//    }
-
-//    public void addClinicAdministrator(Clinic newClinicAdministrator) {
-//        if (newClinicAdministrator == null)
-//            return;
-//        if (this.clinics == null)
-//            this.clinics = new ArrayList<Clinic>();
-//        if (!this.clinics.contains(newClinicAdministrator))
-//            this.clinics.add(newClinicAdministrator);
-//    }
-//
-//    public void removeClinicAdministrator(ClinicAdministrator oldClinicAdministrator) {
-//        if (oldClinicAdministrator == null)
-//            return;
-//        if (this.clinics != null)
-//            this.clinics.remove(oldClinicAdministrator);
-//    }
-//
-//    public void removeAllClinicAdministrator() {
-//        if (clinics != null)
-//            clinics.clear();
-//    }
-
 }
