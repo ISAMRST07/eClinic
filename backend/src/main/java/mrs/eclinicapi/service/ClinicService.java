@@ -35,6 +35,7 @@ public class ClinicService {
     }
 
     public Clinic findOne(String id) {
+        if(id == null) return null;
         return clinicRepository.findById(id).orElse(null);
     }
 

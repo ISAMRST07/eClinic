@@ -75,7 +75,7 @@ public class UnregisteredUserController {
         eventPublisher.publishEvent(new EmailEvent(found, "Registration request denied", content, sendTo));
 
         service.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(found.getId(), HttpStatus.OK);
 
     }
 
