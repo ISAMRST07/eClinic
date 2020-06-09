@@ -35,7 +35,7 @@ public class MedicineService {
 
     @Transactional
     public Medicine findOne(String id) {
-        return repository.findById(id).orElseGet(null);
+        return repository.findById(id).orElse(null);
     }
 
     @Transactional

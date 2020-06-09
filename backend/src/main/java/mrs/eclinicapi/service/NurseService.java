@@ -20,7 +20,7 @@ public class NurseService {
     }
 
     public Nurse findOne(String id) {
-        return repository.findById(id).orElseGet(null);
+        return repository.findById(id).orElse(null);
     }
 
     public List<Nurse> findAll() {

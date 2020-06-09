@@ -33,7 +33,7 @@ public class DiagnosisService {
     }
 
     public Diagnosis findOne(String id) {
-        return repository.findById(id).orElseGet(null);
+        return repository.findById(id).orElse(null);
     }
 
     public void deleteById(String id) {
