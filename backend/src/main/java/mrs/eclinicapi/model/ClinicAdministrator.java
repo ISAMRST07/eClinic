@@ -21,7 +21,6 @@ import javax.persistence.*;
 public class ClinicAdministrator {
 
 
-    //    @JsonIgnoreProperties("clinicAdministrator")
     @ManyToOne
     public Clinic clinic;
     @Id

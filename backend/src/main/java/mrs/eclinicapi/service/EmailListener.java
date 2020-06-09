@@ -28,7 +28,6 @@ public class EmailListener implements
 
 
         String subject = event.getSubject();
-//        String confirmationUrl = "/confirmRegistration/" + token;
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(event.getAddress());
@@ -37,7 +36,6 @@ public class EmailListener implements
         email.setFrom(mail);
         email.setSubject(event.getSubject());
         email.setText(event.getContent());
-//        email.setText();
         mailSender.send(email);
     }
 }

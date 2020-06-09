@@ -19,7 +19,7 @@ public class MedicalStaff {
 
     /*ovde nije CascadeType.ALL da ne bi kada obrises doctor/nurse bili i
     user i clinic obrisani iz svojih tabela*/
-    //@OneToOne(cascade = {CascadeType.PERSIST})
+
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
