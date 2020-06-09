@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -81,7 +82,7 @@ public class TokenUtils {
                     .setClaims(claims)
                     .setExpiration(generateExpirationDate())
                     .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             refreshedToken = null;
         }
         return refreshedToken;
@@ -108,7 +109,7 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             username = claims.getSubject();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             username = null;
         }
         return username;
@@ -119,7 +120,7 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             issueAt = claims.getIssuedAt();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             issueAt = null;
         }
         return issueAt;
@@ -130,7 +131,7 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             audience = claims.getAudience();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             audience = null;
         }
         return audience;
@@ -141,7 +142,7 @@ public class TokenUtils {
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             expiration = claims.getExpiration();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             expiration = null;
         }
         return expiration;
@@ -189,7 +190,7 @@ public class TokenUtils {
                     .setSigningKey(SECRET)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             claims = null;
         }
         return claims;
