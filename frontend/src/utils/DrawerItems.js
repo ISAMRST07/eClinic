@@ -204,7 +204,6 @@ class ClinicalAdmin {
         this.items = [
             clinicDetailsItem(id),
             interventionTypeItem,
-            interventionItem,
             medicinesItem,
             clinicRoomsItem(id),
             doctorsItem(id),
