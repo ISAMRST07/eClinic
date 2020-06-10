@@ -97,7 +97,6 @@
             },
         },
         created() {
-            console.log("created djes sestro heeh");
             console.log(this.user);		//doctor id = user.id
             console.log(this.clinic);	//klinika kojoj ovaj doctor pripada
         }

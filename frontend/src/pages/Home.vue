@@ -2,6 +2,7 @@
 	<v-container>
 		<doctor-home-component v-if="role === doctorCode"></doctor-home-component>
 		<patient-home v-else-if="role === patientCode"></patient-home>
+		<home-clinic-center-admin v-else-if="role === clinicCenterAdminCode"></home-clinic-center-admin>
 		<nurse-home v-else-if="role === nurseCode"></nurse-home>
 		<v-dialog v-model="dialog" persistent max-width="600px">
 			<v-card>
@@ -68,14 +69,15 @@
 <script>
 import { mapState } from "vuex";
 import DoctorHomeComponent from "../components/DoctorHome/DoctorHomeComponent";
-import {ClinicalAdmin, Doctor, Patient, Nurse} from "../utils/DrawerItems";
+import {ClinicalAdmin, Doctor, Patient, Nurse, ClinicalCenterAdminClass} from "../utils/DrawerItems";
 import ClinicDetailsComponent from "../components/ClinicDetails/ClinicDetailsComponent";
 import store from '../store/index'
 import NurseHome from "../components/Nurse/NurseHome";
 import PatientHome from "../components/PatientHome/PatientHome";
+import HomeClinicCenterAdmin from "../components/ClinicCenterAdministrator/HomeClinicCenterAdmin";
 export default {
 	name: "Home",
-	components: {PatientHome, ClinicDetailsComponent, DoctorHomeComponent, NurseHome},
+	components: {PatientHome, ClinicDetailsComponent, DoctorHomeComponent, NurseHome, HomeClinicCenterAdmin},
 	data: () => ({
 		dialog: false,
 		password: "",
@@ -95,7 +97,8 @@ export default {
 		doctorCode: Doctor.code,
 		patientCode: Patient.code,
 		nurseCode: Nurse.code,
-		clinicAdminCode: ClinicalAdmin.code
+		clinicAdminCode: ClinicalAdmin.code,
+		clinicCenterAdminCode: ClinicalCenterAdminClass.code
 	}),
 	computed: {
 		...mapState("auth", ["user"]),

@@ -179,6 +179,23 @@ const ClinicalCenterAdmin = {
     ],
 };
 
+class ClinicalCenterAdminClass {
+    static name = 'Clinical Center Admin';
+    static code = 'clinicCentarAdministrator';
+    constructor() {
+        this.items = [
+            homeItem,
+            clinicCenterAdminsItem,
+            clinicsItem,
+            diseaseItem,
+            medicinesItem,
+            clinicAdminsItem,
+            patientsItem,
+            unregisteredUsersItem
+        ]
+    }
+};
+
 
 class ClinicalAdmin {
     static name = 'Clinical Admin';
@@ -240,4 +257,4 @@ class Nurse {
         ]
     }
 }
-export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor, Nurse};
+export {ClinicalCenterAdmin, ClinicalCenterAdminClass, ClinicalAdmin, Patient, Doctor, Nurse};
