@@ -36,6 +36,8 @@ export const vacationRequestPath ='/vacationRequest';
 
 export const workingSchedulePath = '/workingSchedule';
 
+export const medicalPrescriptionPath = '/medicalPrescriptions';
+
 export const appointmentRequestClinicPath = '/appointmentRequests/clinic=:clinicID';
 
 export const appointmentRequestPatientPath = '/appointmentRequests/patient=:patientID';

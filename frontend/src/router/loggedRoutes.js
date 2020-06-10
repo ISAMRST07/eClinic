@@ -15,6 +15,8 @@ import ClinicDetails from "../pages/ClinicDetails";
 import Patients from "../pages/Patients";
 import DoctorHome from "../pages/DoctorHome";
 import WorkingSchedule from "../pages/WorkingSchedule";
+import MedicalRecordView from "../components/Patient/MedicalRecordView";
+import MedicalPrescription from "../pages/MedicalPrescription";
 import VacationRequest from "../pages/VacationRequest";
 import AppointmentRequest from "../pages/AppointmentRequest";
 import OneClickAppointments from "../pages/OneClickAppointments";
@@ -32,6 +34,7 @@ import {
     nursesPath,
     homePath,
     medicinesPath,
+    medicalPrescriptionPath,
     unregisteredUsersPath,
     interventionTypePath,
     interventionPath,
@@ -48,7 +51,7 @@ import {
     historyPath,
     medicalRecordPath
 } from "../utils/paths";
-import MedicalRecordView from "../components/Patient/MedicalRecordView";
+
 
 const loggedRoutes = [
     {
@@ -152,6 +155,10 @@ const loggedRoutes = [
     {
         path: historyPath,
         component: History
+    },
+    {
+        path: medicalPrescriptionPath,
+        component: MedicalPrescription
     }
 ];
 

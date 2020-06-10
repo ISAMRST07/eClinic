@@ -17,8 +17,12 @@ import java.util.Set;
 @Setter
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class VisitDTO {
+    private String patientName;
     private String anamnesis;
     private String usageMethod;
+    private String doctorName;
+    private boolean certified;
+    private String id;
     Set<Diagnosis> diagnoses;
     Set<Medicine> medicines;
 }

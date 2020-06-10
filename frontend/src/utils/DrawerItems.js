@@ -19,7 +19,7 @@ import {
     oneClickAppointmentPath,
     diseasePath,
     historyPath,
-    medicalRecordPath
+    medicalRecordPath, medicalPrescriptionPath
 } from "./paths";
 
 function doctorsItem(clinicID) {
@@ -163,6 +163,11 @@ const workingScheduleItem = {
     path: workingSchedulePath
 };
 
+const medicalPrescriptionItem = {
+    icon: 'mdi-format-page-break',
+    label: 'Medical Prescription',
+    path: medicalPrescriptionPath
+};
 
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
@@ -251,7 +256,8 @@ class Nurse {
             homeItem,
             patientsItem,
             workingScheduleItem,
-            vacationRequestItem
+            vacationRequestItem,
+            medicalPrescriptionItem
 
         ]
     }
