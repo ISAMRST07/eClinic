@@ -31,7 +31,7 @@
                         >
                             <span class="title">{{adminClinic.rating}}</span>
                         </v-btn>
-                        <v-btn
+                        <v-btn v-if="this.role != patientCode"
                                 elevation="2"
                                 class="edit-clinic"
                                 color="primary"
@@ -236,16 +236,19 @@
     import MapView from "../Clinics/MapView";
     import ModifyClinicDialog from "../Clinics/ModifyClinicDialog";
     import {emptyClinic} from "../../utils/skeletons";
+    import {Patient} from "../../utils/DrawerItems";
 
     export default {
         name: "ClinicDetailsComponent",
         components: {ModifyClinicDialog, MapView},
         data: () => ({
             modifyDialog: false,
-            adminClinic: emptyClinic
+            adminClinic: emptyClinic,
+            patientCode: Patient.code
         }),
         computed: {
             ...mapState('auth', ['token']),
+            ...mapState('auth', ['role']),         
             editClinic: {
                 get() {
                     return this.$store.state.clinics.addClinic.clinic;
@@ -271,6 +274,8 @@
             this.adminClinic = clinic;
             console.log("adminClinic = ");
             console.log(this.adminClinic);
+            console.log("-------------------------- my role =");
+            console.log(this.role);
         }
     };
 
