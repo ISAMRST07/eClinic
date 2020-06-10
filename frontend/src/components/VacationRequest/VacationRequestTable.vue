@@ -68,7 +68,7 @@
 import {mapActions, mapState} from "vuex";
 import DeleteDialog from "./DeleteDialog";
 import DisapproveDialog from "./DisapproveDialog";
-import {ClinicalAdmin, Doctor} from '../../utils/DrawerItems';
+import {ClinicalAdmin, Doctor, Nurse} from '../../utils/DrawerItems';
 
 export default {
     name: "VacationRequestTable",
@@ -151,6 +151,7 @@ export default {
     created() {
         this.loading = true;
         switch (this.user.type) {
+			case Nurse.code:
             case Doctor.code:
                 console.log("user = Doctor user.id = " + this.user.id);
 				this.getUserVacationRequestApi(this.user.id);

@@ -124,7 +124,7 @@ public class NurseController {
                     passwordEncoder.encode(doctorNurseDTO.getPassword()),
                     doctorNurseDTO.getName(),
                     doctorNurseDTO.getSurname(),
-                    UserType.doctor,
+                    UserType.nurse,
                     doctorNurseDTO.getPhoneNumber(),
                     doctorNurseDTO.getAddress(),
                     doctorNurseDTO.getCity(),

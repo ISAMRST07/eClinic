@@ -227,15 +227,17 @@ class Doctor {
         ]
     }
 }
+class Nurse {
+    static name = 'Nurse';
+    static code = 'nurse';
+    constructor() {
+        this.items = [
+            homeItem,
+            patientsItem,
+            workingScheduleItem,
+            vacationRequestItem
 
-const Nurse = {
-    name: 'Nurse',
-    code: 'nurse',
-    items: [
-        homeItem,
-        workingScheduleItem,
-        vacationRequestItem,
-        patientsItem
-    ]
-};
+        ]
+    }
+}
 export {ClinicalCenterAdmin, ClinicalAdmin, Patient, Doctor, Nurse};
