@@ -16,4 +16,8 @@ public interface InterventionRepository extends JpaRepository<Intervention, Stri
     List<Intervention> findInterventionsByPatient_IdAndVisitNotNull(String id);
 
     List<Intervention> findInterventionsByDoctor_IdAndPatient_Id(String doctorID, String patientID);
+    
+    @Query("select i from Intervention i where i.interventionType.id = ?1")
+    List<Intervention> findInterventionsByInterventionType(String id);
+
 }

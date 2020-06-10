@@ -1,8 +1,10 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.InterventionTypeDTO;
+import mrs.eclinicapi.model.Intervention;
 import mrs.eclinicapi.model.InterventionType;
 import mrs.eclinicapi.service.ClinicService;
+import mrs.eclinicapi.service.InterventionService;
 import mrs.eclinicapi.service.InterventionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,9 @@ public class InterventionTypeController {
 
     @Autowired
     private ClinicService clinicService;
+
+    @Autowired
+    private InterventionService interventionService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionType> addInterventionType(@RequestBody InterventionTypeDTO itDTO) {
@@ -71,6 +77,18 @@ public class InterventionTypeController {
 
         if (it == null) {
             return new ResponseEntity<>("InterventionType not found", HttpStatus.NOT_FOUND);
+        }
+
+        List<Intervention> list = interventionService.findInterventionsByInterventionType(it.getId());
+        System.out.println(list);
+        if(list == null || list.size() == 0) {
+        	System.out.println("list == null || size == 0");        	
+        }else {
+         	System.out.println("list != null || size != 0");   
+            /*for(Intervention i : list) {
+            	System.out.println("this type exists in intervention = " + i);
+            }*/
+            return new ResponseEntity<>("this type exists in intervention", HttpStatus.BAD_REQUEST);
         }
         service.deleteById(id);
         return new ResponseEntity<>("deleted InterventionType", HttpStatus.OK);

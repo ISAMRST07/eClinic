@@ -81,5 +81,9 @@ public class InterventionService {
         List<Intervention> interventions = repository.findInterventionsByDoctor_IdAndPatient_Id(doctorID, patientID);
         return interventions.stream().anyMatch(in -> in.getVisit() != null);
     }
+    
+    public List<Intervention> findInterventionsByInterventionType(String interventionTypeId){
+    	return repository.findInterventionsByInterventionType(interventionTypeId);
+    }
 
 }

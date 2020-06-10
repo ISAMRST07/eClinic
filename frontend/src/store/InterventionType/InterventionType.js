@@ -64,12 +64,11 @@ export default {
         },
         async deleteInterventionTypeApi({rootState, commit}, interventionType) {
             try {
-            	console.log("delete interventionType = ");
-            	console.log(interventionType.id);
                 let res = await Vue.prototype.$axios.delete(`/api/interventionType/${interventionType.id}`,
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
                 commit('deleteInterventionType', interventionType);
             } catch (err) {
+            	alert("This intervention type is used in already created intervention. It can't be deleted");
                 defaultError(err);
             }
         },
