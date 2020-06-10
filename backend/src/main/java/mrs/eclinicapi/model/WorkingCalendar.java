@@ -47,4 +47,8 @@ public class WorkingCalendar {
         workingSchedule.put(Weekday.THURSDAY, ninethrufive);
         workingSchedule.put(Weekday.FRIDAY, ninethrufive);
     }
+    
+    public void addVacation(TimePeriod<LocalDate> v) {
+    	vacations.add(v);
+    }
 }

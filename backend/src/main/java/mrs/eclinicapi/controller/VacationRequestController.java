@@ -1,7 +1,12 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.OnDisapproveVacationCompleteEvent;
+import mrs.eclinicapi.model.Doctor;
+import mrs.eclinicapi.model.TimePeriod;
+import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.VacationRequest;
+import mrs.eclinicapi.service.DoctorService;
+import mrs.eclinicapi.service.UserService;
 import mrs.eclinicapi.service.VacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,7 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -23,6 +33,9 @@ public class VacationRequestController {
     @Autowired
     private VacationRequestService service;
 
+    @Autowired
+    private DoctorService doctorService;
+    
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VacationRequest>> getAllVacationRequest() {
         List<VacationRequest> vacationRequest = service.findAll();
@@ -38,29 +51,28 @@ public class VacationRequestController {
 
         List<VacationRequest> vacationRequest = service.getVacationRequestForUser(id);
         if (vacationRequest == null) {
-
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
-
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
 
     @GetMapping(path = "/approve/{id}")
     public ResponseEntity<VacationRequest> approveVacationRequest(@PathVariable("id") String id) {
 
-
         VacationRequest vac = service.findOne(id);
         if (vac == null) {
-
-
-
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         vac.setStatus("approved");
         vac.setReason("approved");
-
-
+        
+        Doctor d = doctorService.findByUserID(vac.getUser().getId());        
+        TimePeriod<LocalDate> vacations = new TimePeriod<LocalDate>();
+        vacations.setStart(vac.getStartDate().toLocalDate());
+        vacations.setEnd(vac.getEndDate().toLocalDate());
+        d.getWorkingCalendar().addVacation(vacations);
+        doctorService.addDoctor(d);
+        
         VacationRequest modified = service.addVacationRequest(vac);
 
         return new ResponseEntity<>(modified, HttpStatus.OK);
