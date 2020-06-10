@@ -21,7 +21,6 @@ public class DIseaseController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DiagnosisDTO>> getAllDiseases() {
-
         List<Diagnosis> it = service.findAll();
         return new ResponseEntity<>(it.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -67,6 +66,7 @@ public class DIseaseController {
         Diagnosis d;
         if(diagnosisDTO.getId() != null) d = service.findOne(diagnosisDTO.getId());
         else d = new Diagnosis();
+        if(d == null) d = new Diagnosis();
         d.setName(diagnosisDTO.getName());
         return d;
     }

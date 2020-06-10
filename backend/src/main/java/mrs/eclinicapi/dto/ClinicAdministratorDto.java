@@ -4,15 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.ClinicAdministrator;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 
 public class ClinicAdministratorDto extends UserDTO {
+
+    private String clinicID;
 
 
     public ClinicAdministratorDto(ClinicAdministrator clinicAdministrator) {

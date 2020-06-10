@@ -2,7 +2,9 @@ package mrs.eclinicapi.service;
 
 import mrs.eclinicapi.dto.AppointmentRequestDTO;
 import mrs.eclinicapi.model.AppointmentRequest;
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.repository.AppointmentRequestRepository;
+import mrs.eclinicapi.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,13 +20,11 @@ import java.util.List;
 
 @Service
 public class AppointmentRequestService {
-
+    @Autowired
     private AppointmentRequestRepository repository;
 
     @Autowired
-    public AppointmentRequestService(AppointmentRequestRepository repository) {
-        this.repository = repository;
-    }
+    private DoctorRepository doctorRepository;
 
     public List<AppointmentRequest> findAll() {
         return repository.findAll();
@@ -34,9 +34,8 @@ public class AppointmentRequestService {
         return repository.findById(id).orElse(null);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE,
-            rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
-    public AppointmentRequest delete(String id) throws AppointmentRequestDTO.ConcurrentRequest {
+    @Transactional
+    public AppointmentRequest delete(String id) {
         AppointmentRequest request = repository.findById(id).orElse(null);
         if (request == null) return null;
         LocalDateTime doc = request.getDateTime();
@@ -68,13 +67,16 @@ public class AppointmentRequestService {
 
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE,
-            rollbackFor = AppointmentRequestDTO.ConcurrentRequest.class)
-    public AppointmentRequest save(AppointmentRequest ar) throws AppointmentRequestDTO.ConcurrentRequest {
-        List<AppointmentRequest> requests = repository.findAppointmentRequestsByDoctor_Id(ar.getDoctor().getId());
+    @Transactional
+    public AppointmentRequest save(AppointmentRequest ar) {
+        Doctor d = ar.getDoctor();
+        List<AppointmentRequest> requests = repository.findAppointmentRequestsByDoctor_Id(d.getId());
 
-        if (checkRequests(requests, ar))
+        if (checkRequests(requests, ar)) {
+            d.setChangeTime(LocalDateTime.now());
+            doctorRepository.save(d);
             return repository.save(ar);
+        }
         else
             return null;
     }

@@ -112,7 +112,7 @@
                 let parsedTime = this.parseShortTime(this.time);
                 date.setHours(parsedTime.hours, parsedTime.minutes);
 
-                let {data: patient} = await this.$axios.get(`/api/patient/user-id=${this.user.id}`,
+                let {data: patient} = await this.$axios.get(`/api/patient/user/${this.user.id}`,
                     {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
 
                 let offsetDate = new Date(date);

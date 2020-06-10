@@ -78,8 +78,15 @@ public class AuthenticationController {
         if (existUser != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
-        UnregisteredUser user = this.unregisteredUserService.addUnregisteredUser(userRequest);
+        UnregisteredUser user;
+        try {
+            user = this.unregisteredUserService.addUnregisteredUser(userRequest);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         return new ResponseEntity<>(this.convertUnregisteredToDTO(user), HttpStatus.CREATED);
     }
 

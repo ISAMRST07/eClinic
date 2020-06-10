@@ -1,5 +1,6 @@
 package mrs.eclinicapi.service;
 
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Intervention;
 import mrs.eclinicapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,11 @@ public class InterventionService {
     @Autowired
     private ClinicRepository clinicRepository;
 
+    @Transactional
     public Intervention add(Intervention newIntervention) {
+        Doctor d = newIntervention.getDoctor();
+        d.setChangeTime(LocalDateTime.now());
+        doctorRepository.save(d);
         return repository.save(newIntervention);
     }
 

@@ -10,6 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +41,11 @@ public class Doctor extends MedicalStaff {
             strategy = "mrs.eclinicapi.generator.IdGenerator",
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
+
+    @Version
+    private long version;
+
+    private LocalDateTime changeTime;
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<DoctorRating> rating = new HashSet<>();

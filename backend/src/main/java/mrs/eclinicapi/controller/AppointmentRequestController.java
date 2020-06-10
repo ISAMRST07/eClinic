@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.OptimisticLockException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -123,21 +124,12 @@ public class AppointmentRequestController {
         LocalDate dateOfCreation = LocalDate.now();
         appointmentRequest.setDateOfCreation(dateOfCreation);
         AppointmentRequest saved;
-        for (int attempts = 0; ; attempts++) {
-            try {
-                saved = service.save(appointmentRequest);
-                break;
-            } catch (AppointmentRequestDTO.ConcurrentRequest concurrentRequest) {
-                if (attempts == 2) return new ResponseEntity<>(HttpStatus.CONFLICT);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
+        try {
+            saved = service.save(appointmentRequest);
+        } catch (OptimisticLockException e) {
+            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
         }
 
-        if (saved == null) return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
 
         String[] sendTo = appointmentRequest.getClinic().getClinicAdministrator()
                 .stream().map(ca -> ca.getUser().getEmail()).toArray(String[]::new);
@@ -165,19 +157,8 @@ public class AppointmentRequestController {
     @DeleteMapping(path = "{id}")
     public ResponseEntity<AppointmentRequest> deleteRequest(@PathVariable String id) {
         AppointmentRequest request;
-        for (int i = 0; ; ++i) {
-            try {
-                request = this.service.delete(id);
-                break;
-            } catch (AppointmentRequestDTO.ConcurrentRequest concurrentRequest) {
-                if (i == 2) return new ResponseEntity<>(HttpStatus.CONFLICT);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
+        request = this.service.delete(id);
+
         if (request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(request, HttpStatus.OK);

@@ -291,9 +291,9 @@
                     this.clinicAdmin.personalID = this.personalID;
                     this.clinicAdmin.address = this.address;
                     this.clinicAdmin.phoneNumber = this.phoneNumber;
-                    this.clinicAdmin.clinic = this.selectedClinic;
+                    this.clinicAdmin.clinicID = this.selectedClinic.id;
+                    this.clinicAdmin.clinic = null;
                     if (this.mode === "update")
-
                         clinicA.id = this.editClinicAdmin.id;
                     fun(this.clinicAdmin);
                     this.closeAddDialog();

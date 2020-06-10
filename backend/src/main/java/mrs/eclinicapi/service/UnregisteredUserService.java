@@ -7,8 +7,9 @@ import mrs.eclinicapi.repository.UnregisteredUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -26,7 +27,9 @@ public class UnregisteredUserService {
         this.repository = repository;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public UnregisteredUser addUnregisteredUser(UnregisteredUser uu) {
+        if(this.repository.existsByUserEmail(uu.getUser().getEmail())) return null;
         uu.getUser().setPassword(passwordEncoder.encode(uu.getUser().getPassword()));
         return repository.save(uu);
     }
