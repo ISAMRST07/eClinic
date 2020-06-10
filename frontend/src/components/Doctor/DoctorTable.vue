@@ -28,9 +28,14 @@
                 </template>
 
                 <template v-slot:item.remove="{ item }">
-                    <v-icon
+                    <v-icon v-if="item.busyTimes == null || item.busyTimes.length == 0"
                             @click="deleteDialog(item)"
                             color="red"
+                    >
+                        mdi-delete
+                    </v-icon>
+                    <v-icon v-else
+                            color="gray"
                     >
                         mdi-delete
                     </v-icon>
