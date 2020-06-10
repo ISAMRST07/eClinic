@@ -1,5 +1,6 @@
 package mrs.eclinicapi.service;
 
+import mrs.eclinicapi.dto.UserDTO;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(String id, User u) {
+    public User updateUser(String id, UserDTO u) {
         User toModify = repository.findById(id).orElse(null);
         if (toModify == null) return null;
         toModify.setAddress(u.getAddress());

@@ -32,7 +32,7 @@ public class VacationRequestController {
         return new ResponseEntity<>(vacationRequest, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/user/{id}")
+    @GetMapping(path = "/user/{id}")
     public ResponseEntity<List<VacationRequest>> getVacationRequestForUser(@PathVariable("id") String id) {
 
 
@@ -89,7 +89,7 @@ public class VacationRequestController {
         return new ResponseEntity<>(modified, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<List<VacationRequest>> getVacationRequestForClinic(@PathVariable("id") String id) {
 
 

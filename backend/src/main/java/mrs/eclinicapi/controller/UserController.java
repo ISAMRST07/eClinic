@@ -1,5 +1,6 @@
 package mrs.eclinicapi.controller;
 
+import mrs.eclinicapi.dto.UserDTO;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.UserService;
@@ -51,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String id) {
         User user = service.findOne(id);
         if (user == null) {
@@ -63,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<User> modifyUser(@PathVariable String id, @RequestBody User modified) {
+    public ResponseEntity<User> modifyUser(@PathVariable String id, @RequestBody UserDTO modified) {
         User updated = service.updateUser(id, modified);
         if (updated == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(updated, HttpStatus.OK);
