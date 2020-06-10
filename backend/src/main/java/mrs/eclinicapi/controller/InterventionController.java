@@ -117,6 +117,7 @@ public class InterventionController {
         newVisit.setUsageMethod(visitDTO.getUsageMethod());
         newVisit.setMedicines(visitDTO.getMedicines());
         newVisit.setIntervention(intervention);
+        newVisit.setCertified(false);
         Visit savedVisit = visitService.save(newVisit);
 
         Patient p = intervention.getPatient();
