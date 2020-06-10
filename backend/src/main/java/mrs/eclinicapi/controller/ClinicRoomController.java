@@ -112,7 +112,10 @@ public class ClinicRoomController {
         if (room == null) {
             return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
         }
-
+        if(room.getInterventions().size() != 0) {
+        	System.out.println("room interventions size != 0");
+            return new ResponseEntity<>("this room has scheduled appointments", HttpStatus.NOT_FOUND);            	
+        }
         service.deleteById(id);
         return new ResponseEntity<>("room deleted", HttpStatus.OK);
     }
