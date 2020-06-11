@@ -15,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +96,84 @@ public class InterventionController {
             return new ResponseEntity<>(this.convertToDTO(upcoming), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/report/{clinicId}/{startDate}/{endDate}")
+    public ResponseEntity<Report> financialReport(@PathVariable String clinicId,
+    												@PathVariable String startDate,
+    												@PathVariable String endDate) {
+    	System.out.println("fianncial report clinic = "+ clinicId +" start = " + startDate + " end = " + endDate);
+
+    	Report report = new Report();
+
+    	if(startDate.equals("all") && endDate.equals("all")) {
+    		List<Intervention> interventions, pastInterventions, futureInterventions = new ArrayList<>();
+    		interventions = service.getClinicIntervention(clinicId);
+    		pastInterventions = interventions.stream().filter(in -> in.getVisit() != null).collect(Collectors.toList());;
+    		futureInterventions = interventions.stream().filter(in -> in.getVisit() == null).collect(Collectors.toList());
+    		double revenue = 0;
+    		for(Intervention i : pastInterventions) {
+    			revenue += i.getInterventionType().getPrice();
+    		}
+        	report.totalInterventions = interventions.size();
+        	report.totalPastInterventions = pastInterventions.size();
+        	report.totalFutureInterventions = futureInterventions.size();
+        	report.totalRevenue = revenue;
+    	}else if(endDate.equals("none")) {
+    		startDate += " 00:00:00";
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        	
+            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+            LocalDateTime end = start.plusDays(1);	
+            System.out.println("start = " + start);
+            System.out.println("end none = " + end);
+           
+    		List<Intervention> interventions, pastInterventions, futureInterventions = new ArrayList<>();
+    		interventions = service.getClinicIntervention(clinicId)
+    									.stream()
+    									.filter(in -> (in.getDateTime().getEnd().isAfter(start) 
+    													&& in.getDateTime().getEnd().isBefore(end)))
+    									.collect(Collectors.toList());
+    		pastInterventions = interventions.stream().filter(in -> in.getVisit() != null).collect(Collectors.toList());
+    		futureInterventions = interventions.stream().filter(in -> in.getVisit() == null).collect(Collectors.toList());
+    		double revenue = 0;
+    		for(Intervention i : pastInterventions) {
+    			revenue += i.getInterventionType().getPrice();
+    		}
+        	report.totalInterventions = interventions.size();
+        	report.totalPastInterventions = pastInterventions.size();
+        	report.totalFutureInterventions = futureInterventions.size();
+        	report.totalRevenue = revenue;
+    	}else {
+    		startDate += " 00:00:00";
+        	endDate += " 00:00:00";
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        	
+            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+            LocalDateTime end = LocalDateTime.parse(endDate, formatter);	
+            System.out.println("start = " + start);
+            System.out.println("end = " + end);
+           
+    		List<Intervention> interventions, pastInterventions, futureInterventions = new ArrayList<>();
+    		interventions = service.getClinicIntervention(clinicId)
+    									.stream()
+    									.filter(in -> (in.getDateTime().getEnd().isAfter(start) 
+    													&& in.getDateTime().getEnd().isBefore(end)))
+    									.collect(Collectors.toList());
+    		pastInterventions = interventions.stream().filter(in -> in.getVisit() != null).collect(Collectors.toList());
+    		futureInterventions = interventions.stream().filter(in -> in.getVisit() == null).collect(Collectors.toList());
+    		double revenue = 0;
+    		for(Intervention i : pastInterventions) {
+    			revenue += i.getInterventionType().getPrice();
+    		}
+        	report.totalInterventions = interventions.size();
+        	report.totalPastInterventions = pastInterventions.size();
+        	report.totalFutureInterventions = futureInterventions.size();
+        	report.totalRevenue = revenue;
+    	}
+    	System.out.println("report = " + report);
+    	
+    	return new ResponseEntity<>(report, HttpStatus.OK);
+    }
+    
     @GetMapping(path = "/{doctorID}/{patientUserID")
     public ResponseEntity<Boolean> pastIntervention(@PathVariable String doctorID,
                                                     @PathVariable String patientUserID) {
@@ -306,4 +387,21 @@ public class InterventionController {
         private int doctorRating;
         private int clinicRating;
     }
+    
+    @Getter
+    @Setter
+    static class Report{
+    	private int totalInterventions;
+    	private int totalPastInterventions;
+    	private int totalFutureInterventions;
+    	private double totalRevenue;
+		@Override
+		public String toString() {
+			return "Report [totalInterventions=" + totalInterventions + ", totalPastInterventions="
+					+ totalPastInterventions + ", totalFutureInterventions=" + totalFutureInterventions
+					+ ", totalRevenue=" + totalRevenue + "]";
+		}
+    	
+    }
+        
 }

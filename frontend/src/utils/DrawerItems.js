@@ -19,7 +19,9 @@ import {
     oneClickAppointmentPath,
     diseasePath,
     historyPath,
-    medicalRecordPath, medicalPrescriptionPath
+    medicalRecordPath, 
+    medicalPrescriptionPath,
+    reportPath
 } from "./paths";
 
 function doctorsItem(clinicID) {
@@ -169,6 +171,12 @@ const medicalPrescriptionItem = {
     path: medicalPrescriptionPath
 };
 
+const reportItem = {
+    icon: 'mdi-cash',
+    label: 'Report',
+    path: reportPath
+};
+
 const ClinicalCenterAdmin = {
     name: 'Clinical Center Admin',
     code: 'clinicCentarAdministrator',
@@ -208,6 +216,7 @@ class ClinicalAdmin {
     constructor(id) {
         this.items = [
             clinicDetailsItem(id),
+            reportItem,
             interventionTypeItem,
             medicinesItem,
             clinicRoomsItem(id),

@@ -6,11 +6,16 @@ export default {
     namespaced: true,
     state: {
         intervention: [],
+        report : null
     },
     mutations: {
         setAllIntervention(state, intervention){
         	console.log("mutations setAllIntervention intervention = " + intervention);
             Vue.set(state, 'intervention', JSOG.decode(intervention));
+        },
+        setReport(state, report){
+        	console.log("mutations setReportn report = " + report);
+            Vue.set(state, 'report', JSOG.decode(report));
         },
         addIntervention(state, intervention) {
         	console.log("mutations addIntervention");
@@ -43,6 +48,19 @@ export default {
                 console.log("actions getClinicInterventionApi = " + res.data);
                 res.data.forEach(item => console.log(item));
                 commit('setAllIntervention', res.data);
+            } catch (err) {
+                defaultError(err);
+            }
+        },
+        async getClinicReportApi({rootState, commit}, obj) {
+            try {
+                console.log("actions getClinicReportApi obj = " + obj);
+                console.log(obj);
+                let res = await Vue.prototype.$axios.get('/api/intervention/report/'+obj.clinicId+'/'+obj.startDate+'/'+obj.endDate,
+                    {headers: {"Authorization": 'Bearer ' + rootState.auth.token} });
+                console.log("actions getClinicInterventionApi = " + res.data);
+                console.log(res.data);
+                commit('setReport', res.data);
             } catch (err) {
                 defaultError(err);
             }

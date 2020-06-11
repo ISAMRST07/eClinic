@@ -50,3 +50,4 @@ export const medicalRecordPath ='/medical-record/:id';
 
 export const historyPath ='/history';
 
+export const reportPath ='/report';

@@ -22,6 +22,7 @@ import AppointmentRequest from "../pages/AppointmentRequest";
 import OneClickAppointments from "../pages/OneClickAppointments";
 import Visit from "../pages/Visit";
 import History from "../pages/History";
+import Report from "../pages/Report";
 
 import {
     clinicCenterAdministratorsPath,
@@ -49,7 +50,8 @@ import {
     oneClickAppointmentPath,
     visitPath,
     historyPath,
-    medicalRecordPath
+    medicalRecordPath,
+    reportPath
 } from "../utils/paths";
 
 
@@ -159,6 +161,10 @@ const loggedRoutes = [
     {
         path: medicalPrescriptionPath,
         component: MedicalPrescription
+    },
+    {
+        path: reportPath,
+        component: Report
     }
 ];
 
