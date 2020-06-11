@@ -1,5 +1,6 @@
 package mrs.eclinicapi.service;
 
+import mrs.eclinicapi.model.Doctor;
 import mrs.eclinicapi.model.Nurse;
 import mrs.eclinicapi.repository.NurseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,10 @@ public class NurseService {
     public List<Nurse> getNurseForClinic(String id) {
 
         return repository.getNurseForClinic(id);
+    }
+    
+    public Nurse findByUserID(String userID) {
+        return repository.findNurseByUser_Id(userID).orElse(null);
+
     }
 }

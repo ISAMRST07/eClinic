@@ -2,10 +2,12 @@ package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.OnDisapproveVacationCompleteEvent;
 import mrs.eclinicapi.model.Doctor;
+import mrs.eclinicapi.model.Nurse;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.User;
 import mrs.eclinicapi.model.VacationRequest;
 import mrs.eclinicapi.service.DoctorService;
+import mrs.eclinicapi.service.NurseService;
 import mrs.eclinicapi.service.UserService;
 import mrs.eclinicapi.service.VacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class VacationRequestController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private NurseService nurseService;
     
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VacationRequest>> getAllVacationRequest() {
@@ -66,13 +71,26 @@ public class VacationRequestController {
         vac.setStatus("approved");
         vac.setReason("approved");
         
-        Doctor d = doctorService.findByUserID(vac.getUser().getId());        
         TimePeriod<LocalDate> vacations = new TimePeriod<LocalDate>();
         vacations.setStart(vac.getStartDate().toLocalDate());
         vacations.setEnd(vac.getEndDate().toLocalDate());
-        d.getWorkingCalendar().addVacation(vacations);
-        doctorService.addDoctor(d);
         
+        Doctor d = doctorService.findByUserID(vac.getUser().getId());
+        Nurse n = nurseService.findByUserID(vac.getUser().getId());
+        
+        if(d != null) {
+        	System.out.println("doctor != null");
+        	d.getWorkingCalendar().addVacation(vacations);
+            doctorService.addDoctor(d);            
+        }else if(n != null){
+        	System.out.println("nurse != null");
+        	n.getWorkingCalendar().addVacation(vacations);
+            nurseService.addNurse(n);                    	
+        }else {
+        	System.out.println("doctor and nurse == null");
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+                
         VacationRequest modified = service.addVacationRequest(vac);
 
         return new ResponseEntity<>(modified, HttpStatus.OK);

@@ -20,22 +20,7 @@
 				<v-card class="mx-auto" max-width="344">
 					<v-card-text>
 						<p class="display-1 text--primary">
-							Interventions: {{this.clinic.interventions.length}}
-						</p>
-					</v-card-text>
-					<v-card-actions>
-						<v-btn text color="deep-purple accent-4" @click="interventionsDetails()">
-							Details
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-col>
-
-			<v-col cols="12" sm="6">
-				<v-card class="mx-auto" max-width="344">
-					<v-card-text>
-						<p class="display-1 text--primary">
-							Calendar
+							Working schedule
 						</p>
 					</v-card-text>
 					<v-card-actions>
@@ -74,21 +59,7 @@
 						</v-btn>
 					</v-card-actions>
 				</v-card>
-			</v-col>
-			<v-col cols="12" sm="6">
-				<v-card class="mx-auto" max-width="344">
-					<v-card-text>
-						<p class="display-1 text--primary">
-							Appointment
-						</p>
-					</v-card-text>
-					<v-card-actions>
-						<v-btn text color="deep-purple accent-4" @click="appoinDtmentetails()">
-							Details
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-col>
+			</v-col>			
 		</v-row>
 
 
@@ -111,24 +82,17 @@
         },
         methods: {
             patientsDetails(){
-            	console.log("patientsDetails");
-            },
-            interventionsDetails(){
-            	console.log("interventionsDetails");
+            	this.$router.push(`/patients`)            	
             },
             calendarDetails(){
-            	console.log("calendarDetails");
+            	this.$router.push(`/workingSchedule`)
             },
             vacationDetails(){
-            	console.log("vacationDetails");
             	this.$router.push(`/vacationRequest`)
             },
             profileDetails(){
             	console.log("profileDetails");
             	this.$router.push(`/profile/${this.user.id}`)
-            },
-            appoinDtmentetails(){
-            	console.log("appoinDtmentetails");
             },
         },
         created() {

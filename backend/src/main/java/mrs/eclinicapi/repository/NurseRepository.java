@@ -13,4 +13,7 @@ public interface NurseRepository extends JpaRepository<Nurse, String> {
 
     @Query("select n from Nurse n where n.clinic.id = ?1")
     List<Nurse> getNurseForClinic(String id);
+    
+    Optional<Nurse> findNurseByUser_Id(String userID);
+
 }
