@@ -152,7 +152,7 @@ const patientsItem = {
 
 
 const vacationRequestItem = {
-	icon: 'mdi-home',
+	icon: 'mdi-calendar',
 	label: 'Vacation request',
     path: vacationRequestPath,
 };

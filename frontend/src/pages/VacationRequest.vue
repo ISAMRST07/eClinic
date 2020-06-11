@@ -11,7 +11,8 @@
     import {mapState} from "vuex";
 	import VacationRequestTable from "../components/VacationRequest/VacationRequestTable";
     import AddVacationRequest from "../components/VacationRequest/AddVacationRequest";
-    import {Doctor, Nurse} from '../utils/DrawerItems';
+    import store from "../store";
+    import {ClinicalAdmin, Doctor, Nurse} from "../utils/DrawerItems";
     
     export default {
         name: "VacationRequest",
@@ -22,6 +23,17 @@
 	    }),
         computed: {
         	...mapState('auth', ['role']),
+        },
+        beforeRouteEnter(to, from, next) {
+        	console.log("role = " + store.state.auth.role);
+            if(store.state.auth.role === ClinicalAdmin.code 
+            	|| store.state.auth.role === Doctor.code
+            	|| store.state.auth.role === Nurse.code)
+            {
+           		next();
+            }else{
+            	next('/');
+            }
         }
     }
     
