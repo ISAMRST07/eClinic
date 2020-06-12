@@ -68,7 +68,6 @@
 
 <script>
     import {mapState} from "vuex";
-
     export default {
         name: "DoctorHomeComponent",
         components: {},
@@ -101,5 +100,4 @@
 			console.log(this.clinic);	//klinika kojoj ovaj doctor pripada
         }
     };
-
 </script>
