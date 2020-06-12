@@ -41,6 +41,9 @@ public class Visit {
     @ManyToMany
     private Set<Medicine> medicines;
 
+    @Version
+    private long version;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

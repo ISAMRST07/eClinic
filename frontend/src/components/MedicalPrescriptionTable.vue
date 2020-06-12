@@ -26,8 +26,16 @@
                 <v-icon
                         @click="updateDialog(item)"
                         color="amber darken-2"
+                        v-if="!item.certified"
                 >
-                    mdi-pencil
+                    mdi-file-hidden
+                </v-icon>
+                <v-icon
+                        @click="updateDialog(item)"
+                        color="amber darken-2"
+                        v-else
+                >
+                    mdi-file-check
                 </v-icon>
             </template>
 
@@ -55,7 +63,6 @@
                 {text: 'ID', align: 'start', value: 'id'},
                 {text: 'Patient Name', value: 'patientName', align: 'center'},
                 {text: 'Doctor Name', value: 'doctorName', align: 'center'},
-                {text: 'Certified', value: 'certified'},
                 {text: 'Certified', value: 'update', sortable: false}
 
             ],
