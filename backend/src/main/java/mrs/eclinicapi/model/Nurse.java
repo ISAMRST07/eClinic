@@ -28,6 +28,9 @@ public class Nurse extends MedicalStaff {
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "N")})
     private String id;
 
+    @Version
+    private long version;
+    
     @Override
     public String toString() {
         return "Nurse{" +
