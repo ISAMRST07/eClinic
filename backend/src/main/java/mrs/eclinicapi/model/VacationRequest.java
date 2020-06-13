@@ -43,6 +43,9 @@ public class VacationRequest {
 
     private String reason;
 
+    @Version
+    private long version;
+    
     @Override
     public String toString() {
         return "VacationRequest [id=" + id + ", user=" + user.getId() + ", clinic=" + clinic.getId() + ", startDate=" + startDate
