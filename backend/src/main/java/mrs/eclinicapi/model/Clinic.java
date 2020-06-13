@@ -72,6 +72,9 @@ public class Clinic {
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ClinicRating> rating;
 
+    @Version
+    private long version;
+    
     public void addPatient(Patient p) {
         if(patients == null) patients = new HashSet<>();
         patients.add(p);
