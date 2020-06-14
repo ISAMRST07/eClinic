@@ -61,7 +61,7 @@ public class Clinic {
     private Set<AppointmentRequest> appointmentRequests = new HashSet<>();
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OneClickAppointment> oneClicks = new HashSet<>();
+    private Set<Intervention> oneClicks = new HashSet<>();
 
     @ManyToMany
     private Set<Patient> patients;
@@ -74,7 +74,7 @@ public class Clinic {
 
     @Version
     private long version;
-    
+
     public void addPatient(Patient p) {
         if(patients == null) patients = new HashSet<>();
         patients.add(p);

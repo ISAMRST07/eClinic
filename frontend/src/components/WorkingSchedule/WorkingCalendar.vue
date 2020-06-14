@@ -263,6 +263,9 @@
                 for(let timeperiod of this.doctor.oneClickAppointments) {
                     let startDateTime = new Date(timeperiod.start);
                     let endDateTime = new Date(timeperiod.end);
+                    console.log(timeperiod);
+                    console.log(startDateTime);
+                    console.log(endDateTime);
                     events.push({
                         start: this.formatDate(startDateTime),
                         end: this.formatDate(endDateTime),
@@ -330,10 +333,8 @@
                 return true;
              //   return new Date(checkD) >= new Date(fromD) && new Date(checkD) <= new Date(toD);
             },
-            formatDate(a, withTime) {
-                return withTime
-                    ? `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
-                    : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
+            formatDate(a) {
+                return `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`;
             },
         },
     }

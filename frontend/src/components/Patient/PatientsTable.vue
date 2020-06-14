@@ -122,6 +122,7 @@
                 ];
                 let adminHeaders = [
                     {text: 'Medical record', value: 'medicalRecord', sortable: false},
+                    {text: 'Details', value: 'details', sortable: false},
                     {text: 'Remove', value: 'remove', sortable: false},
                 ];
                 let doctorHeaders = [

@@ -42,8 +42,6 @@ public class InterventionController {
     @Autowired
     private AppointmentRequestService requestService;
     @Autowired
-    private OneClickAppointmentService oneClickAppointmentService;
-    @Autowired
     private PatientService patientService;
     @Autowired
     private ClinicRatingService clinicRatingService;
@@ -120,16 +118,16 @@ public class InterventionController {
     	}else if(endDate.equals("none")) {
     		startDate += " 00:00:00";
     		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        	
+
             LocalDateTime start = LocalDateTime.parse(startDate, formatter);
-            LocalDateTime end = start.plusDays(1);	
+            LocalDateTime end = start.plusDays(1);
             System.out.println("start = " + start);
             System.out.println("end none = " + end);
-           
+
     		List<Intervention> interventions, pastInterventions, futureInterventions = new ArrayList<>();
     		interventions = service.getClinicIntervention(clinicId)
     									.stream()
-    									.filter(in -> (in.getDateTime().getEnd().isAfter(start) 
+    									.filter(in -> (in.getDateTime().getEnd().isAfter(start)
     													&& in.getDateTime().getEnd().isBefore(end)))
     									.collect(Collectors.toList());
     		pastInterventions = interventions.stream().filter(in -> in.getVisit() != null).collect(Collectors.toList());
@@ -146,16 +144,16 @@ public class InterventionController {
     		startDate += " 00:00:00";
         	endDate += " 00:00:00";
         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        	
+
             LocalDateTime start = LocalDateTime.parse(startDate, formatter);
-            LocalDateTime end = LocalDateTime.parse(endDate, formatter);	
+            LocalDateTime end = LocalDateTime.parse(endDate, formatter);
             System.out.println("start = " + start);
             System.out.println("end = " + end);
-           
+
     		List<Intervention> interventions, pastInterventions, futureInterventions = new ArrayList<>();
     		interventions = service.getClinicIntervention(clinicId)
     									.stream()
-    									.filter(in -> (in.getDateTime().getEnd().isAfter(start) 
+    									.filter(in -> (in.getDateTime().getEnd().isAfter(start)
     													&& in.getDateTime().getEnd().isBefore(end)))
     									.collect(Collectors.toList());
     		pastInterventions = interventions.stream().filter(in -> in.getVisit() != null).collect(Collectors.toList());
@@ -170,10 +168,10 @@ public class InterventionController {
         	report.totalRevenue = revenue;
     	}
     	System.out.println("report = " + report);
-    	
+
     	return new ResponseEntity<>(report, HttpStatus.OK);
     }
-    
+
     @GetMapping(path = "/{doctorID}/{patientUserID")
     public ResponseEntity<Boolean> pastIntervention(@PathVariable String doctorID,
                                                     @PathVariable String patientUserID) {
@@ -213,15 +211,22 @@ public class InterventionController {
     @PostMapping(path = "/one-click/{oneClickID}/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterventionDTO> scheduleOneClick(@PathVariable String oneClickID,
                                                             @PathVariable String userID) {
-        OneClickAppointment appointment = oneClickAppointmentService.findByID(oneClickID);
-
-        if (appointment == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        oneClickAppointmentService.delete(appointment.getId());
-
-        Patient pat = patientService.getByUserId(userID);
-        if (pat == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Intervention toAdd = new Intervention(appointment, pat);
-        Intervention added = service.add(toAdd);
+//        OneClickAppointment appointment = service.findByID(oneClickID);
+//
+//        if (appointment == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        oneClickAppointmentService.delete(appointment.getId());
+//
+//        Patient pat = patientService.getByUserId(userID);
+//        if (pat == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        Intervention toAdd = new Intervention(appointment, pat);
+//        Intervention added = service.add(toAdd);
+        Intervention added;
+        try {
+            added = service.scheduleOneClick(oneClickID, userID);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        if(added == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         String content = "An intervention for the date " + added.getDateTime().getStart() + " has been added." +
                 "\r\nYou have an option to refuse coming, via this link: " +
@@ -376,9 +381,7 @@ public class InterventionController {
                 patient,
                 doctor,
                 foundClinic,
-                interventionType,
-                null,
-                interventionDTO.getPrice()
+                interventionType
         );
     }
     @Getter
@@ -387,7 +390,7 @@ public class InterventionController {
         private int doctorRating;
         private int clinicRating;
     }
-    
+
     @Getter
     @Setter
     static class Report{
@@ -401,7 +404,7 @@ public class InterventionController {
 					+ totalPastInterventions + ", totalFutureInterventions=" + totalFutureInterventions
 					+ ", totalRevenue=" + totalRevenue + "]";
 		}
-    	
+
     }
-        
+
 }

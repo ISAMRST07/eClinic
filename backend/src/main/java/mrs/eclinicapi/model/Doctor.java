@@ -33,7 +33,7 @@ public class Doctor extends MedicalStaff {
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<AppointmentRequest> appointmentRequests = new ArrayList<>();
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
-    private List<OneClickAppointment> oneClickAppointments = new ArrayList<>();
+    private List<Intervention> oneClickAppointments = new ArrayList<>();
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "d_seq")
@@ -42,13 +42,11 @@ public class Doctor extends MedicalStaff {
             parameters = {@org.hibernate.annotations.Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "D")})
     private String id;
 
-    @Version
-    private long version;
-
-    private LocalDateTime changeTime;
-
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<DoctorRating> rating = new HashSet<>();
+    @Version
+    private long version;
+    private LocalDateTime changeTime;
 
     @Override
     public Clinic getClinic() {

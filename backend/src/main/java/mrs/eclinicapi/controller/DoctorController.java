@@ -243,7 +243,7 @@ public class DoctorController {
                         .map(oc -> new TimePeriod<>(oc.getStart().atStartOfDay(), oc.getEnd().atStartOfDay()))
                         .collect(Collectors.toList()),
                 doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList()),
-                doctor.getOneClickAppointments(),
+                doctor.getOneClickAppointments().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
                 getAvg(doctor.getRating())
         );
     }

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mrs.eclinicapi.model.OneClickAppointment;
+import mrs.eclinicapi.model.Intervention;
 import mrs.eclinicapi.model.TimePeriod;
 import mrs.eclinicapi.model.enums.Weekday;
 
@@ -39,7 +39,7 @@ public class DoctorNurseDTO {
     private List<TimePeriod<LocalDateTime>> busyTimes;
     private List<TimePeriod<LocalDateTime>> vacations;
     private List<AppointmentRequestDTO> appointmentRequests;
-    private List<OneClickAppointment> oneClickAppointments;
+    private List<TimePeriod<LocalDateTime>> oneClickAppointments;
     private double avgRating;
 
     @Override

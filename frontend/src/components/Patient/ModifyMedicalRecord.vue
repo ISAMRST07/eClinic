@@ -130,7 +130,6 @@
             },
             submit() {
                 let fun = this.mode === 'add' ? this.saveMedicalRecord : this.updateMedicineApi;
-                alert("save");
                 if (this.$refs.form.validate()) {
                     let medicalRecord = {
                         height: this.height,

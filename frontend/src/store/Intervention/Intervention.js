@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
 import JSOG from 'jsog'
-
+import router from '../../router/index'
 export default {
     namespaced: true,
     state: {
@@ -116,6 +116,7 @@ export default {
                     null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('addIntervention', added);
             } catch (e) {
+                router.push('/');
                 defaultError(e);
             }
         },

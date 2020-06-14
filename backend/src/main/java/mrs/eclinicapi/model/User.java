@@ -59,6 +59,8 @@ public class User implements UserDetails {
     private String country;
     private String personalID;
     private Timestamp lastPasswordResetDate;
+    @Version
+    private long version;
 
 
     public User(String email, String password, String name) {

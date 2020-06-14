@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {defaultError} from "../utils/defaultErrorBehavior";
 import {emptyUser} from "../utils/skeletons";
-
+import router from '../router/index'
 export default {
     namespaced: true,
     state: {
@@ -31,6 +31,7 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateProfile', res.data);
             } catch (err) {
+                router.push("/");
                 defaultError(err);
             }
         },

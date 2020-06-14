@@ -55,6 +55,10 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
+        if(user.getType().equals(UserType.Patient)) {
+            Patient p = patientService.getByUserId(user.getId());
+            if(p.getMedicalRecord() == null) return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
         String jwt = tokenUtils.generateToken(user.getUsername());
         Clinic clinic = clinicService.findByUser(user.getId());
 
@@ -120,7 +124,7 @@ public class AuthenticationController {
                     passwordChanger.personal);
             String jwt = tokenUtils.generateToken(added.getUsername());
             Clinic clinic = clinicService.findByUser(added.getId());
-
+            System.out.println(added.getLastPasswordResetDate());
             return ResponseEntity.ok(new TokenResponse(jwt, added, clinic));
         } catch (UserService.UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

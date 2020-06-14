@@ -143,6 +143,7 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(this.user);
 		this.dialog = this.user.lastPasswordResetDate == null;
 	},
 	beforeRouteEnter(to, from, next) {

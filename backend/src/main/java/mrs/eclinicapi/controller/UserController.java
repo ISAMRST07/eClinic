@@ -65,7 +65,12 @@ public class UserController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<User> modifyUser(@PathVariable String id, @RequestBody UserDTO modified) {
-        User updated = service.updateUser(id, modified);
+        User updated;
+        try {
+            updated = service.updateUser(id, modified);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         if (updated == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }

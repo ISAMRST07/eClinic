@@ -10,6 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.print.Doc;
 import java.time.LocalDateTime;
 
 
@@ -55,6 +56,9 @@ public class Intervention {
 
     private double price;
 
+    @Version
+    private long version;
+
     public Intervention(AppointmentRequest ar, ClinicRoom cr) {
         this.setPatient(ar.getPatient());
         this.setDoctor(ar.getDoctor());
@@ -65,13 +69,16 @@ public class Intervention {
         this.dateTime.setEnd(ar.getDateTime().plusMinutes(30));
     }
 
-    public Intervention(OneClickAppointment ap, Patient p) {
-        this.setPatient(p);
-        this.setDoctor(ap.getDoctor());
-        this.setDateTime(ap.getDateTime());
-        this.setInterventionType(ap.getInterventionType());
-        this.setClinicRoom(ap.getClinicRoom());
-        this.setClinic(ap.getClinic());
+    public Intervention(String id, TimePeriod<LocalDateTime> dateTime, ClinicRoom room, Patient patient, Doctor doctor, Clinic clinic, InterventionType interventionType) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.clinicRoom = room;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.clinic = clinic;
+        this.interventionType = interventionType;
+        this.visit = null;
+        this.price = 0;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class ClinicDTO {
     private Set<VacationRequest> vacationRequests = new HashSet<>();
     private Set<InterventionType> interventionTypes = new HashSet<>();
     private Set<AppointmentRequest> appointmentRequests = new HashSet<>();
-    private Set<OneClickAppointment> oneClicks = new HashSet<>();
+    private Set<Intervention> oneClicks = new HashSet<>();
     private Set<Patient> patients;
     private ClinicalCentarAdministrator admin;
     private double rating;
