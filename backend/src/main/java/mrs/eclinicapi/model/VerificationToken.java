@@ -30,6 +30,9 @@ public class VerificationToken {
 
     private String token;
 
+    @Version
+    private long version;
+
     @OneToOne(fetch = FetchType.LAZY)
     private UnregisteredUser user;
     private LocalDateTime expiryDate;

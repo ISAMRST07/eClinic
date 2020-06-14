@@ -32,6 +32,9 @@ public class VacationRequest {
     @OneToOne
     private User user;
 
+    @Version
+    private long version;
+
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Clinic clinic;
 
@@ -42,9 +45,6 @@ public class VacationRequest {
     private String status;
 
     private String reason;
-
-    @Version
-    private long version;
     
     @Override
     public String toString() {

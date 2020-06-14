@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
 import JSOG from 'jsog'
+import router from "../../router";
 
 export default {
     namespaced: true,
@@ -42,14 +43,16 @@ export default {
                 console.error(err);
             }
         },
-        async updateVisitApi({rootState, commit}, visit) {
+        async updateVisitApi({rootState, commit}, toSend) {
             try {
                 console.log("updateVisitApi");
-                console.log(visit);
-                let {data: modified} = await Vue.prototype.$axios.put(`/api/visit/certified/${visit.id}`,null, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
+
+                let {data: modified} = await Vue.prototype.$axios.put(`/api/visit/certified/${toSend.visit.id}`, toSend.user, {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('updateVisit', modified);
             } catch (err) {
+
                 console.error(err);
+                router.push("/");
             }
         },
     },

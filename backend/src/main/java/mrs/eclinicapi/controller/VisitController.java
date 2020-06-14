@@ -1,13 +1,9 @@
 package mrs.eclinicapi.controller;
 
-import mrs.eclinicapi.dto.DiagnosisDTO;
-import mrs.eclinicapi.dto.MedicineDTO;
-import mrs.eclinicapi.dto.VisitDTO;
-import mrs.eclinicapi.model.Diagnosis;
-import mrs.eclinicapi.model.Medicine;
-import mrs.eclinicapi.model.VacationRequest;
-import mrs.eclinicapi.model.Visit;
+import mrs.eclinicapi.dto.*;
+import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.service.DiagnosisService;
+import mrs.eclinicapi.service.NurseService;
 import mrs.eclinicapi.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +21,8 @@ public class VisitController {
 
     @Autowired
     VisitService service;
+    @Autowired
+    NurseService nurseService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VisitDTO>> getAllVisits() {
@@ -38,13 +36,15 @@ public class VisitController {
         return new ResponseEntity<>(it.stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    @PutMapping(path ="/certified/{visitId}")
-    public ResponseEntity<VisitDTO> updateMedicine(@PathVariable("visitId") String visitId) {
+    @PutMapping(path ="/certified/{visitId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VisitDTO> updateMedicine(@RequestBody UserDTO userDTO, @PathVariable("visitId") String visitId) {
         System.out.println(visitId);
         Optional<Visit> visit = service.findById(visitId);
-
         if(visit.isPresent()){
+           Nurse nurse = nurseService.findByUserID(userDTO.getId());
+            System.out.println(nurse.getId());
             visit.get().setCertified(true);
+            visit.get().setNurse(nurse);
             Visit modify = service.modify(visit.get());
             if(modify== null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

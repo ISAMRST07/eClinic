@@ -68,6 +68,7 @@
             ],
         }),
         computed: {
+            ...mapState('auth', ['user']),
             ...mapState('visit/visit', ['visits']),
             // editClinic: {
             //     get() {
@@ -85,7 +86,11 @@
             updateDialog(visit) {
                 //visit.certified = true;
                 this.editMedicine = visit;
-                this.updateVisitApi(visit);
+                let toSend = {
+                    visit : visit,
+                    user : this.user,
+                }
+                this.updateVisitApi(toSend, this.user);
 
             }
 

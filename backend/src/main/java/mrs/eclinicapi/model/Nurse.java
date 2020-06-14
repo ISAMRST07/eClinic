@@ -10,6 +10,7 @@ import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Getter
@@ -30,6 +31,9 @@ public class Nurse extends MedicalStaff {
 
     @Version
     private long version;
+
+    @OneToMany(mappedBy = "nurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Visit> visits;
     
     @Override
     public String toString() {

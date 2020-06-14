@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.generator.IdGenerator;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -43,6 +44,9 @@ public class Visit {
 
     @Version
     private long version;
+
+    @ManyToOne
+    private Nurse nurse;
 
     @Override
     public boolean equals(Object o) {
