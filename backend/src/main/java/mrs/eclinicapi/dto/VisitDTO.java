@@ -27,4 +27,5 @@ public class VisitDTO {
     private String nurseId;
     Set<Diagnosis> diagnoses;
     Set<Medicine> medicines;
+
 }

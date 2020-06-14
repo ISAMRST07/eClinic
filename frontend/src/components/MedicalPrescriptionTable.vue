@@ -39,6 +39,7 @@
                 </v-icon>
             </template>
 
+
             <template v-slot:no-data>
                 <p>There are no existing medical prescription</p>
             </template>
@@ -98,8 +99,6 @@
         created() {
             this.loading = true;
             this.getVisits();
-            console.log("OVO")
-            console.log(this.visits)
         },
         watch: {
             visits() {

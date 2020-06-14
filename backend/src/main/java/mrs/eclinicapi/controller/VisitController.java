@@ -41,7 +41,7 @@ public class VisitController {
         System.out.println(visitId);
         Optional<Visit> visit = service.findById(visitId);
         if(visit.isPresent()){
-           Nurse nurse = nurseService.findByUserID(userDTO.getId());
+            Nurse nurse = nurseService.findByUserID(userDTO.getId());
             System.out.println(nurse.getId());
             visit.get().setCertified(true);
             visit.get().setNurse(nurse);
