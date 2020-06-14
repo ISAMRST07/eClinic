@@ -39,7 +39,6 @@
                 </v-icon>
             </template>
 
-
             <template v-slot:no-data>
                 <p>There are no existing medical prescription</p>
             </template>
@@ -63,7 +62,8 @@
                 {text: 'ID', align: 'start', value: 'id'},
                 {text: 'Patient Name', value: 'patientName', align: 'center'},
                 {text: 'Doctor Name', value: 'doctorName', align: 'center'},
-                {text: 'Certified', value: 'update', sortable: false}
+                {text: 'Certified', value: 'update', sortable: false},
+                {text: 'Certified by', value: 'nurseId', sortable: false}
 
             ],
         }),
@@ -98,6 +98,7 @@
         created() {
             this.loading = true;
             this.getVisits();
+            console.log("OVO")
             console.log(this.visits)
         },
         watch: {

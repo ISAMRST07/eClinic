@@ -63,6 +63,8 @@ public class VisitController {
         visitDTO.setMedicines(visit.getMedicines());
         visitDTO.setDiagnoses(visit.getDiagnoses());
         visitDTO.setPatientName(visit.getIntervention().getPatient().getUser().getName());
+        if(visit.getNurse()!= null)
+            visitDTO.setNurseId(visit.getNurse().getId());
 
         return visitDTO;
     }

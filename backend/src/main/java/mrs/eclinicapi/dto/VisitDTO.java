@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mrs.eclinicapi.model.Diagnosis;
 import mrs.eclinicapi.model.Medicine;
+import mrs.eclinicapi.model.Nurse;
 
 import java.util.Set;
 
@@ -23,6 +24,7 @@ public class VisitDTO {
     private String doctorName;
     private boolean certified;
     private String id;
+    private String nurseId;
     Set<Diagnosis> diagnoses;
     Set<Medicine> medicines;
 }
