@@ -19,7 +19,7 @@ import {
     oneClickAppointmentPath,
     diseasePath,
     historyPath,
-    medicalRecordPath, 
+    medicalRecordPath,
     medicalPrescriptionPath,
     reportPath
 } from "./paths";
@@ -218,7 +218,6 @@ class ClinicalAdmin {
             clinicDetailsItem(id),
             reportItem,
             interventionTypeItem,
-            medicinesItem,
             clinicRoomsItem(id),
             doctorsItem(id),
             nursesItem,

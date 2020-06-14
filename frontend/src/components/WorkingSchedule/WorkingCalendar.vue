@@ -123,6 +123,7 @@
 
 <script>
     import {mapState} from "vuex";
+    import {Doctor, Nurse} from "../../utils/DrawerItems";
 
     export default {
         name: "WorkingCalendar",
@@ -190,12 +191,18 @@
         },
         async mounted() {
             try {
-                let {data: doctor} = await this.$axios.get(`/api/doctor/user/${this.$store.state.auth.user.id}`,
-                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
-                this.doctor = doctor;
-                let {data: ongoing} = await this.$axios.get(`/api/intervention/ongoing/${this.user.id}`,
-                    {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token} });
-                this.ongoing = ongoing;
+                if(this.role === Doctor.code) {
+                    let {data: doctor} = await this.$axios.get(`/api/doctor/user/${this.$store.state.auth.user.id}`,
+                        {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                    this.doctor = doctor;
+                    let {data: ongoing} = await this.$axios.get(`/api/intervention/ongoing/${this.user.id}`,
+                        {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                    this.ongoing = ongoing;
+                } else if (this.role === Nurse.code) {
+                    let {data: doctor} = await this.$axios.get(`/api/nurse/user/${this.$store.state.auth.user.id}`,
+                        {headers: {"Authorization": 'Bearer ' + this.$store.state.auth.token}});
+                    this.doctor = doctor;
+                }
             } catch(err) {
                 console.log(err);
             }
@@ -238,55 +245,61 @@
             updateRange({start, end}) {
                 if(!this.doctor) return;
                 const events = [];
-                for(let timeperiod of this.doctor.busyTimes) {
-                    let startDateTime = new Date(timeperiod.start);
-                    let endDateTime = new Date(timeperiod.end);
-                    events.push({
-                        start: this.formatDate(startDateTime),
-                        end: this.formatDate(endDateTime),
-                        name: 'Intervention',
-                        color: 'primary'
-                    });
+                if(this.doctor.busyTimes) {
+                    for (let timeperiod of this.doctor.busyTimes) {
+                        let startDateTime = new Date(timeperiod.start);
+                        let endDateTime = new Date(timeperiod.end);
+                        events.push({
+                            start: this.formatDate(startDateTime),
+                            end: this.formatDate(endDateTime),
+                            name: 'Intervention',
+                            color: 'primary'
+                        });
+                    }
                 }
-
-                for(let timeperiod of this.doctor.vacations) {
-                    let startDateTime = new Date(timeperiod.start);
-                    let endDateTime = new Date(timeperiod.end);
-                    events.push({
-                        start: this.formatDate(startDateTime),
-                        end: this.formatDate(endDateTime),
-                        name: 'Vacation',
-                        color: 'gray'
-                    });
+                if(this.doctor.vacations) {
+                    for (let timeperiod of this.doctor.vacations) {
+                        let startDateTime = new Date(timeperiod.start);
+                        let endDateTime = new Date(timeperiod.end);
+                        events.push({
+                            start: this.formatDate(startDateTime),
+                            end: this.formatDate(endDateTime),
+                            name: 'Vacation',
+                            color: 'grey'
+                        });
+                    }
                 }
-
-                for(let timeperiod of this.doctor.oneClickAppointments) {
-                    let startDateTime = new Date(timeperiod.start);
-                    let endDateTime = new Date(timeperiod.end);
-                    console.log(timeperiod);
-                    console.log(startDateTime);
-                    console.log(endDateTime);
-                    events.push({
-                        start: this.formatDate(startDateTime),
-                        end: this.formatDate(endDateTime),
-                        name: 'Intervention',
-                        color: 'primary'
-                    });
+                console.log(this.doctor.oneClickAppointments);
+                if(this.doctor.oneClickAppointments) {
+                    for (let timeperiod of this.doctor.oneClickAppointments) {
+                        let startDateTime = new Date(timeperiod.start);
+                        let endDateTime = new Date(timeperiod.end);
+                        console.log(timeperiod);
+                        console.log(startDateTime);
+                        console.log(endDateTime);
+                        events.push({
+                            start: this.formatDate(startDateTime),
+                            end: this.formatDate(endDateTime),
+                            name: 'Intervention',
+                            color: 'primary'
+                        });
+                    }
                 }
-                for(let ar of this.doctor.appointmentRequests) {
-                    let time = ar.dateTime;
-                    let startDateTime = new Date(time);
-                    let endDateTime = new Date(startDateTime);
-                    endDateTime.setMinutes(startDateTime.getMinutes() + 30);
+                if(this.doctor.appointmentRequests) {
+                    for (let ar of this.doctor.appointmentRequests) {
+                        let time = ar.dateTime;
+                        let startDateTime = new Date(time);
+                        let endDateTime = new Date(startDateTime);
+                        endDateTime.setMinutes(startDateTime.getMinutes() + 30);
 
-                    events.push({
-                        start: this.formatDate(startDateTime),
-                        end: this.formatDate(endDateTime),
-                        name: 'Request',
-                        color: 'orange'
-                    });
+                        events.push({
+                            start: this.formatDate(startDateTime),
+                            end: this.formatDate(endDateTime),
+                            name: 'Request',
+                            color: 'orange'
+                        });
+                    }
                 }
-
                 this.start = start;
                 this.end = end;
                 this.events = events;

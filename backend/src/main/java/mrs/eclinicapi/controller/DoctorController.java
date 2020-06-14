@@ -238,12 +238,16 @@ public class DoctorController {
                 doctor.getClinic().getId(),
                 doctor.getSpecialties().stream().map(InterventionType::getId).collect(Collectors.toList()),
                 doctor.getWorkingCalendar().getWorkingSchedule(),
-                doctor.getInterventions().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
+                doctor.getInterventions().stream()
+                        .filter(it -> it.getPatient() != null)
+                        .map(Intervention::getDateTime).collect(Collectors.toList()),
                 doctor.getWorkingCalendar().getVacations().stream()
                         .map(oc -> new TimePeriod<>(oc.getStart().atStartOfDay(), oc.getEnd().atStartOfDay()))
                         .collect(Collectors.toList()),
                 doctor.getAppointmentRequests().stream().map(this::appointmentRequestToDTO).collect(Collectors.toList()),
-                doctor.getOneClickAppointments().stream().map(Intervention::getDateTime).collect(Collectors.toList()),
+                doctor.getInterventions().stream()
+                        .filter(it -> it.getPatient() == null)
+                        .map(Intervention::getDateTime).collect(Collectors.toList()),
                 getAvg(doctor.getRating())
         );
     }

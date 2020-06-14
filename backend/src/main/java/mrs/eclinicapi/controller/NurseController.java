@@ -1,9 +1,7 @@
 package mrs.eclinicapi.controller;
 
 import mrs.eclinicapi.dto.DoctorNurseDTO;
-import mrs.eclinicapi.model.Clinic;
-import mrs.eclinicapi.model.Nurse;
-import mrs.eclinicapi.model.User;
+import mrs.eclinicapi.model.*;
 import mrs.eclinicapi.model.enums.UserType;
 import mrs.eclinicapi.service.ClinicService;
 import mrs.eclinicapi.service.NurseService;
@@ -54,6 +52,16 @@ public class NurseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(this.convertToDTO(modified), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<DoctorNurseDTO> getNurseByUserId(@PathVariable String id) {
+
+        Nurse nurse = service.findByUserID(id);
+        if (nurse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(this.convertToDTO(nurse), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -154,7 +162,9 @@ public class NurseController {
                 null,
                 null,
                 null,
-                null,
+                nurse.getWorkingCalendar().getVacations().stream()
+                        .map(oc -> new TimePeriod<>(oc.getStart().atStartOfDay(), oc.getEnd().atStartOfDay()))
+                        .collect(Collectors.toList()),
                 null,
                 null,
                 0

@@ -153,9 +153,12 @@
 						start: new Date(this.selectedDateTime),
 						end: new Date(this.selectedDateTime)
 					};
-					this.oneClick.dateTime.end.setMinutes(this.selectedDateTime.getMinutes() + this.selectedDuration);
+					this.oneClick.dateTime.end.setMinutes(this.selectedDateTime.getMinutes() + Number(this.selectedDuration));
 
-                    fun(this.oneClick);
+					this.oneClick.dateTime.start.setMinutes(this.oneClick.dateTime.start.getMinutes() - this.oneClick.dateTime.start.getTimezoneOffset());
+					this.oneClick.dateTime.end.setMinutes(this.oneClick.dateTime.end.getMinutes() - this.oneClick.dateTime.end.getTimezoneOffset());
+
+					fun(this.oneClick);
                     this.close();
                 }
             },

@@ -32,8 +32,6 @@ public class Doctor extends MedicalStaff {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<AppointmentRequest> appointmentRequests = new ArrayList<>();
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
-    private List<Intervention> oneClickAppointments = new ArrayList<>();
     @Id
     @Column(length = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "d_seq")
