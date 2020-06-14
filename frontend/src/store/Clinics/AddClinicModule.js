@@ -1,6 +1,7 @@
 import {emptyClinic} from "../../utils/skeletons";
 import Vue from 'vue';
 import {defaultError} from "../../utils/defaultErrorBehavior";
+import router from "../../router";
 
 export default {
     namespaced: true,
@@ -30,7 +31,8 @@ export default {
                     {headers: {"Authorization": 'Bearer ' + rootState.auth.token}});
                 commit('clinics/readClinics/updateClinic', res, {root: true});
             } catch (err) {
-                defaultError(err);
+                console.error(err);
+                router.push("/");
             }
         }
     },
